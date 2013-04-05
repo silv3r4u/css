@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv='expires' content='-1' />
+        <meta http-equiv='pragma' content='no-cache' />
+        <link rel="shortcut icon" href="<?= base_url('../favicon.ico') ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/workspace.css') ?>" media="all" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/base.css') ?>" media="screen" /> 
+        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery-ui-1.10.2.custom.css') ?>" media="all" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.autocomplete.css') ?>" media="all" />
+        <link rel="stylesheet" href="<?= base_url('assets/js/sorter/style.css') ?>" media="all" />
+        
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.8.3.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.9.2.custom.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-timepicker-addon.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery.tablesorter.js') ?>"></script>
+
+
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery.autocomplete.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/library.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/workspace.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('assets/js/jquery.watermark.js') ?>"></script>
+
+
+        <script type="text/javascript">
+            $(function() {
+                initMenus();
+                $('#loading').hide();
+                var width = screen.width; 
+                $('.fixed').fadeOut(15000);
+                $("#loading").ajaxStart(function(){$(this).show();});
+                $("#loading").ajaxStop(function(){$(this).fadeOut();});
+                $('a.submenu').click(function() {
+                    $('#loaddata').html('');
+                    var val = $(this).attr('href');
+                    $.ajax({
+                        url: val,
+                        cache: false,
+                        success:function(data) {
+                            $('#loaddata').html(data).hide().fadeIn('fast');
+                        }
+                    });
+                    return false;
+                });
+            });
+
+        </script>
+
+        <body>
+            <div id="loading">Loading ....</div>
+            <div style="height: 100%">
+                <div class="mainribbon-min">
+                    <?php
+                    echo $this->load->view('navigasi');
+                    ?>
+                </div>
+                
+                <div class="menu-detail">
+                    <div class="info-user">
+                        <img src="<?= base_url('assets/images/user-aktif.png') ?>" align="left" /> Anda Login Sebagai:<br/> <b><?= $this->session->userdata('nama') ?></b><br/>
+                        <?= anchor('user/logout', 'Logout') ?> - <span style="cursor: pointer; color: " onclick="ganti_pwd()">Ganti Password</span>
+                    </div>
+                    <div>
+                    
+                        <ul id="menu4" class="menu collapsible expandfirst">
+                            <?php foreach ($master_menu as $menu) { ?>
+                            <li>
+                                <a href="#"><img src="<?= base_url('assets/images/cpanel/'.$menu->icons) ?>" align="left" />&nbsp;<?= $menu->nama ?></a>
+                                <ul>
+                                    <?php 
+                                    $detail_menu = $this->m_user->menu_user_load_data($menu->id)->result();
+                                    foreach ($detail_menu as $rows) { ?>
+                                        <li><a class="submenu" href="<?= base_url($rows->url) ?>"><?= $rows->form_nama ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+                <!--            <div class="arrow-left">&nbsp;</div>
+                            <div class="arrow-right">&nbsp;</div>-->
+
+
+                <div id="loaddata">
+                    &nbsp;
+                </div>
+            </div>
+        </body>
+</html>
+<noscript><div class="windowsjavascript"><div>Maaf Javascript pada browser anda tidak aktif.<br/>mohon aktifkan untuk menggunakan sistem ini.</div></div></noscript>
