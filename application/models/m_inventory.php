@@ -20,10 +20,24 @@ class M_inventory extends CI_Model {
     }
     
     function pp_uang_detail($id) {
-        $sql = "select pp.dokumen_no, pp.tanggal, pp.jenis, k.penerimaan, k.pengeluaran, k.penerimaan_pengeluaran_nama from uang_penerimaan_pengeluaran pp
+        $sql = "select pp.id, pp.dokumen_no, pp.tanggal, pp.jenis, k.penerimaan, k.pengeluaran, k.penerimaan_pengeluaran_nama from uang_penerimaan_pengeluaran pp
             join kas k on (pp.id = k.transaksi_id)
             where k.transaksi_jenis = 'Penerimaan dan Pengeluaran' and k.transaksi_id = '$id'";
         return $this->db->query($sql);
+    }
+    
+    function pp_uang_delete($id) {
+        $this->db->trans_begin();
+        $this->db->delete('kas', array('transaksi_id' => $id, 'transaksi_jenis' => 'Penerimaan dan Pengeluaran'));
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $status = FALSE;
+        } else {
+            $this->db->trans_commit();
+            $status = TRUE;
+        }
+        $result['status'] = $status;
+        return $result;
     }
     
     function save_pemesanan() {
@@ -877,40 +891,45 @@ class M_inventory extends CI_Model {
     
     function inkaso_save() {
         $this->db->trans_begin();
-        $data_inkaso = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
-            'pembelian_id' => $this->input->post('nopembelian'),
-            'pegawai_penduduk_id' => $this->session->userdata('id_user'),
-            'jumlah_bayar' => currencyToNumber($this->input->post('bayar'))
-        );
-        $this->db->insert('inkaso', $data_inkaso);
-        $id_inkaso = $this->db->insert_id();
-        
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-        }
-        
-        $rows = $this->db->query("select * from kas order by waktu desc limit 1")->row();
-        $data_kas = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
-            'transaksi_id' => $id_inkaso,
-            'transaksi_jenis' => 'Inkaso',
-            'awal_saldo' => $rows->akhir_saldo,
-            'penerimaan' => '0',
-            'pengeluaran' => currencyToNumber($this->input->post('bayar')),
-            'akhir_saldo' => ($rows->akhir_saldo-currencyToNumber($this->input->post('bayar')))
-        );
-        $this->db->insert('kas', $data_kas);
-        
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            $status = FALSE;
+        if ($this->input->post('bayar') != '') {
+            $data_inkaso = array(
+                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'pembelian_id' => $this->input->post('nopembelian'),
+                'pegawai_penduduk_id' => $this->session->userdata('id_user'),
+                'jumlah_bayar' => currencyToNumber($this->input->post('bayar'))
+            );
+            $this->db->insert('inkaso', $data_inkaso);
+            $id_inkaso = $this->db->insert_id();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            }
+
+            $rows = $this->db->query("select * from kas order by waktu desc limit 1")->row();
+            $data_kas = array(
+                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'transaksi_id' => $id_inkaso,
+                'transaksi_jenis' => 'Inkaso',
+                'awal_saldo' => $rows->akhir_saldo,
+                'penerimaan' => '0',
+                'pengeluaran' => currencyToNumber($this->input->post('bayar')),
+                'akhir_saldo' => ($rows->akhir_saldo-currencyToNumber($this->input->post('bayar')))
+            );
+            $this->db->insert('kas', $data_kas);
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $status = FALSE;
+            } else {
+                $this->db->trans_commit();
+                $status = TRUE;
+            }
+            $result['status'] = $status;
+            $result['id_pembelian'] = $this->input->post('nopembelian');
+            
         } else {
-            $this->db->trans_commit();
-            $status = TRUE;
+            $result['status'] = FALSE;
         }
-        $result['status'] = $status;
-        $result['id_pembelian'] = $this->input->post('nopembelian');
         return $result;
     }
     

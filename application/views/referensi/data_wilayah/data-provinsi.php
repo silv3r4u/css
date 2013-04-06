@@ -97,7 +97,8 @@
     
     function save_prov(){
         var Url = '';           
-        if($('input[name=tipe]').val() == 'add'){
+        var status = $('input[name=tipe]').val();
+        if($('input[name=tipe]').val() === 'add'){
             Url = '<?= base_url('referensi/manage_provinsi') ?>/add/';
         }else{
             Url = '<?= base_url('referensi/manage_provinsi') ?>/edit/';
@@ -110,9 +111,10 @@
             success: function(data) {
                 $('#pro_list').html(data);
                 $('#form-prov').dialog("close");
-                if($('input[name=tipe]').val() == 'add'){
+                
+                if(status === 'add'){
                     alert_tambah();
-                }else{
+                } else{
                     alert_edit();
                 }
                 reset_all();

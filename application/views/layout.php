@@ -32,13 +32,13 @@
                 $("#loading").ajaxStart(function(){$(this).show();});
                 $("#loading").ajaxStop(function(){$(this).fadeOut();});
                 $('a.submenu').click(function() {
-                    $('#loaddata').html('');
+                    $('#loaddata').empty();
                     var val = $(this).attr('href');
                     $.ajax({
                         url: val,
                         cache: false,
                         success:function(data) {
-                            $('#loaddata').html(data).hide().fadeIn('fast');
+                            $('#loaddata').html(data);
                         }
                     });
                     return false;
@@ -83,9 +83,7 @@
                             <div class="arrow-right">&nbsp;</div>-->
 
 
-                <div id="loaddata">
-                    &nbsp;
-                </div>
+                <div id="loaddata"></div>
             </div>
         </body>
 </html>

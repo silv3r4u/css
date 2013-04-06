@@ -9,7 +9,6 @@ class Demografi extends CI_Controller {
         parent::__construct();
         is_logged_in();
         $this->load->model('configuration');
-        $this->load->model('demografi_pasien');
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->helper('functions');

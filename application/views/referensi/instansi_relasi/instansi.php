@@ -4,7 +4,7 @@
     <script type="text/javascript">
         var request;
         $(function() {
-            $("#table").tablesorter({sortList:[[0,0]]});
+        
             $( "#addnewrow" ).button({icons: {primary: "ui-icon-circle-plus"}});
             $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
             $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -12,8 +12,8 @@
             $('.cari').button({icons: {secondary: 'ui-icon-search'}});
             $('#form').dialog({
                 autoOpen: false,
-                height: 400,
-                width: 500,
+                height: 500,
+                width: 550,
                 modal: true,
                 resizable : false,
                 close : function(){
@@ -25,9 +25,9 @@
             });
             $('#formcarirelasi').dialog({
                 autoOpen: false,
-                title: 'Form Pencarian Instansi Relasi',
+                title: 'Pencarian Instansi Relasi',
                 height: 150,
-                width: 400,
+                width: 500,
                 modal: true,
                 resizable : false,
                 close : function(){
@@ -176,7 +176,8 @@
         
         function save(){
             var Url = ''; 
-            if($('input[name=tipe]').val() == 'add'){
+            var status = $('input[name=tipe]').val();
+            if(status === 'add'){
                 Url = '<?= base_url('referensi/manage_instansi') ?>/add/';
             }else{
                 Url = '<?= base_url('referensi/manage_instansi') ?>/edit/';
@@ -190,7 +191,7 @@
                     success: function(data) {
                         $('#ins_list').html(data);
                         $('#form').dialog("close");
-                        if($('input[name=tipe]').val() == 'add'){
+                        if(status === 'add'){
                             alert_tambah();
                         }else{
                             alert_edit();
@@ -287,19 +288,19 @@
         <?= form_open('', 'id=formadd') ?>
         <?= form_hidden('tipe') ?>
         <?= form_hidden('id') ?>
-        <table width="100%">
+        <table width="100%" class="tabel-input">
             <tr>
-                <td width="30%">Nama</td>
-                <td><?= form_input('nama', '', 'id=nama size=40') ?> </td>
+                <td width="15%">Nama</td>
+                <td><?= form_input('nama', '', 'id=nama size=50') ?> </td>
             </tr>
             <tr>
                 <td width="15%" valign="top">Alamat</td>
-                <td><?= form_textarea('alamat', '', 'cols=41 rows=2 id=alamat class="minitextarea"') ?></td>
+                <td><?= form_textarea('alamat', '', 'cols=35 rows=2 id=alamat class="minitextarea"') ?></td>
             </tr>
             <tr valign="top">
                 <td width="15%">Kelurahan</td>
                 <td>
-                    <?= form_input('', '', 'class=kelurahan size=40') ?><br/>
+                    <?= form_input('', '', 'class=kelurahan size=50') ?><br/>
                     <?= form_hidden('id_kelurahan') ?>
                     <div id="ket"></div>
 
@@ -307,19 +308,19 @@
             </tr>
             <tr>
                 <td width="15%">Telpon</td>
-                <td><?= form_input('telp', '', 'id=telp size=40') ?> </td>
+                <td><?= form_input('telp', '', 'id=telp size=50') ?> </td>
             </tr>
             <tr>
                 <td width="15%">Fax</td>
-                <td><?= form_input('fax', '', 'id=fax size=40') ?> </td>
+                <td><?= form_input('fax', '', 'id=fax size=50') ?> </td>
             </tr>
             <tr>
                 <td width="15%">Email</td>
-                <td><?= form_input('email', '', 'id=email size=40') ?> </td>
+                <td><?= form_input('email', '', 'id=email size=50') ?> </td>
             </tr>
             <tr>
                 <td width="15%">Website</td>
-                <td><?= form_input('website', '', 'id=website size=40') ?> </td>
+                <td><?= form_input('website', '', 'id=website size=50') ?> </td>
             </tr>
             <tr>
                 <td width="15%">Jenis</td>
@@ -351,8 +352,8 @@
         <div class="msg" id="msg_carirelasi"></div>
         <table width="100%">
             <tr>
-                <td width="30%">Parameter</td>
-                <td><?= form_input('nama', '', 'id=nama_cari class=nama size=40') ?> </td>
+                <td width="15%">Nama</td>
+                <td><?= form_input('nama', '', 'id=nama_cari class=nama size=50') ?> </td>
             </tr>
             <tr>
                 <td></td>

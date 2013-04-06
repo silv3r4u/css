@@ -37,7 +37,7 @@ $(function() {
             },
             formatItem: function(data,i,max)
             {
-                if (data.id != null) {
+                if (data.id !== null) {
                     var str = '<div class=result>'+data.id+' - '+datefmysql(data.dokumen_tanggal)+' - '+data.instansi+'</div>';
                 }
                 return str;
@@ -54,20 +54,18 @@ $(function() {
                 $('#total_tagihan').html(numberToCurrency(Math.ceil(data.total)));
                 $('#total_terbayar').html(numberToCurrency(Math.ceil(data.jumlah_terbayar)));
                 var sisa = data.total-data.jumlah_terbayar;
-                if (sisa >= 0) {
+                if (sisa <= 0) {
                     var hasil_sisa = numberToCurrency(Math.ceil(sisa));
-                    $('#tanggal, button[type=submit], #bayar').removeAttr('disabled', 'disabled');
+                    $('#simpan').hide();
+                    $('#bayar, #tanggal').attr('disabled','disabled');
+                    $('#tanggal, #bayar').attr('disabled', 'disabled');
                 } else {
+                    $('#simpan').show();
                     var hasil_sisa = Math.ceil(sisa);
-                    $('#tanggal, button[type=submit], #bayar').attr('disabled', 'disabled');
+                    $('#tanggal, #bayar').removeAttr('disabled', 'disabled');
                 }
                 $('#sisa_tagihan').html(hasil_sisa);
-                //$('#bayar').removeAttr('disabled');
-                $('button[type=submit]').show();
-                if (data.total-data.jumlah_terbayar == '0') {
-                    $('#bayar').attr('disabled', 'disabled')
-                    $('button[type=submit]').hide();
-                }
+                $('#bayar').val(hasil_sisa);
             }
         );
         $('#bayar, #serahuang').keyup(function() {
@@ -94,7 +92,7 @@ $(function() {
                 $('#nopembelian').focus();
                 return false;
             }
-            if ($('#bayar').val() == '') {
+            if ($('#bayar').val() === '') {
                 alert('Jumlah pembayaran tidak boleh kosong');
                 $('#bayar').focus();
                 return false;

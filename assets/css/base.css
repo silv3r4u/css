@@ -135,10 +135,8 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .data-list .aksi a small {position: absolute; top: 18px; left: -6px; padding: 7px 10px 3px 0; font-size: .8em; opacity: 0.8}
 .data-list .aksi a:hover small {visibility: visible}
 .data-list .aksi .edit {background: url('../images/icons/edit.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; width: 18px; height: 16px}
-.data-list .aksi .edit:hover {background: url('../images/icons/edit.png') no-repeat bottom; border: none; cursor: pointer; padding-bottom: 0px; width: 18px; height: 16px}
 .data-list .aksi .add {background: url('../images/icons/add.png') no-repeat 0 50%}
 .data-list .aksi .delete {background: url('../images/icons/delete.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px;}
-.data-list .aksi .delete:hover {background: url('../images/icons/delete.png') no-repeat bottom; cursor: pointer; padding-bottom: 0px; border-radius: 3px;}
 .data-list .aksi .detail {background: url('../images/icons/search.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px; }
 .data-list .aksi .detail:hover {background: url('../images/icons/search.png') no-repeat bottom; border: none; cursor: pointer; padding-top: 0px; border-radius: 3px;}
 .data-list .aksi .reset {background: url('../images/icons/reset.png') no-repeat 0 50%}

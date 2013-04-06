@@ -245,6 +245,7 @@
         $('#perundangan').val(data[10]);
         $('#indikasi').val(data[13]);
         $('#dosis').val(data[14]);
+        $('#kandungan').val(data[15]);
           
         
         if(data[11] !='Generik'){

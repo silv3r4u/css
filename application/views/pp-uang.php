@@ -134,7 +134,7 @@ $(function() {
             <label>No. Dokumen</label> <?= form_input('nodoc',NULL,'id=nodoc size=30') ?>
             <label>Tanggal</label><?= form_input('tanggal',date("d/m/Y H:i"),'id=awal size=15') ?>
             <label>Jenis Transaksi</label>
-            <span class="label"> <?= form_radio('jenis', 'Penerimaan', TRUE) ?> Penerimaan </span>
+            <span class="label"> <?= form_radio('jenis', 'Penerimaan', TRUE) ?> Pemasukan </span>
             <span class="label"> <?= form_radio('jenis', 'Pengeluaran', FALSE) ?>Pengeluaran </span>
             <?php
             if(!isset($_GET['id'])) { ?>

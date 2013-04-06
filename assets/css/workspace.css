@@ -30,7 +30,7 @@ h2 { font-size: 14px; display: block; }
 .tabel th a {color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
 .tabel .total-sum {background: #f4f4f4}
 .tabel select { border: 1px solid #666; width: 1em; }
-.tabel-input td:first-child { width: 150px; height: 20px; font-size: 14px; font-weight: bold; color: #666}
+.tabel-input td:first-child { width: 150px; height: 20px; font-size: 14px; text-align: right ;color: #666;}
 .tabel-input textarea { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .tabel-input textarea:focus { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .right {text-align:right}

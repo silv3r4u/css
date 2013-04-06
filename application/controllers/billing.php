@@ -122,7 +122,7 @@ class Billing extends CI_Controller {
     }
     
     function pp_uang() {
-        $data['title'] = 'Penerimaan dan Pengeluaran Uang';
+        $data['title'] = 'Transaksi Keuangan';
         $this->load->view('pp-uang', $data);
     }
     

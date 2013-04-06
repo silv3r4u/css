@@ -211,7 +211,7 @@ class M_inv_autocomplete extends CI_Model {
             from pembelian p
             join transaksi_detail td on (td.transaksi_id = p.id)
             join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
-            where p.id like '%$q%' and td.transaksi_jenis = 'Pembelian' group by p.id";
+            where p.id = '$q' and td.transaksi_jenis = 'Pembelian' group by p.id";
         return $this->db->query($sql);
     }
 

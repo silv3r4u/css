@@ -1,7 +1,5 @@
 <script type="text/javascript">
-    $(function() {
-        $("#table").tablesorter({sortList:[[0,0]]});
-    })
+    $("#table").tablesorter({sortList:[[0,0]]});
 </script>
 <?php if (isset($key)): ?>
     <div id="pencarian">
@@ -11,14 +9,14 @@
         </h3>
     </div>
 <?php endif; ?>
-<table class="sortable" width="100%" id="table">
+<table class="sortable" id="table" width="100%">
     <thead>
     <tr>
-        <th width="10%" class="nosort"><h3>No.</h3></th>
-        <th width="30%"><h3>Nama</h3></th>
-        <th width="40%"><h3>Alamat</h3></th>
+        <th class="nosort" width="5%"><h3>No.</h3></th>
+        <th width="40%"><h3>Nama</h3></th>
+        <th width="20%"><h3>Kelurahan</h3></th>
         <th width="10%"><h3>Jenis</h3></th>
-        <th width="10%" class="nosort"><h3>Aksi</h3></th>
+        <th width="5%"><h3>Aksi</h3></th>
     </tr>
     </thead>
     <tbody>
@@ -28,15 +26,16 @@
             <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= $rows->nomor ?></td>
                 <td><?= $rows->nama ?></td>
-                <td><?= $rows->alamat.' '.$rows->kabupaten ?></td>
+                <td><?= $rows->kelurahan ?></td>
                 <td><?= $rows->jenis ?></td>
-                <td align="center"> 
-                    <a class="edit" onclick="edit_instansi('<?= $str ?>')">&nbsp;</a>
-                    <a class="delete" onclick="delete_instansi('<?= $rows->id ?>')">&nbsp;</a>
+                <td class="aksi"> 
+                    <a class="edit" onclick="edit_instansi('<?= $str ?>')"></a>
+                    <a class="delete" onclick="delete_instansi('<?= $rows->id ?>')"></a>
                 </td>   
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
     </tbody>
 </table>
+<br/>
 <div id="paging"><?= $paging ?></div>

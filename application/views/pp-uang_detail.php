@@ -2,13 +2,29 @@
 <script>
 $(function() {
     $('button').button();
-})
+    $('#deletion_ppuang').click(function() {
+        var ok=confirm('Anda yakin akan menghapus transaksi ini ?');
+        if (ok) {
+            var id = $('#id_pp_uang').html();
+            $.get('<?= base_url('inventory/pp_uang_delete') ?>/'+id, function(data) {
+                if (data.status === true) {
+                    alert_delete();
+                }
+            },'json');
+            $(this).closest("#result_detail").dialog().remove();
+            $('#loaddata').load('<?= base_url('laporan/kas?'.generate_get_parameter($_GET)) ?>');
+        } else {
+            return false;
+        }
+    });
+});
 </script>
 <title><?= $title ?></title>
     <h1 class="informasi"><?= $title ?></h1>
     <?php foreach ($list_data as $rows); ?>
     <div class="data-input">
-            <label>No. Dokumen</label><span class="label"><?= $rows->dokumen_no ?></span>
+            <label>ID</label><span class="label" id="id_pp_uang"><?= $rows->id ?></span>
+            <label>No. Dokumen</label><span class="label" id="no_document"><?= $rows->dokumen_no ?></span>
             <label>Tanggal</label><span class="label"><?= indo_tgl($rows->tanggal) ?></span>
             <label>Jenis Transaksi</label><span class="label"><?= $rows->jenis ?></span>
     </div>
@@ -44,4 +60,4 @@ $(function() {
                 </tr>
             </tfoot>
         </table><br/>
-        <?= form_button('delete', 'Delete', 'id=deletion') ?>
+        <?= form_button('delete', 'Delete', 'id=deletion_ppuang') ?>

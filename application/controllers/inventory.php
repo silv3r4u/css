@@ -414,7 +414,12 @@ class Inventory extends CI_Controller {
     function pp_uang_detail($id) {
         $data['title'] = 'Pemasukan & Pengeluaran Kas';
         $data['list_data'] = $this->m_inventory->pp_uang_detail($id)->result();
-        $this->load->view('laporan/pp-uang_detail', $data);
+        $this->load->view('pp-uang_detail', $data);
+    }
+    
+    function pp_uang_delete($id) {
+        $data = $this->m_inventory->pp_uang_delete($id);
+        die(json_encode($data));
     }
 }
 ?>

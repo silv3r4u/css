@@ -59,7 +59,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->kekuatan . "#" . $rows->satuan_id
                             . "#" . $rows->sediaan_id . "#" . $rows->atc . "#" . $rows->ddd . "#" . $rows->adm_r
                             . "#" . $rows->perundangan . "#" . $rows->generik . "#" . $rows->formularium
-                            . "#" . $rows->indikasi . "#" . $rows->dosis;
+                            . "#" . $rows->indikasi . "#" . $rows->dosis
+                            . "#" . $rows->kandungan;
                     ?>
                     <a class="edit" onclick="edit_obat('<?= $str ?>')"></a>
                     <a class="delete" onclick="delete_obat('<?= $rows->id ?>')"></a>

@@ -68,7 +68,7 @@
                         value: data[i].nama // nama field yang dicari
                     };
                 }
-                $('#id_provinsi_kab').val('');
+                $('input[name=idprovinsikab]').val('');
                 return parsed;
             },
             formatItem: function(data,i,max)
@@ -108,11 +108,10 @@
                     dataType: 'json',
                     success: function(msg){
                         if (!msg.status){
-                            $('#text_konfirmasi_kab').html('Nama Kabupaten <b>"'+kabupaten+'"</b> dengan Provinsi <b>"'+prov+'"</b> sudah ada<br/> Apakah anda yakin akan menambahkannya lagi?');            
+                            $('#text_konfirmasi_kab').html('Nama Kabupaten <b>"'+kabupaten+'"</b> dengan Provinsi <b>"'+prov+'"</b><br/>Apakah anda akah menyimpan data '+kabupaten+'?');            
                         } else {
-                            $('#text_konfirmasi_kab').html('Nama Kabupaten <b>"'+kabupaten+'"</b> dengan Provinsi <b>"'+prov+'"</b> <br/> Apakah anda akan menyimpan data?');                    
+                            $('#text_konfirmasi_kab').html('Nama Kabupaten <b>"'+kabupaten+'"</b> dengan Provinsi <b>"'+prov+'"</b> <br/> Apakah anda akan menyimpan data '+kabupaten+'?');                    
                         }
-                        
                         $('#konfirmasi_kab').dialog("open");
                     }
                 });
@@ -124,7 +123,8 @@
     
     function save_kab(){
         var Url = '';           
-        if($('input[name=tipe]').val() == 'add'){
+        var status = $('input[name=tipe]').val();
+        if($('input[name=tipe]').val() === 'add'){
             Url = '<?= base_url('referensi/manage_kabupaten') ?>/add/';
         }else{
             Url = '<?= base_url('referensi/manage_kabupaten') ?>/edit/';
@@ -137,9 +137,9 @@
             success: function(data) {
                 $('#kab_list').html(data);
                 $('#form-kab').dialog('close');
-                if($('input[name=tipe]').val() == 'add'){
+                if (status === 'add'){
                     alert_tambah();
-                }else{
+                } else{
                     alert_edit();
                 }
                 reset_all();

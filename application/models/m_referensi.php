@@ -1033,7 +1033,7 @@ class M_referensi extends CI_Model {
         $limitation = null;
         $limitation.="";
 
-        $sql = "select p.*, d.*, d.id as id_dp, p.id as penduduk_id, kl.nama as kelurahan,kb.nama as kabupaten, pd.nama as pendidikan, pr.nama profesi 
+        $sql = "select p.*, d.*, d.identitas_no, d.id as id_dp, p.id as penduduk_id, kl.nama as kelurahan,kb.nama as kabupaten, pd.nama as pendidikan, pr.nama profesi 
             , dp.no_id from penduduk p
         left join dinamis_penduduk d on (p.id = d.penduduk_id)
         left join kabupaten kb on (p.lahir_kabupaten_id = kb.id)
@@ -1119,10 +1119,10 @@ class M_referensi extends CI_Model {
     function jabatan_get_data() {
         return array(
             '' => 'Pilih',
-            'Direktur' => 'Direktur',
-            'Manajer' => 'Manajer',
-            'Asisten Manajer' => 'Asisten Manajer',
-            'Staf' => 'Staf'
+            'PSA' => 'Pemegang Saham Apotek',
+            'APA' => 'Apoteker Pengelola Apotek',
+            'Akuntan' => 'Akuntan',
+            'Staff' => 'Staff'
         );
     }
 

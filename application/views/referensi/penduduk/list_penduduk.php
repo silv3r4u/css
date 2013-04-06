@@ -38,10 +38,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <tr>
         <th class="nosort" width="5%"><h3>No.</h3></th>
         <th width="10%"><h3>No. Identitas</h3></th>
-        <th width="25%"><h3>Nama</h3></th>
-        <th width="30%"><h3>Alamat</h3></th>
-        <th width="15%"><h3>No. Telp</h3></th>
-        <th class="nosort"><h3>Aksi</h3></th>
+        <th width="30%"><h3>Nama</h3></th>
+        <th width="40%"><h3>Alamat</h3></th>
+        <th width="10%"><h3>No. Telp</h3></th>
+        <th class="nosort" width="5%"><h3>Aksi</h3></th>
     </tr>
     </thead>
     <tbody>
@@ -66,7 +66,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
 
             <tr class="tr_row <?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= (++$key + (($page - 1) * $limit)) ?></td>
-                <td align="center"><?= ($rows->no_id=='')?'-':$rows->no_id ?></td>
+                <td align="center"><?= ($rows->identitas_no=='')?'-':$rows->identitas_no ?></td>
                 <td><?= $rows->nama ?></td>
                 <td><?= !empty($rows->alamat) ? $rows->alamat : '-' ?></td>
                 <td><?= $rows->telp ?></td>

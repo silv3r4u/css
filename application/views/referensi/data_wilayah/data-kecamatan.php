@@ -68,7 +68,7 @@
                         value: data[i].nama // nama field yang dicari
                     };
                 }
-                
+                $('input[name=idkabupatenkec]').val("");
                 return parsed;
             },
             formatItem: function(data,i,max)
@@ -127,8 +127,9 @@
     });
     
     function save_kec(){
-        var Url = '';           
-        if($('input[name=tipe]').val() == 'add'){
+        var Url = '';    
+        var status = $('input[name=tipe]').val();
+        if($('input[name=tipe]').val() === 'add'){
             Url = '<?= base_url('referensi/manage_kecamatan') ?>/add/';
         }else{
             Url = '<?= base_url('referensi/manage_kecamatan') ?>/edit/';
@@ -142,7 +143,7 @@
             success: function(data) {
                 $('#kec_list').html(data);
                 $('#form-kec').dialog('close');
-                if($('input[name=tipe]').val() == 'add'){
+                if(status === 'add'){
                     alert_tambah();
                 }else{
                     alert_edit();
@@ -218,7 +219,7 @@
             <tr><td>Nama Kabupaten</td><td><?= form_input('', null, 'class=kabupaten-kec size=30') ?> <?= form_hidden('idkabupatenkec') ?></td></tr>
             <tr><td>Nama Kecamatan</td><td><?= form_input('kecamatan', null, 'id=kecamatan size=30') ?></td></tr>
             <tr><td>Kode Kecamatan</td><td><?= form_input('kodekec', null, 'id=kodekec size=10') ?></td></tr>
-            <tr><td></td><td><?= form_submit('addkec', 'Simpan', 'id=savekec') ?> <?= form_button('', 'Batal', 'id=resetkec') ?></td> </tr>
+            <tr><td></td><td><?= form_submit('addkec', 'Simpan', 'id=savekec') ?> <?= form_button('', 'Reset', 'id=resetkec') ?></td> </tr>
         </table>
         </form>
     </div>

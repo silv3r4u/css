@@ -73,7 +73,7 @@
                         value: data[i].nama // nama field yang dicari
                     };
                 }
-                $('#idKecamatan_kel').attr('value','');
+               $('input[name=idkecamatankel]').val("");
                 return parsed;
             },
             formatItem: function(data,i,max)
@@ -129,7 +129,8 @@
     
     function save_kel(){
         var Url = '';           
-        if($('input[name=tipe]').val() == 'add'){
+        var status = $('input[name=tipe]').val();
+        if($('input[name=tipe]').val() === 'add'){
             Url = '<?= base_url('referensi/manage_kelurahan') ?>/add/';
         }else{
             Url = '<?= base_url('referensi/manage_kelurahan') ?>/edit/';
@@ -143,7 +144,7 @@
             success: function(data) {
                 $('#kel_list').html(data);
                 $('#form-kel').dialog("close");
-                if($('input[name=tipe]').val() == 'add'){
+                if(status == 'add'){
                     alert_tambah();
                 }else{
                     alert_edit();
@@ -219,7 +220,7 @@
             <tr><td>Nama Kecamatan</td><td><?= form_input('', null, 'class=kecamatan-kel size=30') ?> <?= form_hidden('idkecamatankel') ?></td></tr>
             <tr><td>Nama Kelurahan</td><td><?= form_input('kelurahan', null, 'id=kelurahan size=30') ?></td></tr>
             <tr><td>Kode Kelurahan</td><td><?= form_input('kodekel', null, 'id=kodekel size=10') ?></td></tr>
-            <tr><td></td><td><?= form_submit('addkel', 'Simpan', 'id=savekel') ?> <?= form_button('', 'Batal', 'class=cancel id=resetkel') ?></td> </tr>
+            <tr><td></td><td><?= form_submit('addkel', 'Simpan', 'id=savekel') ?> <?= form_button('', 'Reset', 'class=cancel id=resetkel') ?></td> </tr>
         </table>
         <?= form_close() ?>
     </div>

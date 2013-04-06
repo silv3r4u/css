@@ -192,7 +192,7 @@
             
             $('#formpenduduk').submit(function(){
                 var nama = $('#nama').val();
-                if(nama==''){
+                if(nama===''){
                     $('#msg_penduduk').fadeIn('fast').html('Nama penduduk tidak boleh kosong !');
                     $('#nama').focus();
                     return false;
@@ -221,7 +221,7 @@
         function save(){
             var Url = '';       
             var tipe = $('input[name=tipe]').val();
-            if( tipe== 'add'){
+            if( tipe=== 'add'){
                 Url = '<?= base_url('referensi/manage_penduduk') ?>/add/';
             }else{
                 Url = '<?= base_url('referensi/manage_penduduk') ?>/edit/';
@@ -236,7 +236,7 @@
                     success: function(data) {
                         $('#penduduk_list').html(data);
                         $('#form_penduduk').dialog("close");
-                        if(tipe == 'add'){
+                        if(tipe === 'add'){
                             alert_tambah();
                         }else{
                             alert_edit();
@@ -405,8 +405,8 @@
 
             <div id="tab">
                 <ul>
-                    <li><a class="pdd" href="#pdd">Data penduduk</a>  </li>
-                    <li><a class="dinamis" href="#dinamis">Data dinamis penduduk</a>  </li>
+                    <li><a class="pdd" href="#pdd">Master penduduk</a>  </li>
+                    <li><a class="dinamis" href="#dinamis">Data Pelengkap</a>  </li>
                 </ul>
 
                 <div id="pdd">
