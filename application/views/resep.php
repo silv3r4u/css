@@ -483,7 +483,7 @@ $(function() {
                     foreach ($list_data as $key => $data) { ?>
                     <div style="display: inline-block; width: 100%" class=tr_row>
                         <div class="masterresep" style="display: inline-block; width: 100%; border-bottom: 1px solid #f1f1f1; padding: 10px 0; ">
-                                <label>No. R/:</label><input style="border: none;" type=text name=nr[] id=nr<?= $key ?> value='<?= $noo ?>' class=nr size=20 onkeyup=Angka(this) readonly maxlength=2 />
+                                <label>No. R/: </label><input style="border: none;" type=text name=nr[] id=nr<?= $key ?> value='<?= $noo ?>' class=nr size=20 onkeyup=Angka(this) readonly maxlength=2 />
                                 <label>Jumlah Permintaan:</label><input type=text name=jr[] value="<?= $data->resep_r_jumlah ?>" id=jr<?= $key ?> class=jr size=20 onkeyup=Angka(this) />
                                 <label>Jumlah Tebus:</label><input type=text name=jt[] value="<?= $data->tebus_r_jumlah ?>" id=jt<?= $key ?> class=jt onkeyup=Angka(this) size=20 />
                                 <label>Aturan Pakai:</label><input type=text name=ap[] value="<?= $data->pakai_aturan ?>" id=ap<?= $key ?> class=ap size=20 />

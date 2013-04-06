@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-    $("#table").tablesorter({sortList:[[1,0]]});
+    $("#table").tablesorter();
     $('#checkall').live('click', function() {
         $('#checkall').html('Uncheck all');
         $('#checkall').attr('id', 'uncheckall');

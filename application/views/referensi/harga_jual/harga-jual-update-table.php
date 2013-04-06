@@ -1,12 +1,11 @@
 <?= $this->load->view('message') ?>
 <script type="text/javascript">
 function set_harga_jual(i) {
-    
     var hna = currencyToNumber($('#hna'+i).html());
     var margin = parseInt($('#margin'+i).val())/100;
     var diskon = parseInt($('#diskon'+i).val())/100;
     var harga_jual = (hna+(hna*margin)) - ((hna+(hna*margin))*diskon);
-    $('#hj'+i).html(numberToCurrency(harga_jual));
+    $('#hj'+i).html(numberToCurrency(Math.ceil(harga_jual)));
     //($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
 }
 $(function() {
@@ -42,10 +41,22 @@ $(function() {
         var margin = parseInt($('#margin').val());
         var diskon = parseInt($('#diskons').val());
         var hasil  = hna + (hna*(margin/100) - (hna*(diskon/100)));
-        
-        $('#harga').html(numberToCurrency(parseInt(hasil)));
+        $('#harga').html(numberToCurrency(parseInt(Math.ceil(hasil))));
     });
     $('#form_harga_jual_update_save').submit(function() {
+        var jml = $('.tr_rows').length-1;
+        for (i = 0; i <= jml; i++) {
+            if ($('#margin'+i).val() === '') {
+                alert('Margin tidak boleh kosong !');
+                $('#margin'+i).focus();
+                return false;
+            }
+            if ($('#diskon'+i).val() === '') {
+                alert('Diskon tidak boleh kosong !');
+                $('#diskon'+i).focus();
+                return false;
+            }
+        }
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'),

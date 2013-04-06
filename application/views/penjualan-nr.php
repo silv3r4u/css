@@ -339,7 +339,7 @@ function subTotal() {
         var new_totallica = (totallica - diskon_bank)+pajak;
         $('#total').html(numberToCurrency(Math.ceil(new_totallica)));
         if (tagihan !== 0) {
-            $('#bulat').val(numberToCurrency(pembulatan_seratus(new_totallica)));
+            $('#bulat').val(numberToCurrency(pembulatan_seratus(Math.ceil(new_totallica))));
         }
     });
 }
@@ -370,18 +370,19 @@ $(function() {
         for (i = 1; i <= jumlah; i++) {
             subTotal(i);
         }
-    })
+    });
     $('#bayar').focus(function() {
         var jumlah = $('.tr_row').length;
         for (i = 1; i <= jumlah; i++) {
             subTotal(i);
         }
-    })
+    });
     $('#tanggal').datetimepicker();
     $('#reset').click(function() {
-        var url = $('#form_penjualan_non_resep').attr('action');
+        $('#loaddata').empty();
+        var url = '<?= base_url('pelayanan/penjualan_nr') ?>';
         $('#loaddata').load(url+'?_'+Math.random());
-    })
+    });
     $("#form_penjualan_non_resep").submit(function() {
         
         if ($('#id_pembeli').val() == '') {
@@ -401,8 +402,8 @@ $(function() {
         }
         var jumlah = $('.tr_row').length;
         for(i = 1; i <= jumlah; i++) {
-            if ($('#jl'+i).val() == '') {
-                if ($('#id_pb'+i).val() != '') {
+            if ($('#jl'+i).val() === '') {
+                if ($('#id_pb'+i).val() !== '') {
                     alert('Jumlah tidak boleh kosong !');
                     $('#jl'+i).focus();
                     return false;
@@ -416,17 +417,15 @@ $(function() {
             dataType: 'json',
             data: $(this).serialize(),
             success: function(data) {
-                if (data.status == true) {
-                    //$('input,select').attr('disabled','disabled');
+                if (data.status === true) {
+                    $('input,select').attr('disabled','disabled');
                     $('#print').show();
                     $('#id_penjualan').html(data.id_penjualan);
                     $('button[type=submit]').hide();
                     alert_tambah();
-                } else {
-
                 }
             }
-        })
+        });
         return false;
         
     });

@@ -273,7 +273,7 @@ class M_resep extends CI_Model {
             left join relasi_instansi ri on (ri.id = b.pabrik_relasi_instansi_id)
             left join satuan s on (s.id = o.satuan_id)
             where rrr.r_resep_id = '$id_resep_r'";
-        //echo $sql;
+        //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);
     }
 }

@@ -1,3 +1,6 @@
+<script>
+$(".sortable").tablesorter({sortList:[[0,0]]});
+</script>
 <div id="resume">
     <br/>
     <h3>
@@ -5,14 +8,17 @@
     </h3>
 
 </div>
-<table cellpadding="0" cellspacing="0" class="tabel" width="60%">
+<table cellpadding="0" cellspacing="0" class="sortable" id="table" width="60%">
+    <thead>
     <tr>
-        <th width="10%">No.</th>
-        <th width="20%">Nama</th>
-        <th width="20%">Kecamatan</th>
-        <th width="20%">Kode Wilayah</th>
-        <th width="10%">Aksi</th>
+        <th width="10%" class="nosort"><h3>No.</h3></th>
+        <th width="20%"><h3>Nama</h3></th>
+        <th width="20%"><h3>Kecamatan</h3></th>
+        <th width="20%"><h3>Kode Wilayah</h3></th>
+        <th width="10%" class="nosort"><h3>Aksi</h3></th>
     </tr>
+    </thead>
+    <tbody>
     <?php if ($kelurahan != null): ?>
         <?php foreach ($kelurahan as $key => $data): ?>
             <tr class="<?php echo ($key % 2) ? "even" : "odd" ?>">
@@ -27,6 +33,7 @@
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
+    </tbody>
 </table>
 <br/>
 <div id="paging"><?= $paging ?></div>

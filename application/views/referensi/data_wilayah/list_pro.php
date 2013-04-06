@@ -1,5 +1,5 @@
 <script>
-$("#table").tablesorter({sortList:[[0,0]]});
+$(".sortable").tablesorter({sortList:[[0,0]]});
 </script>
 <div id="resume">
     <br/>

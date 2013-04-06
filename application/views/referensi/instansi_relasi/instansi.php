@@ -25,7 +25,7 @@
             });
             $('#formcarirelasi').dialog({
                 autoOpen: false,
-                title: 'Pencarian Instansi Relasi',
+                title: 'Pencarian',
                 height: 150,
                 width: 500,
                 modal: true,
@@ -290,15 +290,15 @@
         <?= form_hidden('id') ?>
         <table width="100%" class="tabel-input">
             <tr>
-                <td width="15%">Nama</td>
+                <td width="15%">Nama:</td>
                 <td><?= form_input('nama', '', 'id=nama size=50') ?> </td>
             </tr>
             <tr>
-                <td width="15%" valign="top">Alamat</td>
+                <td width="15%" valign="top">Alamat:</td>
                 <td><?= form_textarea('alamat', '', 'cols=35 rows=2 id=alamat class="minitextarea"') ?></td>
             </tr>
             <tr valign="top">
-                <td width="15%">Kelurahan</td>
+                <td width="15%">Kelurahan:</td>
                 <td>
                     <?= form_input('', '', 'class=kelurahan size=50') ?><br/>
                     <?= form_hidden('id_kelurahan') ?>
@@ -307,27 +307,27 @@
                 </td>
             </tr>
             <tr>
-                <td width="15%">Telpon</td>
+                <td width="15%">Telepon:</td>
                 <td><?= form_input('telp', '', 'id=telp size=50') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Fax</td>
+                <td width="15%">Fax:</td>
                 <td><?= form_input('fax', '', 'id=fax size=50') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Email</td>
+                <td width="15%">Email:</td>
                 <td><?= form_input('email', '', 'id=email size=50') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Website</td>
+                <td width="15%">Website:</td>
                 <td><?= form_input('website', '', 'id=website size=50') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Jenis</td>
+                <td width="15%">Jenis:</td>
                 <td><?= form_dropdown('jenis', $jenis, null, 'id=jenis') ?></td>
             </tr>
             <tr>
-                <td width="15%">Diskon Penjualan (%)</td>
+                <td width="15%">Diskon Penjualan (%):</td>
                 <td><?= form_input('disk_penjualan', '', 'id=diskon_penjualan size=5 maxlength=3') ?> </td>
             </tr>
 
@@ -346,13 +346,12 @@
     </div>
 
     <div id="formcarirelasi" style="display: none; top: 20%; background: #fff; padding: 10px; ">
-        <b>Form Pencarian</b>
         <?= form_open('', 'id=form_carirelasi') ?>
 
         <div class="msg" id="msg_carirelasi"></div>
-        <table width="100%">
+        <table width="100%" class="tabel-input">
             <tr>
-                <td width="15%">Nama</td>
+                <td width="25%">Nama:</td>
                 <td><?= form_input('nama', '', 'id=nama_cari class=nama size=50') ?> </td>
             </tr>
             <tr>

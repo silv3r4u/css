@@ -584,7 +584,7 @@ class Referensi extends CI_Controller {
     /* Relasi Instansi */
 
     function instansi_relasi() {
-        $data['title'] = 'Instansi';
+        $data['title'] = 'Data Perusahaan';
         $data['jenis'] = null;
         $jenis[''] = 'Pilih Jenis';
         $arr = $this->m_referensi->relasi_instansi_jenis_get_data();

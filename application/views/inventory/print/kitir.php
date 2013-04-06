@@ -93,7 +93,7 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'10';
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
     ?>
     <tr><td>Bayar:</td><td align="right"><?= inttocur($money->bayar) ?></td></tr>
-    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-$money->total) ?></td></tr>
+    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-($tagihan+$byapotek+($jml_ppn/100*$tagihan))) ?></td></tr>
     <?php } ?>
 </table>
 <p align="center">

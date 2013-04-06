@@ -376,7 +376,7 @@ function setKembali() {
         if (kembali < 0) {
             var kembali = kembali;
         } else {
-            var kembali = numberToCurrency(kembali);
+            var kembali = numberToCurrency(Math.ceil(kembali));
         }
         //$('#bulat').val(numberToCurrency(total));
         $('#kembalian').html(kembali);

@@ -221,15 +221,15 @@
             <td><?= $data->dokter ?></td>
             <td><?= $data->r_no ?></td>
             <td><?= $data->apoteker ?></td>
-            <td align="right"><?= $data->layanan.' '.$data->bobot.' '.$data->kelas ?></td>
+            <td><?= $data->layanan.' '.(($data->bobot == 'Tanpa Bobot')?'':$data->bobot) ?></td>
             <td align="right"><?= $data->profesi_layanan_tindakan_jasa_total ?></td>
             <td align="center"><!--<?= anchor('laporan/salin_resep/'.$data->id, 'Cetak Salin Resep', 'class=salinresep') ?>--> 
-            <?= anchor('pelayanan/resep/'.$data->id, 'Edit', 'class=salinresep') ?> - <?= ($data->resep_id == NULL)?'Tidak':'Ya' ?></td>
+            <?= anchor('pelayanan/resep/'.$data->id, 'Edit', 'class=salinresep') ?></td>
         </tr>
         <?php } ?>
         <tr>
-            <td colspan="8" align="right">Total</td>
-            <td align="right"><?= rupiah($total) ?></td>
+            <td colspan="8" align="right"><b>Total</b></td>
+            <td align="right"><b><?= rupiah($total) ?></b></td>
             <td></td>
         </tr>
         <?php } else { 

@@ -128,17 +128,17 @@
                     return parsed;
                 },
                 formatItem: function(data,i,max){
-                    if (data.id_obat != null) {
-                        if (data.kekuatan != null && data.satuan != null && data.sediaan != null) {
-                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+'  <i> '+data.pabrik+'</i></div>';
+                    if (data.id_obat !== null) {
+                        if (data.kekuatan !== null && data.satuan !== null && data.sediaan !== null) {
+                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+'  <i> '+data.pabrik+'</i></div>';
                         } 
-                        else if (data.kekuatan != null && data.satuan != null && data.sediaan == null) {
-                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+' <i> '+data.pabrik+'</i></div>';
+                        else if (data.kekuatan !== null && data.satuan !== null && data.sediaan === null) {
+                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+' <i> '+data.pabrik+'</i></div>';
                         } else {
                             var str = '<div class=result>'+data.nama+'</div>';
                         }	
                     } else {
-                        if (data.pabrik != null) {
+                        if (data.pabrik !== null) {
                             var str = '<div class=result>'+data.nama+'<i> '+data.pabrik+'</i></div>';
                         } else {
                             var str = '<div class=result>'+data.nama+'</div>';

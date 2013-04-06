@@ -13,8 +13,8 @@
     <thead>
     <tr>
         <th class="nosort" width="5%"><h3>No.</h3></th>
-        <th width="40%"><h3>Nama</h3></th>
-        <th width="20%"><h3>Kelurahan</h3></th>
+        <th width="20%"><h3>Nama</h3></th>
+        <th width="40%"><h3>Alamat</h3></th>
         <th width="10%"><h3>Jenis</h3></th>
         <th width="5%"><h3>Aksi</h3></th>
     </tr>
@@ -26,7 +26,7 @@
             <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= $rows->nomor ?></td>
                 <td><?= $rows->nama ?></td>
-                <td><?= $rows->kelurahan ?></td>
+                <td><?= $rows->alamat.' '.$rows->kabupaten ?></td>
                 <td><?= $rows->jenis ?></td>
                 <td class="aksi"> 
                     <a class="edit" onclick="edit_instansi('<?= $str ?>')"></a>

@@ -159,8 +159,9 @@ $(function() {
         $('#sales').val(data.sales);
         $('input[name=id_sales]').val(data.salesman_penduduk_id);
         var id = data.id;
+        $('.form-inputan tbody').empty();
         $.ajax({
-            url: '<?= base_url('inventory/get_data_pemesanan') ?>/'+id,
+            url: '<?= base_url('inventory/get_data_pemesanan') ?>/'+id+'?_'+Math.random(),
             cache: false,
             success: function(msg) {
                 $('.form-inputan tbody').html(msg);
