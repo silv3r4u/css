@@ -58,7 +58,7 @@
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
-                <th width="35%">Packing Barang</th>
+                <th width="35%">Kemasan Barang</th>
                 <th width="8%">ED</th>
                 <th width="5%">Jumlah</th>
                 <th width="8%">Harga @</th>

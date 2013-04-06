@@ -379,8 +379,9 @@ class M_inv_autocomplete extends CI_Model {
 
     function reretur_penjualan_get_nomor($q) {
         $sql = "select p.*, pdd.nama as pegawai, pdk.nama as pembeli from penjualan_retur p 
+            join penjualan pj on (p.penjualan_id = pj.id)
             join penduduk pdd on (p.pegawai_penduduk_id = pdd.id)
-            left join penduduk pdk on (p.pembeli_penduduk_id = pdk.id)
+            left join penduduk pdk on (pj.pembeli_penduduk_id = pdk.id)
             where p.id like ('%$q%') order by locate ('$q', p.id)";
         return $this->db->query($sql);
     }

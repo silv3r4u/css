@@ -48,14 +48,13 @@
 
 </script>
 <div id="kegiatan">
-    <h1><?= $title ?></h1>
+    <h1 class="informasi"><?= $title ?></h1>
     <?php 
     foreach ($list_data as $key => $rows); 
     $asuransi = $this->m_referensi->asuransi_kepersertaan_get_data($rows->pasien_penduduk_id);
     $biaya_apoteker = $this->m_inventory->biaya_apoteker_by_penjualan($rows->transaksi_id)->row();
     ?>
     <div class="data-input">
-    <fieldset><legend>Summary</legend>
         <?= form_hidden('total', null, 'id=total_tagihan') ?>
         <?= form_hidden('jasa_apotek', null, 'id=jasa_total_apotek') ?>
         <div class="left_side">
@@ -82,14 +81,12 @@
             <label>Total Diskon</label><span id="total-diskon" class="label"><?= $rows->total ?></span>
             <label>Total</label><span id="total" class="label"></span>
         </div>
-        </fieldset>
     </div>
-    <div class="data-list">
-        <table class="tabel form-inputan" width="100%">
+        <table class="tabel" width="100%">
             <thead>
             <tr>
                 <th>Barcode</th>
-                <th width="40%">Packing Barang</th>
+                <th width="40%">Kemasan Barang</th>
                 <?php if (isset($_GET->id)) { ?>
                 <th width="10%">ED</th>
                 <?php } ?>
@@ -123,8 +120,7 @@
                 $total_diskon = $total_diskon+($data->diskon*$hjual*$data->keluar);
                 } ?>
             </tbody>
-        </table> 
-    </div>
+        </table><br/>
     <!--<?= form_button(null, 'Cetak Nota', 'id=cetak onClick=PrintElem("#kegiatan")') ?>-->
     <?= form_button(null, 'Delete', 'id=deletion') ?>
     <?= form_button(null, 'Retur', 'id=retur') ?>

@@ -20,19 +20,15 @@ $(function() {
 </script>
 <?php foreach ($list_data as $rows); ?>
 <div>
-    <h1><?= $title ?></h1>
+    <h1 class="informasi"><?= $title ?></h1>
     <div class="data-input">
-        <fieldset><legend>Summary</legend>
         <div class="total-retur">Total: Rp. <b id="returan"></b></div>
         <label>No. Retur:</label><span class="label" id="reretur_pembelian_id"><?= $rows->penerimaan_retur_id ?></span>
         <label>Waktu:</label><span class="label"><?= datetime($rows->waktu) ?></span>
         <label>Suplier:</label><span class="label"><?= $rows->suplier ?></span>
         <label>Salesman:</label><span class="label"><?= $rows->salesman ?></span>
         <label>Penerimaan Berupa:</label><span class="label"><?= ($rows->uang == '0')?'Barang':'Uang' ?></span>
-        </table>
-        </fieldset>
     </div>
-    <div class="data-list">
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
@@ -72,5 +68,4 @@ $(function() {
             </script>
             </tbody>
         </table>
-    </div>
 </div>

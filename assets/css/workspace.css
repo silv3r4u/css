@@ -1,9 +1,10 @@
 
 * { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
+button { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px;}
 fieldset { border: 1px solid #ccc; font-size: 13px;}
 #useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px; font-size: 10px; }
 #useractive .label { text-transform: none; font-style: italic; font-size: 11px; }
-body {margin:0; overflow-x:hidden; color: #000; font-size: 12px; font-family: Tahoma;}
+body {margin:0; overflow-x:hidden; color: #000;}
 a {text-decoration: none}
 h1 { font-size: 20px; display: block; font-weight: normal; color: #000;}
 h2 { font-size: 14px; display: block; }

@@ -234,8 +234,9 @@
         });
     
         function save(){
-            var Url = '';           
-            if($('input[name=tipe]').val() == 'add'){
+            var Url = '';  
+            var status = $('input[name=tipe]').val();
+            if($('input[name=tipe]').val() === 'add'){
                 Url = '<?= base_url('referensi/manage_packing') ?>/add/';
             }else{
                 Url = '<?= base_url('referensi/manage_packing') ?>/edit/';
@@ -250,7 +251,7 @@
                     success: function(data) {
                         $('#packing_list').html(data);
                         $('#form_packing').dialog("close");
-                        if($('input[name=tipe]').val() == 'add'){
+                        if(status == 'add'){
                             alert_tambah();
                         }else{
                             alert_edit();
