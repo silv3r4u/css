@@ -883,8 +883,8 @@ class M_referensi extends CI_Model {
         $sql = "select o.id as id_obat, o.generik, bp.*, s.nama as s_besar, st.nama as s_kecil, b.nama, o.kekuatan, stn.nama as satuan_obat, sd.nama as sediaan, r.nama as pabrik from barang_packing bp
         join barang b on (b.id = bp.barang_id)
         left join relasi_instansi r on (b.pabrik_relasi_instansi_id = r.id)
-        join satuan s on (s.id = bp.terbesar_satuan_id)
-        join satuan st on (st.id = bp.terkecil_satuan_id)
+        left join satuan s on (s.id = bp.terbesar_satuan_id)
+        left join satuan st on (st.id = bp.terkecil_satuan_id)
         left join obat o on (b.id = o.id)
         left join satuan stn on (o.satuan_id = stn.id)
         left join sediaan sd on (o.sediaan_id = sd.id) where bp.id is not NULL ";

@@ -278,7 +278,7 @@ function addnoresep(i) {
                     '<label>Aturan Pakai:</label><input type=text name=ap[] id=ap'+i+' class=ap size=20 />'+
                     '<label>Iterasi:</label><input type=text name=it[] id=it'+i+' class=it size=10 value="0" onkeyup=Angka(this) />'+
                     '<label>Biaya Apoteker:</label><select onchange="subTotal()" name=ja[] id=ja'+i+'><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'">'.$value->layanan.' '.$value->bobot.'</option>'; } ?></select>'+
-                    '<label></label><input type=button value="Tambah Packing Barang" onclick=add('+i+') id="addition'+i+'" />'+
+                    '<label></label><input type=button value="Tambah Produk" onclick=add('+i+') id="addition'+i+'" />'+
                     '<input type=button value="Hapus R/" id="deletion'+i+'" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket'+i+'" style="display: none" class="etiket" onclick=cetak_etiket('+(i+1)+') />'+
                 '</div>'+
                 '<div id=resepno'+i+' style="display: inline-block;width: 100%"></div>'+
@@ -292,8 +292,7 @@ function add(i) {
     var j = $('.detailobat'+i).length;
     str = ' <div class=tr_rows style="width: 100%; display: block;">'+
                 '<table align=right width=95% style="border-bottom: 1px solid #f1f1f1" class="detailobat'+i+'">'+
-                '<tr><td width=15%>Barcode:</td><td> <input type=text value="<?= isset($val->barcode)?$val->barcode:NULL ?>" name=bc'+i+'[] id=bc'+i+''+j+' class=bc size=30 readonly /></td></tr>'+
-                '<tr><td>Packing Barang</td><td>  <input type=text name=pb'+i+'[] id=pb'+i+''+j+' class=pb size=60 />'+
+                '<tr><td>Produk</td><td>  <input type=text name=pb'+i+'[] id=pb'+i+''+j+' class=pb size=60 />'+
                     '<input type=hidden name=id_pb'+i+'[] id=id_pb'+i+''+j+' class=id_pb />'+
                     '<input type=hidden name=kr'+i+'[] id=kr'+i+''+j+' class=kr />'+
                     '<input type=hidden name=jp'+i+'[] id=jp'+i+''+j+' class=jp /></td></tr>'+
@@ -305,7 +304,7 @@ function add(i) {
 
         
     $('#resepno'+i).append(str);
-    $('.pb').watermark('Nama packing barang');
+    $('.pb').watermark('Nama Produk');
     $('#pb'+i+''+j).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
     {
         parse: function(data){
@@ -342,7 +341,7 @@ function add(i) {
     }).result(
     function(event,data,formated){
         if (data.kekuatan == null) {
-            alert('Kekuatan untuk packing barang yang dipilih tidak boleh null, silahkan ubah pada bagian master data obat');
+            alert('Kekuatan untuk Produk yang dipilih tidak boleh null, silahkan ubah pada bagian master data obat');
             $(this).val('');
             $('#id_pb'+i+''+j).val('');
             $('#bc'+i+''+j).val('');
@@ -466,9 +465,9 @@ $(function() {
     <fieldset><legend>Summary</legend>
         <label>No.:</label><span class="label" id="id_receipt"><?= isset($id_resep)?$id_resep:get_last_id('resep', 'id') ?></span>
         <label>Waktu:</label><?= form_input('tanggal', isset($id_resep)?datetimefmysql($rows->waktu,'true'):date("d/m/Y H:i:s"), 'id=tanggal') ?>
-        <label>Dokter *:</label><?= form_input('', isset($id_resep)?$rows->dokter:NULL, 'id=dokter size=40') ?> <?= form_hidden('id_dokter', isset($id_resep)?$rows->dokter_penduduk_id:NULL) ?>
-        <label>Pasien: </label><?= form_input('', isset($id_resep)?$rows->pasien:NULL, 'id=pasien size=40') ?> <?= form_hidden('id_pasien', isset($id_resep)?$rows->pasien_penduduk_id:NULL) ?>
-        <label></label><span class="label"><?= form_radio('absah', 'Sah', (isset($id_resep) and $rows->sah == 'Sah')?TRUE:FALSE) ?>  Sah </span> <span class="label"><?= form_radio('absah', 'Tidak Sah', (isset($id_resep) and $rows->sah == 'Tidak Sah')?TRUE:FALSE) ?>  Tidak Sah</span>
+        <label>Nama Dokter:</label><?= form_input('', isset($id_resep)?$rows->dokter:NULL, 'id=dokter size=40') ?> <?= form_hidden('id_dokter', isset($id_resep)?$rows->dokter_penduduk_id:NULL) ?>
+        <label>Nama Pasien: </label><?= form_input('', isset($id_resep)?$rows->pasien:NULL, 'id=pasien size=40') ?> <?= form_hidden('id_pasien', isset($id_resep)?$rows->pasien_penduduk_id:NULL) ?>
+        <label>Absah:</label><span class="label"><?= form_radio('absah', 'Sah', (isset($id_resep) and $rows->sah == 'Sah')?TRUE:FALSE) ?>  Sah </span> <span class="label"><?= form_radio('absah', 'Tidak Sah', (isset($id_resep) and $rows->sah == 'Tidak Sah')?TRUE:FALSE) ?>  Tidak Sah</span>
         <label>Keterangan:</label><?= form_textarea('ket', isset($id_resep)?$rows->keterangan:NULL) ?> </td> </tr>
         
     </fieldset>
@@ -489,7 +488,7 @@ $(function() {
                                 <label>Aturan Pakai:</label><input type=text name=ap[] value="<?= $data->pakai_aturan ?>" id=ap<?= $key ?> class=ap size=20 />
                                 <label>Iterasi:</label><input type=text name=it[] value="<?= $data->iter ?>" id=it<?= $key ?> class=it size=10 value="0" onkeyup=Angka(this) />
                                 <label>Biaya Apoteker</label><select onchange="subTotal()" name=ja[] id=ja<?= $key ?>><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option '; if ($value->id == $data->tarif_id) echo 'selected'; echo ' value="'.$value->id.'-'.$value->nominal.'">'.$value->layanan.' '.$value->bobot.' '.$value->kelas.'</option>'; } ?></select>
-                                <label></label><input type=button value="Tambah Packing Barang" onclick=add(<?= $key ?>) id="addition<?= $key ?>" />
+                                <label></label><input type=button value="Tambah Produk" onclick=add(<?= $key ?>) id="addition<?= $key ?>" />
                                 <input type=button value="Hapus R/" id="deletion<?= $key ?>" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket<?= $noo ?>" style="display: none" class="etiket" onclick="cetak_etiket(<?= $noo ?>)" />
                         </div>
                         <div id=resepno<?= $key ?> style="display: inline-block;width: 100%"></div>
@@ -499,8 +498,7 @@ $(function() {
                     foreach($detail as $no => $val) { ?>
                          <div class=tr_rows style="width: 100%; display: block;">
                                 <table align=right width=95% style="border-bottom: 1px solid #f4f4f4" class="detailobat<?= $key ?>">
-                                <tr><td width=15%>Barcode:</td><td> <input type=text value="<?= isset($val->barcode)?$val->barcode:NULL ?>" name=bc<?= $key ?>[] id=bc<?= $key ?><?= $no ?> class=bc size=30 readonly /></td></tr>
-                                <tr><td>Packing Barang:</td><td>  <input type=text name=pb<?= $key ?>[] value="<?= $val->barang ?> <?= $val->barang ?> <?= ($val->kekuatan == '1')?'':$val->kekuatan ?>  <?= $val->satuan ?> <?= $val->sediaan ?> <?= $val->pabrik ?> <?= ($val->isi==1)?'':'@'.$val->isi ?> <?= $val->satuan_terkecil ?>" id=pb<?= $key ?><?= $no ?> class=pb size=60 />
+                                <tr><td>Produk:</td><td>  <input type=text name=pb<?= $key ?>[] value="<?= $val->barang ?> <?= $val->barang ?> <?= ($val->kekuatan == '1')?'':$val->kekuatan ?>  <?= $val->satuan ?> <?= $val->sediaan ?> <?= $val->pabrik ?> <?= ($val->isi==1)?'':'@'.$val->isi ?> <?= $val->satuan_terkecil ?>" id=pb<?= $key ?><?= $no ?> class=pb size=60 />
                                         <input type=hidden name=id_pb<?= $key ?>[] value="<?= $val->id_packing ?>" id=id_pb<?= $key ?><?= $no ?> class=id_pb />
                                         <input type=hidden name=kr<?= $key ?>[] value="<?= $val->kekuatan ?>" id=kr<?= $key ?><?= $no ?> class=kr />
                                         <input type=hidden name=jp<?= $key ?>[] value="<?= $val->pakai_jumlah ?>" id=jp<?= $key ?><?= $no ?> class=jp /></td></tr>
@@ -546,7 +544,7 @@ $(function() {
                                 }).result(
                                 function(event,data,formated){
                                     if (data.kekuatan == null) {
-                                        alert('Kekuatan untuk packing barang yang dipilih tidak boleh null, silahkan ubah pada bagian master data obat');
+                                        alert('Kekuatan untuk Produk yang dipilih tidak boleh null, silahkan ubah pada bagian master data obat');
                                         $(this).val('');
                                         $('#id_pb<?= $key ?><?= $no ?>').val('');
                                         $('#bc<?= $key ?><?= $no ?>').val('');
