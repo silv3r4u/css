@@ -33,7 +33,7 @@ h2 { font-size: 14px; display: block; }
 .tabel select { border: 1px solid #666; width: 1em; }
 .tabel-input td:first-child { width: 150px; height: 20px; font-size: 14px; text-align: right ;color: #666;}
 .tabel-input textarea { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
-.tabel-input textarea:focus { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
+.tabel-input textarea:focus { height: 40px; float: left; min-width: 25em; padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .right {text-align:right}
 .table-cetak { border-top: 1px solid #ccc; border-left: 1px solid #ccc; border-spacing:0; margin: 5px; }
 .table-cetak th { border-bottom: 1px solid #ccc; border-right: 1px solid #ccc; padding: 3px; empty-cells: show; font-size: 9px; }
@@ -110,10 +110,8 @@ input[type='text'], input[type='password'], input[type=number], textarea, select
 }
 input[type='text']:focus,input[type='password']:focus, textarea:focus, select:focus {
     color:#666;
-    border:1px solid #06F;
     outline:none;
     padding: 2px;
-    box-shadow: 0pt 0px 3px #06F ;
 }
 .kegiatan {
     margin: 5px 10px 15px 10px;
