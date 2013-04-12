@@ -56,8 +56,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->isi
                             . "#" . $rows->terkecil_satuan_id;
                     ?>
-                    <a class="edit" onclick="edit_packing('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_packing('<?= $rows->id ?>')"></a>
+                    <span class="edit" onclick="edit_packing('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_packing('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>   
 
             </tr>

@@ -127,42 +127,39 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     padding:7px 7px 20px;
     width:98%;
 }
+.data-list #pb { margin-left: 0; margin-bottom: 10px; } 
+.data-list input[type=text] { margin-right: 2px; }
 .data-list .title {color:#003399}
 .data-list .active {background:url(../images/icons/aktive.ico) no-repeat center;background:12px;padding:6px;}
 /*.add{font:11px tahoma, arial,verdana; border: 1px solid #ccc; padding:5px 8px 5px 18px; margin: 13px 5px 13px 0; text-decoration:none; background: url(../images/icons/add.png) left no-repeat; color: #666; cursor:pointer;}*/
-.data-list .aksi {text-align: center; width: 0.5em; white-space: nowrap}
+.data-list .aksi {text-align: center; white-space: nowrap;}
 .data-list .aksi a, .data-list .aksi a:visited {padding: 1px 1px 1px 19px; margin-left: .4em; font-size: .9em; text-indent: 1em; position: relative}
 .data-list .aksi a small {position: absolute; top: 18px; left: -6px; padding: 7px 10px 3px 0; font-size: .8em; opacity: 0.8}
 .data-list .aksi a:hover small {visibility: visible}
-.data-list .aksi .edit {background: url('../images/icons/edit.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; width: 18px; height: 16px}
+/*.data-list .aksi .delete {background: url('../images/icons/delete.png') no-repeat; cursor: pointer; border-radius: 3px; }
+.data-list .aksi .edit {background: url('../images/icons/edit.png') no-repeat top; border: none; cursor: pointer; width: 18px; height: 16px; border-radius: 3px;}
 .data-list .aksi .add {background: url('../images/icons/add.png') no-repeat 0 50%}
-.data-list .aksi .delete {background: url('../images/icons/delete.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px;}
 .data-list .aksi .detail {background: url('../images/icons/search.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px; }
 .data-list .aksi .detail:hover {background: url('../images/icons/search.png') no-repeat bottom; border: none; cursor: pointer; padding-top: 0px; border-radius: 3px;}
-.data-list .aksi .reset {background: url('../images/icons/reset.png') no-repeat 0 50%}
+.data-list .aksi .reset {background: url('../images/icons/reset.png') no-repeat 0 50%}*/
 .data-list .bolder {font-size: 12px;text-transform: capitalize}
 .data-list .aksi .aktif {background:url(../images/icons/accept.png) no-repeat 0% 50%}
 .data-list .aksi .nonaktif {background:url(../images/icons/cross.png) no-repeat 0 50%}
-.data-list .even {background: #fff}
-.data-list .even:hover {background: #d8fabd}
-.data-list .group-history {background-color: #cccccc; display: block; width: 70%; padding:2px 10px 2px 10px;
-                           cursor: pointer; color: #ffffff; margin-bottom: 4px}
-.data-list .group-history:hover {background-color: #aaaaaa}
-.data-list .no-active {background:url(../images/icons/non.ico) no-repeat center;background:12px;padding:6px}
+.data-list .even {background: #fff; height: 30px;}
+.data-list .odd {background: #f9f9f9;}
 .data-list .no-wrap {white-space:nowrap}
-.data-list .odd {background: #ecf2f6;}
-.data-list .odd:hover{background: #d8fabd}
+
 .aksi .addition {background: url('../images/icons/add.png') no-repeat 0 50%; padding-left:18px;}
 .sortable td .aksi { text-align: center; white-space: nowrap; }
-.edit {background: url('../images/icons/edit.png') no-repeat top; border: none; cursor: pointer; padding: 1px 10px; border-radius: 3px;}
+/*.edit {background: url('../images/icons/edit.png') no-repeat top; border: none; cursor: pointer; padding: 1px 10px; border-radius: 3px;}
 .edit:hover {background: url('../images/icons/edit.png') no-repeat bottom; border: none; cursor: pointer; padding-bottom: 1px; }
 .delete {background: url('../images/icons/delete.png') no-repeat top; border: none; cursor: pointer; padding: 1px 10px; border-radius: 3px;}
 .delete:hover {background: url('../images/icons/delete.png') no-repeat bottom; cursor: pointer; padding-bottom: 1px; border-radius: 3px;}
 .detail {background: url('../images/icons/search.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px; }
-.detail:hover {background: url('../images/icons/search.png') no-repeat bottom; border: none; cursor: pointer; padding-top: 0px; border-radius: 3px;}
+.detail:hover {background: url('../images/icons/search.png') no-repeat bottom; border: none; cursor: pointer; padding-top: 0px; border-radius: 3px;}*/
 .reset {background: url('../images/icons/reset.png') no-repeat 0 50%}
-.noblock {padding:1px 5px 2px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; border:1px solid #ccc; text-decoration: none; color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px;  margin-right: 0;}
-.block {padding:1px 5px 2px 5px; background-color:#eee; border:1px solid #ccc; color:#444; -moz-border-radius: 5px; -webkit-border-radius: 5px; cursor: pointer; margin: 0 2px; }
+.noblock { width: 32px; padding:1px 5px 2px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; border:1px solid #ccc; text-decoration: none; color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px;  margin-right: 0;}
+.block { width: 32px; padding:1px 5px 2px 5px; background-color:#eee; border:1px solid #ccc; color:#444; -moz-border-radius: 5px; -webkit-border-radius: 5px; cursor: pointer; margin: 0 2px; }
 .block:hover { padding:1px 5px 2px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; color: #fff; }
 .page-next {cursor:pointer;font-size:10px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
     background:-moz-linear-gradient( center top, #42c3eb 5%, #289ad9 100% );
@@ -173,10 +170,21 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 
 /*Tabel Sorter*/
 .sortable { border-left:1px solid #c6d5e1; border-top:1px solid #c6d5e1; border-bottom:none; border-spacing: 0; margin-bottom: 10px; }
-.sortable th {background: #525866 url(../images/header-bg.gif); text-align:left; color:#cfdce7; border:1px solid #fff; border-right:none; white-space: nowrap;}
+.sortable th { 
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
+    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-bottom:1px solid #c6d5e1; }
+.sortable th:last-child { 
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
+    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-right:1px solid #c6d5e1;}
 .sortable th.nosort h3 { text-align: center; }
-.sortable th h3{font-size:10px; padding:4px 8px; font-weight: normal; cursor: pointer;}
-.sortable td { padding: 5px 10px 5px 3px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1}
+.sortable th.sortright h3 { text-align: right; }
+.sortable th h3{font-size:10px; padding:4px 3px; font-weight: normal; cursor: pointer;}
+.sortable td { padding: 5px 3px 2px 3px; border-bottom:1px solid #c6d5e1;}
+.sortable td:last-child { padding: 5px 3px 2px 3px; border-right:1px solid #c6d5e1;}
 .sortable .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
 .sortable .desc, .sortable .asc {background: url(../images/header-selected-bg.gif)}
 .sortable .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
@@ -187,9 +195,10 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .sortable td.evenselected {background:#ecf2f6}
 .sortable td.oddselected {background:#dce6ee}
 .sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
-    background: url(../images/header-selected-bg.gif);
+    
 }
-.form-inputan td { padding-top: 0; padding-bottom: 0; height: 28px;}
+.form-inputan td { padding-top: 0; padding-bottom: 0; height: 28px; padding-right: 7px;}
+.form-inputan td input[type=text] { padding: 5px 2px; }
 /*print lanscape*/
 .landscape { 
     width: 100%; 

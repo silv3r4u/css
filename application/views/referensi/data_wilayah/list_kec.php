@@ -27,8 +27,8 @@ $(".sortable").tablesorter();
                 <td><?php echo $kab->kabupaten ?></td>
                 <td><?php echo $kab->kode ?></td>
                 <td class="aksi"> 
-                    <a class="edit" onclick="edit_kecamatan('<?= $kab->id ?>','<?= $kab->nama ?>','<?= $kab->kabupaten_id ?>','<?= $kab->kabupaten ?>','<?= $kab->kode ?>')"></a>
-                    <a class="delete" onclick="delete_kecamatan('<?= $kab->id ?>')"></a>
+                    <span class="edit" onclick="edit_kecamatan('<?= $kab->id ?>','<?= $kab->nama ?>','<?= $kab->kabupaten_id ?>','<?= $kab->kabupaten ?>','<?= $kab->kode ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_kecamatan('<?= $kab->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td> 
             </tr>
         <?php endforeach; ?>

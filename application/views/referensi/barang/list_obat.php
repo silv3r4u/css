@@ -62,8 +62,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->indikasi . "#" . $rows->dosis
                             . "#" . $rows->kandungan;
                     ?>
-                    <a class="edit" onclick="edit_obat('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_obat('<?= $rows->id ?>')"></a>
+                    <span class="edit" onclick="edit_obat('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_obat('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>
             </tr>
         <?php endforeach; ?>

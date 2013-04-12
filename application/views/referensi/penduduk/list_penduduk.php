@@ -83,8 +83,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->lahir_tanggal
                             . "#" . $rows->id_dp;
                     ?>
-                    <a class="edit" onclick="edit_penduduk('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_penduduk('<?= $rows->penduduk_id ?>')"></a>
+                    <span class="edit" onclick="edit_penduduk('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_penduduk('<?= $rows->penduduk_id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>   
             </tr>
         <?php endforeach; ?>

@@ -77,18 +77,18 @@ $(function() {
 <?= form_open('referensi/harga_jual_update', 'id=form_harga_jual2') ?>
 <?= form_button(NULL, 'Check all', 'id=checkall') ?>
 <table class="sortable form-inputan" width="100%" id="table">
-        <thead>
-        <tr>
-            <th class="nosort"><h3>#</h3></th>
-            <th><h3>Tanggal</h3></th>
-            <th><h3>Packing Barang</h3></th>
-            <th><h3>HNA (Rp.)</h3></th>
-            <th><h3>Margin (%)</h3></th>
-            <th><h3>Diskon (%)</h3></th>
-            <th><h3>Harga Jual (Rp.)</h3></th>
-        </tr>
-        </thead>
-        <tbody>
+    <thead>
+    <tr>
+        <th class="nosort"><h3>#</h3></th>
+        <th class="nosort"><h3>Tanggal</h3></th>
+        <th><h3>Packing Barang</h3></th>
+        <th class="sortright"><h3>HNA (Rp.)</h3></th>
+        <th class="nosort"><h3>Margin (%)</h3></th>
+        <th class="nosort"><h3>Diskon (%)</h3></th>
+        <th class="sortright"><h3>Harga Jual (Rp.)</h3></th>
+    </tr>
+    </thead>
+    <tbody>
 <?php
 $jumlah = 0;
 foreach ($list_data as $key => $data) {

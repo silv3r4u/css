@@ -4,6 +4,7 @@ class Referensi extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->helper('html');
         $this->load->model('m_referensi');
         $this->load->model('m_inv_autocomplete');
     }
@@ -1588,14 +1589,15 @@ class Referensi extends CI_Controller {
 
     function harga_jual() {
         $data['title'] = 'Administrasi Produk';
+        $data['list_data'] = $this->m_referensi->harga_jual_load_data()->result();
         $this->load->view('referensi/harga_jual/harga-jual', $data);
     }
 
     function harga_jual_load() {
         $data['title'] = 'Administrasi Harga Jual';
-        $id = $_GET['pb'];
-        $data['list_data'] = $this->m_referensi->harga_jual_load_data($id)->result();
-        $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+        $pb = $_GET['pb'];
+        $data['list_data'] = $this->m_referensi->harga_jual_load_data($pb)->result();
+        $this->load->view('referensi/harga_jual/harga-jual', $data);
     }
 
     function harga_jual_update() {

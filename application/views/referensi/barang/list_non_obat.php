@@ -45,8 +45,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td><?= $rowA->pabrik ?></td>
                 <?php $str = $rowA->id . "#" . $rowA->nama . "#" . $rowA->barang_kategori_id . "#" . $rowA->id_pabrik . "#" . $rowA->pabrik; ?>
                 <td class="aksi" align="center"> 
-                    <a class="edit" onclick="edit_non('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_non('<?= $rowA->id ?>')"></a>
+                    <span class="edit" onclick="edit_non('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_non('<?= $rowA->id ?>')"></span>
                 </td>
             </tr>
         <?php endforeach; ?>

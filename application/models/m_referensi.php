@@ -1157,10 +1157,10 @@ class M_referensi extends CI_Model {
         return $ret;
     }
 
-    function harga_jual_load_data($id_pb = null) {
+    function harga_jual_load_data($pb = null) {
         $q = null;
-        if ($id_pb != null) {
-            $q.="and br.nama like ('%$id_pb%')";
+        if ($pb != null) {
+            $q.="and br.nama like ('%$pb%') or t.hna like ('%$pb%')";
         }
         $sql = "select t.*, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
             s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from transaksi_detail t 

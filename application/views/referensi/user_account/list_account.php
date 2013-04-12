@@ -15,8 +15,8 @@
             <td><?= $rows->username ?></td>
             <td><?= $rows->nama ?></td>
             <td class="aksi" align="center"> 
-                <a class="edit" onclick="edit_user('<?= $rows->id ?>')"></a>
-                <a class="delete" onclick="delete_user('<?= $rows->id ?>')"></a>
+                <span class="edit" onclick="edit_user('<?= $rows->id ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                <span class="delete" onclick="delete_user('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
             </td>  
         </tr>
     <?php endforeach; ?>

@@ -806,10 +806,10 @@ body .ui-tooltip {
     color: #333333;
 }
 .ui-widget-header {
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9a9b9d), color-stop(1, #51626f) );
+/*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9a9b9d), color-stop(1, #51626f) );
     background:-moz-linear-gradient( center top, #9a9b9d 5%, #51626f 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9a9b9d', endColorstr='#51626f');
-    color: #ffffff;
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9a9b9d', endColorstr='#51626f');*/
+    color: #666;
     font-weight: normal;
 }
 .ui-widget-header a {

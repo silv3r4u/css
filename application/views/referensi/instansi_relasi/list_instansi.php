@@ -16,7 +16,7 @@
         <th width="20%"><h3>Nama</h3></th>
         <th width="40%"><h3>Alamat</h3></th>
         <th width="10%"><h3>Jenis</h3></th>
-        <th width="5%"><h3>Aksi</h3></th>
+        <th width="5%" class="nosort"><h3>Aksi</h3></th>
     </tr>
     </thead>
     <tbody>
@@ -29,8 +29,8 @@
                 <td><?= $rows->alamat.' '.$rows->kabupaten ?></td>
                 <td><?= $rows->jenis ?></td>
                 <td class="aksi"> 
-                    <a class="edit" onclick="edit_instansi('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_instansi('<?= $rows->id ?>')"></a>
+                    <span onclick="edit_instansi('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span onclick="delete_instansi('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>   
             </tr>
         <?php endforeach; ?>

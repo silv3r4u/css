@@ -118,7 +118,7 @@
             str = '<tr class=tr_row>'+
                 '<td><input type=text name=np[] id=np'+i+' class=bc size=15 style="width: 100%" /></td>'+
                 '<td><input type=text name=produk[] id=produk'+i+' class=produk size=40 style="width: 100%" /><input type=hidden name=id_produk[] id=id_produk'+i+' class=id_produk size=10 /></td>'+
-                '<td class=aksi><a href=# class=delete onclick=eliminate(this)></a></td>'+
+                '<td class=aksi><span href=# class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
                 '</tr>';
 
             $('.form-inputan tbody').append(str);

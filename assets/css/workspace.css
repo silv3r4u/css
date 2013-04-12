@@ -15,17 +15,22 @@ h2 { font-size: 14px; display: block; }
 .logos {height: 110px; background: url(../images/logo.jpg) no-repeat; z-index:1; position: relative; }
 /*-- tabel mode-- */
 .home { background: url(../images/home.png) no-repeat left; padding-left: 10px; margin: 0px 5px;  }
-.tabel {border-top: 1px solid #cccccc; border-left: 1px solid #cccccc; empty-cells: show; border-radius:5px; overflow:auto; margin-top:5px; clear: both;border-collapse: collapse; background: #fff; color: #000}
+.tabel {border-top: 1px solid #cccccc; border-left: 1px solid #c6d5e1; empty-cells: show; border-radius:5px; overflow:auto; margin-top:5px; clear: both;border-collapse: collapse; background: #fff; color: #000}
 .tabel input[type=text] { width: 100%; }
-.tabel td {border-bottom: 1px solid #cccccc; border-right: 1px solid #f4f4f4; padding: 4px 9px 4px 3px;font-family: tahoma,arial,verdana;font-size: 13px; }
+.tabel td {border-bottom: 1px solid #cccccc; padding: 4px 9px 4px 3px;font-family: tahoma,arial,verdana;font-size: 13px; }
 .tabel th { 
-    background: #525866 url(../images/header-bg.gif);
-    color:#cfdce7; border:1px solid #fff; border-right:none;
-    height: 25px;
-    font-weight: normal;
-    color: #fff;
-    white-space: nowrap;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
+    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-bottom:1px solid #c6d5e1; padding: 0 2px; font-weight: normal;
 }
+.tabel th:last-child { 
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
+    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-right:1px solid #c6d5e1;
+}
+.tabel th .nosort { text-align: center }
 .tabel .even { background: #ecf2f6; }
 .tabel .odd { background: #fff; }
 .tabel th a {color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
