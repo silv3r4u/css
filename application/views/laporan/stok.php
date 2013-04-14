@@ -220,13 +220,13 @@
                 }
             }
             ?>
-            <label>Urutkan:</label>
-            <span class="label"><?= form_radio('sort', 'Terakhir', isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir') ? TRUE : FALSE, 'id=last ') ?> Terakhir</span>
-            <span class="label"><?= form_radio('sort', 'History', isset($_GET['sort']) and ($_GET['sort'] == 'History') ? TRUE : FALSE, 'id=history ') ?> History</span>
-            <label>Waktu:</label><?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : NULL, 'id=awal size=10 ' . $disabled) ?> <span class="label"> s . d </span><?= form_input('akhir', isset($_GET['akhir']) ? $_GET['akhir'] : NULL, 'id=akhir size=10 ' . $disabled) ?>
+            <label>Group Berdasar:</label>
+            <span class="label"><?= form_radio('sort', 'Terakhir', isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir') ? TRUE : FALSE, 'id=last ') ?> Stok Terakhir</span>
+            <span class="label"><?= form_radio('sort', 'History', isset($_GET['sort']) and ($_GET['sort'] == 'History') ? TRUE : FALSE, 'id=history ') ?> Rincian</span>
+            <label>Range:</label><?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : NULL, 'id=awal size=10 ' . $disabled) ?> <span class="label"> s . d </span><?= form_input('akhir', isset($_GET['akhir']) ? $_GET['akhir'] : NULL, 'id=akhir size=10 ' . $disabled) ?>
             <label>Jenis Transaksi:</label><?= form_dropdown('transaksi_jenis', $jenis_transaksi, isset($_GET['transaksi_jenis']) ? $_GET['transaksi_jenis'] : null) ?></td></tr>
             <label>Jenis Barang:</label><?= form_dropdown('jenis', array('' => 'Semua Jenis ...', 'Obat' => 'Obat','Non Obat' => 'Non Obat'), isset($_GET['jenis'])?$_GET['jenis']:NULL) ?>
-            <label>Packing Barang:</label><?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=50') ?> <?= form_hidden('id_pb', isset($_GET['id_pb']) ? $_GET['id_pb'] : null) ?>
+            <label>Nama Barang:</label><?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=50') ?> <?= form_hidden('id_pb', isset($_GET['id_pb']) ? $_GET['id_pb'] : null) ?>
             <label>Sediaan:</label><?= form_dropdown('sediaan', $sediaan, isset($_GET['pb']) ? $_GET['sediaan'] : null) ?>
             <label>Perundangan:</label><?= form_dropdown('perundangan', $perundangan, isset($_GET['perundangan']) ? $_GET['perundangan'] : null) ?>
             <label>Generik:</label><?= form_dropdown('generik', $generik, isset($_GET['generik']) ? $_GET['generik'] : null) ?>
@@ -249,9 +249,9 @@
                 <th>Pembeli / Pasien</th>
                 <?php } ?>
                 <th>Jenis Transaksi</th>
-                <th>Packing Barang</th>
-                <th>ED</th>
-                <th>HPP</th>
+                <th>Barang</th>
+                <th>Expired</th>
+                <th>HNA</th>
                 <?php if (isset($_GET['sort']) and $_GET['sort'] == 'History') { ?>
                 <th>Awal</th>
                 <th>Masuk</th>
@@ -329,13 +329,13 @@
                         <td><?= $data->transaksi_jenis ?></td>
                         <td><?= $data->barang ?> <?= ($data->kekuatan != '1') ? $data->kekuatan : null ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= (($data->generik == 'Non Generik') ? '' : $data->pabrik) ?> @ <?= ($data->isi == 1) ? '' : $data->isi ?> <?= $data->satuan_terkecil ?></td>
                         <td align="center"><?= ($data->transaksi_jenis == 'Pemesanan') ? '-' : datefmysql($data->ed) ?></td>
-                        <td align="right"><?= inttocur($data->hpp) ?></td>
+                        <td align="right"><?= inttocur($data->hna) ?></td>
                         <?php if (isset($_GET['sort']) and $_GET['sort'] == 'History') { ?>
                         <td><?= $data->awal ?></td>
                         <td><?= $data->masuk ?></td>
                         <td><?= $data->keluar ?></td>
                         <?php } ?>
-                        <td><?= $data->sisa ?></td>
+                        <td align="center"><?= $data->sisa ?></td>
                     </tr>
                     <?php
                     $hpp = $hpp+$data->hpp;
@@ -360,9 +360,8 @@
         </table>
     <br/>
     <?php
-    if (isset($list_data) and (count($list_data) > 0) and isset($_GET['sort']) and $_GET['transaksi_jenis'] != '' and $_GET['sort'] == 'Terakhir') { ?>
-    <b>TOR: <?= rupiah(($hpp/count($list_data))/($sisa/count($list_data))) ?></b><br/>
-    <b>Nilai Asset: <?= rupiah($asset) ?></b>
+    if (isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir')) { ?>
+    <b>Total Asset: <?= rupiah($asset) ?></b>
     <?php } ?>
     </div>
 </div>

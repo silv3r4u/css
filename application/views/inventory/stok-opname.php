@@ -73,11 +73,7 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.id_pb').attr('id','id_pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.ed').attr('id','ed'+i);
         $('.tr_row:eq('+i+')').children('td:eq(2)').children('.hna').attr('id','hna'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.hpp').attr('id','hpp'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.het').attr('id','het'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.js').attr('id','js'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.alasan').attr('id','alasan'+i);
-        
+        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.js').attr('id','js'+i);
     }
 }
 function add(i) {
@@ -86,10 +82,8 @@ function add(i) {
                     '<input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
                 '<td><input type=text name=ed[] id=ed'+i+' class=ed size=8 /></td>'+
                 '<td><input type=text name=hna[] id=hna'+i+' class=hna size=5 onKeyup=FormNum(this) /></td>'+
-                '<td><input type=text name=hpp[] id=hpp'+i+' class=hpp size=5 onKeyup=FormNum(this) /></td>'+
-                '<td><input type=text name=het[] id=het'+i+' class=het size=5 onKeyup=FormNum(this) /></td>'+
                 '<td><input type=text name=js[] id=js'+i+' class=js size=5 /></td>'+
-                '<td class=aksi><a class=delete onclick=eliminate(this)></a></td>'+
+                '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
             '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -164,9 +158,11 @@ function add(i) {
     <?= form_open('inventory/stok_opname', 'id=form_stok_opname') ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
+        <div class="left_side">
             <label>No.:</label><span class="label" id="stok_opname"><?= isset($_GET['id'])?$_GET['id']:get_last_id('opname_stok', 'id') ?></span>
             <label>Alasan:</label><?= form_input('alasan', NULL, 'id=alasan size=40') ?>
             <label></label><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+            </div>
     </fieldset>
     </div>
     <div class="data-list">
@@ -176,8 +172,6 @@ function add(i) {
                 <th>Packing Barang</th>
                 <th>ED</th>
                 <th>HNA</th>
-                <th>HPP</th>
-                <th>HET</th>
                 <th>Jumlah Sisa</th>
                 <th>#</th>
             </tr>
@@ -191,8 +185,6 @@ function add(i) {
                     <td><?= $data['barang'] ?> <?= ($data['kekuatan']!='1')?$data['kekuatan']:null ?>  <?= $data['satuan'] ?> <?= $data['sediaan'] ?> <?= ($data['pabrik'] == 'Non Generik')?'':$data['pabrik'] ?> @ <?= ($data['isi']==1)?'':$data['isi'] ?> <?= $data['satuan_terbesar'] ?></td>
                     <td align="center"><?= datefmysql($data['ed']) ?></td>
                     <td align="right"><?= inttocur($data['hna']) ?></td>
-                    <td align="right"><?= inttocur($data['hpp']) ?></td>
-                    <td align="right"><?= inttocur($data['het']) ?></td>
                     <td><?= $data['sisa'] ?></td>
                     <td>#</td>
                 </tr>

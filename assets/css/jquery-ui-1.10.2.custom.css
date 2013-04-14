@@ -489,8 +489,8 @@ button.ui-button::-moz-focus-inner {
 	right: .3em;
 	top: 50%;
 	width: 21px;
-	margin: -10px 0 0 0;
-	padding: 1px;
+	margin: -12px 0 0 0;
+	padding: 3px 1px 0 3px;
 	height: 20px;
 }
 .ui-dialog .ui-dialog-content {
@@ -766,7 +766,7 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs .ui-tabs-panel {
 	display: block;
 	border-width: 0;
-	padding: 1em 1.4em;
+	padding: 1em 0em;
 	background: none;
 }
 .ui-tooltip {
@@ -806,10 +806,10 @@ body .ui-tooltip {
     color: #333333;
 }
 .ui-widget-header {
-/*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9a9b9d), color-stop(1, #51626f) );
-    background:-moz-linear-gradient( center top, #9a9b9d 5%, #51626f 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9a9b9d', endColorstr='#51626f');*/
-    color: #666;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
+    background:-moz-linear-gradient( center top, #42c3eb 5%, #289ad9 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#42c3eb', endColorstr='#289ad9');
+    color: #fff;
     font-weight: normal;
 }
 .ui-widget-header a {
@@ -1139,25 +1139,25 @@ body .ui-tooltip {
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	border-top-left-radius: 4px;
+	border-top-left-radius: 0px;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	border-top-right-radius: 4px;
+	border-top-right-radius: 0px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	border-bottom-left-radius: 4px;
+	border-bottom-left-radius: 0px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	border-bottom-right-radius: 4px;
+	border-bottom-right-radius: 0px;
 }
 
 /* Overlays */

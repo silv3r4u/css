@@ -17,7 +17,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
         <th width="40%"><h3>Barang</h3></th>
         <th width="10%"><h3>Kemasan</h3></th>
         <th width="10%"><h3>Isi @</h3></th>
-        <th width="10%"><h3>Satuan</h3></th>
+        <th width="10%"><h3>Satuan Terkecil</h3></th>
         <th class="nosort" width="10%"><h3>Aksi</h3></th>
     </tr>
     </thead>

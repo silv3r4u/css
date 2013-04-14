@@ -23,7 +23,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .arrow-right { background: url(../images/left-arrow.png) no-repeat; float: left; width: 34px; height: 45px; margin-top: 3%; }
 .content { padding: 5px; font-size: 12px;}
 .information { background: url(../images/icons/warning.png) no-repeat left; height: 16px; padding-left: 17px; font-style: italic; }
-@media screen and (min-width: 480px) {
+@media screen and (min-width: 700px) {
     #loaddata { background: #efefef; width: 80%; float: right; height: 83%; overflow-y: auto; }
     #loading { position: fixed; width:100px; height:13px; padding:10px; z-index:9999; margin: 8% auto; left: 0; right: 0; top:0; padding-left: 35px; font-size: 12px; }
     #useractive { display: block; }
@@ -44,7 +44,13 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .menu-root { position: fixed; top: 88px; width: 80%; float: right; right: 0; }
     .menu-root span { font-size: 13px; color: #000; height: 32px; background: #edec43; padding: 7px 10px;}
     .menu-root span:hover { color: #f4f4f4; cursor: pointer; color: #006a9c; background: #f4f4f4; padding: 8px 10px; }
-
+    .data-input label {color: #000; clear: both; display: block; float: left; font-size: 12px; line-height: 1.5em; padding: .5em .5em 0; width: 11.5em; white-space: nowrap;}
+    .data-input input[type=text], .data-input input[type=radio], .data-input input[type=submit], .data-input input[type=checkbox], .data-input input[type=button], .data-input input[type=reset], .data-input input[type=textarea], .data-input select, .data-input button {float: left; }
+    .data-input input[type=text] { font-size: 12px; min-width: 200px; margin-left: 5px;}
+    .data-input button { margin-left: 5px; margin-top: 5px; }
+    .data-input input[type=text].hasDatepicker { min-width: 85px; }
+    .data-input button,.data-input input,.data-input select {margin: .3em 5px 0 5px; }
+    .data-input textarea { height: 40px; float: left; width: 200px; border: 1px inset #CCCCCC; padding:3px; margin: 5px 5px 0 5px; font: tahoma,arial lighter !important}
 }
 @media screen and (min-width: 1200px) {
     #loaddata { background: #efefef; width: 80%; float: right; height: 86%; overflow-y: auto; }
@@ -70,6 +76,12 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .menu-root { position: fixed; top: 88px; width: 80%; float: right; right: 0; }
     .menu-root span { font-size: 13px; color: #000; height: 32px; background: #edec43; padding: 7px 10px;}
     .menu-root span:hover { color: #f4f4f4; cursor: pointer; color: #006a9c; background: #f4f4f4; padding: 8px 10px; }
+    .data-input label {color: #000; clear: both; display: block; float: left; font-size: 12px; line-height: 1.5em; padding: .5em .5em 0; width: 11.5em; white-space: nowrap;}
+    .data-input input[type=text], .data-input input[type=radio], .data-input input[type=submit], .data-input input[type=checkbox], .data-input input[type=button], .data-input input[type=reset], .data-input input[type=textarea], .data-input select, .data-input button {float: left; }
+    .data-input input[type=text] { font-size: 12px; min-width: 250px;}
+    .data-input input[type=text].hasDatepicker { min-width: 85px; }
+    .data-input button,.data-input input,.data-input select {margin: .3em 5px 0 5px; }
+    .data-input textarea { height: 40px; float: left; width: 250px; border: 1px inset #CCCCCC; padding:3px; margin: 5px 5px 0 5px; font: tahoma,arial lighter !important}
 
 }
 /*b8d806*/
@@ -84,13 +96,8 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .content-menu img { margin-right: 5px; }
 .data-input fieldset { margin-top: 5px; padding-top: 20px; }
 .data-input fieldset legend { display: none; }
-.data-input button,.data-input input,.data-input select {margin: .3em 5px 0 0 }
-.data-input textarea { height: 40px; float: left; width: 250px; border: 1px inset #CCCCCC; padding:3px; margin: 5px 5px 0 0; font: tahoma,arial lighter !important}
 .data-input .filter-predicate {min-width: 150px;width: 253px;}
 .data-input .filter-values {min-width: 150px;}
-.data-input label {color: #000; clear: both; display: block; float: left; font-size: 12px; line-height: 1.5em; padding: .5em .5em 0; width: 11.5em; white-space: nowrap;}
-.data-input input[type=text], .data-input input[type=radio], .data-input input[type=submit], .data-input input[type=checkbox], .data-input input[type=button], .data-input input[type=reset], .data-input input[type=textarea], .data-input select, .data-input button {float: left; }
-.data-input input[type=text] { font-size: 12px; }
 .data-input .mini {min-width: 2em;}
 .data-input .mini-select {min-width: 10em;padding: 1px;margin-left: 5px;white-space: nowrap;}
 .data-input .mini-select2 {min-width: 22.5em;padding: 1px;margin-left: 10px;white-space: nowrap;}
@@ -127,7 +134,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     padding:7px 7px 20px;
     width:98%;
 }
-.data-list #pb { margin-left: 0; margin-bottom: 10px; } 
+.data-list #pb { margin-left: 0; margin-bottom: 10px; } d
 .data-list input[type=text] { margin-right: 2px; }
 .data-list .title {color:#003399}
 .data-list .active {background:url(../images/icons/aktive.ico) no-repeat center;background:12px;padding:6px;}
@@ -158,33 +165,35 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .detail {background: url('../images/icons/search.png') no-repeat top; border: none; cursor: pointer; padding-bottom: 0px; border-radius: 3px; }
 .detail:hover {background: url('../images/icons/search.png') no-repeat bottom; border: none; cursor: pointer; padding-top: 0px; border-radius: 3px;}*/
 .reset {background: url('../images/icons/reset.png') no-repeat 0 50%}
-.noblock { width: 32px; padding:1px 5px 2px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; border:1px solid #ccc; text-decoration: none; color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px;  margin-right: 0;}
-.block { width: 32px; padding:1px 5px 2px 5px; background-color:#eee; border:1px solid #ccc; color:#444; -moz-border-radius: 5px; -webkit-border-radius: 5px; cursor: pointer; margin: 0 2px; }
-.block:hover { padding:1px 5px 2px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; color: #fff; }
-.page-next {cursor:pointer;font-size:10px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
+.noblock { width: 32px; padding:3px 5px 5px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; border:1px solid #ccc; text-decoration: none; color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px;  margin-right: 0;}
+.block { width: 32px; padding:3px 5px 5px 5px; background-color:#eee; border:1px solid #ccc; color:#444; -moz-border-radius: 5px; -webkit-border-radius: 5px; cursor: pointer; margin: 0 2px; }
+.block:hover { padding:3px 5px 5px 5px; background: url(../images/ui-bg_gloss-wave_75_2191c0_500x100.png) center; color: #fff; }
+.page-next {cursor:pointer;font-size:12px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
     background:-moz-linear-gradient( center top, #42c3eb 5%, #289ad9 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#42c3eb', endColorstr='#289ad9'); color: #fff; border-radius: 4px; padding: 2px 10px 3px 10px; margin-left: 2px;}
-.page-prev { cursor:pointer;font-size:10px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#42c3eb', endColorstr='#289ad9'); color: #fff; border-radius: 4px; padding: 4px 10px 6px 10px; margin-left: 2px;}
+.page-prev { cursor:pointer;font-size:12px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #42c3eb), color-stop(1, #289ad9) );
     background:-moz-linear-gradient( center top, #42c3eb 5%, #289ad9 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#42c3eb', endColorstr='#289ad9'); color: #fff; border-radius: 4px; padding: 2px 10px 3px 10px; margin-right: 2px;}
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#42c3eb', endColorstr='#289ad9'); color: #fff; border-radius: 4px; padding: 4px 10px 6px 10px; margin-right: 2px;}
 
 /*Tabel Sorter*/
 .sortable { border-left:1px solid #c6d5e1; border-top:1px solid #c6d5e1; border-bottom:none; border-spacing: 0; margin-bottom: 10px; }
-.sortable th { 
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
-    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
-    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-bottom:1px solid #c6d5e1; }
+.sortable th {
+    font-weight: bold;
+    font-size: 12px;
+    border-right:1px solid #c6d5e1;
+    background: #faf6d1;
+    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1; }
 .sortable th:last-child { 
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
-    background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
-    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-right:1px solid #c6d5e1;}
-.sortable th.nosort h3 { text-align: center; }
-.sortable th.sortright h3 { text-align: right; }
-.sortable th h3{font-size:10px; padding:4px 3px; font-weight: normal; cursor: pointer;}
-.sortable td { padding: 5px 3px 2px 3px; border-bottom:1px solid #c6d5e1;}
-.sortable td:last-child { padding: 5px 3px 2px 3px; border-right:1px solid #c6d5e1;}
+    font-weight: bold;
+    font-size: 12px;
+    border-right:1px solid #c6d5e1;
+    background: #faf6d1;
+    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-right:1px solid #c6d5e1;}
+.sortable th.nosort h3 { text-align: center; font-size: 12px; }
+.sortable th.sortright h3 { text-align: right; font-size: 12px; }
+.sortable th h3{font-size:12px; padding:4px 3px; cursor: pointer;}
+.sortable td { padding: 3px 3px 0px 3px; border-bottom:1px solid #c6d5e1; border-right: 1px solid #c6d5e1; }
+.sortable td:last-child { padding: 3px 3px 0px 3px; border-right:1px solid #c6d5e1;}
 .sortable .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
 .sortable .desc, .sortable .asc {background: url(../images/header-selected-bg.gif)}
 .sortable .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
@@ -197,8 +206,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .sortable thead tr .headerSortDown, table.sortable thead tr .headerSortUp {
     
 }
-.form-inputan td { padding-top: 0; padding-bottom: 0; height: 28px; padding-right: 7px;}
-.form-inputan td input[type=text] { padding: 5px 2px; }
+.form-inputan td { padding-top: 1; padding-bottom: 1; height: 15px; padding-right: 7px;}
 /*print lanscape*/
 .landscape { 
     width: 100%; 

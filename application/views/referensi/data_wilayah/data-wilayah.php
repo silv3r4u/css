@@ -18,7 +18,7 @@
                     my_ajax('<?= base_url() ?>referensi/data_kabupaten','#kab');
                 }
             });
-            $('.kec').click(function(){
+            /*$('.kec').click(function(){
                 if($('#kec').html()== ''){
                     my_ajax('<?= base_url() ?>referensi/data_kecamatan','#kec');
                 }
@@ -27,7 +27,7 @@
                 if($('#kel').html()== ''){
                     my_ajax('<?= base_url() ?>referensi/data_kelurahan','#kel');
                 }
-            });      
+            });      */
         
         
         
@@ -85,15 +85,15 @@
     <div id="tabs">
         <ul>
             <li><a class="pro" href="#pro">Provinsi</a>  </li>
-            <li><a class="kab" href="#kab">Kabupaten</a>  </li>
-            <li><a class="kec" href="#kec">Kecamatan</a>  </li>
-            <li><a class="kel" href="#kel">Kelurahan</a>  </li>
+            <li><a class="kab" href="#kab">Kab. / Kodya</a>  </li>
+<!--            <li><a class="kec" href="#kec">Kecamatan</a>  </li>
+            <li><a class="kel" href="#kel">Kelurahan</a>  </li>-->
         </ul>
 
         <div id="pro"></div>
         <div id="kab"></div>
-        <div id="kec"></div>
-        <div id="kel"></div>
+<!--        <div id="kec"></div>
+        <div id="kel"></div>-->
     </div>
 
 

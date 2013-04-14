@@ -4,7 +4,30 @@ function loading() {
     var url = '<?= base_url('inventory/penjualan') ?>';
     $('#loaddata').load(url);
 }
+
+function form_open() {
+    $('#form_pembayaran').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 350,
+        height: 300,
+        buttons: {
+            "Ok": function() {
+                $('input[name=bulat]').val($('#bulat').val());
+                $('input[name=bayar]').val($('#bayar').val());
+                $(this).dialog("close");
+                $('#noresep').focus();
+            }
+        }
+    });
+}
 $(function() {
+    $('input,select').live('keydown', function(e) {
+        if (e.keyCode === 120) {
+            form_open();
+            $('#bayar').focus();
+        }
+    });
     $('button[id=reset]').button({
         icons: {
             primary: 'ui-icon-refresh'
@@ -124,20 +147,7 @@ $(function() {
                 $('#total_tagihan_penjualan').html($('#total').html());
                 var nominal = currencyToNumber($('#total').html());
                 $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
-                $('#form_pembayaran').dialog({
-                    autoOpen: true,
-                    modal: true,
-                    width: 350,
-                    height: 300,
-                    buttons: {
-                        "Ok": function() {
-                            $('input[name=bulat]').val($('#bulat').val());
-                            $('input[name=bayar]').val($('#bayar').val());
-                            $(this).dialog("close");
-                            $(this).dialog().remove();
-                        }
-                    }
-                });
+                
             }
         });
         var id = data.pasien_penduduk_id;
@@ -148,9 +158,10 @@ $(function() {
             success: function(msg) {
                 $('#asuransi').html((msg != 'null')?msg:'-');
             }
-        })
+        });
+        $('#ppn').focus();
     });
-})
+});
 $(function() {
     for(x = 0; x <= 1; x++) {
         add(x);
@@ -453,6 +464,8 @@ $(function() {
                     $('#deletion,#print').show();
                     $('button[type=submit]').hide();
                     $('#id_penjualan').html(data.id_penjualan);
+                    $('input[name=bulat]').val('');
+                    $('input[name=bayar]').val('');
                     alert_tambah();
                 }
             }
@@ -487,11 +500,11 @@ $(function() {
 <div class="kegiatan">
     <h1><?= $title ?></h1>
     <?= form_open('inventory/penjualan', 'id=form_penjualan') ?>
-    <div class="data-input" id="form_pembayaran" title="Form Pembayaran" style="display: none;">
-        <label style="text-align: right;">Total:</label><span id="total_tagihan_penjualan" class="label"></span>
-        <label style="text-align: right;">Pembulatan:</label><?= form_input('', null, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
-        <label style="text-align: right;">Bayar (Rp):</label><?= form_input('', null, 'id=bayar size=30 ') ?>
-        <label style="text-align: right;">Kembalian (Rp):</label><span id="kembalian" class="label"></span>
+    <div class="data-input" id="form_pembayaran" title="Form Pembayaran" style="display: none; font-size: 18px;">
+        <label style="font-size: 18px">Total (Rp.):</label><b><span style="font-size: 18px" id="total_tagihan_penjualan" class="label"></span></b>
+        <label style="font-size: 18px">Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat style="font-size: 18px" onkeyup=FormNum(this) ') ?>
+        <label style="font-size: 18px">Bayar (Rp):</label><?= form_input('', null, 'id=bayar style="font-size: 18px"') ?>
+        <label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px" id="kembalian" class="label"></span>
     </div>
     <div class="data-input">
     <?= form_hidden('bulat') ?>
@@ -508,7 +521,7 @@ $(function() {
                     <?= form_hidden('id_resep', isset($rows['resep_id'])?$rows['resep_id']:NULL) ?>
             <label>Pasien</label><span id="pasien" class="label"></span>
             <label>Produk Asuransi</label><span id="asuransi" class="label"></span>
-            <label>PPN (%) </label><?= form_input('ppn', '10', 'id=ppn size=10 onkeyup=subTotal()') ?>
+            <label>PPN (%) </label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
             <label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
         </div>
         <div class="right_side">

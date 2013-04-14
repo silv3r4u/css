@@ -72,9 +72,9 @@ $row5= $this->db->query("select (sum(rrr.jual_harga)/".$row4.") as harga_rata2
   <tr>
     <td align="center"><?= $row->total_resep ?></td>
     <td align="center"><?= $row2->total_no_r ?></td>
-    <td align="center"><?= rupiah($row3->harga_rata2) ?></td>
-    <td align="center"><?= $row4 ?></td>
-    <td align="center"><?= rupiah(($row2->total_no_r==0)?'0':$row5->harga_rata2) ?></td>
+    <td align="center"><?= isset($row3->harga_rata2)?rupiah($row3->harga_rata2):NULL ?></td>
+    <td align="center"><?= isset($row4)?$row4:NULL ?></td>
+    <td align="center"><?= (isset($row2->total_no_r) and isset($row5->harga_rata2))?rupiah(($row2->total_no_r==0)?'0':$row5->harga_rata2):'0' ?></td>
     <td align="center"><?= ($row2->total_no_r==0)?'0':($row4/$row2->total_no_r)*100 ?> %</td>
   </tr>
 </table><br/>

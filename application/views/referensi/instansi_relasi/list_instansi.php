@@ -22,7 +22,7 @@
     <tbody>
     <?php if ($instansi != null): ?>
         <?php foreach ($instansi as $key => $rows): ?>
-        <?php $str = $rows->id . "#" . $rows->nama . "#" . $rows->alamat . "#" . $rows->kelurahan_id . "#" . $rows->kelurahan . "#" . $rows->telp . "#" . $rows->fax . "#" . $rows->email . "#" . $rows->website . "#" . $rows->relasi_instansi_jenis_id . "#" . $rows->diskon_penjualan; ?>
+        <?php $str = $rows->id . "#" . $rows->nama . "#" . preg_replace('/^\s+|\n|\r|\s+$/m', '',$rows->alamat) . "#" . $rows->kabupaten_id . "#" . $rows->kabupaten . "#" . $rows->telp . "#" . $rows->fax . "#" . $rows->email . "#" . $rows->website . "#" . $rows->relasi_instansi_jenis_id . "#" . $rows->diskon_penjualan; ?>
             <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= $rows->nomor ?></td>
                 <td><?= $rows->nama ?></td>

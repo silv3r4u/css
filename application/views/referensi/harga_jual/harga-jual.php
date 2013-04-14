@@ -52,7 +52,7 @@
                                         data: 'pb='+id_pb,
                                         cache: false,
                                         success: function(msg) {
-                                            $('#result').html(msg);
+                                            $('#loaddata').html(msg);
                                         }
                                     })
                                 }
@@ -76,48 +76,32 @@
                 icons: {
                     primary: 'ui-icon-refresh'
                 }
-            })
+            });
             $('button[id=update]').button({
                 icons: {
                     primary: 'ui-icon-pencil'
                 }
-            })
+            });
             $('#akhir').datepicker({
                 changeYear: true,
                 changeMonth: true
-            })
-        
-            $('#update').hide();
+            });
             $('#reset').click(function() {
                 $('#loaddata').html('');
                 var url = '<?= base_url('referensi/harga_jual') ?>';
                 $('#loaddata').load(url);
-            })
+            });
             $('#searchs').click(function() {
                 $('#form-update').fadeIn('fast').draggable();
             });
-            
-        
-        })
+        });
     </script>
     <h1><?= $title ?></h1>
-    
-<!--    <div class="data-input">
-        <fieldset><legend>Parameter</legend>
-            <?= form_open('referensi/harga_jual', 'id=form_harga_jual') ?>
-            <label>Nama Barang</label> <?= form_input('pb', isset($_GET['id']) ? $packing : null, 'id=pb size=50') ?> <?= form_hidden('id_pb') ?>
-            <label></label>
-            <?= form_submit(null, 'Cari', 'id=search') ?>
-            <?= form_button('Reset', 'Reset', 'id=reset') ?>
-            <?= form_button('updatemargin', 'Update Margin', 'id=update') ?>
-            <?= form_close() ?>
-        </fieldset>
-    </div>-->
-    
-        
-    
+    <div id="result_load"></div>
     <div class="data-list">
+        
         <?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=30') ?><?= form_button(NULL, 'Check all', 'id=checkall') ?>
+        <?= form_open('referensi/harga_jual_update', 'id=form_harga_jual2') ?>
         <table class="sortable form-inputan" width="100%" id="table">
             <thead>
             <tr>
@@ -128,6 +112,7 @@
                 <th class="nosort"><h3>Margin (%)</h3></th>
                 <th class="nosort"><h3>Diskon (%)</h3></th>
                 <th class="sortright"><h3>Harga Jual (Rp.)</h3></th>
+                <th class="nosort"><h3>Stok Minimal</h3></th>
             </tr>
             </thead>
             <tbody>
@@ -144,6 +129,7 @@
                 <td align="center"><?= $data->margin ?></td>
                 <td align="center"><?= $data->diskon ?></td>
                 <td align="right"><?= inttocur($harga_jual) ?></td>
+                <td align="center"><?= $data->stok_minimal ?></td>
             </tr>
         <?php 
         $jumlah++;

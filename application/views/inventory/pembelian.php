@@ -231,9 +231,8 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(5)').children('.diskon_pr').attr('id','diskon_pr'+i);
         $('.tr_row:eq('+i+')').children('td:eq(6)').children('.diskon_rp').attr('id','diskon_rp'+i);
         $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(8)').children('.net').attr('id','net'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(9)').children('input[name=bonus]').attr('id','check'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(9)').children('input[name=bonus]').attr('class',i);
+        $('.tr_row:eq('+i+')').children('td:eq(8)').children('input[name=bonus]').attr('id','check'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(8)').children('input[name=bonus]').attr('class',i);
     }
     hitungDetail();
 }
@@ -263,9 +262,8 @@ function add(i) {
         '<td><input type=text name=diskon_rp[] id=diskon_rp'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=diskon_rp />'+
         '<input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=subtotal'+i+' align=right></td>'+
-        '<td><input type=text name=net[] id=net'+i+' size=5 class=net onKeyup=FormNum(this) onblur=hitungDetail() /></td>'+
         '<td align=center><input type=checkbox name=bonus id=check'+i+' class="'+i+'" onClick=bonusthis() /></td>'+
-        '<td class=aksi><a class=delete onclick=eliminate(this)></a></td>'+
+        '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
     '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -354,28 +352,28 @@ $(function() {
         i++;
     });
     $('#simpan').click(function() {
-        if ($('#nodoc').val() == '') {
+        if ($('#nodoc').val() === '') {
             alert('Nomor faktur tidak boleh kosong !');
             $('#nodoc').focus();
             return false;
         }
-        if ($('#nopemesanan').val() == '') {
+        if ($('#nopemesanan').val() === '') {
             alert('Nomor pemesanan tidak boleh kosong !');
             $('#nopemesanan').focus();
             return false;
         }
-        if ($('#ppn').val() == '') {
+        if ($('#ppn').val() === '') {
             alert('PPN tidak boleh kosong !');
             $('#ppn').focus();
             return false;
         }
         
-        if ($('#materai').val() == '') {
+        if ($('#materai').val() === '') {
             alert('Materai tidak boleh kosong !');
             $('#materai').focus();
             return false;
         }
-        if ($('#tempo').val() == '') {
+        if ($('#tempo').val() === '') {
             alert('Jatuh tempo tidak boleh kosong !');
             $('#tempo').focus();
             return false;
@@ -444,29 +442,27 @@ function hitungDetail() {
         <fieldset><legend>Summary</legend>
             <div class="left_side">
             <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
+            <label>No. SP:</label><?= form_input('no_pemesanan', null, 'id=nopemesanan size=20') ?>
             <label>No. Faktur:</label><?= form_input('nodoc', null, 'size=20 id=nodoc') ?>
-            <label>Tgl Dokumen:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
-            <label>No. Pemesanan:</label><?= form_input('no_pemesanan', null, 'id=nopemesanan size=20') ?>
-            <label>Supplier:</label><?= form_input(null, null, 'id=suplier size=35') ?> <?= form_hidden('id_suplier') ?>
-            <label>Salesman:</label><?= form_input(null, null, 'id=sales size=35') ?> <?= form_hidden('id_sales') ?>
+            <label>Tanggal:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
+            <label>Supplier:</label><?= form_input(null, null, 'id=suplier') ?> <?= form_hidden('id_suplier') ?>
             <label>Ttd Penerimaan:</label>
                 <span class="label"><?= form_radio('ttd', 'Ada', TRUE, null) ?>  Ada</span>
                 <span class="label"><?= form_radio('ttd', 'Tidak', FALSE, null) ?> Tidak</span>
-            <label>PPN (%):</label><?= form_input('ppn', '10', 'id=ppn min=0 max=100 onblur=hitungDetail() ') ?>
-            <label>Materai (Rp.):</label><?= form_input('materai', '6.000', 'id=materai size=10 onkeyup=FormNum(this) onblur=hitungDetail() ') ?>
+            <label>PPN (%):</label><?= form_input('ppn', '0', 'id=ppn min=0 max=100 onblur=hitungDetail() ') ?>
+            <label>Materai (Rp.):</label><?= form_input('materai', '0', 'id=materai size=10 onkeyup=FormNum(this) onblur=hitungDetail() ') ?>
             <label>Tgl Jatuh Tempo:</label><?= form_input('tempo', null, 'id=tempo class=tanggals size=10') ?>
 
             <label>Keterangan:</label><?= form_textarea('keterangan',null, null) ?>
             <label></label><?= form_button('add','Tambah Baris', 'id=addnewrow') ?>
             </div>
             <div class="right_side">
-                
-                    <label>Total Harga</label><span class="label" id="total-harga"></span>
-                    <label>Total Diskon</label><span class="label" id="total-diskon"></span>
-                    <label>Total Pembelian</label><span class="label" id="total-pembelian"></span>
-                    <label>Total PPN</label><span class="label" id="total-ppn"></span>
-                    <label>Materai</label><span class="label" id="materai2"></span>
-                    <label>Total Tagihan</label><span class="label" id="total-tagihan"></span>
+                    <label>Total Harga:</label><span class="label" id="total-harga"></span>
+                    <label>Total Diskon:</label><span class="label" id="total-diskon"></span>
+                    <label>Total Pembelian:</label><span class="label" id="total-pembelian"></span>
+                    <label>Total PPN:</label><span class="label" id="total-ppn"></span>
+                    <label>Materai:</label><span class="label" id="materai2"></span>
+                    <label>Total Tagihan:</label><span class="label" id="total-tagihan"></span>
                 </table>
             </div>
         </fieldset>
@@ -483,7 +479,6 @@ function hitungDetail() {
                 <th width="5%">Disc(%)</th>
                 <th width="7%">Disc(Rp.)</th>
                 <th width="8%">SubTotal</th>
-                <th width="7%">HET</th>
                 <th width="2%">Bonus</th>
                 <th width="5%">#</th>
             </tr>

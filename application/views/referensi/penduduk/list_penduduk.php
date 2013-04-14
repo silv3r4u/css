@@ -3,7 +3,6 @@ $("#table").tablesorter({sortList:[[0,0]]});
 </script>
 <?php if (isset($key)): ?>
     <div id="pencarian">
-        <br/>
         <h3>
             Pencarian dengan kata kunci "<?= $key ?>" 
             <?php if (isset($alamat) && $alamat != ''): ?>
@@ -33,6 +32,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
         </h3>
     </div>
 <?php endif; ?>
+<div id="list" class="data-list">
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>
@@ -91,6 +91,6 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <?php endif; ?>
     </tbody>
 </table>
-<br/>
+</div><br/>
 <?= $this->load->view('paging') ?>
 <!--<div id="paging"><?= $paging ?></div>-->

@@ -6,7 +6,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <tr>
         <th width="10%" class="nosort"><h3>No.</h3></th>
         <th width="40%"><h3>Perusahaan</h3></th>
-        <th width="40%"><h3>nama produk</h3></th>
+        <th width="40%"><h3>Nama Produk</h3></th>
         <th width="10%" class="nosort"><h3>Aksi</h3></th>
     </tr>
     </thead>
@@ -34,8 +34,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td><?= $prov->prsh ?></td>
                 <td><?= $prov->nama ?></td>
                 <td class="aksi" align="center">
-                    <a class="edit" onclick="edit_produk_asuransi('<?= $prov->id ?>','<?= $prov->nama ?>','<?= $prov->id_ap ?>','<?= $prov->prsh ?>','<?= $prov->reimbursement ?>')"></a>
-                    <a class="delete" onclick="delete_produk_asuransi('<?= $prov->id ?>')"></a>
+                    <span class="edit" onclick="edit_produk_asuransi('<?= $prov->id ?>','<?= $prov->nama ?>','<?= $prov->id_ap ?>','<?= $prov->prsh ?>','<?= $prov->reimbursement ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_produk_asuransi('<?= $prov->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>
             </tr>
             <?php

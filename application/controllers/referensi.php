@@ -588,12 +588,7 @@ class Referensi extends CI_Controller {
         $data['title'] = 'Data Perusahaan';
         $data['jenis'] = null;
         $jenis[''] = 'Pilih Jenis';
-        $arr = $this->m_referensi->relasi_instansi_jenis_get_data();
-        foreach ($arr as $value) {
-            $jenis[$value->id] = $value->nama;
-        }
-        $data['jenis'] = $jenis;
-
+        $data['jenis'] = $this->m_referensi->relasi_instansi_jenis_get_data();
         $this->load->view('referensi/instansi_relasi/instansi', $data);
     }
 
@@ -620,8 +615,8 @@ class Referensi extends CI_Controller {
         $limit = 15;
         $add = array(
             'nama' => $this->input->post('nama'),
-            'alamat' => $this->input->post('alamat'),
-            'kelurahan_id' => ($this->input->post('id_kelurahan') == '') ? NULL : $this->input->post('id_kelurahan'),
+            'alamat' => preg_replace('/^\s+|\n|\r|\s+$/m', ' ',$this->input->post('alamat')),
+            'kabupaten_id' => ($this->input->post('id_kelurahan') == '') ? NULL : $this->input->post('id_kelurahan'),
             'telp' => $this->input->post('telp'),
             'fax' => $this->input->post('fax'),
             'email' => $this->input->post('email'),

@@ -62,11 +62,6 @@ $(function() {
             $('#suplier').focus();
             return false;
         }
-        if ($('input[name=id_sales]').val() == '') {
-            alert('Data sales tidak boleh kosong !');
-            $('#sales').focus();
-            return false;
-        }
         var jumlah = $('.tr_row').length-1;
         for (i = 0; i <= jumlah; i++) {
             if ($('#id_pb'+i).val() == '') {
@@ -213,13 +208,13 @@ function add(i) {
                 '<td><input type=text name=pb[] id=pb'+i+' class=pb size=90 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb size=10 /></td>'+
                 '<td align=center class=sisa id=sisa'+i+'></td>'+
                 '<td align=center class=rop id=rop'+i+'></td>'+
-                '<td><input type=text name=biapesan[] id=biapesan'+i+' onblur="hitung('+i+')" class=biapesan size=10 onkeyup=FormNum(this) /></td>'+
+                /*'<td><input type=text name=biapesan[] id=biapesan'+i+' onblur="hitung('+i+')" class=biapesan size=10 onkeyup=FormNum(this) /></td>'+
                 '<td align=center class=eoq id=eoq'+i+'></td>'+
                 '<td align=center class=eoi id=eoi'+i+'></td>'+
                 '<td align=center class=smin id=smin'+i+'></td>'+
-                '<td align=center class=smax id=smax'+i+'></td>'+
+                '<td align=center class=smax id=smax'+i+'></td>'+*/
                 '<td><input type=text name=jml[] id=jml'+i+' class=jml size=10 onkeyup=Angka(this) /></td>'+
-                '<td class=aksi><a class="delete" onclick=eliminate(this)></a></td>'+
+                '<td class=aksi><span class="delete" onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
             '</tr>';
     
     $('.form-inputan tbody').append(str);
@@ -324,156 +319,19 @@ function add(i) {
 <title><?= $title ?></title>
 <div class="kegiatan">
 <h1><?= $title ?></h1>
-<?php    
-    $isi = null;
-    if (isset($_GET['id']) and !isset($_GET['do'])) {?>
-        <script type="text/javascript">
-            $(function() {
-                $('.tr_row').html('');
-            })
-        </script>
-        <?php
-        $psn = pemesanan_muat_data($_GET['id']);
-        $pesan = pemesanan_muat_data($_GET['id']);
-        foreach($psn as $rows);
-        foreach ($pesan as $key => $data) {
-            if ($data['id_obat'] == null) {
-                $packing = "$data[barang] $data[pabrik] @ ".(($data['isi']==1)?'':$data['isi'])." $data[satuan_terkecil]";
-            } else {
-                $packing = "$data[barang] ".(($data['kekuatan'] != '1')?$data['kekuatan']:null)." $data[satuan] $data[sediaan] ".(($data['generik'] == 'Non Generik')?'':$data['pabrik'])." ".(($data['isi']==1)?'':'@ '.$data['isi'])." $data[satuan_terkecil]";
-            }
-            $isi.="
-                <tr class='".(($key%2==0)?'odd':'even')."'>
-                    <td>$packing</td>
-                    <td align=center>$data[masuk]</td>
-                    <td align=center>$data[sisa]</td>
-                    <td align=center>$data[leadtime_hours]</td>
-                    <td align=center>-</td>
-                </tr>
-            ";
-        }
-    }
-    $row = null;
-    if (isset($_GET['id']) and isset($_GET['do'])) { 
-        $psn = pemesanan_muat_data($_GET['id']);
-        $pesan = pemesanan_muat_data($_GET['id']);
-        foreach($psn as $rows);
-        
-        foreach ($pesan as $key => $data) {
-            if ($data['id_obat'] == null) {
-                $packing = "$data[barang] $data[pabrik] @ ".(($data['isi']==1)?'':$data['isi'])." $data[satuan_terkecil]";
-            } else {
-                $packing = "$data[barang] ".(($data['kekuatan'] != '1')?$data['kekuatan']:null)." $data[satuan] $data[sediaan] ".(($data['generik'] == 'Non Generik')?'':$data['pabrik'])." ".(($data['isi']==1)?'':'@ '.$data['isi'])." $data[satuan_terkecil]";
-            }
-            
-            $row.="
-                <tr class='tr_row'>
-                    <td><input type=text name=pb[] id='pb".$key."' value='$packing' class=pb size=40 /><input type=hidden name=id_pb[] id='id_pb".$key."' value='$data[id_pb]' class=id_pb size=10 /></td>
-                    <td><input type=text name=jml[] id='jml".$key."' value='$data[masuk]' class=jml size=10 /></td>
-                    <td align=center id='sisa".$key."'>$data[sisa]</td>
-                    <td align=center id='rop".$key."'>$data[leadtime_hours] </td>
-                    <td align=center>-</td>
-            </tr>
-            ";
-            ?>
-        <script type="text/javascript">
-            $(function() {
-            $('#pb<?= $key ?>').autocomplete("<?= base_url('common/autocomplete?opsi=packing-barang') ?>",
-            {
-                parse: function(data){
-                    var parsed = [];
-                    for (var i=0; i < data.length; i++) {
-                        parsed[i] = {
-                            data: data[i],
-                            value: data[i].nama // nama field yang dicari
-                        };
-                    }
-                    return parsed;
-                },
-                formatItem: function(data,i,max){
-                    var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                    if (data.isi != '1') { var isi = '@ '+data.isi; }
-                    if (data.kekuatan != null) { var kekuatan = data.kekuatan; }
-                    if (data.satuan != null) { var satuan = data.satuan; }
-                    if (data.sediaan != null) { var sediaan = data.sediaan; }
-                    if (data.pabrik != null) { var pabrik = data.pabrik; }
-                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                    if (data.id_obat == null) {
-                        var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
-                    } else {
-                        var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
-                    }
-                    return str;
-                },
-                width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-                dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-            }).result(
-            function(event,data,formated){
-                var sisa = data.sisa;
-                if (data.sisa == null) {
-                    var sisa = 0;
-                }
-                var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                if (data.isi != '1') { var isi = '@ '+data.isi; }
-                if (data.kekuatan != null) { var kekuatan = data.kekuatan; }
-                if (data.satuan != null) { var satuan = data.satuan; }
-                if (data.sediaan != null) { var sediaan = data.sediaan; }
-                if (data.pabrik != null) { var pabrik = data.pabrik; }
-                if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                if (data.id_obat == null) {
-                    $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
-                } else {
-                    $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
-                }
-                $('#id_pb<?= $key ?>').val(data.id);
-                $('#bc<?= $key ?>').val(data.barcode);
-                var id_packing = data.id;
-                $.ajax({
-                    url: '<?= base_url('inventory/fillField') ?>',
-                    data: 'do=pemesanan&id='+id_packing,
-                    cache: false,
-                    dataType: 'json',
-                    success: function(msg) {
-                        sisa = '0';
-                        if (msg.row[1] != null) {
-                            sisa = msg.row[1];
-                        }
-                        var rop = '0';
-                        if (msg.row[2] != null || msg.row[3] != null) {
-                            var rop = parseInt(msg.row[2]*msg.row[3]);
-                        }
-                        var panjang = (sisa.length) - 3;
-                        var checking= sisa.substr(panjang, 3);
-                        if (checking == '.00') {
-                            sisa = sisa.substr(0, panjang);
-                        }
-                        $('#sisa<?= $key ?>').html(sisa);
-                        $('#rop<?= $key ?>').html(rop);
-                    }
-                })
-            });
-            });
-            </script>
-        <?php
-        }
-    }
-?>
     <?= form_open('inventory/save_pemesanan', 'id=myform') ?>
     <?= form_hidden('id', NULL) ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-    
+        <div class="left_side">
         <label>No.:</label><span id="id_auto" class="label"><?= get_last_id('pemesanan', 'id') ?></span>
         <label>No. Dokumen:</label><span id="no_doc" class="label"><?= !isset($_GET['id'])?get_last_id('pemesanan', 'id').'/'.date("dmY"):$rows['dokumen_no'] ?></span>
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-        <label>Supplier:</label><?= form_input(null, isset($rows['suplier'])?$rows['suplier']:null, 'id=suplier size=40') ?>
-        <?= form_hidden('id_suplier', isset($rows['suplier_relasi_instansi_id'])?$rows['suplier_relasi_instansi_id']:null) ?></td> </tr>
-        <label>Salesman:</label><?= form_input(null, isset($rows['salesman'])?$rows['salesman']:null, 'id=sales size=40') ?>
-        <?= form_hidden('id_sales', isset($rows['salesman_penduduk_id'])?$rows['salesman_penduduk_id']:null) ?></td> </tr>
+        <label>Supplier:</label><?= form_input(null, null, 'id=suplier') ?>
+        <?= form_hidden('id_suplier') ?></td> </tr>
         
         <label></label><?= form_button('Tambah Baris', 'Tambah Baris', 'id=tambahrow') ?>
-        
-    </table>
+        </div>
     </fieldset>
     </div>
     <div class="data-list">
@@ -483,17 +341,17 @@ function add(i) {
                 <th width="30%">Packing Barang</th>
                 <th width="10%">Jumlah Sisa</th>
                 <th width="10%">ROP</th>
-                <th width="10%">Bia. Pemesanan</th>
+<!--                <th width="10%">Bia. Pemesanan</th>
                 <th width="5%">EOQ</th>
                 <th width="5%">EOI</th>
                 <th width="5%">Smin</th>
-                <th width="5%">Smax</th>
+                <th width="5%">Smax</th>-->
                 <th width="10%">Jumlah</th>
                 <th width="5%">#</th>
             </tr>
             </thead>
             <tbody>
-                <?= isset($isi)?$isi:$row ?>
+                
             </tbody>
         </table><br/>
         <?= form_submit('Simpan', 'Simpan', 'id=simpan'); ?> 

@@ -348,22 +348,22 @@
 
         <table width="100%">
             <tr>
-                <td width="15%">Barang</td>
+                <td width="15%">Barang:</td>
                 <td>
                     <?= form_hidden('barcode', '', 'size=40') ?>
                     <?= form_input('barang', '', 'class=barang id=barang size=40') ?>
                     <?= form_hidden('id_barang') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Kemasan</td>
+                <td width="15%">Kemasan:</td>
                 <td><?= form_dropdown('kemasan', $kemasan, null, 'id=kemasan') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Isi @</td>
+                <td width="15%">Isi @:</td>
                 <td><?= form_input('isi', '', 'id=isi size=40') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Satuan</td>
+                <td width="15%">Satuan Terkecil:</td>
                 <td><?= form_dropdown('satuan', $satuan, null, 'id=satuan') ?> </td>
             </tr>
             <tr>

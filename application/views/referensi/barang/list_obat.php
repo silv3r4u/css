@@ -16,12 +16,11 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <thead>
     <tr>
         <th class="nosort" width="5%"><h3>No.</h3> </th>
-        <th width="30%"><h3>Nama</h3> </th>
+        <th width="20%"><h3>Nama</h3> </th>
         <th width="10%"><h3>Kekuatan</h3></th>
-        <th width="10%"><h3>Satuan</h3></th>
         <th width="15%"><h3>Bentuk Sediaan</h3></th>
-        <th width="20%"><h3>Pabrik</h3></th>
-        <th width="20%"><h3>Kandungan</h3></th>
+        <th width="25%"><h3>Kandungan</h3></th>
+        <th width="25%"><h3>Indikasi</h3></th>
         <th class="nosort" width="10%"><h3>Aksi</h3></th>
     </tr>
     </thead>
@@ -32,7 +31,6 @@ $("#table").tablesorter({sortList:[[0,0]]});
             <tr class="<?= ($i % 2 == 1) ? 'even' : 'odd' ?>">
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -48,10 +46,9 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td align="center"><?= (++$key+$start) ?></td>
                 <td><?= $rows->nama ?></td>
                 <td><?= $rows->kekuatan ?></td>
-                <td><?= $rows->satuan ?></td>
                 <td><?= $rows->sediaan ?></td>
-                <td><?= $rows->pabrik ?></td>
                 <td><?= $rows->kandungan ?></td>
+                <td><?= $rows->indikasi ?></td>
                 <td class="aksi" align="center"> 
                     <?php
                     $str = $rows->id . "#" . $rows->nama

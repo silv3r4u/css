@@ -85,6 +85,7 @@ $(function() {
             <th>Margin (%)</th>
             <th>Diskon (%)</th>
             <th>Harga Jual (Rp.)</th>
+            <th>Stok Minimal</th>
         </tr>
         </thead>
         <tbody>
@@ -99,6 +100,7 @@ $harga_jual = ($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data-
         <td align="center"><?= form_input('margin[]', $data->margin, 'size=5 onkeyup=set_harga_jual('.$key.') id=margin'.$key) ?></td>
         <td align="center"><?= form_input('diskon[]', $data->diskon, 'size=5 id=diskon'.$key) ?></td>
         <td align="right" id="hj<?= $key ?>"><?= inttocur($harga_jual) ?></td>
+        <td align="center"><?= form_input('stokmin[]', $data->stok_minimal, 'size=5 id=stokmin'.$key) ?></td>
     </tr>
 <?php 
 $jumlah++;

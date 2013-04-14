@@ -234,8 +234,10 @@ $(function() {
     <h1><?= $title ?></h1>
     <?= form_open('inventory/reretur_pembelian_save', 'id=form_reretur_pembelian') ?>
     <div class="data-input">
+        
     <?= form_hidden('total', isset($kas)?rupiah($kas['penerimaan']):null, 'id=returan2') ?>
         <fieldset><legend>Summary</legend>
+            <div class="left_side">
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>No. Retur:</label></label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>
         <label>Suplier:</label><span id="suplier" class="label"><?= isset($_GET['id'])?$data[0]['suplier']:null ?></span>
@@ -245,7 +247,7 @@ $(function() {
             <span class="label"><?= form_radio('berupa', 'barang', TRUE, 'id=barang') ?> Barang</span> 
             <span class="label"><?= form_radio('berupa', 'uang', FALSE, 'id=uang') ?> Uang</span>
             <label></label><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
-        
+        </div>
         </fieldset>
     </div>
     <div class="data-list">

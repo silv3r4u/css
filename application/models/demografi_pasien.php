@@ -300,10 +300,7 @@ class Demografi_pasien extends CI_Model {
 
     function pendidikan() {
         $db = $this->db->get('pendidikan');
-        $data[''] = 'Pilih';
-        foreach ($db->result() as $row) {
-            $data[$row->id] = $row->nama;
-        }
+        $data = $db->result();
         return $data;
     }
 

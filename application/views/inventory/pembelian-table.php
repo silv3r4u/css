@@ -14,9 +14,8 @@ foreach ($list_data as $no => $rows) { ?>
         <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />
         </td>
         <td id="subtotal<?= $key ?>" align="right"></td>
-        <td><input type=text name=net[] id="net<?= $key ?>" size=6 class=net onkeyup="FormNum(this)" /></td>
         <td align=center>-</td>
-        <td class=aksi><a class=delete onclick=eliminate(this)></a></td>
+        <td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
         $('#ed<?= $key ?>').datepicker({

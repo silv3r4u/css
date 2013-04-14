@@ -57,7 +57,9 @@ class Configuration extends CI_Model {
             'Penerimaan Retur Pembelian' => 'Penerimaan Retur Pembelian',
             'Penerimaan dan Pengeluaran' => 'Penerimaan dan Pengeluaran',
             'Pengeluaran Retur Penjualan' => 'Pengeluaran Retur Penjualan',
-            'Penjualan' => 'Penjualan',
+            'Penjualan Resep' => 'Penjualan Resep',
+            'Penjualan Non Resep' => 'Penjualan Non Resep',
+            'Penjualan' => 'Penjualan Total',
             'Retur Penjualan' => 'Retur Penjualan',
             'Retur Pembelian' => 'Retur Pembelian'
             

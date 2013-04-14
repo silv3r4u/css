@@ -1,17 +1,17 @@
 <?php
 
 function inttocur($jml) {
-    $int = number_format($jml, 0, '', '.');
+    $int = number_format($jml, 0, '', ',');
     return $int;
 }
 
 function rupiah($jml) {
-    $int = number_format($jml, 0, '', '.');
+    $int = number_format($jml, 0, '', ',');
     return $int;
 }
 
 function rupiah2($jml) {
-    $int = number_format($jml, 0, '', '.');
+    $int = number_format($jml, 0, '', ',');
     return $int;
 }
 

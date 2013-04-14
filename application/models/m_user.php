@@ -33,7 +33,7 @@ class M_user extends CI_Model {
             from penduduk_privileges pp
             join privileges p on (pp.privileges_id = p.id)
             join module m on (p.module_id = m.id)
-            $q order by p.form_nama";
+            $q order by p.sort";
         //echo $sql;
         return $this->db->query($sql);
     }

@@ -6,7 +6,55 @@ header('Cache-Control: max-age=0');
 <div class="kegiatan">
 <?php $this->load->view('message'); ?>
 <script type="text/javascript">
+function create_dialog() {
+    var str = '<div id=open_bayar class=data-input>'+
+        '<label style="font-size: 18px">Total:</label><span style="font-size: 18px" class=label id=totalopen>'+$('#bulat').val()+'</span>'+
+        '<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px" type=text name=bayar id=bayar size=20 />'+
+        '<label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px" id="kembalian_nr" class="label"></span></div>';
+    $('#loaddata').append(str);
+    $('#open_bayar').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 350,
+        height: 300,
+        resizable: true,
+        close: function() {
+            $(this).dialog().remove();
+            $('#bulat').focus();
+        }, buttons: {
+            "OK": function() {
+                $('#')
+            }
+        }
+    });
+    $('#bayar').keyup(function() {
+        FormNum(this);
+        setKembali();  
+    })
+}
+function form_open() {
+    $('#form_pembayaran_nr').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 350,
+        height: 300,
+        buttons: {
+            "Ok": function() {
+                $('input[name=bulat]').val($('#bulat').val());
+                $('input[name=bayar]').val($('#bayar').val());
+                $(this).dialog("close");
+                $('#noresep').focus();
+            }
+        }
+    });
+}
 $(function() {
+    $('input,select').live('keydown', function(e) {
+        if (e.keyCode === 120) {
+            create_dialog();
+            $('#bayar').focus();
+        }
+    });
     $('button[id=reset]').button({
         icons: {
             primary: 'ui-icon-refresh'
@@ -42,11 +90,6 @@ $(function() {
         }
     });
     $('#noresep').focus();
-    $('#bayar').keyup(function() {
-        FormNum(this);
-        setKembali();
-        
-    })
     $('#print').hide();
     $('#print').click(function() {
         var id = $('#id_penjualan').html();
@@ -337,14 +380,13 @@ function subTotal() {
         var diskon_bank   = (totallica * ($('#disc_bank').html()/100));
         var pajak = ppn*tagihan;
         var new_totallica = (totallica - diskon_bank)+pajak;
-        $('#total').html(numberToCurrency(Math.ceil(new_totallica)));
+        $('#total, #total_tagihan_penjualan_nr').html(numberToCurrency(Math.ceil(new_totallica)));
         if (tagihan !== 0) {
             $('#bulat').val(numberToCurrency(pembulatan_seratus(Math.ceil(new_totallica))));
         }
     });
 }
 function setKembali() {
-    $(function() {
         //var apoteker = currencyToNumber($('#jasa-apt').html());
         var total = currencyToNumber($('#total').html());
         var bayar = currencyToNumber($('#bayar').val());
@@ -358,9 +400,8 @@ function setKembali() {
             var kembali = numberToCurrency(kembali);
         }
         //$('#bulat').val(numberToCurrency(total));
-        $('#kembalian').html(kembali);
+        $('#kembalian, #kembalian_nr').html(kembali);
         $('input[name=total]').val(total);
-    });
 }
 $(function() {
     $('#bulat').focus(function() {
@@ -430,14 +471,14 @@ $(function() {
         
     });
     $('#id_penduduk').blur(function() {
-        if ($('#id_penduduk').val() != '') {
+        if ($('#id_penduduk').val() !== '') {
             var id = $('#id_penduduk').val();
             $.ajax({
                 url: '<?= base_url('inventory/fillField') ?>',
                 data: 'id_pasien=true&id='+id,
                 dataType: 'json',
                 success: function(val) {
-                    if (val.id == null) {
+                    if (val.id === null) {
                         alert('Data pasien tidak ditemukan !');
                         $('#id_penduduk, #pembeli, #id_pembeli').val('');
                         $('#id_penduduk').focus();
@@ -452,7 +493,7 @@ $(function() {
     });
     $('input,select').live('keydown', function(e) {
         if (e.keyCode === 120) {
-            $('#bayar').focus();
+            form_open();
         }
     });
 });
@@ -508,8 +549,8 @@ $(function() {
                 <label>No.</label> <span class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </span>
                 <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
                 <label>Pembayaran Bank</label><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?>
-                <label>PPN (%)</label><?= form_input('ppn', '10', 'id=ppn size=10 onkeyup=subTotal()') ?>
-                <label>Pembeli</label><?= form_input(null, null, 'id=pembeli size=40') ?><?= form_hidden('id_pembeli') ?>
+                <label>PPN (%)</label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
+                <label>Pembeli</label><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?>
                 <label>Total Tagihan</label><span class="label" id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </span>
                 
             </div><div class="right_side">
@@ -517,8 +558,8 @@ $(function() {
                 <label>Diskon Bank (%)</label><span id="disc_bank" class="label"><?= isset($data['diskon_bank'])?$data['diskon_bank']:'0' ?></span><?= form_hidden('diskon_bank', isset($data['diskon_bank'])?$data['diskon_bank']:'0', 'id=diskon_bank size=10 ') ?>
                 <label>Total</label><span id="total" class="label"><?= isset($data['total'])?rupiah($data['total']):null ?></span>
                 <label>Pembulatan Total</label><?= form_input('bulat', isset($data['total'])?rupiah($data['total']):NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
-                <label>Bayar (Rp)</label><?= form_input('bayar', isset($data['bayar'])?rupiah($data['bayar']):null, 'id=bayar size=30 ') ?>
-                <label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>
+<!--                <label>Bayar (Rp)</label><?= form_input('bayar', isset($data['bayar'])?rupiah($data['bayar']):null, 'id=bayar size=30 ') ?>
+                <label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
                 
             </div>
         </fieldset>

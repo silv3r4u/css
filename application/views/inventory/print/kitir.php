@@ -54,7 +54,7 @@
 $no = 1;
 $tagihan = 0;
 $diskon = 0;
-foreach ($penjualan as $key => $data) { 
+foreach ($penjualan as $key => $data) {
     $harga = ($data->hna*($data->margin/100))+$data->hna;
     ?>
     <tr valign="top" class="<?= ($key%2==0)?'even':'odd' ?> tr_row">
@@ -73,7 +73,7 @@ $no++;
 
 foreach ($penjualan as $rows);
 $ppn = (isset($rows->ppn)?$rows->ppn:'0')*$tagihan;
-$jml_ppn = isset($rows->ppn)?$rows->ppn:'10';
+$jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
 ?>
 </table>
 <table width="100%">

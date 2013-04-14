@@ -6,8 +6,10 @@
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.9.2.custom.js') ?>"></script>
         <script type="text/javascript">
         $(document).ready(function(){
-            $('input.help,textarea.help').formtips({
-                  tippedClass: 'tipped'
+            $('input').live('keyup', function(e) {
+                if (e.keyCode===13) {
+                    loginForm();
+                }
             });
         });
         /*"+window.location.hostname+"*/
@@ -64,7 +66,7 @@
                             <div class='loadingbox' id='username-check'><input type="text" name="username" id="username" class="inputbox"/><div class="loadingbar"><span>Completed!..</span></div></div><br/>
                             <label id="password-label">Password :</label>
                             <div class='loadingbox' id='password-check'><input type="password" name="password" id="password" class="inputbox"/><div class="loadingbar"><span>Completed!..</span></div></div>
-                            <input id="login-button" name="login_button" value="Login" type="button" class="buttonsave" onclick="loginForm();" />
+                            <input id="login-button" name="login_button" value="Login" type="button" class="buttonsave" onclick="loginForm()" />
                             <input type="hidden" name="last_link" value="<?=$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']?>" />
                         </div>
                     </div>

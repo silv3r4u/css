@@ -459,12 +459,10 @@ class M_referensi extends CI_Model {
         if (($search != 'null') & isset($search['id'])) {
             $q = " where r.id = '" . $search['id'] . "' ";
         }
-        $sql = "select @row := @row + 1 as nomor, r.*, rj.id as jenis_id, rj.nama as jenis, k.id as kelurahan_id, k.nama as kelurahan, kb.nama as kabupaten
+        $sql = "select @row := @row + 1 as nomor, r.*, rj.id as jenis_id, rj.nama as jenis, kb.nama as kabupaten
                 from relasi_instansi r
                 left join relasi_instansi_jenis rj on(rj.id = r.relasi_instansi_jenis_id)
-                left join kelurahan k on (k.id = r.kelurahan_id)
-                left join kecamatan kc on (kc.id = k.kecamatan_id)
-                left join kabupaten kb on (kb.id = kc.kabupaten_id), (SELECT @row := $start) rr 
+                left join kabupaten kb on (kb.id = r.kabupaten_id), (SELECT @row := $start) rr 
                 $q order by r.nama asc ";
         $query = $this->db->query($sql . $limit);
         $ret['data'] = $query->result();
@@ -1098,12 +1096,8 @@ class M_referensi extends CI_Model {
     }
 
     function profesi_get_data() {
-        $sql = "select * from profesi";
-        $arr = $this->db->query($sql)->result();
-        $data[''] = 'Pilih';
-        foreach ($arr as $value) {
-            $data[$value->id] = $value->nama;
-        }
+        $sql = "select * from profesi order by nama";
+        $data = $this->db->query($sql)->result();
         return $data;
     }
 
@@ -1162,7 +1156,7 @@ class M_referensi extends CI_Model {
         if ($pb != null) {
             $q.="and br.nama like ('%$pb%') or t.hna like ('%$pb%')";
         }
-        $sql = "select t.*, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
+        $sql = "select t.*, b.stok_minimal, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
             s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from transaksi_detail t 
             join barang_packing b on (t.barang_packing_id = b.id)
             join barang br on (br.id = b.barang_id)
@@ -1185,7 +1179,7 @@ class M_referensi extends CI_Model {
         if ($pb != null) {
             $q.="and t.barang_packing_id in ($pb)";
         }
-        $sql = "select t.*, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
+        $sql = "select t.*, b.stok_minimal, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
             s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from transaksi_detail t 
             join barang_packing b on (t.barang_packing_id = b.id)
             join barang br on (br.id = b.barang_id)
@@ -1208,10 +1202,12 @@ class M_referensi extends CI_Model {
         $id_pb = $this->input->post('id_pb');
         $margin = $this->input->post('margin');
         $diskon = $this->input->post('diskon');
+        $stokmin= $this->input->post('stokmin');
         foreach ($id_pb as $key => $data) {
             $data_update = array(
                 'margin' => $margin[$key],
-                'diskon' => $diskon[$key]
+                'diskon' => $diskon[$key],
+                'stok_minimal' => $stokmin[$key]
             );
             $this->db->where('id', $data);
             $this->db->update('barang_packing', $data_update);

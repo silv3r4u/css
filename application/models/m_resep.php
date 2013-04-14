@@ -76,7 +76,7 @@ class M_resep extends CI_Model {
         if ($id_resep != null) {
             $q.="where rs.id = '$id_resep'";
         }
-        $sql = "select rr.resep_id, td.transaksi_id, td.hna, td.hpp, pj.bayar, pj.id as id_penjualan, rrr.pakai_jumlah as keluar, td.ed, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
+        $sql = "select pj.ppn, pj.total, pj.bayar, pj.pembulatan, rr.resep_id, td.transaksi_id, td.hna, td.hpp, pj.bayar, pj.id as id_penjualan, rrr.pakai_jumlah as keluar, td.ed, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
             o.kekuatan, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan, pdk.nama as pegawai, pdd.nama as pasien, pdd.nama, rs.pasien_penduduk_id
             from resep rs
             join resep_r rr on (rs.id = rr.resep_id)

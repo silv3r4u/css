@@ -1,12 +1,11 @@
-
-* { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
+* { font-family: Arial, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
 button { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px;}
 fieldset { border: 1px solid #ccc; font-size: 13px;}
 #useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px; font-size: 10px; }
 #useractive .label { text-transform: none; font-style: italic; font-size: 11px; }
 body {margin:0; overflow-x:hidden; color: #000;}
 a {text-decoration: none}
-h1 { font-size: 20px; display: block; font-weight: normal; color: #000;}
+h1 { font-size: 20px; display: block; font-weight: normal; color: #000; background: url(../images/icons/title.png) left no-repeat; text-indent: 18px;}
 h2 { font-size: 14px; display: block; }
 
 .menu-upper a { color: #000;  padding: 6px 10px;}
@@ -17,26 +16,32 @@ h2 { font-size: 14px; display: block; }
 .home { background: url(../images/home.png) no-repeat left; padding-left: 10px; margin: 0px 5px;  }
 .tabel {border-top: 1px solid #cccccc; border-left: 1px solid #c6d5e1; empty-cells: show; border-radius:5px; overflow:auto; margin-top:5px; clear: both;border-collapse: collapse; background: #fff; color: #000}
 .tabel input[type=text] { width: 100%; }
-.tabel td {border-bottom: 1px solid #cccccc; padding: 4px 9px 4px 3px;font-family: tahoma,arial,verdana;font-size: 13px; }
+.tabel td {border-bottom: 1px solid #cccccc; padding: 1px 2px 1px 3px; font-family: tahoma,arial,verdana;font-size: 13px; }
 .tabel th { 
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    font-size: 12px;
+/*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
     background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
-    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-bottom:1px solid #c6d5e1; padding: 0 2px; font-weight: normal;
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); */
+    background: #faf6d1;
+    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1; padding: 0 2px;
 }
 .tabel th:last-child { 
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
+    font-size: 12px;
+/*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfbfb), color-stop(1, #eaeaea) );
     background:-moz-linear-gradient( center top, #fbfbfb 5%, #eaeaea 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); 
-    text-align:left; color:#666666; border-right:none; white-space: nowrap; height: 35px; border-right:1px solid #c6d5e1;
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#eaeaea'); */
+    background: #faf6d1;
+    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-right:1px solid #c6d5e1;
 }
-.tabel th .nosort { text-align: center }
+.tabel th.left { text-align: left; }
+.tabel th.right { text-align: right; }
 .tabel .even { background: #ecf2f6; }
 .tabel .odd { background: #fff; }
-.tabel th a {color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
+.tabel th a { color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
 .tabel .total-sum {background: #f4f4f4}
 .tabel select { border: 1px solid #666; width: 1em; }
-.tabel-input td:first-child { width: 150px; height: 20px; font-size: 14px; text-align: right ;color: #666;}
+.tabel-input td input[type=text] { min-width: 200px; }
+.tabel-input td:first-child { width: 150px; height: 20px; font-size: 12px; text-align: right ;color: #666;}
 .tabel-input textarea { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .tabel-input textarea:focus { height: 40px; float: left; min-width: 25em; padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .right {text-align:right}
@@ -121,6 +126,7 @@ input[type='text']:focus,input[type='password']:focus, textarea:focus, select:fo
 .kegiatan {
     margin: 5px 10px 15px 10px;
     background: #efefef;
+    color: #000;
 }
 .diagrams {
     border: 1px solid #d0d0d0;
@@ -269,15 +275,47 @@ status {
 }
 
 .left_side{
+    border: 1px solid #ccc;
     float: left;
+    border-radius: 5px;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fff), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fff 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eaeaea');
+    width: 50%;
+    min-height: 200px;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 .right_side{
-    
+    border-radius: 5px;
+    border: 1px solid #ccc;
     position: relative; right: 0;
     float: right;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fff), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fff 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eaeaea');
+    width: 49%;
+    min-height: 200px;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
+
+.one_side {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    position: relative; right: 0;
+    float: right;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fff), color-stop(1, #eaeaea) );
+    background:-moz-linear-gradient( center top, #fff 5%, #eaeaea 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eaeaea');
+    width: 100%;
+    min-height: 200px;
+    padding-bottom: 20px;
+}
+
 .right_side label { text-align: right; }
+.right_side span.label { min-width: 100px; }
 
 ul.menu, ul.menu ul {
   list-style-type:none;
@@ -319,7 +357,7 @@ ul.menu li ul li a {
 
 ul.menu li ul li a:hover {
   background: #fff;
-  border-left: 5px #dfe5e6 solid;
+  border-left: 5px #42c3eb solid;
   border-bottom: 1px solid #dfe5e6;
   padding-left: 15px;
   color: #000;

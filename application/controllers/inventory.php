@@ -10,6 +10,7 @@ class Inventory extends CI_Controller {
         $this->load->model('m_inv_autocomplete');
         $this->load->model('m_referensi');
         $this->load->model('configuration');
+        $this->load->helper('html');
         date_default_timezone_set('Asia/Jakarta');
         is_logged_in();
     }
@@ -420,6 +421,12 @@ class Inventory extends CI_Controller {
     function pp_uang_delete($id) {
         $data = $this->m_inventory->pp_uang_delete($id);
         die(json_encode($data));
+    }
+    
+    function defecta() {
+        $data['title'] = 'Buku Defecta';
+        $data['list_data'] = $this->m_inventory->defecta_load_data()->result();
+        $this->load->view('inventory/defecta', $data);
     }
 }
 ?>
