@@ -36,7 +36,6 @@ if (count($list_data) > 0) { ?>
         <label>No</label><span id="id_auto" class="label"><?= $rows->id ?></span>
         <label>No. Dokumen</label><span id="no_doc" class="label"><?= $rows->dokumen_no ?></span>
         <label>Supplier</label><span class="label"> <?= isset($rows->suplier)?$rows->suplier:null ?></span>
-        <label>Salesman</label><span class="label"><?= isset($rows->salesman)?$rows->salesman:null ?></span>
     </div>
         
         <table class="tabel form-inputan" width="100%">

@@ -139,8 +139,8 @@ class M_inventory extends CI_Model {
             $q.=" and t.unit_id = '".$this->session->userdata('id_unit')."'";
         }
         $sql = "select o.id as id_obat, o.generik, o.perundangan, p.*, b.nama as barang, bp.isi, r.nama as pabrik, o.kekuatan, bp.id as id_pb, b.id as id_barang, bp.barcode, 
-        bp.isi, s.nama as satuan, pd.nama as salesman, pdd.nama as petugas, t.awal, t.masuk, sd.nama as sediaan, t.leadtime_hours, t.ss, ri.nama as suplier,
-        t.sisa, t.awal, r.alamat, kl.nama as kelurahan, st.nama as satuan_terkecil, t.barang_packing_id, t.ed, t.beli_diskon_percentage, t.beli_diskon_rupiah from pemesanan p
+        bp.isi, s.nama as satuan, pdd.nama as petugas, t.awal, t.masuk, sd.nama as sediaan, t.leadtime_hours, t.ss, ri.nama as suplier,
+        t.sisa, t.awal, r.alamat, st.nama as satuan_terkecil, t.barang_packing_id, t.ed, t.beli_diskon_percentage, t.beli_diskon_rupiah, k.nama as kabupaten from pemesanan p
             join transaksi_detail t on (p.id = t.transaksi_id)
             join barang_packing bp on (t.barang_packing_id = bp.id)
             join barang b on (b.id = bp.barang_id)
@@ -148,12 +148,10 @@ class M_inventory extends CI_Model {
             left join satuan s on (o.satuan_id = s.id)
             left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id)
             left join relasi_instansi ri on (ri.id = p.suplier_relasi_instansi_id)
+            left join kabupaten k on (k.id = ri.kabupaten_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
             left join satuan st on (st.id = bp.terkecil_satuan_id)
-            join penduduk pd on (pd.id = p.salesman_penduduk_id)
-            join penduduk pdd on (pdd.id = p.pegawai_penduduk_id)
-            left join kelurahan kl on (kl.id = r.kelurahan_id) where t.transaksi_jenis = 'Pemesanan' $q";
-        //echo "<pre>".$sql."</pre>";
+            join penduduk pdd on (pdd.id = p.pegawai_penduduk_id) where t.transaksi_jenis = 'Pemesanan' $q";
             return $this->db->query($sql);
         }
         
@@ -168,7 +166,6 @@ class M_inventory extends CI_Model {
             'ppn' => $this->input->post('ppn'),
             'materai' => currencyToNumber($this->input->post('materai')),
             'tanggal_jatuh_tempo' => datetopg($this->input->post('tempo')),
-            'salesman_penduduk_id' => $this->input->post('id_sales'),
             'ada_penerima_ttd' => $this->input->post('ttd'),
             'keterangan' => $this->input->post('keterangan')
         );

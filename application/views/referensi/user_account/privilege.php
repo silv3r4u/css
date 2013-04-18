@@ -1,13 +1,31 @@
 <script type="text/javascript">
-    $(function() {
-        $('#checkall').click(function() {
-            var status = ($(this).is(':checked') == true);
-            if (status == true) {
-                $('.check').attr('checked', 'checked');
+    function selected_item() {
+        var jumlah = $('.tr_row').length-1;
+        for (i = 0; i <= jumlah; i++) {
+            if ($('#check'+i).is(':checked') === true) {
+                $('#listdata'+i).addClass('selected');
             } else {
-                $('.check').removeAttr('checked');
+                $('#listdata'+i).removeClass('selected');
             }
-        })
+        }
+    }
+    $('.check').live('click', function() {
+        selected_item();
+    });
+    $(function() {
+        $('#checkall').button();
+        $('#checkall').live('click', function() {
+            $('.ui-button-text').html('Uncheck all');
+            $('#checkall').attr('id', 'uncheckall');
+            $('.check').attr('checked', 'checked');
+            selected_item();
+        });
+        $('#uncheckall').live('click', function() {
+            $('.ui-button-text').html('Check all');
+            $('#uncheckall').attr('id', 'checkall');
+            $('.check').removeAttr('checked');
+            selected_item();
+        });
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
         $('#batal').button({icons: {secondary: 'ui-icon-refresh'}});
@@ -16,7 +34,7 @@
         $('#all').click(function(){
             $(".check").each( function() {
                 $(this).attr("checked",'checked');
-            })
+            });
         });
         $('#uncek').click(function(){
             $(".check").each( function() {
@@ -83,11 +101,10 @@
         <tr><td>Nama</td><td><?= $user->nama ?></td> </tr>
     </table>
 </fieldset>
+<?= form_button(NULL, 'Check all', 'id=checkall') ?>
+<?= form_submit('addprevileges', 'Update Grant Privileges', 'id=simpan') ?>
+<div id="list" style="padding-top: 10px;padding-bottom: 10px"></div>
 
-<div class="data-list">
-    <div id="list" style="padding-top: 10px;padding-bottom: 10px"></div>
-    <?= form_submit('addprevileges', 'Simpan', 'id=simpan') ?>
-</div>
 <?= form_hidden('id_penduduk') ?>
 
 <?= form_close() ?>

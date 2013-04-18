@@ -9,30 +9,7 @@ function set_harga_jual(i) {
     //($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
 }
 $(function() {
-    $('#simpan').each(function(){
-        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
-    });
-    $('#simpan').button({
-        icons: {
-            secondary: 'ui-icon-circle-check'
-        }
-    });
-    $('#resethj').each(function(){
-        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'" onclick="'+$(this).attr('onclick')+'">' + $(this).val() + '</button>');
-    });
-    $('#resethj').button({
-        icons: {
-            secondary: 'ui-icon-refresh'
-        }
-    });
-    $('input[type=submit]').each(function(){
-        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
-    });
-    $('button[type=submit]').button({
-        icons: {
-            primary: 'ui-icon-pencil'
-        }
-    });
+    $('#update').button();
     $('#resethj').click(function() {
         $('#form-update').fadeOut('fast');
     });
@@ -65,7 +42,7 @@ $(function() {
             cache: false,
             success: function(msg) {
                 if (msg.status === true) {
-                    $(this).closest("#result_detail").dialog().remove();
+                    $("#result_load").dialog('close');
                     alert_edit();
                 }
             }
@@ -75,7 +52,6 @@ $(function() {
 });
 </script>
 <div id="result_load"></div>
-<div class="data-list">
 <?= form_open('referensi/harga_jual_update_save', 'id=form_harga_jual_update_save') ?>
 <table class="tabel form-inputan" width="100%">
         <thead>
@@ -108,6 +84,6 @@ $jumlah++;
 ?>
         </tbody>
 </table>
-<?= form_submit('submit', 'Simpan', 'id=update') ?>
+<br/>
+<?= form_submit('submit', 'Simpan', 'id=update style="margin-left: 0;"') ?>
 <?= form_close() ?>
-</div>

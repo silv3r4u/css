@@ -9,6 +9,7 @@ class User extends CI_Controller {
         $this->load->library('session');
         $this->load->model('m_user');
         $this->load->helper('login');
+        $this->load->helper('html');
         $user = $this->session->userdata('user');
         if ($user != '') {
             $data = $this->menu_user_load_data();

@@ -1,8 +1,68 @@
 <script type="text/javascript">
+    function create_form_kabupaten() {
+        var str = '<div id=datainput><div class="msg"></div>'+
+                '<form action="" id=formpro>'+
+                '<input type=hidden name=tipe value=add /><input type=hidden name=id />'+
+                '<table>'+
+                    '<tr><td align=right>Nama Provinsi:</td><td><input type=text name=provinsi class=provinsi-kab size=30 /><input type=hidden name=idprovinsikab /></td></tr>'+
+                    '<tr><td align=right>Kode:</td><td><input type=text name=kodekab id=kodekab size=10 /></td></tr>'+
+                    '<tr><td align=right>Nama Kabupaten:</td><td><input type=text name=kabupaten id=kabupaten size=30 /></td></tr>'+
+                '</table></form></div>';
+        $('#loaddata').append(str);
+        $('.provinsi-kab').autocomplete("<?= base_url('referensi/get_provinsi') ?>",
+        {
+            parse: function(data)
+            {
+                var parsed = [];
+                for (var i=0; i < data.length; i++)
+                {
+                    parsed[i] =
+                        {
+                        data: data[i],
+                        value: data[i].nama // nama field yang dicari
+                    };
+                }
+                $('input[name=idprovinsikab]').val('');
+                return parsed;
+            },
+            formatItem: function(data,i,max)
+            {
+                var str = '<div class=result>'+data.nama+'</div>';
+                return str;
+            },
+            width: 270, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+            dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+        }).result(
+        function(event,data,formated) {
+            $(this).attr('value',data.nama);
+            $('input[name=idprovinsikab]').val(data.id);
+        });
+        $('#datainput').dialog({
+            title: 'Form Referensi Provinsi',
+            autoOpen: true,
+            height: 200,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Simpan": function() {
+                    save_kab();
+                },
+                "Batal": function() {
+                    $(this).dialog().remove();
+                }
+            },
+            close : function(){
+                $(this).dialog().remove();
+            }
+        });
+    }
     $(function() {
         //initial
         get_kabupaten_list(1);
         //initial
+        $( "#addkab" ).click(function() {
+            create_form_kabupaten();
+        });
         $( "#addkab" ).button({icons: {primary: "ui-icon-circle-plus"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -54,39 +114,6 @@
         });
         
         $('#provinsi-kab').focus();
-        
-        $('.provinsi-kab').autocomplete("<?= base_url('referensi/get_provinsi') ?>",
-        {
-            parse: function(data)
-            {
-                var parsed = [];
-                for (var i=0; i < data.length; i++)
-                {
-                    parsed[i] =
-                        {
-                        data: data[i],
-                        value: data[i].nama // nama field yang dicari
-                    };
-                }
-                $('input[name=idprovinsikab]').val('');
-                return parsed;
-            },
-            formatItem: function(data,i,max)
-            {
-                var str = '<div class=result>'+data.nama+'</div>';
-                return str;
-            },
-            width: 270, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-            dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-        }).result(
-        function(event,data,formated)
-        {
-            $(this).attr('value',data.nama);
-            $('input[name=idprovinsikab]').val(data.id);
-        }
-    );
-       
-        
         $('#formkab').submit(function(){    
             var kabupaten = $('#kabupaten').val();
             var provid= $('input[name=idprovinsikab]').val();
@@ -124,10 +151,10 @@
     function save_kab(){
         var Url = '';           
         var status = $('input[name=tipe]').val();
-        if($('input[name=tipe]').val() === 'add'){
-            Url = '<?= base_url('referensi/manage_kabupaten') ?>/add/';
-        }else{
+        if(status === 'edit'){
             Url = '<?= base_url('referensi/manage_kabupaten') ?>/edit/';
+        }else{
+            Url = '<?= base_url('referensi/manage_kabupaten') ?>/add/';
         }
         $.ajax({
             type : 'POST',
@@ -137,10 +164,10 @@
             success: function(data) {
                 $('#kab_list').html(data);
                 $('#form-kab').dialog('close');
-                if (status === 'add'){
-                    alert_tambah();
-                } else{
+                if (status === 'edit'){
                     alert_edit();
+                } else{
+                    alert_tambah();
                 }
                 reset_all();
                     
@@ -204,21 +231,6 @@
 <?= form_button('', 'Tambah Data', 'id=addkab') ?>
 <?= form_button('', 'Reset', 'class=resetan id=showKabAll') ?>
 <div class="data-list">
-    <div id="form-kab" style="display: none">
-        <div class="msg"></div>
-        <?= form_open('', 'id=formkab') ?>
-        <table>
-            <?= form_hidden('tipe') ?>
-            <?= form_hidden('id') ?>
-            <tr><td>Nama Provinsi</td><td><?= form_input('provinsi', null, 'class=provinsi-kab size=30') ?> <?= form_hidden('idprovinsikab', null) ?></td></tr>
-            <tr><td>Nama Kabupaten</td><td><?= form_input('kabupaten', null, 'id=kabupaten size=30') ?></td></tr>
-            <tr><td>Kode Kabupaten</td><td><?= form_input('kodekab', null, 'id=kodekab size=10') ?></td></tr>
-            <tr><td></td><td><?= form_submit('addkab', 'Simpan', 'id=savekab') ?>
-                    <?= form_button('', 'Reset', 'id=resetkab') ?></td> </tr>
-        </table>
-        <?= form_close() ?>
-    </div>
-
     <div id="konfirmasi_kab" style="display: none; padding: 20px;">
         <div id="text_konfirmasi_kab"></div>
     </div>

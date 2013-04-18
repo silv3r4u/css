@@ -5,15 +5,17 @@
     <script type="text/javascript">
         var request;
         $(function(){
-            $( "#addpacking" ).button({icons: {primary: "ui-icon-circle-plus"}});
+            $('#key').watermark('Search ...');
+            $( "#addpacking" ).button({icons: {primary: "ui-icon-newwin"}});
             $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
             $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
-            $('#reset, #cetak_batal,.resetan').button({icons: {secondary: 'ui-icon-refresh'}}); 
-            $('#bt_caripack').button({icons: {secondary: 'ui-icon-search'}});
-            $('#cetak-jumlah').button({icons: {secondary: 'ui-icon-print'}});
+            $('#reset, #cetak_batal,.resetan').button({icons: {primary: 'ui-icon-folder-open'}}); 
+            $('#bt_caripack').button({icons: {primary: 'ui-icon-search'}});
+            $('#cetak-jumlah').button({icons: {primary: 'ui-icon-print'}});
             get_packing_list(1);
             $('#packAll').click(function(){
-                get_packing_list(1);
+                $('#loaddata').empty();
+                $('#loaddata').load('<?= base_url('referensi/packing_barang') ?>');
             });
             
             $('#form_cari_packing').dialog({
@@ -85,13 +87,26 @@
                 return false;
                 
             });
-       
+//            <tr>
+//                <td></td>
+//                <td>
+//                    <?= form_submit('save', 'Simpan', 'id=simpan') ?>
+//                    <?= form_button('', 'Reset', 'id=reset') ?>
+//                </td>
+//            </tr>
             $('#form_packing').dialog({
                 autoOpen: false,
-                height: 300,
-                width: 800,
+                height: 270,
+                width: 430,
                 modal: true,
-                resizable : false,
+                buttons: {
+                    "Simpan": function() {
+                        $('#formpacking').submit();
+                    }, 
+                    "Batal": function() {
+                        $(this).dialog('close');
+                    }
+                },
                 close : function(){
                     reset_all();
                 },
@@ -330,13 +345,13 @@
     <h1><?= $title ?></h1>
 
     <?= form_button('', 'Tambah Data', 'id=addpacking') ?>
-    <?= form_button('', 'Cari', 'id=bt_caripack class=cari') ?>
-    <?= form_button('', 'Reset', 'class=resetan id=packAll') ?>
+    <?= form_button('', 'Tampilkan', 'class=resetan id=packAll') ?>
+    <div style="margin-bottom: 2px; float: right;"><?= form_input('key', null, 'id=key size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
     <div id="form_packing" style="display: none;position: relative; background: #fff; padding: 10px;">
         <div class="msg" id="msg_packing"></div>
         <table width="100%">
             <tr>
-                <td width="15%">Barcode</td>
+                <td width="25%" align="right">Barcode</td>
                 <td> <?= form_input('barcode', '', 'id=barcode size=40') ?></td>
             </tr>
         </table>
@@ -348,31 +363,25 @@
 
         <table width="100%">
             <tr>
-                <td width="15%">Barang:</td>
+                <td width="25%" align="right">Barang:</td>
                 <td>
                     <?= form_hidden('barcode', '', 'size=40') ?>
                     <?= form_input('barang', '', 'class=barang id=barang size=40') ?>
                     <?= form_hidden('id_barang') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Kemasan:</td>
+                <td width="25%" align="right">Kemasan:</td>
                 <td><?= form_dropdown('kemasan', $kemasan, null, 'id=kemasan') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Isi @:</td>
+                <td width="25%" align="right">Isi @:</td>
                 <td><?= form_input('isi', '', 'id=isi size=40') ?> </td>
             </tr>
             <tr>
-                <td width="15%">Satuan Terkecil:</td>
+                <td width="25%" align="right">Satuan Terkecil:</td>
                 <td><?= form_dropdown('satuan', $satuan, null, 'id=satuan') ?> </td>
             </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <?= form_submit('save', 'Simpan', 'id=simpan') ?>
-                    <?= form_button('', 'Reset', 'id=reset') ?>
-                </td>
-            </tr>
+            
         </table>
     </div>
     <?= form_close() ?>

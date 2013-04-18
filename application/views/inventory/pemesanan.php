@@ -5,13 +5,34 @@ function reset_form() {
     var url = '<?= base_url('inventory/pemesanan') ?>';
     $('#loaddata').load(url+'?_'+Math.random());
 }
+function konfirmasi_lanjut() {
+    var str = '<div id=konfirmasi_lanjut>'+
+            '<p><span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>'+
+            'Proses penambahan data pemesanan berhasil dilakukan, <br/>Apakah anda akan melanjutkann ke proses pembelian ?</p></div>';
+    $('#loaddata').append(str);
+    $('#konfirmasi_lanjut').dialog({
+        autoOpen: true,
+        title :'Konfirmasi',
+        height: 200,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Ya": function() {
+                var id = $('#id_auto').html();
+                $('#loaddata').load('<?= base_url('inventory/pembelian') ?>/'+id);
+                $(this).dialog().remove();
+            },
+            "Tidak": function() {
+                $(this).dialog().remove();
+            }
+        }
+    });
+}
 $(function() {
-    //$('#deletion').hide();
-    //$('button[id=deletion],button[id=print]').attr('disabled','disabled');
     $('button[id=reset]').click(function() {
         reset_form();
         $('button[type=submit]').show();
-    })
+    });
     $('input[type=submit]').each(function() {
         $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
     });
@@ -47,7 +68,7 @@ $(function() {
         if (ok) {
             var id = $('#id_auto').html();
             $.get('<?= base_url('inventory/pemesanan_delete') ?>/'+id, function(data) {
-                if (data.status == true) {
+                if (data.status === true) {
                     alert_delete();
                     reset_form();
                 }
@@ -55,21 +76,21 @@ $(function() {
         } else {
             return false;
         }
-    })
+    });
     $('#myform').submit(function() {
-        if ($('input[name=id_suplier]').val() == '') {
+        if ($('input[name=id_suplier]').val() === '') {
             alert('Data suplier tidak boleh kosong !');
             $('#suplier').focus();
             return false;
         }
         var jumlah = $('.tr_row').length-1;
         for (i = 0; i <= jumlah; i++) {
-            if ($('#id_pb'+i).val() == '') {
+            if ($('#id_pb'+i).val() === '') {
                 alert('Data packing barang tidak boleh kosong !');
                 $('#pb'+i).focus();
                 return false;
             }
-            if (($('#jml'+i).val() == '') || ($('#jml'+i).val() == '0')) {
+            if (($('#jml'+i).val() === '') || ($('#jml'+i).val() === '0')) {
                 alert('Jumlah pemesanan tidak boleh kosong !');
                 $('#jml'+i).val('').focus();
                 return false;
@@ -82,25 +103,25 @@ $(function() {
             data: $(this).serialize(),
             dataType: 'json',
             success: function(data) {
-                if (data.status == true) {
+                if (data.status === true) {
                     $('input').attr('disabled','disabled');
                     $('button[type=submit]').hide();
                     $('button[id=print], button[id=deletion]').show();
                     $('#id_auto').html(data.id_pemesanan);
                     $('input[name=id]').val(data.id_pemesanan);
                     //$('button[id=deletion],button[id=print]').removeAttr('disabled');
-                    alert_tambah();
+                    konfirmasi_lanjut();
                 }
             }
-        })
+        });
         return false;
-    })
+    });
     
     $('#print').click(function() {
         var doc_no = $('#doc_no').html();
         var id_pemesanan = $('input[name=id]').val();
         location.href='<?= base_url('inventory/pemesanan_cetak') ?>?no_doc='+doc_no+'&id='+id_pemesanan+'&perundangan=<?= isset($_GET['perundangan'])?$_GET['perundangan']:NULL ?>';
-    })
+    });
     $('#suplier').autocomplete("<?= base_url('inv_autocomplete/load_data_instansi_relasi/supplier') ?>",
     {
         parse: function(data){

@@ -5,7 +5,7 @@
             var str = '<div id="form_penduduk" style="display: none;position: relative; background: #fff; padding: 10px;">'+
                     '<div class="msg" id="msg_penduduk"></div>'+
                     '<form action="" id="formpenduduk">'+
-                    '<input type=hidden name=tipe />'+
+                    '<input type=hidden name=tipe value="add" />'+
                     '<input type=hidden name=id_penduduk />'+
                     '<table width="100%" class="tabel-input">'+
                         '<tr>'+
@@ -14,14 +14,14 @@
                         '</tr>'+
                         '<tr valign=top>'+
                             '<td width="25%">Alamat:</td>'+
-                            '<td><textarea name=alamat cols=30 rows=2></textarea>'+
-                                '<input type=hidden name=alamat_nama size=50 /></td>'+
+                            '<td><textarea name=alamat id=alamat cols=30 rows=2></textarea>'+
+                                '</td>'+
                         '</tr>'+
                         '<tr>'+
                             '<td width="25%">Kab. / Kodya:</td>'+
                             '<td>'+
                                 '<code><?php echo form_input("", "", "class=kelurahan id=alamat_kab size=50") ?><br/>'+
-                                '<input type=hidden name=id_kabupaten id=id_alamat_kab />'+
+                                '<input type=hidden name=id_kabupaten_alamat id=id_alamat_kab />'+
                             '</td>'+
                         '</tr>'+
                         '<tr>'+
@@ -58,7 +58,7 @@
                         '</tr>'+
                         '<tr>'+
                             '<td width="25%">Pernikahan:</td>'+
-                            '<td><select name=pernikahan id=pernikahan><?php foreach ($gol_darah as $rowg) { echo '<option value="'.$rowg.'">'.$rowg.'</option>'; } ?></select></td>'+
+                            '<td><select name=pernikahan id=pernikahan><?php foreach ($pernikahan as $rowg) { echo '<option value="'.$rowg.'">'.$rowg.'</option>'; } ?></select></td>'+
                         '</tr>'+
                         '<tr>'+
                             '<td width="25%">Pendidikan:</td>'+
@@ -143,7 +143,7 @@
             $('#form_penduduk').dialog({
                 autoOpen: true,
                 height: 550,
-                width: 800,
+                width: 600,
                 modal: true,
                 title: 'Form Data Penduduk',
                 resizable : false,
@@ -151,7 +151,8 @@
                     $(this).dialog().remove();
                 }, buttons: {
                     "Simpan": function() {
-                        $('#formpenduduk').submit();
+                        //$('#formpenduduk').submit();
+                        save();
                     },
                     "Reset": function() {
                         reset_all();
@@ -164,11 +165,11 @@
         }
         var request;
         $(function(){
-            $( "#addpenduduk" ).button({icons: {primary: "ui-icon-circle-plus"}});
+            $( "#addpenduduk" ).button({icons: {primary: "ui-icon-newwin"}});
             $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
             $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
-            $('.resetan').button({icons: {secondary: 'ui-icon-refresh'}});
-            $('.cari').button({icons: {secondary: 'ui-icon-search'}});
+            $('.resetan').button({icons: {primary: 'ui-icon-folder-open'}});
+            $('.cari').button({icons: {primary: 'ui-icon-search'}});
             get_penduduk_list(1,'null');
             
             
@@ -193,15 +194,23 @@
             });
             
             $('#showAll').click(function(){
-                get_penduduk_list(1, 'null');
+                $('#loaddata').empty();
+                $('#loaddata').load('<?= base_url('referensi/penduduk') ?>');
             });
-        
             $('#form_cari_pdd').dialog({
                 autoOpen: false,
-                height: 450,
-                width: 500,
+                height: 350,
+                width: 450,
                 modal: true,
                 resizable : false,
+                buttons: {
+                    "Cari Data": function() {
+                        $('#formcaripenduduk').submit();
+                    },
+                    "Reset": function() {
+                        reset_all();
+                    }
+                },
                 close : function(){
                     reset_all();
                 },
@@ -211,20 +220,8 @@
             });
             $( "#tab" ).tabs({selected: 0 });
             $('#addpenduduk').click(function() {
-                //get_last_id();
-//                $('input[name=tipe]').val('add');
-//                $('#form_penduduk').dialog("option",  "title", "Tambah Data Penduduk");
-//                $('#form_penduduk').dialog("open");
-                //$( "#tab" ).tabs({selected: 0 });
                 create_form();
             });
-        
-            $('.resetan').click(function() {
-                reset_all();
-            });
-            
-            
-            
             $('#showAll').click(function() {
                 get_penduduk_list(1,'null');
             });
@@ -253,57 +250,6 @@
                 }
                 return false;
             });
-        
-            $('#formdinamis').submit(function(){     
-                Url = '<?= base_url('referensi/manage_penduduk') ?>/edit_dinamis/';              
-        
-                if(!request) {
-                    request =  $.ajax({
-                        type : 'POST',
-                        url: Url,               
-                        data: $(this).serialize(),
-                        cache: false,
-                        success: function(res) {
-                            var data = $.parseJSON(res);
-                            get_penduduk_list($('.noblock').html(), 'null')
-                            get_dinamis_penduduk_list(data.id);
-                            alert_edit();
-                            $('#form_penduduk').dialog("close");
-                            reset_all();
-                            request = null;                            
-                        }
-                    });
-                }  
-           
-            
-                return false;
-            });
-        
-            $('.kelurahan').autocomplete("<?= base_url('referensi/get_kelurahan') ?>",
-            {
-                parse: function(data){
-                    var parsed = [];
-                    for (var i=0; i < data.length; i++) {
-                        parsed[i] = {
-                            data: data[i],
-                            value: data[i].nama // nama field yang dicari
-                        };
-                    }
-                    return parsed;
-                },
-                formatItem: function(data,i,max){
-                    var str = '<div class=result>'+data.nama+'<br/>Kec: '+data.kecamatan+', Kab: '+data.kabupaten+', Prov: '+data.provinsi+'</div>';
-                    return str;
-                },
-                width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-                dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-            }).result(
-            function(event,data,formated){
-                $(this).val(data.nama);
-                $('input[name=id_kelurahan]').val(data.id);
-                // $('.id_kabupaten').val(data.id_kabupaten);
-            });
-            
             $('#formpenduduk').submit(function(){
                 var nama = $('#nama').val();
                 if(nama===''){
@@ -317,13 +263,13 @@
             });
         });
         
-        function save(){
+        function save() {
             var Url = '';       
             var tipe = $('input[name=tipe]').val();
-            if( tipe === 'add'){
-                Url = '<?= base_url('referensi/manage_penduduk') ?>/add/';
-            }else{
+            if( tipe === 'edit'){
                 Url = '<?= base_url('referensi/manage_penduduk') ?>/edit/';
+            } else {
+                Url = '<?= base_url('referensi/manage_penduduk') ?>/add/';
             }   
             
             if(!request) {
@@ -335,16 +281,16 @@
                     success: function(data) {
                         $('#penduduk_list').html(data);
                         $('#form_penduduk').dialog("close");
-                        if(tipe === 'add'){
-                            alert_tambah();
-                        }else{
+                        if(tipe === 'edit'){
                             alert_edit();
+                        }else{
+                            alert_tambah();
                         }
                         reset_all(); 
                         request = null;                            
                     }
                 });
-            }  
+            }
         }
     
         function reset_all(){
@@ -357,6 +303,7 @@
             $('#telp').val('');
             $('#telp_cari').val('');
             $('.kabupaten').val('');
+            $('#kategori').val('');
             $('.l').removeAttr('checked');
             $('.p').removeAttr('checked');
             $('#gol_darah').val('');
@@ -414,10 +361,11 @@
         }
     
         function edit_penduduk(arr){
+            create_form();
             var data = arr.split("#");
             $(".dinamis").show();
             $('input[name=tipe]').val('edit');
-        
+            
             $('#nomor_penduduk').html(data[0]);
             $('#id_pdd_dinamis').html(data[0]);
             $('input[name=id_penduduk]').val(data[0]);       
@@ -427,21 +375,27 @@
             $('#alamat').val(data[2]);  
             $('input[name=alamat_lama]').val(data[2]);
             $('#telp').val(data[3]);
-            $('input[name=id_kabupaten]').val(data[4]);
-            $('#kabupaten').val(data[5]);
             if(data[6] === 'L'){
                 $('.l').attr('checked','checked');
             }else{
                 $('.p').attr('checked','checked');
             }
-      
             $('#gol_darah').val(data[7]);
             $('#awal').val(datefmysql(data[8]));
+            $('#id_tempat_lahir').val(data[10]);
+            $('#tempat_lahir').val(data[11]);
+            $('#id_alamat_kab').val(data[12]);
+            $('#alamat_kab').val(data[13]);
+            $('#noid').val(data[14]);
+            $('#pernikahan').val(data[15]);
+            $('#pendidikan').val(data[17]);
+            $('#profesi').val(data[18]);
+            $('#nostr').val(data[19]);
+            $('#nosip').val(data[20]);
+            $('#nosik').val(data[21]);
+            $('#jabatan').val(data[22]);
             $( "#tab" ).tabs({selected: 0 });
-    
-        
-            $('#form_penduduk').dialog("option",  "title", "Edit Data Penduduk");
-            $('#form_penduduk').dialog("open");
+            
         }
     
         function paging(page, tab,search){
@@ -451,9 +405,8 @@
     <div class="kegiatan">
         <h1><?= $title ?></h1>
         <?= form_button('', 'Tambah Data', 'id=addpenduduk') ?>
+        <?= form_button('', 'Tampilkan', 'class=resetan id=showAll') ?>
         <?= form_button('', 'Cari', 'id=bt_cari class=cari') ?>
-        <?= form_button('', 'Reset', 'class=resetan id=showAll') ?>
-        
         <!-- end of form -->
         <div id="konfirmasi" style="display: none;">
             <div id="text_konfirmasi"></div>
@@ -488,6 +441,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td align="right">Kategori:</td>
+                    <td>
+                        <?= form_dropdown('kategori', array('' => 'Semua ...', 'pasien' => 'Pasien', 'dokter' => 'Dokter', 'karyawan' => 'Karyawan'), NULL, 'id=kategori') ?>
+                    </td>
+                </tr>
+                <tr>
                     <td width="25%" style="text-align: right;">Gender:</td>
                     <td>
                         <?= form_radio('kelamin_cari', 'L', false, 'class=l') ?>Laki -laki
@@ -501,14 +460,6 @@
                 <tr>
                     <td width="25%" style="text-align: right;">Tanggal Lahir:</td>
                     <td><?= form_input('tgl_lahir_cari', '', 'id=awal_cari class=tgl size=10 placeholder=dd/mm/yyyy') ?> </td>
-                </tr>
-
-                <tr>
-                    <td></td>
-                    <td>
-                        <?= form_submit('cari', 'Cari', 'id=cari class=cari') ?>
-                        <?= form_button('', 'Reset', 'id=batal_cari class=resetan') ?>
-                    </td>
                 </tr>
             </table>
             <?= form_close() ?>

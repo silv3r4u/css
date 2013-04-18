@@ -61,10 +61,6 @@ $(function() {
                     //$('button[id=delete_pembelian],button[id=print]').removeAttr('disabled');
                     alert_tambah();
                 }
-            },
-            error: function() {
-                alert('Transaksi gagal dilakukan reload halaman kembali');
-                location.reload();
             }
         });
         return false;
@@ -285,19 +281,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
            var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
                 var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                 }
             }
             return str;
@@ -307,45 +303,32 @@ function add(i) {
     }).result(
     function(event,data,formated){
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
         
-        if (data.id_obat == null) {
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((data.kekuatan == '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
         
         $('#id_pb'+i).val(data.id);
-
-        var id_packing = data.id;
-        /*$.ajax({
-            url: '<?= base_url('inventory/fillField') ?>',
-            data: 'do=pemesanan&id='+id_packing,
-            cache: false,
-            dataType: 'json',
-            success: function(msg) {
-                sisa = '0';
-                if (msg.row[1] != null) {
-                    sisa = msg.row[1];
-                }
-                $('#sisa'+i).html(sisa);
-            }
-        })*/
     });
 }
 $(function() {
+    <?php if (!isset($list_data)) { ?>
     for(x = 0; x <= 1; x++) {
         add(x);
     }
+    <?php } ?>
     $('#addnewrow').click(function() {
         var row = $('.tr_row').length;
         add(row);
@@ -437,15 +420,16 @@ function hitungDetail() {
 <title><?= $title ?></title>
 <div class="kegiatan">
     <h1><?= $title ?></h1>
+    <?php if (isset($list_data)) { foreach ($list_data as $rows); } ?>
     <?= form_open('inventory/pembelian_save', 'id=form_pembelian') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
             <div class="left_side">
             <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
-            <label>No. SP:</label><?= form_input('no_pemesanan', null, 'id=nopemesanan size=20') ?>
+            <label>No. SP:</label><?= form_input('no_pemesanan', isset($rows->id)?$rows->id:null, 'id=nopemesanan size=20') ?>
             <label>No. Faktur:</label><?= form_input('nodoc', null, 'size=20 id=nodoc') ?>
             <label>Tanggal:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
-            <label>Supplier:</label><?= form_input(null, null, 'id=suplier') ?> <?= form_hidden('id_suplier') ?>
+            <label>Supplier:</label><?= form_input(null, isset($rows->id)?$rows->suplier:null, 'id=suplier') ?> <?= form_hidden('id_suplier', isset($rows->id)?$rows->suplier_relasi_instansi_id:null) ?>
             <label>Ttd Penerimaan:</label>
                 <span class="label"><?= form_radio('ttd', 'Ada', TRUE, null) ?>  Ada</span>
                 <span class="label"><?= form_radio('ttd', 'Tidak', FALSE, null) ?> Tidak</span>
@@ -471,7 +455,7 @@ function hitungDetail() {
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
-                <th>No</th>
+                <th width="5%">No</th>
                 <th width="35%">Packing Barang</th>
                 <th width="8%">ED</th>
                 <th width="5%">Jumlah</th>
@@ -484,6 +468,74 @@ function hitungDetail() {
             </tr>
             </thead>
             <tbody>
+            <?php if (isset($list_data)) { 
+                foreach ($list_data as $key => $data) { ?>
+                <tr class="tr_row">
+                    <td align="center"><?= ++$key ?></td>
+                    <td><input type=text name=pb[] id="pb<?= $key ?>" style="width: 100%" value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?> <?= $data->satuan ?> <?= $data->sediaan ?> <?= (($data->generik == 'Non Generik')?'':$data->pabrik) ?> @ <?= ($data->isi=='1')?'':$data->isi ?> <?= $data->satuan_terkecil ?>" class=pb />
+                    <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $data->barang_packing_id ?>" class=pb />
+                    </td>
+                    <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($data->ed) ?>" class=ed /></td>
+                    <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $data->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
+                    <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
+                    <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $data->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
+                    <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $data->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
+                    <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />
+                    </td>
+                    <td id="subtotal<?= $key ?>" align="right"></td>
+                    <td align=center>-</td>
+                    <td class=aksi><span class=delete onclick=eliminate(this);><?= img('assets/images/icons/delete.png') ?></span></td>
+                </tr>
+                <script type="text/javascript">
+                    $('#ed<?= $key ?>').datepicker({
+                        changeYear: true,
+                        changeMonth: true
+                    });
+                    $('#pb<?= $key ?>').autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
+                        {
+                            parse: function(data){
+                                var parsed = [];
+                                for (var i=0; i < data.length; i++) {
+                                    parsed[i] = {
+                                        data: data[i],
+                                        value: data[i].nama // nama field yang dicari
+                                    };
+                                }
+                                return parsed;
+                            },
+                            formatItem: function(data,i,max){
+                                var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terbesar = ''; var kekuatan = '';
+                                if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                                if (data.satuan !== null) { var satuan = data.satuan; }
+                                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                                if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                                if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                                if (data.satuan_terbesar !== null) { var satuan_terbesar = data.satuan_terbesar; }
+                                var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan+'</div>';
+                                return str;
+                            },
+                            width: 370, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+                            dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+                        }).result(
+                        function(event,data,formated){
+                            var sisa = data.sisa;
+                            if (data.sisa == null) {
+                                var sisa = 0;
+                            }
+                            var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terbesar = ''; var kekuatan = '';
+                            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                            if (data.satuan !== null) { var satuan = data.satuan; }
+                            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                            if (data.satuan_terbesar !== null) { var satuan_terbesar = data.satuan_terbesar; }
+                            $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terbesar);
+                            $('#id_pb<?= $key ?>').val(data.id);
+                            $('#sisa<?= $key ?>').html(sisa);
+                        });
+                </script>
+                <?php }
+            } ?>
             </tbody>
         </table><br/>
         <?= form_submit('Simpan', 'Simpan', 'id=simpan'); ?>

@@ -7,15 +7,15 @@ foreach ($list_data as $no => $rows) { ?>
         <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $rows->barang_packing_id ?>" class=pb />
         </td>
         <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($rows->ed) ?>" class=ed /></td>
-        <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $rows->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>)" /></td>
-        <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this)" onblur="jmlSubTotal(<?= $key ?>)" class=harga /></td>
-        <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $rows->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>)" /></td>
-        <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $rows->beli_diskon_rupiah ?>" onkeyup="FormNum(this)" onblur="jmlSubTotal(<?= $key ?>)" class=diskon_rp />
+        <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $rows->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
+        <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
+        <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $rows->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
+        <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $rows->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
         <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />
         </td>
         <td id="subtotal<?= $key ?>" align="right"></td>
         <td align=center>-</td>
-        <td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>
+        <td class=aksi><span class=delete onclick=eliminate(this);><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
         $('#ed<?= $key ?>').datepicker({
@@ -36,12 +36,12 @@ foreach ($list_data as $no => $rows) { ?>
                 },
                 formatItem: function(data,i,max){
                     var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terbesar = ''; var kekuatan = '';
-                    if (data.isi != '1') { var isi = '@ '+data.isi; }
-                    if (data.satuan != null) { var satuan = data.satuan; }
-                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                    if (data.sediaan != null) { var sediaan = data.sediaan; }
-                    if (data.pabrik != null) { var pabrik = data.pabrik; }
-                    if (data.satuan_terbesar != null) { var satuan_terbesar = data.satuan_terbesar; }
+                    if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                    if (data.satuan !== null) { var satuan = data.satuan; }
+                    if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                    if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                    if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                    if (data.satuan_terbesar !== null) { var satuan_terbesar = data.satuan_terbesar; }
                     var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan+'</div>';
                     return str;
                 },
@@ -54,12 +54,12 @@ foreach ($list_data as $no => $rows) { ?>
                     var sisa = 0;
                 }
                 var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terbesar = ''; var kekuatan = '';
-                if (data.isi != '1') { var isi = '@ '+data.isi; }
-                if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                if (data.satuan != null) { var satuan = data.satuan; }
-                if (data.sediaan != null) { var sediaan = data.sediaan; }
-                if (data.pabrik != null) { var pabrik = data.pabrik; }
-                if (data.satuan_terbesar != null) { var satuan_terbesar = data.satuan_terbesar; }
+                if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                if (data.satuan !== null) { var satuan = data.satuan; }
+                if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                if (data.satuan_terbesar !== null) { var satuan_terbesar = data.satuan_terbesar; }
                 $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terbesar);
                 $('#id_pb<?= $key ?>').val(data.id);
                 $('#sisa<?= $key ?>').html(sisa);
@@ -92,11 +92,11 @@ $(function() {
         //$('#diskon_pr'+i).removeAttr('disabled');
         
         var subttl= (harga * jumlah);
-        if (dis_pr != 0 || dis_rp != '') {
+        if (dis_pr !== 0 || dis_rp !== '') {
             var subttl = subttl - ((dis_pr/100)*harga)*jumlah;
             //$('#diskon_rp'+i).attr('disabled','disabled');
         }
-        if (dis_rp != '' || dis_rp != 0) {
+        if (dis_rp !== '' || dis_rp !== 0) {
             var subttl = subttl - (dis_rp * jumlah);
             //$('#diskon_pr'+i).attr('disabled','disabled');
         }

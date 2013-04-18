@@ -1,18 +1,26 @@
 <script type="text/javascript">
     var request;
     $(function(){
-        $( "#addnewrow" ).button({icons: {primary: "ui-icon-circle-plus"}});
+        $( "#addnewrow" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
-        $('.resetan').button({icons: {secondary: 'ui-icon-refresh'}});
-        $('#bt_carinon').button({icons: {secondary: 'ui-icon-search'}});
+        $('.resetan').button({icons: {primary: 'ui-icon-folder-open'}});
+        $('#bt_carinon').button({icons: {primary: 'ui-icon-search'}});
         get_nonobat_list(1,'null');
         $('#form_non').dialog({
             autoOpen: false,
-            height: 250,
-            width: 600,
+            height: 230,
+            width: 400,
             modal: true,
             resizable : false,
+            buttons: {
+                "Simpan": function() {
+                    save_barang_non();
+                },
+                "Batal": function() {
+                    $(this).dialog('close');
+                }
+            },
             close : function(){
                 reset_all();
             },
@@ -20,19 +28,23 @@
                 
             }
         });        
-        
         $('#carinonobat').dialog({
             autoOpen: false,
             height: 200,
-            title :'Pencarian Barang Non Obat',
-            width: 600,
+            title :'Form Pencarian Barang Non Obat',
+            width: 400,
             modal: true,
-            resizable : false,
+            buttons: {
+                "Cari": function() {
+                    $('#form_carinon').submit();
+                },
+                "Batal": function() {
+                    reset_all();
+                    $(this).dialog('close');
+                }
+            },
             close : function(){
                 reset_all();
-            },
-            open : function(){
-                
             }
         });
         $('#konfirmasi_brg').dialog({
@@ -79,7 +91,7 @@
         
         $('#addnewrow').click(function() {
             $('input[name=tipe]').val('add');
-            $('#form_non').dialog("option",  "title", "Tambah Data Master Barang Non Obat");
+            $('#form_non').dialog("option",  "title", "Form Barang Non Obat");
             $('#form_non').dialog("open");
             $('.dinamis').hide();
             
@@ -116,7 +128,7 @@
         $('#form_carinon').submit(function(){
             var Url = '<?= base_url('referensi/manage_barang_non') ?>/search/';         
             
-            if($('#nama_cari').val()==''){
+            if($('#nama_cari').val()===''){
                 $('#msg_carinon').fadeIn('fast').html('Nama barang tidak boleh kosong !');
                 $('#nama_cari').focus();
                 return false;
@@ -178,12 +190,11 @@
     function save_barang_non(){
         var Url = '';       
         var tipe = $('input[name=tipe]').val();
-        if( tipe== 'add'){
-            Url = '<?= base_url('referensi/manage_barang_non') ?>/add/';
-        }else{
+        if(tipe === 'edit') {
             Url = '<?= base_url('referensi/manage_barang_non') ?>/edit/';
+        } else {
+            Url = '<?= base_url('referensi/manage_barang_non') ?>/add/';
         }
-        
         if(!request) {
             request =  $.ajax({
                 type : 'POST',
@@ -193,10 +204,10 @@
                 success: function(data) {
                     $('#non_list').html(data);
                     $('#form_non').dialog("close");
-                    if(tipe == 'add'){
-                        alert_tambah();
-                    }else{
+                    if(tipe === 'edit'){
                         alert_edit();
+                    }else{
+                        alert_tambah();
                     }
                     $('#form_non').dialog("close");
                     reset_all(); 
@@ -264,9 +275,9 @@
 </script>
 
 <div style="display: inline-block; padding-left: 2px;">
-    <?= form_button('', 'Tambah Data', 'id=addnewrow') ?>
-    <?= form_button('', 'Cari', 'id=bt_carinon') ?>
-    <?= form_button('', 'Reset', 'class=resetan id=showAll') ?>  
+    <?= form_button('', 'Tambah Data', 'id=addnewrow style="margin-left: 0px;"') ?>
+    <?= form_button('', 'Cari', 'id=bt_carinon style="margin-left: 0px;"') ?>
+    <?= form_button('', 'Tampilkan', 'class=resetan id=showAll style="margin-left: 0px;"') ?>  
 </div>
 
 <div id="form_non" style="display: none;position: static; background: #fff; padding: 10px;">
@@ -276,25 +287,18 @@
     <?= form_hidden('id_barang', '', 'id=id_barang') ?>
     <table width="100%">
         <tr>
-            <td width="15%">Nama</td>
-            <td><?= form_input('nama', '', 'id=nama_brg class=nama size=60') ?> </td>
+            <td width="20%" align="right">Nama:</td>
+            <td><?= form_input('nama', '', 'id=nama_brg class=nama size=40') ?> </td>
         </tr>
         <tr>
-            <td width="15%">Kategori</td>
+            <td width="20%" align="right">Kategori:</td>
             <td><?= form_dropdown('kategori', $kategori, null, 'id=kategori') ?></td>
         </tr>
         <tr>
-            <td width="15%">Pabrik</td>
+            <td width="20%" align="right">Pabrik:</td>
             <td>
-                <?= form_input('pabrikbarang', '', 'class=pabrik size=60') ?>
+                <?= form_input('pabrikbarang', '', 'class=pabrik size=40') ?>
                 <?= form_hidden('id_pabrik') ?>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <?= form_submit('savebarang', 'Simpan', 'id=savebarang') ?>
-                <?= form_button('Reset', 'Reset`', 'id=reset class=resetan') ?>
             </td>
         </tr>
     </table>
@@ -306,28 +310,20 @@
 </div>
 
 <div id="carinonobat" style="display: none; background: #fff; padding: 10px">
-    <b>Form Pencarian</b>
     <?= form_open('', 'id=form_carinon') ?>
     <?= form_hidden('kat') ?>
     <?= form_hidden('id_barang') ?>
     <div class="msg" id="msg_carinon"></div>
     <table width="100%">
         <tr>
-            <td width="15%">Nama</td>
-            <td><?= form_input('nama', '', 'id=nama_cari class=nama size=60') ?> </td>
+            <td width="20%" align="right">Nama Barang:</td>
+            <td><?= form_input('nama', '', 'id=nama_cari class=nama size=40') ?> </td>
         </tr>
         <tr>
-            <td width="15%">Pabrik</td>
+            <td width="20%" align="right">Pabrik:</td>
             <td>
-                <?= form_input('pabrik', '', 'class=pabrik size=60') ?>
+                <?= form_input('pabrik', '', 'class=pabrik size=40') ?>
                 <?= form_hidden('id_pabriks') ?>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <?= form_submit('cari', 'Cari', '') ?>
-                <?= form_button('', 'Reset', 'id=resetkab class=resetan') ?>
             </td>
         </tr>
     </table>

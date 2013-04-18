@@ -8,6 +8,7 @@ class Billing extends CI_Controller {
         $this->load->model('m_billing');
         $this->load->library('session');
         $this->load->helper('login');
+        $this->load->helper('html');
         $this->load->helper('functions');
         $this->load->library('form_validation');
         $this->load->helper('url');

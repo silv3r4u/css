@@ -1,22 +1,29 @@
 <script type="text/javascript">
     var request;
     $(function(){
-        $( "#addobat" ).button({icons: {primary: "ui-icon-circle-plus"}});
+        $( "#addobat" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
-        $('.resetan').button({icons: {secondary: 'ui-icon-refresh'}});
-        $('#bt_cariobat').button({icons: {secondary: 'ui-icon-search'}});
+        $('.resetan').button({icons: {primary: 'ui-icon-folder-open'}});
+        $('#bt_cariobat').button({icons: {primary: 'ui-icon-search'}});
         get_obat_list(1,'null');
         $('#showObatAll').click(function(){
             get_obat_list(1,'null');
         });
-        
         $('#bt_cariobat').click(function(){           
             $('#cariobat').dialog({
                 modal: true,
-                width: 600,
-                height: 300,
-                autoOpen: true
+                width: 450,
+                height: 250,
+                autoOpen: true,
+                buttons: {
+                    "Cari Obat": function() {
+                        $('#form_cariobat').submit();
+                    },
+                    "Batal": function() {
+                        $(this).dialog('close');
+                    }
+                }
             });
             $('#nama').focus();
         });
@@ -59,13 +66,27 @@
             $('input[name=id_pabrik_obat]').val(data.id);
             $('input[name=id_pabriks_obat]').val(data.id);
         });
-        
+//        <tr>
+//            <td></td>
+//            <td>
+//                <?= form_submit('saveobat', 'Simpan', 'id=saveobat') ?>
+//                <?= form_button('Reset', 'Reset', 'id=resetobat class=resetan') ?>
+//            </td>
+//        </tr>
         $('#form_obat').dialog({
             autoOpen: false,
-            height: 550,
-            width: 600,
+            height: 500,
+            width: 500,
             modal: true,
-            resizable : false,
+            resizable : true,
+            buttons: {
+                "Simpan": function() {
+                    $('#formobat').submit();
+                },
+                "Batal": function() {
+                    $(this).dialog('close');
+                }
+            },
             close : function(){
                 reset_all();
             },
@@ -114,7 +135,7 @@
         $('#formobat').submit(function(){
             var Url = '<?= base_url('referensi/manage_barang_obat') ?>/cek/1';
             var namaobat = $('#namaobat').val();
-            if($('#namaobat').val()==''){
+            if($('#namaobat').val()===''){
                 $('#msg_obat').fadeIn('fast').html('Nama obat tidak boleh kosong !');
                 $('#namaobat').focus();
                 return false;
@@ -148,10 +169,10 @@
     function save_obat(){
         var Url = '';       
         var tipe = $('input[name=tipe]').val();
-        if( tipe== 'add'){
-            Url = '<?= base_url('referensi/manage_barang_obat') ?>/add/';
-        }else{
+        if(tipe === 'edit') {
             Url = '<?= base_url('referensi/manage_barang_obat') ?>/edit/';
+        } else {
+            Url = '<?= base_url('referensi/manage_barang_obat') ?>/add/';
         }            
         
         if(!request) {
@@ -163,10 +184,10 @@
                 success: function(data) {
                     $('#obat_list').html(data);
                     $('#form_obat').dialog("close");
-                    if(tipe == 'add'){
-                        alert_tambah();
-                    }else{
+                    if (tipe === 'edit') {
                         alert_edit();
+                    } else {
+                        alert_tambah();
                     }
                     reset_all(); 
                     $('#form_obat').dialog("close");
@@ -270,8 +291,11 @@
    
 </script>
 
-
-<div id="form_obat" style="display: none;position: static; background: #fff; padding: 10px;">
+<?= form_button('', 'Tambah Data', 'id=addobat class=newrow style="margin-left: 2px;"') ?>
+<?= form_button('', 'Cari', 'id=bt_cariobat class=cari style="margin-left: 0px;"') ?>
+<?= form_button('', 'Tampilkan', 'class=resetan id=showObatAll style="margin-left: 0px;"') ?>
+<br/><br/>
+<div id="form_obat" style="display: none;">
     <div class="msg" id="msg_obat"></div>
     <?= form_open_multipart('', 'id=formobat') ?>
     <?= form_hidden('tipe') ?>
@@ -328,76 +352,55 @@
                 <?= form_radio('generik', 'Non Generik', false, 'id=c') ?>Non Generik
             </td>
         </tr>
-<!--        <tr>
-            <td align="right">Gambar</td>
-            <td><?= form_upload('image') ?></td>
-        </tr>-->
-        <tr>
-            <td></td>
-            <td>
-                <?= form_submit('saveobat', 'Simpan', 'id=saveobat') ?>
-                <?= form_button('Reset', 'Reset', 'id=resetobat class=resetan') ?>
-            </td>
-        </tr>
     </table>
     <?= form_close() ?>
 
 </div>
 
-<div id="konfirmasi_obat" style="display: none; padding: 20px;">
+<div id="konfirmasi_obat" style="display: none;">
     <div id="text_konfirmasi_obat"></div>
 </div>
 
-<div id="cariobat" style="display: none; padding: 20px;" title="Parameter Pencarian">
+<div id="cariobat" style="display: none;" title="Parameter Pencarian">
     <?= form_open('', 'id=form_cariobat') ?>
     <?= form_hidden('kat_obat') ?>
     <?= form_hidden('id_barang_obat') ?>
     <div class="msg" id="msg_cariobat"></div>
     <table width="100%">
         <tr>
-            <td width="15%">Nama</td>
+            <td width="15%" align="right">Nama Obat:</td>
             <td><?= form_input('nama', null, 'id=nama class=nama size=60') ?> </td>
         </tr>
         <tr>
-            <td width="15%">Pabrik</td>
+            <td width="15%" align="right">Pabrik:</td>
             <td>
                 <?= form_input('pabrik', null, 'class=pabrik size=60') ?>
                 <?= form_hidden('id_pabriks_obat', null, 'class=id_pabrik') ?>
             </td>
         </tr>
         <tr>
-            <td width="15%">Indikasi</td>
+            <td width="15%" align="right">Indikasi:</td>
             <td>
                 <?= form_input('indikasi_obat', null, 'class=indikasi_obat size=60') ?>
             </td>
         </tr>
         <tr>
-            <td width="15%">Dosis</td>
+            <td width="15%" align="right">Dosis:</td>
             <td>
                 <?= form_input('dosis_obat', null, 'class=dosis_obat size=60') ?>
             </td>
         </tr>
         <tr>
-            <td width="15%">Kandungan</td>
+            <td width="15%" align="right">Kandungan:</td>
             <td>
                 <?= form_input('kandungan', null, 'class=kandungan size=60') ?>
             </td>
         </tr>
-        <tr>
-            <td></td>
-            <td>
-                <?= form_submit('cari', 'Cari', '') ?>
-                <?= form_button('', 'Reset', 'id=resetproedit class=resetan') ?>
-            </td>
-        </tr>
+        
     </table>
     <?= form_close() ?>
 </div>
-<div style="display: inline-block; padding-left: 2px;">
-    <?= form_button('', 'Tambah Data', 'id=addobat class=newrow') ?>
-    <?= form_button('', 'Cari', 'id=bt_cariobat class=cari') ?>
-    <?= form_button('', 'Reset', 'class=resetan id=showObatAll') ?>
-</div>
+    
 <div class="data-list" id="obat_list">
 
 </div>

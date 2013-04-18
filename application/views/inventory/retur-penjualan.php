@@ -128,7 +128,7 @@ $(function() {
                         <td id="disc<?= $key ?>" align="right"><?= $rows->diskon ?></td>
                         <td align="center"><?= round($rows->keluar,1) ?> <?= form_hidden('harga[]', $harga_jual) ?></td>
                         <td><?= form_input('jml_retur[]', round($rows->keluar,1), 'size=10 id=jml_retur'.$key.' class=jml_retur onkeyup=hitungRetur() ') ?> <?= form_hidden('ed[]', $rows->ed) ?></td>
-                        <td align="center" class="aksi"><a class="delete" onclick="eliminate(this)"></a></td>
+                        <td align="center" class="aksi"><span class="delete" onclick="eliminate(this)"><?= img('assets/images/icons/delete.png') ?></span></td>
                     </tr>
                 <?php } ?>
             </tbody>

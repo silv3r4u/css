@@ -305,7 +305,7 @@ class Referensi extends CI_Controller {
     }
 
     function manage_provinsi($mode, $page = null) {
-        $limit = 15;
+        $limit = 10;
         $add = array(
             'nama' => $this->input->post('provinsi'),
             'kode' => $this->input->post('kode')
@@ -587,8 +587,14 @@ class Referensi extends CI_Controller {
     function instansi_relasi() {
         $data['title'] = 'Data Perusahaan';
         $data['jenis'] = null;
-        $jenis[''] = 'Pilih Jenis';
-        $data['jenis'] = $this->m_referensi->relasi_instansi_jenis_get_data();
+        $data['jenis'] = $this->m_referensi->relasi_instansi_jenis_get_data()->result();
+        $jns = $this->m_referensi->relasi_instansi_jenis_get_data();
+        $ddmenu = array();
+        $ddmenu[''] = 'Pilih Jenis Perusahaan ..';
+        foreach ($jns->result_array() as $rows) {
+            $ddmenu[$rows['nama']] = $rows['nama'];
+        }
+        $data['jns_prsh'] = $ddmenu;
         $this->load->view('referensi/instansi_relasi/instansi', $data);
     }
 
@@ -606,8 +612,10 @@ class Referensi extends CI_Controller {
         if (($search != 'null') & isset($search['nama'])) {
             $str = $search['nama'];
         }
-
-        $data['paging'] = paging_ajax($data['jumlah'], $limit, $page, 1, $str);
+        $data['paging'] = '';
+        if ($query['jumlah'] > 0) {
+            $data['paging'] = paging_ajax($data['jumlah'], $limit, $page, 1, $str);
+        }
         return $data;
     }
 
@@ -1438,6 +1446,16 @@ class Referensi extends CI_Controller {
             'penduduk_id' => $this->input->post('id_penduduk'),
             'tanggal' => date('Y-m-d'),
             'alamat' => $this->input->post('alamat'),
+            'kabupaten_id' => $this->input->post('id_kabupaten_alamat'),
+            'identitas_no' => $this->input->post('noid'),
+            'pernikahan' => $this->input->post('pernikahan'),
+            'pendidikan_id' => ($this->input->post('pendidikan') == '') ? NULL : $this->input->post('pendidikan'),
+            'profesi_id' => ($this->input->post('profesi') == '') ? NULL : $this->input->post('profesi'),
+            'str_no' => $this->input->post('nostr'),
+            'sip_no' => $this->input->post('nosip'),
+            'pekerjaan_id' => ($this->input->post('pekerjaan') == '') ? NULL : $this->input->post('pekerjaan'),
+            'kerja_izin_surat_no' => $this->input->post('nosik'),
+            'jabatan' => $this->input->post('jabatan')
         );
         $searchnull = 'null';
         switch ($mode) {
@@ -1518,7 +1536,8 @@ class Referensi extends CI_Controller {
                     'kabupaten' => $this->input->post('id_kabupaten_cari'),
                     'gender' => $this->input->post('kelamin_cari'),
                     'gol_darah' => $this->input->post('gol_darah_cari'),
-                    'tgl_lahir' => $this->input->post('tgl_lahir_cari')
+                    'tgl_lahir' => $this->input->post('tgl_lahir_cari'),
+                    'kategori' => $this->input->post('kategori')
                 );
 
 
@@ -1531,7 +1550,8 @@ class Referensi extends CI_Controller {
                 $data['gender'] = $search['gender'];
                 $data['gol_darah'] = $search['gol_darah'];
                 $data['tgl_lahir'] = $search['tgl_lahir'];
-
+                $data['kategori'] = $search['kategori'];
+                
                 $this->load->view('referensi/penduduk/list_penduduk', $data);
                 break;
 

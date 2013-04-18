@@ -199,9 +199,8 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function get_nomor_pemesanan($q) {
-        $sql = "select p.*, r.nama as pabrik, pd.nama as sales from pemesanan p
+        $sql = "select p.*, r.nama as pabrik from pemesanan p
             join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
-            join penduduk pd on (p.salesman_penduduk_id = pd.id)
             where p.id not in (select pemesanan_id from pembelian) and p.id like ('%$q%') order by locate ('$q', p.id)";
         return $this->db->query($sql);
     }

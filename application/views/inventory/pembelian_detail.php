@@ -37,7 +37,7 @@
                 <label>Tanggal Dokumen:</label><span class="label"><?= datefrompg($rows->dokumen_tanggal) ?></span>
                 <label>No. Pemesanan:</label><span class="label"><?= $rows->pemesanan_id ?></span>
                 <label>Supplier:</label><span class="label"><?= $rows->pabrik ?></span>
-                <label>Salesman:</label><span class="label"><?= $rows->salesman ?></span>
+<!--                <label>Salesman:</label><span class="label"><?= $rows->salesman ?></span>-->
                 <label>Ttd Penerimaan:</label><span class="label"><?= $rows->ada_penerima_ttd ?></span>
                 <label>PPN (%):</label><span class="label"><?= $rows->ppn ?></span>
                 <label>Materai (Rp.):</label><span class="label"><?= rupiah($rows->materai) ?></span>

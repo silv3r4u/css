@@ -9,7 +9,7 @@ foreach ($list_data as $key => $rows) { ?>
         <td><input type=text name=ed[] id="ed<?= $key ?>" size=15 value="<?= datefmysql($rows->ed) ?>" class=ed /></td>
         <td id="jml_retur<?= $key ?>"><?= $rows->keluar ?></td>
         <td><input type=text name=jml[] id="jml<?= $key ?>" value="<?= $rows->keluar ?>" size=7 class=jml onkeyup="checkMount(<?= $key ?>)" /></td></td>
-        <td class=aksi><a class=delete onclick=eliminate(this)></a></td>
+        <td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
         function checkMount(i) {

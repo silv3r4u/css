@@ -1,9 +1,8 @@
 <script type="text/javascript">
-    $("#table").tablesorter({sortList:[[0,0]]});
+    $(".sortable").tablesorter();
 </script>
 <?php if (isset($key)): ?>
     <div id="pencarian">
-        <br/>
         <h3>
             Pencarian dengan kata kunci "<?= $key ?>" 
         </h3>

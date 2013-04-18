@@ -10,7 +10,7 @@ foreach ($list_data as $key => $rows) {
         <td align="right" id="hpp<?= $key ?>"><?= rupiah($harga_jual) ?></td>
         <td align="center" id="jml_retur<?= $key ?>"><?= $rows->masuk ?> <?= form_hidden('ed[]', $rows->ed) ?></td>
         <td><input type=text name=jml[] id="jml<?= $key ?>" value="<?= $rows->masuk ?>" size=7 class=jml onkeyup="checkMount(<?= $key ?>)" /></td></td>
-        <td class=aksi><a class=delete onclick=eliminate(this)></a></td>
+        <td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
         function checkMount(i) {

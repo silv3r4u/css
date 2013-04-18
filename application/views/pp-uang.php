@@ -8,7 +8,7 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nama[] id=nama'+i+' class=nama style="width:100%" /></td>'+
                 '<td><input type=text name=jml[] id=jml'+i+' class=jml style="width:100%" /></td>'+
-                '<td class=aksi><a class=delete onclick=eliminate(this)></a></td>'+
+                '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
             '</tr>';
         
     $('.form-inputan tbody').append(str);

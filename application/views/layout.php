@@ -32,13 +32,13 @@
                 $("#loading").ajaxStart(function(){$(this).show();});
                 $("#loading").ajaxStop(function(){$(this).fadeOut();});
                 $('a.submenu').click(function() {
-                    $('#loaddata').empty();
+                    $('.contentdata').remove();
                     var val = $(this).attr('href');
                     $.ajax({
                         url: val,
                         cache: false,
                         success:function(data) {
-                            $('#loaddata').html(data);
+                            $('#loaddata').html('<div class="contentdata">'+data+'</div>');
                         }
                     });
                     return false;
@@ -62,11 +62,11 @@
                         <?= anchor('user/logout', 'Logout') ?> - <span style="cursor: pointer; color: " onclick="ganti_pwd()">Ganti Password</span>
                     </div>
                     <div>
-                    
-                        <ul id="menu4" class="menu collapsible expandfirst">
+                        <!--  id="menu4" class="menu collapsible expandfirst" -->
+                        <ul id="menu3" class="menu noaccordion">
                             <?php foreach ($master_menu as $menu) { ?>
                             <li>
-                                <a href="#"><img src="<?= base_url('assets/images/cpanel/'.$menu->icons) ?>" align="left" />&nbsp;<?= $menu->nama ?></a>
+                                <a href="#" class="root"><img src="<?= base_url('assets/images/cpanel/'.$menu->icons) ?>" align="left" />&nbsp;<?= $menu->nama ?></a>
                                 <ul>
                                     <?php 
                                     $detail_menu = $this->m_user->menu_user_load_data($menu->id)->result();
@@ -83,7 +83,10 @@
                             <div class="arrow-right">&nbsp;</div>-->
 
 
-                <div id="loaddata"></div>
+                <div id="loaddata">
+                    <?= $this->load->view('registrasi') ?>
+                </div>
+                
             </div>
         </body>
 </html>

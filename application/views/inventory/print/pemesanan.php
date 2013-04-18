@@ -22,7 +22,7 @@ foreach ($pemesanan as $rows);
     <tr>
     <td rowspan="3" style="width: 70px"><img src="<?= base_url('assets/images/company/'.$apt->logo_file_nama) ?>" width="70px" height="70px" /></td>    
     <td colspan="3" align="center"><b><?= strtoupper($apt->nama) ?></b></td> </tr>
-    <tr><td colspan="3" align="center"><b><?= strtoupper($apt->alamat) ?> <?= strtoupper($apt->kelurahan) ?></b></td> </tr>
+    <tr><td colspan="3" align="center"><b><?= strtoupper($apt->alamat) ?> <?= strtoupper($apt->kabupaten) ?></b></td> </tr>
     <tr><td colspan="3" align="center" style="padding-right: 70px"><b>TELP. <?= $apt->telp ?>,  FAX. <?= $apt->fax ?>, EMAIL <?= $apt->email ?></b></td> </tr>
 </table>
 <?php
@@ -37,7 +37,7 @@ if ($rows->perundangan == 'Psikotropika') {
 <table width="100%">
     <tr><td>Nama:</td><td><?= $detail->nama ?></td><td colspan="2">Kepada: </td></tr>
     <tr><td>Alamat:</td><td><?= isset($detail->alamat)?$detail->alamat:null ?></td><td colspan="2">Yth. <?= $rows->suplier ?></td></tr>
-    <tr><td>Jabatan:</td><td><?= isset($detail->jabatan)?$detail->jabatan:null ?></td><td colspan="2">Di <?= $rows->alamat ?> <?= $rows->kelurahan ?></td></tr>
+    <tr><td>Jabatan:</td><td><?= isset($detail->jabatan)?$detail->jabatan:null ?></td><td colspan="2">Di <?= $rows->alamat ?> <?= $rows->kabupaten ?></td></tr>
 </table>
 
 <table>
@@ -78,7 +78,7 @@ if ($rows->perundangan == 'Psikotropika') {
 <table width="100%">
     <tr><td colspan="4">Kepada: </td></tr>
     <tr><td colspan="4">Yth. <?= $rows->suplier ?></td></tr>
-    <tr><td colspan="4">Di <?= $rows->alamat ?> <?= $rows->kelurahan ?></td></tr>
+    <tr><td colspan="4">Di <?= $rows->alamat ?> <?= $rows->kabupaten ?></td></tr>
 </table>
 
 <table><tr><td colspan="4">Mohon dikirim obat-obatan untuk keperluan Apotek kami sebagai berikut:<br/></td></tr></table>

@@ -1,9 +1,39 @@
 <script type="text/javascript">
+    function create_form_provinsi() {
+        var str = '<div id=datainput><div class="msg"></div>'+
+                '<form action="" id=formpro>'+
+                '<input type=hidden name=tipe value=add /><input type=hidden name=id />'+
+                '<table>'+
+                    '<tr><td align=right>Kode:</td><td><input type=text name=kode id=kode size=10 /></td></tr>'+
+                    '<tr><td align=right>Nama Provinsi:</td><td><input type=text name=provinsi id=provinsi size=40 /></td></tr>'+
+                '</table></div>';
+        $('#loaddata').append(str);
+        $('#datainput').dialog({
+            title: 'Form Referensi Provinsi',
+            autoOpen: true,
+            height: 170,
+            width: 370,
+            modal: true,
+            buttons: {
+                "Simpan": function() {
+                    save_prov();
+                },
+                "Batal": function() {
+                    $(this).dialog().remove();
+                }
+            },
+            close : function(){
+                $(this).dialog().remove();
+            }
+        });
+    }
     $(function() {
         //initial
         get_provinsi_list(1);
-        //initial
-        $( "#prov" ).button({icons: {primary: "ui-icon-circle-plus"}});
+        $('#prov').click(function() {
+            create_form_provinsi();
+        });
+        $("#prov").button({icons: {primary: "ui-icon-circle-plus"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
         $('#reset, .resetan').button({icons: {secondary: 'ui-icon-refresh'}});
@@ -12,20 +42,6 @@
             $('input[name=tipe]').val('add');
             $('#form-prov').dialog("option","title", "Tambah Data Provinsi");
             $('#form-prov').dialog("open");
-            $('#provinsi').focus();
-          
-          
-        });
-        
-        $('#form-prov').dialog({
-            autoOpen: false,
-            height: 170,
-            width: 400,
-            modal: true,
-            resizable : false,
-            close : function(){
-                reset_all();
-            }
         });
         
         $('#konfirmasi_prov').dialog({
@@ -55,7 +71,8 @@
         });
         
         $('#showProAll').click(function(){
-            get_provinsi_list(1);
+            $('#loaddata').empty();
+            $('#loaddata').load('<?= base_url('referensi/data_wilayah') ?>');
         });
         
         $('#reset').click(function() {
@@ -98,10 +115,10 @@
     function save_prov(){
         var Url = '';           
         var status = $('input[name=tipe]').val();
-        if($('input[name=tipe]').val() === 'add'){
-            Url = '<?= base_url('referensi/manage_provinsi') ?>/add/';
-        }else{
+        if(status === 'edit'){
             Url = '<?= base_url('referensi/manage_provinsi') ?>/edit/';
+        }else{
+            Url = '<?= base_url('referensi/manage_provinsi') ?>/add/';
         }
         $.ajax({
             type : 'POST',
@@ -112,13 +129,12 @@
                 $('#pro_list').html(data);
                 $('#form-prov').dialog("close");
                 
-                if(status === 'add'){
-                    alert_tambah();
-                } else{
+                if(status === 'edit'){
                     alert_edit();
+                } else{
+                    alert_tambah();
                 }
-                reset_all();
-                    
+                $('#datainput').dialog().remove();
             }
         });
     }
@@ -159,6 +175,7 @@
     }
     
     function edit_provinsi(id, nama,kode){
+        create_form_provinsi();
         $('input[name=tipe]').val('edit');
         $('input[name=id]').val(id);
         $('#provinsi').val(nama);
@@ -166,26 +183,12 @@
         $('#form-prov').dialog("option","title", "Edit Data Provinsi");
         $('#form-prov').dialog("open");
         $('#simpan').focus();
-        
     }
     
 </script>
 <?= form_button('', 'Tambah Data', 'id=prov') ?>
 <?= form_button('', 'Reset', 'class=resetan id=showProAll') ?>
 <div id="list" class="data-list">
-    <div id="form-prov" style="display: none">
-        <div class="msg"></div>
-        <?= form_open('', 'id=formpro') ?>
-        <table>
-            <?= form_hidden('tipe') ?>
-            <?= form_hidden('id') ?>
-            <tr><td>Nama Provinsi</td><td><?= form_input('provinsi', null, 'id=provinsi size=30') ?></td></tr>
-            <tr><td>Kode Provinsi</td><td><?= form_input('kode', null, 'id=kode size=10') ?></td></tr>
-            <tr><td></td><td><?= form_submit('addprov', 'Simpan', 'id=simpan') ?>
-                    <?= form_button('', 'Reset', 'id=reset') ?></td> </tr>
-        </table>
-        <?= form_close() ?>
-    </div>
     <div id="konfirmasi_prov" style="padding: 20px;">
         <div id="text_konfirmasi_prov"></div>
     </div>

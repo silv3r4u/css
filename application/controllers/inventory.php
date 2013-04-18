@@ -31,8 +31,11 @@ class Inventory extends CI_Controller {
         }
     }
     
-    function pembelian() {
+    function pembelian($id = null) {
         $data['title'] = 'Pembelian';
+        if ($id != null) {
+            $data['list_data'] = $this->m_inventory->pemesanan_muat_data($id)->result();
+        }
         $this->load->view('inventory/pembelian', $data);
     }
     

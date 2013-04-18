@@ -64,8 +64,8 @@ $(function() {
                     var hasil_sisa = Math.ceil(sisa);
                     $('#tanggal, #bayar').removeAttr('disabled', 'disabled');
                 }
-                $('#sisa_tagihan').html(hasil_sisa);
-                $('#bayar').val(hasil_sisa);
+                $('#sisa_tagihan').html(numberToCurrency(hasil_sisa));
+                $('#bayar').val(numberToCurrency(hasil_sisa));
             }
         );
         $('#bayar, #serahuang').keyup(function() {

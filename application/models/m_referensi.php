@@ -447,14 +447,14 @@ class M_referensi extends CI_Model {
 
     function relasi_instansi_jenis_get_data() {
         $query = $this->db->get('relasi_instansi_jenis');
-        return $query->result();
+        return $query;
     }
 
     function instansi_get_data($limit, $start, $search) {
         $q = '';
         $limit = "limit $start, $limit";
         if (($search != 'null') & isset($search['nama'])) {
-            $q = " where r.nama like '%" . $search['nama'] . "%' or kb.nama like '%" . $search['nama'] . "%' or kc.nama like '%" . $search['nama'] . "%' or rj.nama like '%" . $search['nama'] . "%'";
+            $q = " where r.nama like '%" . $search['nama'] . "%' or kb.nama like '%" . $search['nama'] . "%' or r.alamat like '%" . $search['nama'] . "%' or rj.nama like '%" . $search['nama'] . "%'";
         }
         if (($search != 'null') & isset($search['id'])) {
             $q = " where r.id = '" . $search['id'] . "' ";
@@ -737,6 +737,7 @@ class M_referensi extends CI_Model {
         left join obat o on (b.id = o.id)
         left join satuan s on (s.id = o.satuan_id)
         left join sediaan sd on (sd.id = o.sediaan_id)";
+        //echo $sql . $q . $limitation;
         $query = $this->db->query($sql . $q . $limitation);
         $queryAll = $this->db->query($sql . $q);
         $data['data'] = $query->result();
@@ -1023,7 +1024,17 @@ class M_referensi extends CI_Model {
         if (isset($search['tgl_lahir']) && ($search['tgl_lahir'] != '')) {
             $q.=" and p.lahir_tanggal = '" . $search['tgl_lahir'] . "'";
         }
-
+        if (isset($search['kategori']) and $search['kategori'] != '') {
+            if ($search['kategori'] == 'dokter') {
+                $q.=" and pr.nama = 'Dokter'";
+            }
+            if ($search['kategori'] == 'pasien') {
+                $q.=" and p.id in (select pasien_penduduk_id from resep)";
+            }
+            if ($search['kategori'] == 'karyawan') {
+                $q.=" and p.id in (select id from users)";
+            }
+        }
         if (isset($search['id'])) {
             $q.=" and p.id = '" . $search['id'] . "'";
         }
@@ -1031,11 +1042,11 @@ class M_referensi extends CI_Model {
         $limitation = null;
         $limitation.="";
 
-        $sql = "select p.*, d.*, d.identitas_no, d.id as id_dp, p.id as penduduk_id, kl.nama as kelurahan,kb.nama as kabupaten, pd.nama as pendidikan, pr.nama profesi 
+        $sql = "select p.*, d.*, d.identitas_no, d.id as id_dp, p.id as penduduk_id, kb.nama as kabupaten, kbt.nama as kabupaten_alamat, pd.nama as pendidikan, pr.nama profesi 
             , dp.no_id from penduduk p
         left join dinamis_penduduk d on (p.id = d.penduduk_id)
         left join kabupaten kb on (p.lahir_kabupaten_id = kb.id)
-        left join kelurahan kl on (d.kelurahan_id = kl.id)
+        left join kabupaten kbt on (d.kabupaten_id = kbt.id)
         left join pendidikan pd on (d.pendidikan_id = pd.id)
         left join profesi pr on (d.profesi_id = pr.id)
         inner join (
@@ -1061,7 +1072,22 @@ class M_referensi extends CI_Model {
     function penduduk_add_data($data) {
         $this->db->insert('penduduk', $data['penduduk']);
         $id = $this->db->insert_id();
-        $this->db->insert('dinamis_penduduk', $data['dinamis']);
+        $dinamis = array(
+            'penduduk_id' => $id,
+            'tanggal' => date('Y-m-d'),
+            'alamat' => $this->input->post('alamat'),
+            'kabupaten_id' => ($this->input->post('id_kabupaten_alamat') != '')?$this->input->post('id_kabupaten_alamat'):NULL,
+            'identitas_no' => $this->input->post('noid'),
+            'pernikahan' => $this->input->post('pernikahan'),
+            'pendidikan_id' => ($this->input->post('pendidikan') == '') ? NULL : $this->input->post('pendidikan'),
+            'profesi_id' => ($this->input->post('profesi') == '') ? NULL : $this->input->post('profesi'),
+            'str_no' => $this->input->post('nostr'),
+            'sip_no' => $this->input->post('nosip'),
+            'pekerjaan_id' => ($this->input->post('pekerjaan') == '') ? NULL : $this->input->post('pekerjaan'),
+            'kerja_izin_surat_no' => $this->input->post('nosik'),
+            'jabatan' => $this->input->post('jabatan')
+        );
+        $this->db->insert('dinamis_penduduk', $dinamis);
         return $id;
     }
 
@@ -1075,11 +1101,22 @@ class M_referensi extends CI_Model {
     function penduduk_edit_data($data) {
         $this->db->where('id', $data['penduduk']['id']);
         $this->db->update('penduduk', $data['penduduk']);
-
-        if ($data['dinamis']['alamat'] != $data['dinamis']['alamat_lama']) {
-            unset($data['dinamis']['alamat_lama']);
-            $this->db->insert('dinamis_penduduk', $data['dinamis']);
-        }
+        $dinamis = array(
+            'tanggal' => date('Y-m-d'),
+            'alamat' => $this->input->post('alamat'),
+            'kabupaten_id' => $this->input->post('id_kabupaten_alamat'),
+            'identitas_no' => $this->input->post('noid'),
+            'pernikahan' => $this->input->post('pernikahan'),
+            'pendidikan_id' => ($this->input->post('pendidikan') == '') ? NULL : $this->input->post('pendidikan'),
+            'profesi_id' => ($this->input->post('profesi') == '') ? NULL : $this->input->post('profesi'),
+            'str_no' => $this->input->post('nostr'),
+            'sip_no' => $this->input->post('nosip'),
+            'pekerjaan_id' => ($this->input->post('pekerjaan') == '') ? NULL : $this->input->post('pekerjaan'),
+            'kerja_izin_surat_no' => $this->input->post('nosik'),
+            'jabatan' => $this->input->post('jabatan')
+        );
+        $this->db->where('penduduk_id', $data['penduduk']['id']);
+        $this->db->update('dinamis_penduduk', $dinamis);
     }
 
     function penduduk_cek_data($data) {

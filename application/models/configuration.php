@@ -67,12 +67,9 @@ class Configuration extends CI_Model {
     }
     
     function rumah_sakit_get_atribute() {
-        $sql = "select a.*, kl.nama as kelurahan, kc.nama as kecamatan, kb.nama as kabupaten, p.nama as provinsi 
+        $sql = "select a.*, kb.nama as kabupaten
         from apotek a
-        left join kelurahan kl on (kl.id = a.kelurahan_id)
-        left join kecamatan kc on (kc.id = kl.kecamatan_id)
-        left join kabupaten kb on (kb.id = kc.kabupaten_id)
-        left join provinsi p on (p.id = kb.provinsi_id)";
+        left join kabupaten kb on (kb.id = a.kabupaten_id)";
         return $this->db->query($sql);
     }
     

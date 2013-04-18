@@ -13,7 +13,7 @@
             $('#loaddata').html('');
             var url = '<?= base_url('inventory/repackage') ?>';
             $('#loaddata').load(url+'?_'+Math.random());
-        })
+        });
         $('input[type=submit]').each(function(){
             $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
         });
@@ -23,12 +23,12 @@
             }
         });
         $('#form_repackage').submit(function() {
-            if ($('input[name=id_pb]').val() == '') {
+            if ($('input[name=id_pb]').val() === '') {
                 alert('Packing barang asal tidak boleh kosong!');
                 $('#pb').focus();
                 return false;
             }
-            if (($('#jml_asal').val() == '') || $('#jml_asal').val() == '0') {
+            if (($('#jml_asal').val() === '') || $('#jml_asal').val() === '0') {
                 alert('Jumlah asal tidak boleh kosong!');
                 $('#jml_asal').val('').focus();
                 return false;

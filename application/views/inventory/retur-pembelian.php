@@ -130,7 +130,7 @@ function eliminate(el) {
         <label>No.:</label><span id="id_retur_pembelian" class="label"><?= get_last_id('pembelian_retur', 'id') ?></span>
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>Suplier:</label><span class="label"><?= $data->suplier ?> <?= form_hidden('id_suplier', isset($data->id_suplier)?$data->id_suplier:NULL) ?></span>
-        <label>Salesman:</label><span class="label"><?= $data->salesman ?> <?= form_hidden('id_sales', $data->id_sales) ?></span>
+<!--        <label>Salesman:</label><span class="label"><?= $data->salesman ?> <?= form_hidden('id_sales', $data->id_sales) ?></span>-->
         <label>Total Retur (Rp.):</label><span id="retur" class="label"></span>
     </fieldset>    
 </div>
@@ -163,7 +163,7 @@ function eliminate(el) {
                     <td id="hpp<?= $key ?>" class="hpp" align="right"><?= rupiah($rows->hpp) ?></td>
                     <td align="center"><?= $rows->masuk ?></td>
                     <td><?= form_input('jml_retur[]', $rows->masuk, 'id=jml_retur'.$key.' class=jml_retur size=5 onkeyup=hitungRetur()') ?></td>
-                    <td align="center" class="aksi"><a onclick="eliminate(this)" class="delete"></a></td>
+                    <td align="center" class="aksi"><span onclick="eliminate(this)" class="delete"><?= img('assets/images/icons/delete.png') ?></span></td>
                 </tr>
             <script type="text/javascript">
                 

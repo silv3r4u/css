@@ -15,6 +15,7 @@ function form_open() {
             "Ok": function() {
                 $('input[name=bulat]').val($('#bulat').val());
                 $('input[name=bayar]').val($('#bayar').val());
+                $('#form_penjualan').submit();
                 $(this).dialog("close");
                 $('#noresep').focus();
             }
@@ -143,7 +144,6 @@ $(function() {
             cache: false,
             success: function(msg) {
                 $('.form-inputan tbody').html(msg);
-                $('#total-tagihan').html($('#tagihan').val());
                 $('#total_tagihan_penjualan').html($('#total').html());
                 var nominal = currencyToNumber($('#total').html());
                 $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
@@ -324,7 +324,7 @@ function add(i) {
                 $('#diskon'+i).html(msg.diskon);
                 //subTotal(i);
             }
-        })
+        });
     });
 }
 
@@ -357,7 +357,7 @@ function subTotal() {
             var subtotall = 0;
             //alert(harga); alert(diskon); alert(jumlah);
             if (!isNaN(harga) && !isNaN(diskon) && !isNaN(jml)) {
-                if (parseInt($('#subttl'+i).val()) != '') {
+                if (parseInt($('#subttl'+i).val()) !== '') {
                     //var subtotall = parseInt($('#subttl'+i).val());
                     var subtotall = harga*jml;
                 }
@@ -369,8 +369,7 @@ function subTotal() {
         //$('#jasa_total_apotek').val(ja);
         
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
-        $('#total-tagihan').html(numberToCurrency(tagihan));
-        
+        //$('#total-tagihan').html(numberToCurrency(tagihan));
         //alert(jasa_apt)
         var totalllica = Math.ceil((tagihan - disc)+jasa_apt);
         var total = totalllica+(tagihan*ppn);
@@ -427,26 +426,25 @@ $(function() {
         });
     });
     $("#form_penjualan").submit(function() {
-        
-        if ($('#id_pembeli').val() == '') {
+        if ($('#id_pembeli').val() === '') {
             alert('Nama pembeli tidak boleh kosong !');
             $('#pasien').focus();
             return false;
         }
-        if ($('#bayar').val() == '') {
+        if ($('#bayar').val() === '') {
             alert('Jumlah bayar tidak boleh kosong !');
             $('#bayar').focus();
             return false;
         }
-        if ($('#bulat').val() == '') {
+        if ($('#bulat').val() === '') {
             alert('Jumlah pembulatan tidak boleh kosong !');
             $('#bulat').focus();
             return false;
         }
         var jumlah = $('.tr_row').length;
         for(i = 1; i <= jumlah; i++) {
-            if ($('#jl'+i).val() == '') {
-                if ($('#id_pb'+i).val() != '') {
+            if ($('#jl'+i).val() === '') {
+                if ($('#id_pb'+i).val() !== '') {
                     alert('Jumlah tidak boleh kosong !');
                     $('#jl'+i).focus();
                     return false;
@@ -460,7 +458,7 @@ $(function() {
             data: $(this).serialize(),
             dataType: 'json',
             success: function(data) {
-                if (data.status == true) {
+                if (data.status === true) {
                     $('#deletion,#print').show();
                     $('button[type=submit]').hide();
                     $('#id_penjualan').html(data.id_penjualan);
@@ -500,11 +498,11 @@ $(function() {
 <div class="kegiatan">
     <h1><?= $title ?></h1>
     <?= form_open('inventory/penjualan', 'id=form_penjualan') ?>
-    <div class="data-input" id="form_pembayaran" title="Form Pembayaran" style="display: none; font-size: 18px;">
-        <label style="font-size: 18px">Total (Rp.):</label><b><span style="font-size: 18px" id="total_tagihan_penjualan" class="label"></span></b>
-        <label style="font-size: 18px">Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat style="font-size: 18px" onkeyup=FormNum(this) ') ?>
-        <label style="font-size: 18px">Bayar (Rp):</label><?= form_input('', null, 'id=bayar style="font-size: 18px"') ?>
-        <label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px" id="kembalian" class="label"></span>
+    <div class="data-input" id="form_pembayaran" title="Form Pembayaran" style="display: none;">
+        <label>Total (Rp.):</label><b><span id="total_tagihan_penjualan" class="label"></span></b>
+        <label>Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat onkeyup=FormNum(this) ') ?>
+        <label>Bayar (Rp):</label><?= form_input('', null, 'id=bayar ') ?>
+        <label>Kembalian (Rp):</label><span id="kembalian" class="label"></span>
     </div>
     <div class="data-input">
     <?= form_hidden('bulat') ?>

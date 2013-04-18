@@ -120,13 +120,14 @@
         }
         var request;
         $(function() {
+            $('#searching').watermark('Search ...');
             $("#addnewrow").click(function() {
                 create_dialog();
             });
             $("#addnewrow").button({icons: {primary: "ui-icon-circle-plus"}});
             $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
             $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
-            $('#reset, .resetan').button({icons: {secondary: 'ui-icon-refresh'}});
+            $('#reset, .resetan').button({icons: {primary: 'ui-icon-refresh'}});
             $('.cari').button({icons: {secondary: 'ui-icon-search'}});
             $('#formcarirelasi').dialog({
                 autoOpen: false,
@@ -186,34 +187,32 @@
             $('#reset').click(function() {
                 reset_all();
             });
-            $('#form_carirelasi').submit(function(){
-                var Url = '<?= base_url('referensi/manage_instansi') ?>/search/';         
-            
-                if($('#nama_cari').val()===''){
-                    $('#msg_carirelasi').fadeIn('fast').html('Nama instansi tidak boleh kosong !');
-                    $('#nama_cari').focus();
-                    return false;
-                }else{    
-                    if(!request) {
-                        request =  $.ajax({
-                            type : 'POST',
-                            url: Url+$('.noblock').html(),               
-                            data: $(this).serialize(),
-                            cache: false,
-                            success: function(data) {
-                                $('#ins_list').html(data);                           
-                                $('#formcarirelasi').dialog('close');
-                                reset_all(); 
-                                request = null;                            
-                            }
-                        });
+            $('#jenis').change(function() {
+                var Url = '<?= base_url('referensi/manage_instansi') ?>/search/';
+                $.ajax({
+                    type: 'POST',
+                    url: Url+$('.noblock').html(),               
+                    data: 'nama='+$(this).val(),
+                    cache: false,
+                    success: function(data) {
+                        $('#ins_list').html(data);
                     }
-                    return false;
+                });
+            })
+            $('#searching').keyup(function(e) {
+                if (e.keyCode === 13) {
+                    var Url = '<?= base_url('referensi/manage_instansi') ?>/search/';
+                    $.ajax({
+                        type: 'POST',
+                        url: Url+$('.noblock').html(),               
+                        data: 'nama='+$('input[name=cari]').val(),
+                        cache: false,
+                        success: function(data) {
+                            $('#ins_list').html(data);
+                        }
+                    });
                 }
-                return false;
             });
-        
-        
         });
         
         function save(){
@@ -321,31 +320,12 @@
     <h1><?= $title ?></h1>
 
     <?= form_button('', 'Tambah Data', 'id=addnewrow') ?>
-    <?= form_button('', 'Cari', 'id=carirelasi class=cari') ?>
+    <!--<?= form_button('', 'Cari', 'id=carirelasi class=cari') ?>-->
     <?= form_button('', 'Reset', 'class=resetan id=showAll') ?>  
-    
+    <?= form_dropdown('jenis', $jns_prsh, isset($_GET['search'])?$_GET['search']:NULL, 'id=jenis style="padding: 3px 5px 5px 3px; border: 1px solid #ccc"') ?>
+    <div style="margin-bottom: 2px; float: right;"><?= form_input('cari', isset($_POST['nama'])?$_POST['nama']:NULL, 'id=searching size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
     <div id="konfirmasi" style="display: none; padding: 20px;">
         <div id="text_konfirmasi"></div>
-    </div>
-
-    <div id="formcarirelasi" style="display: none; top: 20%; background: #fff; padding: 10px; ">
-        <?= form_open('', 'id=form_carirelasi') ?>
-
-        <div class="msg" id="msg_carirelasi"></div>
-        <table width="100%" class="tabel-input">
-            <tr>
-                <td width="25%">Nama:</td>
-                <td><?= form_input('nama', '', 'id=nama_cari class=nama size=50') ?> </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <?= form_submit('cari', 'Cari', 'class=cari id=cari_relasi') ?>
-                    <?= form_button('', 'Reset', 'id=resetcari class=resetan') ?>
-                </td>
-            </tr>
-        </table>
-        <?= form_close() ?>
     </div>
     <div id="list" class="data-list">
         <div id="ins_list"></div>

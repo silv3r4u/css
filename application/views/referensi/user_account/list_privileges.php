@@ -13,22 +13,19 @@
         });
     });
 </script>
-<?= form_button(NULL, 'Check all', 'id=checkall') ?>
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>
-        <th width="10%" class="nosort"><h3>No.</h3></th>
+        <th width="5%" class="nosort"><h3>#</h3></th>
+        <th width="5%" class="nosort"><h3>No.</h3></th>
         <th width="30%"><h3>Nama Form</h3></th>
-        <th width="20%"><h3>Module</h3></th>
-        <th width="10%" class="nosort"><h3>#</h3></th>
+        <th width="30%"><h3>Module</h3></th>
+        
     </tr>
     </thead>
     <tbody>
     <?php foreach ($privilege as $key => $rows) : ?>
         <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
-            <td align="center"><?= ++$key ?></td>
-            <td><?= $rows->form_nama ?></td>
-            <td><?= $rows->modul ?></a></td>
             <td class="aksi" align="center">
                 <?php
                 $check = false;
@@ -39,6 +36,9 @@
                 echo form_checkbox('data[]', $rows->id, $check,'class=check');
                 ?>
             </td>
+            <td align="center"><?= ++$key ?></td>
+            <td><?= $rows->form_nama ?></td>
+            <td><?= $rows->modul ?></a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

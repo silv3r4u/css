@@ -1,37 +1,6 @@
 <script>
 $("#table").tablesorter({sortList:[[0,0]]});
 </script>
-<?php if (isset($key)): ?>
-    <div id="pencarian">
-        <h3>
-            Pencarian dengan kata kunci "<?= $key ?>" 
-            <?php if (isset($alamat) && $alamat != ''): ?>
-                , alamat "<?= $alamat ?>"   
-            <?php endif; ?>
-
-            <?php if (isset($telp) && $telp != ''): ?>
-                ,  telepon "<?= $telp ?>"   
-            <?php endif; ?>
-
-            <?php if (isset($kabupaten) && $kabupaten != ''): ?>
-                , kabupaten "<?= $kabupaten ?>"   
-            <?php endif; ?>
-
-            <?php if (isset($gender) && $gender != ''): ?>
-                , jenis kelamin "<?= ($gender == 'L') ? 'Laki - laki' : 'Perempuan' ?>"   
-            <?php endif; ?>
-
-            <?php if (isset($gol_darah) && $gol_darah != ''): ?>
-                , golongan darah "<?= $gol_darah ?>"   
-            <?php endif; ?>
-
-            <?php if (isset($tgl_lahir) && $tgl_lahir != ''): ?>
-                , tanggal lahir "<?= $tgl_lahir ?>"   
-            <?php endif; ?>
-
-        </h3>
-    </div>
-<?php endif; ?>
 <div id="list" class="data-list">
 <table class="sortable" id="table" width="100%">
     <thead>
@@ -73,15 +42,29 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td class="aksi" align="center">
                     <?php
                     $str = $rows->penduduk_id
-                            . "#" . $rows->nama
+                    /*1*/   . "#" . $rows->nama
                             . "#" . $rows->alamat
                             . "#" . $rows->telp
                             . "#" . $rows->lahir_kabupaten_id
                             . "#" . $rows->kabupaten
-                            . "#" . $rows->gender
+                    /*6*/   . "#" . $rows->gender
                             . "#" . $rows->darah_gol
                             . "#" . $rows->lahir_tanggal
-                            . "#" . $rows->id_dp;
+                            . "#" . $rows->id_dp
+                            . "#" . $rows->lahir_kabupaten_id
+                    /*11*/  . "#" . $rows->kabupaten
+                            . "#" . $rows->kabupaten_id
+                            . "#" . $rows->kabupaten_alamat
+                            . "#" . $rows->identitas_no
+                            . "#" . $rows->pernikahan
+                            . "#" . $rows->kabupaten_alamat
+                    /*17*/  . "#" . $rows->pendidikan_id
+                            . "#" . $rows->profesi_id
+                            . "#" . $rows->str_no
+                            . "#" . $rows->sip_no
+                            . "#" . $rows->kerja_izin_surat_no
+                    /*22*/  . "#" . $rows->jabatan;
+                            
                     ?>
                     <span class="edit" onclick="edit_penduduk('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_penduduk('<?= $rows->penduduk_id ?>')"><?= img('assets/images/icons/delete.png') ?></span>

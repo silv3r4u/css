@@ -9,7 +9,7 @@ header('Cache-Control: max-age=0');
 function create_dialog() {
     var str = '<div id=open_bayar class=data-input>'+
         '<label style="font-size: 18px">Total:</label><span style="font-size: 18px" class=label id=totalopen>'+$('#bulat').val()+'</span>'+
-        '<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px" type=text name=bayar id=bayar size=20 />'+
+        '<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px" type=text id=bayar size=20 />'+
         '<label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px" id="kembalian_nr" class="label"></span></div>';
     $('#loaddata').append(str);
     $('#open_bayar').dialog({
@@ -23,7 +23,9 @@ function create_dialog() {
             $('#bulat').focus();
         }, buttons: {
             "OK": function() {
-                $('#')
+                $('#bayar_nr').val($('#bayar').val());
+                $('#form_penjualan_non_resep').submit();
+                $(this).dialog().remove();
             }
         }
     });
@@ -558,8 +560,8 @@ $(function() {
                 <label>Diskon Bank (%)</label><span id="disc_bank" class="label"><?= isset($data['diskon_bank'])?$data['diskon_bank']:'0' ?></span><?= form_hidden('diskon_bank', isset($data['diskon_bank'])?$data['diskon_bank']:'0', 'id=diskon_bank size=10 ') ?>
                 <label>Total</label><span id="total" class="label"><?= isset($data['total'])?rupiah($data['total']):null ?></span>
                 <label>Pembulatan Total</label><?= form_input('bulat', isset($data['total'])?rupiah($data['total']):NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
-<!--                <label>Bayar (Rp)</label><?= form_input('bayar', isset($data['bayar'])?rupiah($data['bayar']):null, 'id=bayar size=30 ') ?>
-                <label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
+                <label>Bayar (Rp)</label><?= form_input('bayar', isset($data['bayar'])?rupiah($data['bayar']):null, 'id=bayar_nr size=30 ') ?>
+                <!--<label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
                 
             </div>
         </fieldset>
