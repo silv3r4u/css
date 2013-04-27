@@ -29,7 +29,7 @@
 ?>
 <table style="border-bottom: 1px solid #000; font-size: 16px;" width="100%">
     <tr><td colspan="4" align="center" style="text-transform: uppercase; font-size: 16px;"><?= $apt->nama ?></td> </tr>
-    <tr><td colspan="4" align="center" style="font-size: 16px;"><?= $apt->alamat ?> <?= $apt->kelurahan ?></td> </tr>
+    <tr><td colspan="4" align="center" style="font-size: 16px;"><?= $apt->alamat ?> <?= $apt->kabupaten ?></td> </tr>
     <tr><td colspan="4" align="center" style="font-size: 16px;">Telp. <?= $apt->telp ?>,  Fax. <?= $apt->fax ?>, Email <?= $apt->email ?></td> </tr>
 </table>
     <center><h1><?= $title ?></h1></center>

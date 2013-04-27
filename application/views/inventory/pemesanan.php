@@ -48,7 +48,7 @@ $(function() {
     });
     $('button[id=tambahrow]').button({
         icons: {
-            secondary: 'ui-icon-circle-plus'
+            primary: 'ui-icon-circle-plus'
         }
     });
     $('button[id=reset]').button({
@@ -254,19 +254,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
                 var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                 }
                 
             }
@@ -277,23 +277,23 @@ function add(i) {
     }).result(
     function(event,data,formated){
         var sisa = data.sisa;
-        if (data.sisa == null) {
+        if (data.sisa === null) {
             var sisa = 0;
         }
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
             
         }
@@ -344,7 +344,7 @@ function add(i) {
     <?= form_hidden('id', NULL) ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-        <div class="left_side">
+        <div class="one_side">
         <label>No.:</label><span id="id_auto" class="label"><?= get_last_id('pemesanan', 'id') ?></span>
         <label>No. Dokumen:</label><span id="no_doc" class="label"><?= !isset($_GET['id'])?get_last_id('pemesanan', 'id').'/'.date("dmY"):$rows['dokumen_no'] ?></span>
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>

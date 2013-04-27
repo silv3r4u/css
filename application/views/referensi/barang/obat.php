@@ -1,4 +1,26 @@
 <script type="text/javascript">
+    function konfirmasi_lanjut() {
+        var str = '<div id=konfirmasi_lanjut>'+
+                '<p><span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>'+
+                'Proses penambahan data obat berhasil dilakukan, <br/>Apakah anda akan melanjutkann ke proses pengemasan obat ?</p></div>';
+        $('#loaddata').append(str);
+        $('#konfirmasi_lanjut').dialog({
+            autoOpen: true,
+            title :'Konfirmasi',
+            height: 200,
+            width: 300,
+            modal: true,
+            buttons: {
+                "Ya": function() {
+                    $('#loaddata').load('<?= base_url('referensi/packing_barang') ?>');
+                    $(this).dialog().remove();
+                },
+                "Tidak": function() {
+                    $(this).dialog().remove();
+                }
+            }
+        });
+    }
     var request;
     $(function(){
         $( "#addobat" ).button({icons: {primary: "ui-icon-newwin"}});
@@ -66,16 +88,9 @@
             $('input[name=id_pabrik_obat]').val(data.id);
             $('input[name=id_pabriks_obat]').val(data.id);
         });
-//        <tr>
-//            <td></td>
-//            <td>
-//                <?= form_submit('saveobat', 'Simpan', 'id=saveobat') ?>
-//                <?= form_button('Reset', 'Reset', 'id=resetobat class=resetan') ?>
-//            </td>
-//        </tr>
         $('#form_obat').dialog({
             autoOpen: false,
-            height: 500,
+            height: 530,
             width: 500,
             modal: true,
             resizable : true,
@@ -187,13 +202,13 @@
                     if (tipe === 'edit') {
                         alert_edit();
                     } else {
-                        alert_tambah();
+                        konfirmasi_lanjut();
                     }
                     reset_all(); 
                     $('#form_obat').dialog("close");
                     request = null;                            
                 },error: function() {
-                    alert('Gagal menambah data baru')
+                    alert('Gagal menambah data baru');
                 }
             });
         }   
@@ -220,6 +235,7 @@
         $('input[name=id_pabrik_obat]').val('');
         $('input[name=id_pabriks_obat]').val('');
         $('#id_barang').val('');
+        $('#hna').val('');
     }
     
     function get_obat_list(p,search){
@@ -267,15 +283,15 @@
         $('#indikasi').val(data[13]);
         $('#dosis').val(data[14]);
         $('#kandungan').val(data[15]);
-          
+        $('#hna').val(numberToCurrency(data[16]));
         
-        if(data[11] !='Generik'){
+        if(data[11] !=='Generik'){
             $('#c').attr('checked','checked');
             $('#a').removeAttr('checked');
         }
         
           
-        if(data[12] !='Ya'){
+        if(data[12] !=='Ya'){
             $('#k').attr('checked','checked');
             $('#j').removeAttr('checked');
         }
@@ -344,6 +360,10 @@
         <tr>
             <td align="right">Kandungan:</td>
             <td><?= form_textarea('kandungan', NULL, 'id=kandungan style="width: 90%; height: 40px;"') ?></td>
+        </tr>
+        <tr>
+            <td align="right">HNA (Rp.):</td>
+            <td><?= form_input('hna', NULL, 'id=hna size=10 onkeyup=FormNum(this)') ?></td>
         </tr>
         <tr>
             <td width="15%"></td>

@@ -63,7 +63,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->str_no
                             . "#" . $rows->sip_no
                             . "#" . $rows->kerja_izin_surat_no
-                    /*22*/  . "#" . $rows->jabatan;
+                    /*22*/  . "#" . $rows->jabatan
+                            . '#' . $rows->member;
                             
                     ?>
                     <span class="edit" onclick="edit_penduduk('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>

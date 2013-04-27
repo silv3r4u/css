@@ -212,7 +212,7 @@
     <div class="data-input">
         <?= form_open('inventory/repackage_save', 'id=form_repackage') ?>
         <fieldset><legend>Summary</legend>
-            <div class="left_side">
+            <div class="one_side">
             <label>No.:</label><span class="label"><?= get_last_repackage_id('transaksi_detail', 'transaksi_id', 'Repackage') ?></span>
 		<label>Packing Barang Asal:</label><?= form_input('pb',NULL,'id=pb size=55') ?> <?= form_hidden('id_pb') ?> <?= form_hidden('id_brg') ?> <?= form_hidden('isi') ?>
                 <label>Jumlah Asal:</label><?= form_input('jml_asal',NULL,'size=10 id=jml_asal onkeyup="Angka(this)"') ?> <?= form_hidden('sisa_stok') ?>

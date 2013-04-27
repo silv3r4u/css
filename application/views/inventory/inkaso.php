@@ -129,7 +129,7 @@ $(function() {
     <?= form_open('inventory/inkaso', 'id=form_inkaso') ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-        <div class="left_side">
+        <div class="one_side">
         <?= form_hidden('id_layanan', isset($rows['id'])?$rows['id']:null, null) ?>
         
             <label>No.:</label><span class="label"> <?= isset($_GET['id'])?$_GET['id']:get_last_id('inkaso', 'id') ?></span>

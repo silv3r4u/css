@@ -647,6 +647,20 @@ class M_referensi extends CI_Model {
         return $query->result();
     }
 
+    function satuans_get_data($id = null) {
+        $q = null;
+        if ($id != null) {
+            $q.=" where id = '$id'";
+        }
+        $sql = "select * from satuan $q order by nama asc";
+        $query = $this->db->query($sql)->result();
+        $data[''] = 'Pilih Sediaan';
+        foreach ($query as $value) {
+            $data[$value->id] = $value->nama;
+        }
+        return $data;
+    }
+    
     function satuan_get_data($id = null) {
         $q = null;
         if ($id != null) {
@@ -654,11 +668,7 @@ class M_referensi extends CI_Model {
         }
         $sql = "select * from satuan $q order by nama asc";
         $query = $this->db->query($sql)->result();
-        $data[''] = 'Pilih Satuan';
-        foreach ($query as $value) {
-            $data[$value->id] = $value->nama;
-        }
-        return $data;
+        return $query;
     }
 
     function sediaan_get_data($id = null) {
@@ -1191,11 +1201,26 @@ class M_referensi extends CI_Model {
     function harga_jual_load_data($pb = null) {
         $q = null;
         if ($pb != null) {
+            $q.="and br.nama like ('%$pb%')";
+        }
+        $sql = "select br.*, br.nama as barang, r.nama as pabrik, o.kekuatan, s.nama as satuan from
+            barang br
+            left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
+            left join obat o on (br.id = o.id)
+            left join satuan s on (o.satuan_id = s.id)
+            order by br.nama";
+        //echo "<pre>".$sql."</pre>";
+        return $this->db->query($sql);
+    }
+    
+    function harga_jual_load_data_packing($pb = null) {
+        $q = null;
+        if ($pb != null) {
             $q.="and br.nama like ('%$pb%') or t.hna like ('%$pb%')";
         }
-        $sql = "select t.*, b.stok_minimal, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
-            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from transaksi_detail t 
-            join barang_packing b on (t.barang_packing_id = b.id)
+        $sql = "select t.*, br.stok_minimal, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
+            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from barang_packing b
+            left join transaksi_detail t on (t.barang_packing_id = b.id)
             join barang br on (br.id = b.barang_id)
             left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
             left join obat o on (b.id = o.id)
@@ -1214,22 +1239,18 @@ class M_referensi extends CI_Model {
     function harga_jual_load_data_update($pb) {
         $q = null;
         if ($pb != null) {
-            $q.="and t.barang_packing_id in ($pb)";
+            $q.="and br.id in ($pb)";
         }
-        $sql = "select t.*, b.stok_minimal, date(t.waktu) as tanggal, br.nama as barang, b.margin, b.id as id_pb, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
-            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from transaksi_detail t 
-            join barang_packing b on (t.barang_packing_id = b.id)
+        $sql = "select b.id as barang_packing_id, br.stok_minimal, br.nama as barang, b.margin, b.id as id_pb, br.hna, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
+            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from
+            barang_packing b
             join barang br on (br.id = b.barang_id)
             left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
             left join obat o on (b.id = o.id)
             left join satuan s on (s.id = o.satuan_id)
             left join satuan st on (st.id = b.terbesar_satuan_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
-            inner join (
-                select barang_packing_id, max(id) as id_max
-                from transaksi_detail where unit_id = '" . $this->session->userdata('id_unit') . "' group by barang_packing_id
-            ) td on (t.barang_packing_id = td.barang_packing_id and t.id = td.id_max)
-            where t.transaksi_jenis != 'Pemesanan' $q and t.unit_id = '" . $this->session->userdata('id_unit') . "' order by br.nama";
+            where br.id in ($pb) order by br.nama";
         //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);
     }
@@ -1243,8 +1264,7 @@ class M_referensi extends CI_Model {
         foreach ($id_pb as $key => $data) {
             $data_update = array(
                 'margin' => $margin[$key],
-                'diskon' => $diskon[$key],
-                'stok_minimal' => $stokmin[$key]
+                'diskon' => $diskon[$key]
             );
             $this->db->where('id', $data);
             $this->db->update('barang_packing', $data_update);
@@ -1267,6 +1287,7 @@ class M_referensi extends CI_Model {
         $data_kas = array(
             'waktu' => datetime2mysql($this->input->post('tanggal')),
             'penerimaan_pengeluaran_nama' => $this->input->post('transaksi'),
+            'penerimaan' => currencyToNumber($this->input->post('akhir_saldo')),
             'akhir_saldo' => currencyToNumber($this->input->post('akhir_saldo'))
         );
         $this->db->insert('kas', $data_kas);

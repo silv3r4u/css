@@ -1,6 +1,7 @@
 <title><?= $title ?></title>
 <script type="text/javascript">
 $(function() {
+    $('button').button();
     $('#deletion').click(function() {
         var ok=confirm('Anda yakin akan menghapus transaksi ini ?');
         if (ok) {
@@ -22,16 +23,13 @@ $(function() {
     foreach ($list_data as $rows);
 ?>
 <div>
-    <h1><?= $title ?></h1>
+    <h1 class="informasi"><?= $title ?></h1>
     <?= form_open('inventory/stok_opname', 'id=form_stok_opname') ?>
     <div class="data-input">
-    <fieldset><legend>Summary</legend>
             <label>No.</label><span class="label" id="stok_opname"><?= $rows->transaksi_id ?></span>
             <label>Alasan</label><span class="label"><?= $rows->alasan ?></span>
-    </fieldset>
     </div>
-    <div class="data-list">
-        <table class="tabel form-inputan" width="100%">
+        <table class="tabel" width="100%">
             <thead>
             <tr>
                 <th>Packing Barang</th>
@@ -53,13 +51,12 @@ $(function() {
                     <td align="right"><?= inttocur($data->hna) ?></td>
                     <td align="right"><?= inttocur($data->hpp) ?></td>
                     <td align="right"><?= inttocur($data->het) ?></td>
-                    <td><?= $data->sisa ?></td>
+                    <td align="center"><?= $data->sisa ?></td>
                 </tr>
                 <?php
                 }
                 ?>
             </tbody>
         </table>
-    </div>
-    <?= form_button(null, 'Delete', 'id=deletion') ?>
 </div>
+<?= form_button(null, 'Delete', 'id=deletion style="margin-left: 0;"') ?>

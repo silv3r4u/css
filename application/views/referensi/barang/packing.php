@@ -3,10 +3,133 @@
 <title><?= $title ?></title>
 <div class="kegiatan">
     <script type="text/javascript">
+        function create_dialog_packing() {
+            var str = '<div id="form_packing" style="display: none;position: relative; background: #fff; padding: 10px;">'+
+                '<div class="msg" id="msg_packing"></div>'+
+                '<table width="100%">'+
+                    '<tr>'+
+                        '<td width="25%" align="right">Barcode</td>'+
+                        '<td> <?= form_input('barcode', '', 'id=barcode size=40') ?></td>'+
+                    '</tr>'+
+                '</table>'+
+                '<form action="" id=formpacking>'+
+                '<input type=hidden name=tipe><input type=hidden name=id />'+
+                '<table width="100%">'+
+                '<tr><td width="25%" align="right">Barang:</td><td><input type=hidden name=barcode /><?= form_input('barang', '', 'class=barang id=barang size=40') ?><input type=hidden name=id_barang /></td></tr>'+
+                '<tr><td width="25%" align="right">Kemasan:</td><td><select name=kemasan id=kemasan><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td></tr>'+
+                '<tr><td width="25%" align="right">Isi @:</td><td><?= form_input('isi', '', 'id=isi size=40') ?> </td></tr>'+
+                '<tr><td width="25%" align="right">Satuan Terkecil:</td><td><select name=satuan id=satuan><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td></tr>'+
+                '</table></form></div>';
+            $('#loaddata').append(str);
+            $('#form_packing').dialog({
+                autoOpen: false,
+                height: 300,
+                width: 430,
+                modal: true,
+                buttons: {
+                    "Simpan": function() {
+                        save();
+                        $(this).dialog().remove();
+                    }, 
+                    "Batal": function() {
+                        $(this).dialog().remove();
+                    }
+                },
+                close : function(){
+                    reset_all();
+                    $(this).dialog().remove();
+                }
+            });
+            $('.barang').autocomplete("<?= base_url('inv_autocomplete/load_data_barang') ?>",
+            {
+                parse: function(data){
+                    var parsed = [];
+                    for (var i=0; i < data.length; i++) {
+                        parsed[i] = {
+                            data: data[i],
+                            value: data[i].nama // nama field yang dicari
+                        };
+                    }
+                    return parsed;
+                },
+                formatItem: function(data,i,max){
+                    if (data.id_obat !== null) {
+                        if (data.kekuatan !== null && data.satuan !== null && data.sediaan !== null) {
+                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+'  <i> '+data.pabrik+'</i></div>';
+                        } 
+                        else if (data.kekuatan !== null && data.satuan !== null && data.sediaan === null) {
+                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+' <i> '+data.pabrik+'</i></div>';
+                        } else {
+                            var str = '<div class=result>'+data.nama+'</div>';
+                        }	
+                    } else {
+                        if (data.pabrik !== null) {
+                            var str = '<div class=result>'+data.nama+'<i> '+data.pabrik+'</i></div>';
+                        } else {
+                            var str = '<div class=result>'+data.nama+'</div>';
+                        }
+                    }
+                    return str;
+                },
+                width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+                dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+            }).result(
+            function(event,data,formated){
+                if (data.id_obat != null) {
+                    if (data.kekuatan != null && data.satuan != null && data.sediaan != null) {
+                        var str = data.nama+' '+data.kekuatan+' '+data.satuan+' '+data.sediaan+' '+data.pabrik;
+                    } 
+                    else if (data.kekuatan != null && data.satuan != null && data.sediaan == null) {
+                        var str = data.nama+' '+data.kekuatan+' '+data.satuan+' '+data.pabrik+'';
+                    } else {
+                        var str = data.nama;
+                    }	
+                } else {
+                    var str = data.nama+' '+data.pabrik;
+                }
+                $(this).val(str);
+                $('input[name=id_barang]').val(data.id_barang);
+                $('input[name=barang_cari]').val(data.nama);
+            });
+        
+            $('#barcode').live('keydown', function(e) {
+                if (e.keyCode==13) {
+                    $('input[name=barcode]').val($('#barcode').val());
+                }
+            });
+            $('#barcode').keyup(function() {
+                $('input[name=barcode]').val($('#barcode').val());
+            });
+        }
+        function konfirmasi_lanjut() {
+            var str = '<div id=konfirmasi_lanjut>'+
+                    '<p><span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>'+
+                    'Proses penambahan kemasan barang berhasil dilakukan, <br/>Apakah anda akan melanjutkann ke proses administrasi harga barang ?</p></div>';
+            $('#loaddata').append(str);
+            $('#konfirmasi_lanjut').dialog({
+                autoOpen: true,
+                title :'Konfirmasi',
+                height: 200,
+                width: 300,
+                modal: true,
+                buttons: {
+                    "Ya": function() {
+                        $('#loaddata').load('<?= base_url('referensi/harga_jual') ?>');
+                        $(this).dialog().remove();
+                    },
+                    "Tidak": function() {
+                        $(this).dialog().remove();
+                    }
+                }
+            });
+        }
         var request;
         $(function(){
             $('#key').watermark('Search ...');
-            $( "#addpacking" ).button({icons: {primary: "ui-icon-newwin"}});
+            $('#addpacking').click(function() {
+                create_dialog_packing();
+            });
+            $('#addpacking').button({icons: {primary: "ui-icon-newwin"}});
             $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
             $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
             $('#reset, #cetak_batal,.resetan').button({icons: {primary: 'ui-icon-folder-open'}}); 
@@ -87,33 +210,7 @@
                 return false;
                 
             });
-//            <tr>
-//                <td></td>
-//                <td>
-//                    <?= form_submit('save', 'Simpan', 'id=simpan') ?>
-//                    <?= form_button('', 'Reset', 'id=reset') ?>
-//                </td>
-//            </tr>
-            $('#form_packing').dialog({
-                autoOpen: false,
-                height: 270,
-                width: 430,
-                modal: true,
-                buttons: {
-                    "Simpan": function() {
-                        $('#formpacking').submit();
-                    }, 
-                    "Batal": function() {
-                        $(this).dialog('close');
-                    }
-                },
-                close : function(){
-                    reset_all();
-                },
-                open : function(){
-                
-                }
-            });
+            
             $('#addpacking').click(function() {
                 $('input[name=tipe]').val('add');
                 $('#form_packing').dialog("option",  "title", "Tambah Data Packing Barang");
@@ -129,69 +226,6 @@
             $('#reset_cari').click(function() {
                 reset_all();
             });
-        
-            $('.barang').autocomplete("<?= base_url('inv_autocomplete/load_data_barang') ?>",
-            {
-                parse: function(data){
-                    var parsed = [];
-                    for (var i=0; i < data.length; i++) {
-                        parsed[i] = {
-                            data: data[i],
-                            value: data[i].nama // nama field yang dicari
-                        };
-                    }
-                    return parsed;
-                },
-                formatItem: function(data,i,max){
-                    if (data.id_obat !== null) {
-                        if (data.kekuatan !== null && data.satuan !== null && data.sediaan !== null) {
-                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+'  <i> '+data.pabrik+'</i></div>';
-                        } 
-                        else if (data.kekuatan !== null && data.satuan !== null && data.sediaan === null) {
-                            var str = '<div class=result>'+data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+data.satuan+' '+data.sediaan+' <i> '+data.pabrik+'</i></div>';
-                        } else {
-                            var str = '<div class=result>'+data.nama+'</div>';
-                        }	
-                    } else {
-                        if (data.pabrik !== null) {
-                            var str = '<div class=result>'+data.nama+'<i> '+data.pabrik+'</i></div>';
-                        } else {
-                            var str = '<div class=result>'+data.nama+'</div>';
-                        }
-                    }
-                    return str;
-                },
-                width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-                dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-            }).result(
-            function(event,data,formated){
-                if (data.id_obat != null) {
-                    if (data.kekuatan != null && data.satuan != null && data.sediaan != null) {
-                        var str = data.nama+' '+data.kekuatan+' '+data.satuan+' '+data.sediaan+' '+data.pabrik;
-                    } 
-                    else if (data.kekuatan != null && data.satuan != null && data.sediaan == null) {
-                        var str = data.nama+' '+data.kekuatan+' '+data.satuan+' '+data.pabrik+'';
-                    } else {
-                        var str = data.nama;
-                    }	
-                } else {
-                    var str = data.nama+' '+data.pabrik;
-                }
-                $(this).val(str);
-                $('input[name=id_barang]').val(data.id_barang);
-                $('input[name=barang_cari]').val(data.nama);
-            });
-        
-            $('#barcode').live('keydown', function(e) {
-                if (e.keyCode==13) {
-                    $('input[name=barcode]').val($('#barcode').val());
-                }
-            });
-            $('#barcode').keyup(function() {
-                $('input[name=barcode]').val($('#barcode').val());
-            });
-                    
-        
             $('#cetak-jumlah').click(function() {
                 var barcode = $('#real-text').html();
                 var jumlah  = $('#jml').val();
@@ -251,10 +285,10 @@
         function save(){
             var Url = '';  
             var status = $('input[name=tipe]').val();
-            if($('input[name=tipe]').val() === 'add'){
-                Url = '<?= base_url('referensi/manage_packing') ?>/add/';
-            }else{
+            if(status === 'edit'){
                 Url = '<?= base_url('referensi/manage_packing') ?>/edit/';
+            }else{
+                Url = '<?= base_url('referensi/manage_packing') ?>/add/';
             }
             
             if(!request) {
@@ -266,10 +300,10 @@
                     success: function(data) {
                         $('#packing_list').html(data);
                         $('#form_packing').dialog("close");
-                        if(status == 'add'){
-                            alert_tambah();
-                        }else{
+                        if(status === 'edit'){
                             alert_edit();
+                        }else{
+                            konfirmasi_lanjut();
                         }
                         reset_all();    
                         request = null;
@@ -315,6 +349,7 @@
         }
     
         function edit_packing(arr){
+            create_dialog_packing();
             var data = arr.split("#");
             $('input[name=tipe]').val('edit');
         
@@ -347,44 +382,7 @@
     <?= form_button('', 'Tambah Data', 'id=addpacking') ?>
     <?= form_button('', 'Tampilkan', 'class=resetan id=packAll') ?>
     <div style="margin-bottom: 2px; float: right;"><?= form_input('key', null, 'id=key size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
-    <div id="form_packing" style="display: none;position: relative; background: #fff; padding: 10px;">
-        <div class="msg" id="msg_packing"></div>
-        <table width="100%">
-            <tr>
-                <td width="25%" align="right">Barcode</td>
-                <td> <?= form_input('barcode', '', 'id=barcode size=40') ?></td>
-            </tr>
-        </table>
-
-        <?= form_open('', 'id=formpacking') ?>
-        <?= form_hidden('tipe') ?>
-        <?= form_hidden('id') ?>
-
-
-        <table width="100%">
-            <tr>
-                <td width="25%" align="right">Barang:</td>
-                <td>
-                    <?= form_hidden('barcode', '', 'size=40') ?>
-                    <?= form_input('barang', '', 'class=barang id=barang size=40') ?>
-                    <?= form_hidden('id_barang') ?> </td>
-            </tr>
-            <tr>
-                <td width="25%" align="right">Kemasan:</td>
-                <td><?= form_dropdown('kemasan', $kemasan, null, 'id=kemasan') ?> </td>
-            </tr>
-            <tr>
-                <td width="25%" align="right">Isi @:</td>
-                <td><?= form_input('isi', '', 'id=isi size=40') ?> </td>
-            </tr>
-            <tr>
-                <td width="25%" align="right">Satuan Terkecil:</td>
-                <td><?= form_dropdown('satuan', $satuan, null, 'id=satuan') ?> </td>
-            </tr>
-            
-        </table>
-    </div>
-    <?= form_close() ?>
+    
 
 
     <div id="cetak-barcode" style="z-index: 2;display: none;position: absolute;background: #fff;" class="popup">

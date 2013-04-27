@@ -34,17 +34,21 @@ if (isset($_GET['do'])) {
             <th>ID Transaksi</th>
             <th>Jenis Transaksi</th>
             <th>Nama</th>
+            <?php if (isset($_GET['jenis']) and $_GET['jenis'] == '') { ?>
             <th>Awal</th>
+            <?php } ?>
             <th>Penerimaan</th>
             <th>Pengeluaran</th>
+            <?php if (isset($_GET['jenis']) and $_GET['jenis'] == '') { ?>
             <th>Akhir</th>
+            <?php } ?>
         </tr>
         </thead>
         <tbody>
         <?php
         $penerimaan = 0;
         $pengeluaran= 0;
-        
+        $awal = 0;
         foreach ($list_data as $key => $data) { 
             $link = null;
             if ($data->transaksi_jenis == 'Inkaso') { $link = base_url('inventory/inkaso_detail/'.$data->transaksi_id); }
@@ -63,24 +67,34 @@ if (isset($_GET['do'])) {
 <!--            <td align="center"><?= isset($_GET['do'])?$data->transaksi_id:$data->transaksi_id ?></td>-->
             <td><?= $data->transaksi_jenis ?></td>
             <td><?= $data->penerimaan_pengeluaran_nama ?></td>
-            <td align="right"><?= rupiah($data->awal_saldo) ?></td>
+            <?php if (isset($_GET['jenis']) and $_GET['jenis'] == '') { ?>
+            <td align="right"><?= rupiah($awal) ?></td>
+            <?php } ?>
             <td align="right"><?= rupiah($data->penerimaan) ?></td>
             <td align="right"><?= rupiah($data->pengeluaran) ?></td>
-            <td align="right"><?= rupiah($data->akhir_saldo) ?></td>
+            <?php if (isset($_GET['jenis']) and $_GET['jenis'] == '') { ?>
+            <td align="right"><?= rupiah($awal+$data->penerimaan-$data->pengeluaran) ?></td>
+            <?php } ?>
         </tr>
         <?php 
-        
+        $awal = $awal+$data->penerimaan-$data->pengeluaran;
         $penerimaan = $penerimaan+$data->penerimaan;
         $pengeluaran= $pengeluaran+$data->pengeluaran;
+        }
+        $colspan = 5;
+        if (isset($_GET['jenis']) and $_GET['jenis'] != '') {
+            $colspan = 4;
         }
         ?>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"></td>
+            <tr style="height: 25px; background: #f3f3f3; font-weight: bold;">
+                <td align="center" colspan="<?= $colspan ?>">Total</td>
                 <td align="right"><?= rupiah($penerimaan) ?></td>
                 <td align="right"><?= rupiah($pengeluaran) ?></td>
-                <td></td>
+                <?php if (isset($_GET['jenis']) and $_GET['jenis'] == '') { ?>
+                <td align="right"><?= rupiah($penerimaan-$pengeluaran) ?></td>
+                <?php } ?>
             </tr>
             <?php
             if ($_GET['jenis'] == 'Penjualan') {

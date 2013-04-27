@@ -249,6 +249,7 @@
                 <th>Pembeli / Pasien</th>
                 <?php } ?>
                 <th>Jenis Transaksi</th>
+                <th>No. Batch</th>
                 <th>Barang</th>
                 <th>Expired</th>
                 <th>HNA</th>
@@ -261,7 +262,7 @@
             </tr>
             <?php
             if (isset($_GET['sort'])) {
-                $hpp = 0; $sisa = 0; $asset = 0;
+                $hpp = 0; $sisa = 0; $asset = 0; $awal = 0;
                 //$stok = stok_barang_muat_data(isset($_GET->awal)?$_GET->awal:NULL, isset($_GET->akhir)?$_GET->akhir:NULL, isset($_GET->id_pb)?$_GET->id_pb:NULL, isset($_GET->atc)?$_GET->atc:NULL, isset($_GET->ddd)?$_GET->ddd:NULL, isset($_GET->perundangan)?$_GET->perundangan:NULL, isset($_GET->generik)?$_GET->generik:NULL, isset($_GET->transaksi_jenis)?$_GET->transaksi_jenis:NULL, isset($_GET->sort)?$_GET->sort:NULL, isset($_GET->unit)?$_GET->unit:NULL);
                 foreach ($list_data as $key => $data) {
                     $extra = NULL;
@@ -312,6 +313,9 @@
                     } else {
                         $class = "class=" . (($key % 2 == 0) ? 'odd' : 'even') . "";
                     }
+                    
+                    $id_packing = $data->barang_packing_id;
+                    $ed = $data->ed;
                     ?>
                     <tr <?= $class ?>>
                         <td align="center"><?= datetimefmysql($data->waktu) ?></td>
@@ -327,20 +331,26 @@
                         <td><?= isset($pembeli->nama)?$pembeli->nama:$pembeli->pasien ?></td>
                         <?php } ?>
                         <td><?= $data->transaksi_jenis ?></td>
+                        <td><?= $data->nobatch ?></td>
                         <td><?= $data->barang ?> <?= ($data->kekuatan != '1') ? $data->kekuatan : null ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= (($data->generik == 'Non Generik') ? '' : $data->pabrik) ?> @ <?= ($data->isi == 1) ? '' : $data->isi ?> <?= $data->satuan_terkecil ?></td>
                         <td align="center"><?= ($data->transaksi_jenis == 'Pemesanan') ? '-' : datefmysql($data->ed) ?></td>
                         <td align="right"><?= inttocur($data->hna) ?></td>
                         <?php if (isset($_GET['sort']) and $_GET['sort'] == 'History') { ?>
-                        <td><?= $data->awal ?></td>
-                        <td><?= $data->masuk ?></td>
-                        <td><?= $data->keluar ?></td>
+                        <td align="center"><?= $awal ?></td>
+                        <td align="center"><?= $data->masuk ?></td>
+                        <td align="center"><?= $data->keluar ?></td>
                         <?php } ?>
-                        <td align="center"><?= $data->sisa ?></td>
+                        <td align="center"><?= ($awal+$data->masuk-$data->keluar) ?></td>
                     </tr>
                     <?php
                     $hpp = $hpp+$data->hpp;
                     $sisa = $sisa+$data->sisa;
-                    $asset = $asset+($data->hpp*$data->sisa);
+                    $asset = $asset+($data->hna*$data->sisa);
+                    if ($id_packing == $data->barang_packing_id and $ed == $data->ed) {
+                        $awal = $awal+$data->masuk-$data->keluar;
+                    } else {
+                        $awal = $awal+$data->masuk-$data->keluar;
+                    }
                 }
             } else {
                 for ($i = 1; $i <= 2; $i++) {
@@ -354,14 +364,17 @@
                         <td align="center"></td>
                         <td align="center"></td>
                     </tr>
-    <?php }
-}
-?>
+                <?php }
+            }
+        ?>
+        <?php  ?>
         </table>
     <br/>
     <?php
     if (isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir')) { ?>
-    <b>Total Asset: <?= rupiah($asset) ?></b>
+    <table style="border: 1px solid #ccc;">
+        <tr><td style="font-size: 16px; font-weight: bold;">Total Asset:</td><td style="font-size: 16px; font-weight: bold;"><?= rupiah($asset) ?></td></tr>
+    </table>
     <?php } ?>
     </div>
 </div>

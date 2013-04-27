@@ -33,13 +33,14 @@ class M_inv_autocomplete extends CI_Model {
 
     function load_data_penduduk_pasien($name = null, $id = null) {
         if ($id != NULL) {
-            $q = " where ps.no_rm = '$id'";
+            $q = " where p.id = '$id'";
         } else if ($name != null) {
             $q = "where p.nama like ('%$name%')";
         }
-        $sql = "select p.nama, dp.*, kl.nama as kelurahan from penduduk p
+        $sql = "select p.id as id_penduduk, p.nama, p.lahir_tanggal, p.lahir_kabupaten_id, p.telp, p.member, pk.nama as pekerjaan, dp.*, kb.nama as kabupaten from penduduk p
         join dinamis_penduduk dp on (p.id = dp.penduduk_id)
-        left join kelurahan kl on (dp.kelurahan_id = kl.id)
+        left join kabupaten kb on (p.lahir_kabupaten_id = kb.id)
+        left join pekerjaan pk on (dp.pekerjaan_id = pk.id)
         inner join (
             select penduduk_id, max(id) as id_max
             from dinamis_penduduk group by penduduk_id
@@ -72,7 +73,7 @@ class M_inv_autocomplete extends CI_Model {
 //echo $sql;
         return $this->db->query($sql);
     }
-
+    
     function load_data_user_system($q) {
         $sql = "select p.*, dp.alamat from penduduk p left join users u on (p.id = u.id) 
             join dinamis_penduduk dp on (dp.penduduk_id = p.id)
@@ -165,30 +166,19 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function load_data_rop($id) {
-        //$sekarang = gmdate('Y-m-d', gmdate('U') + 25200);
-        //$id_unit = $this->session->userdata('id_unit');
-        $start = $this->db->query("select date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and barang_packing_id = '$id' order by id desc limit 1")->row();
-        $end   = $this->db->query("select date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$id' order by id desc limit 1")->row();
-        if (isset($start->tanggal)) {
-            $sql = "select id, 
-                (select avg(selisih_waktu_beli) from transaksi_detail where transaksi_jenis = 'Pembelian') as selisih_waktu_beli,
-                (select (sum(masuk) - sum(keluar)) as sisa from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id') as sisa, 
-                (select datediff('".$end->tanggal."','".$start->tanggal."')) as leadtime_hours,
-                (select ss from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$id' order by id desc limit 1) as ss,
-                (select avg(keluar) from transaksi_detail where barang_packing_id = '$id' and transaksi_jenis in ('Pemakaian','Penjualan') and date(waktu) 
-                    between '".$start->tanggal."' and '".$end->tanggal."') as average_usage
-                    from transaksi_detail t
-                where id = (select max(id) from transaksi_detail where barang_packing_id = '$id' and transaksi_jenis != 'Pemesanan')";
-            return $this->db->query($sql)->row();
-        } else {
-            $result['id'] = NULL;
-            $result['selisih_waktu_beli'] = '0';
-            $result['sisa'] = '0';
-            $result['leadtime_hours'] = '0';
-            $result['ss'] = '0';
-            $result['average_usage'] = '0';
-            return $result;
-        }
+        $start = $this->db->query("select date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and barang_packing_id = '$id' order by waktu desc limit 1")->row();
+        $end   = $this->db->query("select date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$id' order by waktu desc limit 1")->row();
+        
+        $sql = "select id, 
+            (select avg(selisih_waktu_beli) from transaksi_detail where transaksi_jenis = 'Pembelian') as selisih_waktu_beli,
+            (select (sum(masuk) - sum(keluar)) as sisa from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id') as sisa, 
+            (select datediff('".(isset($end->tanggal)?$end->tanggal:'0')."','".(isset($start->tanggal)?$start->tanggal:'0')."')) as leadtime_hours,
+            (select ss from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$id' order by id desc limit 1) as ss,
+            (select avg(keluar) from transaksi_detail where barang_packing_id = '$id' and transaksi_jenis in ('Pemakaian','Penjualan') and date(waktu) 
+                between '".(isset($start->tanggal)?$start->tanggal:'')."' and '".(isset($end->tanggal)?$end->tanggal:'')."') as average_usage
+                from transaksi_detail t
+            where id = (select max(id) from transaksi_detail where barang_packing_id = '$id' and transaksi_jenis != 'Pemesanan')";
+        return $this->db->query($sql)->row();
     }
     
     function get_harga_jual($id) {
@@ -201,7 +191,7 @@ class M_inv_autocomplete extends CI_Model {
     function get_nomor_pemesanan($q) {
         $sql = "select p.*, r.nama as pabrik from pemesanan p
             join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
-            where p.id not in (select pemesanan_id from pembelian) and p.id like ('%$q%') order by locate ('$q', p.id)";
+            where p.id not in (select pemesanan_id from pembelian where pemesanan_id is not NULL) and p.dokumen_no like ('%$q%') order by locate ('$q', p.dokumen_no)";
         return $this->db->query($sql);
     }
 
@@ -314,7 +304,7 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function load_penjualan_by_no_resep($noresep) {
-        $sql = "select rr.*, o.generik, td.sisa, rd.jual_harga, rd.pakai_jumlah, b.nama as barang, bp.margin, bp.diskon, rd.barang_packing_id, bp.barcode, r.nama as pabrik, 
+        $sql = "select rr.*, o.generik, td.sisa, td.ed, rd.jual_harga, rd.pakai_jumlah, b.nama as barang, bp.margin, bp.diskon, rd.barang_packing_id, bp.barcode, r.nama as pabrik, 
             o.kekuatan, st.nama as satuan_terkecil, sd.nama as sediaan, bp.isi, td.keluar, s.nama as satuan, td.harga, bp.diskon as percent,
             td.hna
             from resep_r rr

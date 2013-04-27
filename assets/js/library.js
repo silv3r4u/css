@@ -79,8 +79,7 @@ function initMenus() {
     
 //Menghitung Umur dari tanggal ditentukan    
 
-function hitungUmur(){
-        var tanggal=$('#tglLahir').attr('value');
+function hitungUmur(tanggal){
         var elem = tanggal.split('/');
         var tahun = elem[2];
         var bulan = elem[1];

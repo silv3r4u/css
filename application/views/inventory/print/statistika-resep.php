@@ -30,7 +30,7 @@ function Popup(data) {
 <table class="content-printer" width="100%">
     <tr><td style="font-size: 16px;">Nama:</td><td style="font-size: 16px;"><?= $data->nama ?></td> </tr>
     <tr><td style="font-size: 16px;">Nomor S.I.A:</td><td style="font-size: 16px;"><?= $data->sia ?></td> </tr>
-    <tr valign="top"><td style="font-size: 16px;">Alamat:</td><td style="font-size: 16px;"><?= $data->alamat ?><br/><?= $data->kelurahan ?>, <?= $data->kecamatan ?>, <?= $data->kabupaten ?>, <?= $data->provinsi ?></td> </tr>
+    <tr valign="top"><td style="font-size: 16px;">Alamat:</td><td style="font-size: 16px;"><?= $data->alamat ?><br/><?= $data->kabupaten ?></td> </tr>
 </table><br/>
 I. STATISTIKA RESEP
 <?php

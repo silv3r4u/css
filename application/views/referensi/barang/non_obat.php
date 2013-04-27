@@ -301,6 +301,10 @@
                 <?= form_hidden('id_pabrik') ?>
             </td>
         </tr>
+        <tr>
+            <td align="right">HNA (Rp.)</td>
+            <td><?= form_input('hna_nb', null, 'id=hna_nb onkeyup=FormNum(this)') ?></td>
+        </tr>
     </table>
     <?= form_close() ?>
 </div>

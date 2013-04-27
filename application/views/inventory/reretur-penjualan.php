@@ -253,7 +253,7 @@ $(function() {
     <?= form_open('inventory/reretur_penjualan_save', 'id=form_reretur_penjualan') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="left_side">
+            <div class="one_side">
         <?= form_hidden('totalreretur') ?>
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>No. Retur:</label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>

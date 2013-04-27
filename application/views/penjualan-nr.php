@@ -1,59 +1,19 @@
-<?php
-header('Cache-Control: max-age=0');
-?>
 <title><?= $title ?></title>
 <div id="result_cetak" style="display: none"></div>
-<div class="kegiatan">
 <?php $this->load->view('message'); ?>
 <script type="text/javascript">
-function create_dialog() {
-    var str = '<div id=open_bayar class=data-input>'+
-        '<label style="font-size: 18px">Total:</label><span style="font-size: 18px" class=label id=totalopen>'+$('#bulat').val()+'</span>'+
-        '<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px" type=text id=bayar size=20 />'+
-        '<label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px" id="kembalian_nr" class="label"></span></div>';
-    $('#loaddata').append(str);
-    $('#open_bayar').dialog({
-        autoOpen: true,
-        modal: true,
-        width: 350,
-        height: 300,
-        resizable: true,
-        close: function() {
-            $(this).dialog().remove();
-            $('#bulat').focus();
-        }, buttons: {
-            "OK": function() {
-                $('#bayar_nr').val($('#bayar').val());
-                $('#form_penjualan_non_resep').submit();
-                $(this).dialog().remove();
-            }
-        }
+    $('#reset').click(function() {
+        $('#penjualan_non_resep_bayar').dialog().remove();
+        $('#loaddata').empty();
+        var url = '<?= base_url('pelayanan/penjualan_nr') ?>';
+        $('#loaddata').load(url+'?_='+Math.random());
     });
-    $('#bayar').keyup(function() {
-        FormNum(this);
-        setKembali();  
-    })
-}
-function form_open() {
-    $('#form_pembayaran_nr').dialog({
-        autoOpen: true,
-        modal: true,
-        width: 350,
-        height: 300,
-        buttons: {
-            "Ok": function() {
-                $('input[name=bulat]').val($('#bulat').val());
-                $('input[name=bayar]').val($('#bayar').val());
-                $(this).dialog("close");
-                $('#noresep').focus();
-            }
-        }
-    });
-}
 $(function() {
-    $('input,select').live('keydown', function(e) {
+    add(0);
+    $('input').live('keyup', function(e) {
         if (e.keyCode === 120) {
             create_dialog();
+            //$('#penjualan_non_resep_bayar').dialog().remove();
             $('#bayar').focus();
         }
     });
@@ -144,19 +104,8 @@ $(function() {
     function(event,data,formated){
         $('#pembeli').val(data.nama);
         $('input[name=id_pembeli]').val(data.penduduk_id);
+        $('#disk_penjualan').html(data.member);
     });
-});
-$(function() {
-    for(x = 0; x <= 1; x++) {
-        add(x);
-    }
-    $('#addnewrow').click(function() {
-        row = $('.tr_row').length;
-        
-        add(row);
-        i++;
-    });
-    
 });
 function eliminate(el) {
     var parent = el.parentNode.parentNode;
@@ -167,10 +116,12 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.bc').attr('id','bc'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','diskon'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.jl').attr('id','jl'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','subtotal'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','diskon'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.ed').attr('id','exp'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','subtotal'+i);
     }
     subTotal();
 }
@@ -178,11 +129,12 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nr[] id=bc'+i+' class=bc size=10 /></td>'+
                 '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
+                '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
-                '<td align=center id=diskon'+i+'></td>'+
-                '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100px;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
+                '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
+                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=subtotal'+i+' align=right></td>'+
-                '<td class=aksi><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+                '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
             '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -216,7 +168,7 @@ function add(i) {
                         $('#hj'+i).html(numberToCurrency(Math.ceil(data.harga))); // text asli
                         $('#harga_jual'+i).val(data.harga);
                         $('#disc'+i).val(data.diskon);
-                        $('#diskon'+i).html(data.diskon);
+                        $('#diskon'+i).val(data.diskon);
                         $('#jl'+i).val('1');
                         subTotal(i);
                         var jml = $('.tr_row').length;
@@ -234,14 +186,14 @@ function add(i) {
                         $('#hj'+i).html(''); // text asli
                         $('#harga_jual'+i).val('');
                         $('#disc'+i).val('');
-                        $('#diskon'+i).html('');
+                        $('#diskon'+i).val('');
                     }
                 }
             })
             return false;
         }
     });
-    $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_where_stok_ready') ?>",
+    $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_per_ed') ?>",
     {
         parse: function(data){
             var parsed = [];
@@ -255,19 +207,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
-                var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
+                var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>Expired: '+datefmysql(data.ed)+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'<br/>Expired: '+datefmysql(data.ed)+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>Expired: '+datefmysql(data.ed)+'</div>';
                 }
             }
             return str;
@@ -277,23 +229,25 @@ function add(i) {
     }).result(
     function(event,data,formated){
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
         $('#id_pb'+i).val(data.id);
         $('#bc'+i).val(data.barcode);
+        $('#ed'+i).html(datefmysql(data.ed));
+        $('#exp'+i).val(data.ed);
         $('#kekuatan'+i).html(data.kekuatan);
         var id_packing = data.id;
         $.ajax({
@@ -304,15 +258,15 @@ function add(i) {
                 $('#hj'+i).html(numberToCurrency(Math.ceil(msg.harga))); // text asli
                 $('#harga_jual'+i).val(msg.harga);
                 $('#disc'+i).val(msg.diskon);
-                $('#diskon'+i).html(msg.diskon);
+                $('#diskon'+i).val(msg.diskon);
                 subTotal(i);
             }
-        })
+        });
         $('#jl'+i).val('1');
         subTotal(i);
         var jml = $('.tr_row').length;
         //alert(jml+' - '+i)
-        if (jml - i == 1) {
+        if (jml - i === 1) {
             add(jml);
         }
         $('#bc'+(i+1)).focus();
@@ -333,8 +287,6 @@ function pembulatan_seratus(angka) {
     
 }
 function subTotal() {
-    
-    $(function() {
         var jumlah = $('.tr_row').length-1;
         var tagihan = 0;
         var disc = 0;
@@ -344,7 +296,7 @@ function subTotal() {
         for (i = 0; i <= jumlah; i++) {
             
             var harga = currencyToNumber($('#hj'+i).html());
-            var diskon= parseInt($('#diskon'+i).html())/100;
+            var diskon= parseInt($('#diskon'+i).val())/100;
             
             <?php 
             if (isset($_GET['id'])) { ?>
@@ -353,14 +305,10 @@ function subTotal() {
             var jml= parseInt($('#jl'+i).val());
             <?php } ?>
             var subtotal = numberToCurrency(Math.ceil((harga - (harga*diskon))*jml));
-            //alert(subtotal);
             $('#subtotal'+i).html(subtotal);
             $('#subttl'+i).val(subtotal);
-            //alert(harga)
-            //alert(disc)
-            
             var harga = parseInt(currencyToNumber($('#hj'+i).html()));
-            var diskon= parseInt($('#diskon'+i).html())/100;
+            var diskon= parseInt($('#diskon'+i).val())/100;
             //var jumlah= parseInt($('#jl'+i).val());
             var subtotall = 0;
             //alert(harga); alert(diskon); alert(jumlah);
@@ -375,18 +323,17 @@ function subTotal() {
             
         }
         
-        //$('#jasa_total_apotek').val(ja);
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
         $('#total-tagihan').html(numberToCurrency(tagihan));
         var totallica = (tagihan - disc)+jasa_apt;
         var diskon_bank   = (totallica * ($('#disc_bank').html()/100));
+        var diskon_jual   = (totallica * ($('#disk_penjualan').html()/100));
         var pajak = ppn*tagihan;
-        var new_totallica = (totallica - diskon_bank)+pajak;
+        var new_totallica = (totallica - (diskon_bank+diskon_jual))+pajak;
         $('#total, #total_tagihan_penjualan_nr').html(numberToCurrency(Math.ceil(new_totallica)));
         if (tagihan !== 0) {
             $('#bulat').val(numberToCurrency(pembulatan_seratus(Math.ceil(new_totallica))));
         }
-    });
 }
 function setKembali() {
         //var apoteker = currencyToNumber($('#jasa-apt').html());
@@ -421,24 +368,19 @@ $(function() {
         }
     });
     $('#tanggal').datetimepicker();
-    $('#reset').click(function() {
-        $('#loaddata').empty();
-        var url = '<?= base_url('pelayanan/penjualan_nr') ?>';
-        $('#loaddata').load(url+'?_'+Math.random());
-    });
     $("#form_penjualan_non_resep").submit(function() {
         
-        if ($('#id_pembeli').val() == '') {
+        if ($('#id_pembeli').val() === '') {
             alert('Nama pembeli tidak boleh kosong !');
             $('#pasien').focus();
             return false;
         }
-        if ($('#bayar').val() == '') {
+        if ($('#bayar').val() === '') {
             alert('Jumlah bayar tidak boleh kosong !');
             $('#bayar').focus();
             return false;
         }
-        if ($('#bulat').val() == '') {
+        if ($('#bulat').val() === '') {
             alert('Jumlah pembulatan tidak boleh kosong !');
             $('#bulat').focus();
             return false;
@@ -493,25 +435,47 @@ $(function() {
             });
         }
     });
-    $('input,select').live('keydown', function(e) {
-        if (e.keyCode === 120) {
-            form_open();
+});
+function create_dialog() {
+    $('#totalopen').html($('#bulat').val());
+    $('#penjualan_non_resep_bayar').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 300,
+        height: 320,
+        title: 'Entri Pembayaran',
+        close: function() {
+            $(this).dialog('close');
+        }, buttons: {
+            "Simpan Pembayaran": function() {
+                $('#bayar_nr').val($('#bayar').val());
+                $('#form_penjualan_non_resep').submit();
+                $(this).dialog().remove();
+            }
         }
     });
-});
+    $('#bayar').keyup(function() {
+        FormNum(this);
+        setKembali();  
+    });
+}
 </script>
+<div class="kegiatan">
     <h1><?= $title ?></h1>
     <?= form_open('pelayanan/penjualan_nr', 'id=form_penjualan_non_resep') ?>
+    <div id="penjualan_non_resep_bayar" class="data-input" style="display: none">
+	<label style="font-size: 18px">Total:</label><span style="font-size: 18px; padding-left: 3px;" class=label id=totalopen></span>
+	<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px;" type=text id=bayar size=25 />
+        <label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px; padding-left: 3px; padding-top: 7px;" id="kembalian_nr" class="label"></span>
+    </div>
     <div class="data-list">
-        <?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+        <!--<?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>-->
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
-                <th>Barcode</th>
+                <th width="10%">Barcode</th>
                 <th width="40%">Packing Barang</th>
-                <?php if (isset($_GET['id'])) { ?>
                 <th width="10%">ED</th>
-                <?php } ?>
                 <th width="15%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="10%">Jumlah</th>
@@ -520,34 +484,13 @@ $(function() {
             </tr>
             </thead>
             <tbody>
-                <?php
-                if (isset($_GET['id'])) { 
-                $penjualan = penjualan_muat_data($_GET['id']);
-                $no = 0;
-                foreach ($penjualan as $key => $data) {
-                    $hjual = ($data['hna']*($data['margin']/100))+$data['hna'];
-                ?>
-                <tr class="<?= ($key%2==0)?'odd':'even' ?> tr_row">
-                    <td align="center"><?= $data['barcode'] ?></td>
-                    <td><?= "$data[barang] ".(($data['kekuatan'] != '1')?$data['kekuatan']:null)." $data[satuan] $data[sediaan] $data[pabrik] @ ".(($data['isi']==1)?'':$data['isi'])." $data[satuan_terkecil]"; ?></td>
-                    <?php if (isset($_GET['id'])) { ?>
-                    <td align="center"><?= datefmysql($data['ed']) ?></td>
-                    <?php } ?>
-                    <td align="right" id="hj<?= $no ?>"><?= inttocur($hjual) ?></td>
-                    <td align="center" id="diskon<?= $no ?>"><?= $data['diskon'] ?></td>
-                    <td align="center" id="jl<?= $no ?>"><?= $data['keluar'] ?></td>
-                    <td align="right"><?= inttocur(($hjual - ($hjual*($data['diskon']/100)))*$data['keluar']) ?></td>
-                    <td></td>
-                </tr>
-                <?php $no++; } 
-                } ?>
             </tbody>
         </table> 
     </div>
    <div class="data-input">
         <fieldset><legend>Summary</legend>
         <?= form_hidden('total') ?>
-            <div class="left_side">
+            <div class="left_side" style="min-height: 160px">
                 <label>No.</label> <span class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </span>
                 <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
                 <label>Pembayaran Bank</label><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?>
@@ -555,18 +498,19 @@ $(function() {
                 <label>Pembeli</label><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?>
                 <label>Total Tagihan</label><span class="label" id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </span>
                 
-            </div><div class="right_side">
-                <label>Total Diskon Barang</label><span class="label" id="total-diskon"><?= isset($data['subtotal'])?rupiah($data['subtotal']):null ?></span>
-                <label>Diskon Bank (%)</label><span id="disc_bank" class="label"><?= isset($data['diskon_bank'])?$data['diskon_bank']:'0' ?></span><?= form_hidden('diskon_bank', isset($data['diskon_bank'])?$data['diskon_bank']:'0', 'id=diskon_bank size=10 ') ?>
-                <label>Total</label><span id="total" class="label"><?= isset($data['total'])?rupiah($data['total']):null ?></span>
-                <label>Pembulatan Total</label><?= form_input('bulat', isset($data['total'])?rupiah($data['total']):NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
-                <label>Bayar (Rp)</label><?= form_input('bayar', isset($data['bayar'])?rupiah($data['bayar']):null, 'id=bayar_nr size=30 ') ?>
+            </div><div class="right_side" style="min-height: 160px">
+                <label>Total Diskon Barang</label><span class="label" id="total-diskon"></span>
+                <label>Diskon Bank (%)</label><span id="disc_bank" class="label">0</span><?= form_hidden('diskon_bank', 0) ?>
+                <label>Diskon Penjualan (%)</label><span id="disk_penjualan" class="label"></span>
+                <label>Total</label><span id="total" class="label"></span>
+                <label>Pembulatan Total</label><?= form_input('bulat', NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
+                <label>Bayar (Rp)</label><?= form_input('bayar', null, 'id=bayar_nr size=30 ') ?>
                 <!--<label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
                 
             </div>
         </fieldset>
     </div>
-    <?= form_submit('save', 'Simpan', 'id=save') ?>
+    <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
     <?= form_button('Reset', 'Reset', 'id=reset') ?>
     <?= form_button(null, 'Cetak Nota', 'id=print') ?>
     <!--<?= form_button(null, 'Retur Penjualan', 'id=retur') ?>-->

@@ -31,7 +31,7 @@
     foreach($list_data as $key => $rows);
     ?>
     <div class="data-input">
-            <div class="left_side">
+            <div class="left_side_detail">
                 <label>No.:</label> <span class="label" id="id_pembelian"><?= $rows->id_pembelian ?></span>
                 <label>No. Dokumen:</label> <span class="label"> <?= $rows->dokumen_no ?> </span>
                 <label>Tanggal Dokumen:</label><span class="label"><?= datefrompg($rows->dokumen_tanggal) ?></span>
@@ -44,7 +44,7 @@
                 <label>Tanggal Jatuh Tempo:</label><span class="label"><?= datefrompg($rows->tanggal_jatuh_tempo) ?></span>
                 <label>Keterangan:</label><span class="label"><?= $rows->keterangan ?></span>
             </div>
-            <div class="right_side">
+            <div class="right_side_detail">
                 <label>Total Harga:</label><span class="label" id="total-harga"></span>
                 <label>Total Diskon:</label><span class="label" id="total-diskon"></span>
                 <label>Total Pembelian:</label><span class="label" id="total-pembelian"></span>

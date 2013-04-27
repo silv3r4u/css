@@ -1,6 +1,7 @@
 <?php $this->load->view('message'); ?>
 <script type="text/javascript">
 $(function() {
+    $("#tanggal").datetimepicker();
     $('#form_stok_opname').submit(function() {
         var url = $(this).attr('action');
         $.ajax({
@@ -69,15 +70,17 @@ function eliminate(el) {
     var jumlah = $('.tr_row').length-1;
     
     for (i = 0; i <= jumlah; i++) {
-        $('.tr_row:eq('+i+')').children('td:eq(0)').children('.pb').attr('id','pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(0)').children('.id_pb').attr('id','id_pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.ed').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.hna').attr('id','hna'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.js').attr('id','js'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(0)').children('.batch').attr('id','batch'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.hna').attr('id','hna'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.js').attr('id','js'+i);
     }
 }
 function add(i) {
      str = '<tr class=tr_row>'+
+                '<td><input type=text name=batch[] id=batch'+i+' class=batch /></td>'+
                 '<td><input type=text name=pb[] id=pb'+i+' class=pb size=45 />'+
                     '<input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
                 '<td><input type=text name=ed[] id=ed'+i+' class=ed size=8 /></td>'+
@@ -158,8 +161,9 @@ function add(i) {
     <?= form_open('inventory/stok_opname', 'id=form_stok_opname') ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-        <div class="left_side">
+        <div class="one_side">
             <label>No.:</label><span class="label" id="stok_opname"><?= isset($_GET['id'])?$_GET['id']:get_last_id('opname_stok', 'id') ?></span>
+            <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
             <label>Alasan:</label><?= form_input('alasan', NULL, 'id=alasan size=40') ?>
             <label></label><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
             </div>
@@ -169,6 +173,7 @@ function add(i) {
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
+                <th>No. Batch</th>
                 <th>Packing Barang</th>
                 <th>ED</th>
                 <th>HNA</th>

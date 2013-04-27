@@ -3,7 +3,7 @@ header_excel("stok-".date("d-m-Y").".xls");
 ?>
 <table width="100%" style="font-family: 'Lucida Sans Unicode'; color: #ffffff" bgcolor="#31849b">
     <tr><td colspan="9" align="center" style="text-transform: uppercase"><?= $datas->nama ?></td> </tr>
-    <tr><td colspan="9" align="center"><?= $datas->alamat ?> <?= $datas->kelurahan ?></td> </tr>
+    <tr><td colspan="9" align="center"><?= $datas->alamat ?> <?= $datas->kabupaten ?></td> </tr>
     <tr><td colspan="9" align="center">Telp. <?= $datas->telp ?>,  Fax. <?= $datas->fax ?>, Email <?= $datas->email ?></td> </tr>
 </table>
 <table width="100%" style="font-family: 'Lucida Sans Unicode';">

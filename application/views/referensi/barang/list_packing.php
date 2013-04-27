@@ -12,7 +12,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>
-        <th class="nosort"><h3>No</h3></th>
+        <th class="nosort" width="5%"><h3>No</h3></th>
         <th width="15%"><h3>Barcode</h3></th>
         <th width="40%"><h3>Barang</h3></th>
         <th width="10%"><h3>Kemasan</h3></th>

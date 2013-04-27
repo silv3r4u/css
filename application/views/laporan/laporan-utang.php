@@ -82,7 +82,7 @@ if (!isset($_GET['do'])) {
         <div class="data-input">
             <fieldset><legend>Parameter Pencarian</legend>
     <?= form_open('laporan/hutang', 'id=formlaporanhutang') ?>
-                <label>Tanggal:</label> <?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : date("d/m/Y"), 'id=awal size=10') ?> <span class="label"> s . d </span> <?= form_input('akhir', isset($_GET['awal']) ? $_GET['akhir'] : date("d/m/Y"), 'id=akhir size=10') ?>
+                <label>Tanggal Jatuh Tempo:</label> <?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : date("d/m/Y"), 'id=awal size=10') ?> <span class="label"> s . d </span> <?= form_input('akhir', isset($_GET['awal']) ? $_GET['akhir'] : date("d/m/Y"), 'id=akhir size=10') ?>
                 <label></label><?= form_submit(null, 'Cari', 'id=search') ?> <?= form_button('Reset', 'Reset', 'id=reset') ?> <?= form_button(null, 'Cetak Excel', 'id=cetak') ?>
     <?= form_close() ?>
             </fieldset>
@@ -92,7 +92,7 @@ if (!isset($_GET['do'])) {
         <table class="sortable" border="<?= $border ?>" width="100%">
             <thead>
                 <tr>
-                    <th width="10%"><h3>Waktu Pembelian</h3></th>
+                    <th width="10%"><h3>Jatuh Tempo</h3></th>
                     <th width="30%"><h3>Supplier</h3></th>
                     <th width="10%"><h3>No. Doc</h3></th>
                     <th width="10%"><h3>Total/Faktur (Rp.)</h3></th>
@@ -110,7 +110,7 @@ if (!isset($_GET['do'])) {
                         $total_faktur = ($data->total + $data->materai) + ($data->total * ($data->ppn / 100));
                         ?>
                         <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
-                            <td align="center"><?= datefmysql($data->dokumen_tanggal) ?></td>
+                            <td align="center"><?= datefmysql($data->tanggal_jatuh_tempo) ?></td>
                             <td><?= $data->nama ?></td>
                             <td align="center"><?= anchor('inventory/pembelian_detail/'.$data->id.'?awal='.$_GET['awal'].'&akhir='.$_GET['akhir'], $data->dokumen_no, 'class=view_transaction') ?></td>
                             <td align="right"><?= rupiah($total_faktur) ?></td>

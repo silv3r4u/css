@@ -20,6 +20,12 @@ class Inv_autocomplete extends CI_Controller {
         $data = $this->m_inv_autocomplete->load_data_user_system($q)->result();
         die(json_encode($data));
     }
+    
+    function load_data_penduduk_hipertensi() {
+        $q = $_GET['q'];
+        $data = $this->m_inv_autocomplete->load_data_penduduk_pasien($q)->result();
+        die(json_encode($data));
+    }
 
     function load_data_produk_asuransi() {
         $q = $_GET['q'];

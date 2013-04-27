@@ -23,7 +23,8 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .arrow-right { background: url(../images/left-arrow.png) no-repeat; float: left; width: 34px; height: 45px; margin-top: 3%; }
 .content { padding: 5px; font-size: 12px;}
 .information { background: url(../images/icons/warning.png) no-repeat left; height: 16px; padding-left: 17px; font-style: italic; }
-@media screen and (min-width: 700px) {
+.panel-show-hide { position: absolute; color: #fff; }
+@media screen and (min-width: 400px) {
     #loaddata { background: #efefef; width: 80%; float: right; height: 83%; overflow-y: auto; }
     #loading { position: fixed; width:100px; height:13px; padding:10px; z-index:9999; margin: 8% auto; left: 0; right: 0; top:0; padding-left: 35px; font-size: 12px; }
     #useractive { display: block; }
@@ -52,7 +53,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .data-input button,.data-input input,.data-input select {margin: .3em 5px 0 5px; }
     .data-input textarea { height: 40px; float: left; width: 200px; border: 1px inset #CCCCCC; padding:3px; margin: 5px 5px 0 5px; font: tahoma,arial lighter !important}
 }
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 800px) {
     #loaddata { background: #efefef; width: 80%; float: right; height: 86%; overflow-y: auto; }
     #loading { position: fixed; width:100px; height:13px; padding:10px; z-index:9999; margin: 7% auto; left: 0; right: 0; top:0; padding-left: 35px; font-size: 12px; }
     #useractive { display: block; }
@@ -94,7 +95,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .content-menu a { font-size: 11px; display: inline-block; padding: 5px 0px 5px 0px; color: #333; width: 190px; }
 .content-menu a:hover { font-size: 11px; background: #f4f4f4; padding: 5px 0px 5px 0px; -webkit-border-radius: 3px; }
 .content-menu img { margin-right: 5px; }
-.data-input fieldset { margin-top: 5px; padding-top: 20px; }
+.data-input fieldset { margin-top: 5px; padding-top: 10px; }
 .data-input fieldset legend { display: none; }
 .data-input .filter-predicate {min-width: 150px;width: 253px;}
 .data-input .filter-values {min-width: 150px;}
@@ -104,7 +105,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .data-input .page-row {min-width: 2em;display: block;}
 .data-input .field-title {clear: both;display: block;float: left;line-height: 1.1em; padding: .7em .0em 0;width: 12em;white-space: nowrap;}
 .data-input .blocked {display: block;padding-right: 2.4em;}
-.data-input span.label {float: left; margin: 7px 10px 4px 2px; font-size: 12px; padding-left: 0px;}
+.data-input span.label {float: left; margin: 7px 10px 4px 2px; font-size: 12px; padding-left: 3px;}
 .data-input small { float: left; margin: 3px 10px 4px 0px; font-weight: normal; font-size: 11px; padding-left: 3px;}
 .data-input .field-group {border: none;padding: 0;}
 .data-input .field-group input {min-width: 1em;}
@@ -152,8 +153,8 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .data-list .bolder {font-size: 12px;text-transform: capitalize}
 .data-list .aksi .aktif {background:url(../images/icons/accept.png) no-repeat 0% 50%}
 .data-list .aksi .nonaktif {background:url(../images/icons/cross.png) no-repeat 0 50%}
-.data-list .even {background: #fff; height: 30px;}
-.data-list .odd {background: #f9f9f9;}
+.data-list .even {background: #fff; height: 25px;}
+.data-list .odd {background: #f9f9f9; height: 25px;}
 .data-list .no-wrap {white-space:nowrap}
 
 .aksi .addition {background: url('../images/icons/add.png') no-repeat 0 50%; padding-left:18px;}

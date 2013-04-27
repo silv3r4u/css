@@ -3,12 +3,20 @@ $key = 0;
 foreach ($list_data as $no => $rows) { ?>
     <tr class="tr_row">
         <td align="center"><?= ++$no ?></td>
+        <td><?= form_input('batch[]', $rows->batch, 'size=10') ?></td>
         <td><input type=text name=pb[] id="pb<?= $key ?>" style="width: 100%" value="<?= $rows->barang ?> <?= ($rows->kekuatan == '1')?'':$rows->kekuatan ?> <?= $rows->satuan ?> <?= $rows->sediaan ?> <?= (($rows->generik == 'Non Generik')?'':$rows->pabrik) ?> @ <?= ($rows->isi=='1')?'':$rows->isi ?> <?= $rows->satuan_terkecil ?>" class=pb />
         <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $rows->barang_packing_id ?>" class=pb />
         </td>
         <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($rows->ed) ?>" class=ed /></td>
         <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $rows->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
         <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
+        <td><?= form_hidden('barang_id[]', $rows->barang_id) ?><select name="kemasan[]" id="kemasan<?= $key ?>">
+            <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($rows->barang_id); 
+            foreach ($array_kemasan as $rowA) { ?>
+                <option value="<?= $rowA->id ?>"><?= $rowA->nama ?></option>
+            <?php } ?>
+        </select></td>
+        <td><input type=text name=isi[] id="isi<?= $key ?>" size=2 value="" class="isi" /></td>
         <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $rows->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
         <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $rows->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
         <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />

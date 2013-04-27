@@ -9,6 +9,7 @@ class Inventory extends CI_Controller {
         $this->load->model('m_inventory');
         $this->load->model('m_inv_autocomplete');
         $this->load->model('m_referensi');
+        $this->load->model('m_resep');
         $this->load->model('configuration');
         $this->load->helper('html');
         date_default_timezone_set('Asia/Jakarta');
@@ -175,12 +176,15 @@ class Inventory extends CI_Controller {
         $this->load->view('inventory/penerimaan-distribusi', $data);
     }
     
-    function penjualan() {
+    function penjualan($id = null) {
         $data['title'] = 'Penjualan (Resep)';
         $noresep = $this->input->post('id_resep');
         if (isset($noresep) and $noresep != '') {
             $data = $this->m_inventory->penjualan_save();
             die(json_encode($data));
+        }
+        if ($id != null) {
+            $data['list_data'] = $this->m_inv_autocomplete->load_penjualan_by_no_resep($id)->result();
         }
         $this->load->view('inventory/penjualan', $data);
     }
@@ -430,6 +434,22 @@ class Inventory extends CI_Controller {
         $data['title'] = 'Buku Defecta';
         $data['list_data'] = $this->m_inventory->defecta_load_data()->result();
         $this->load->view('inventory/defecta', $data);
+    }
+    
+    function save_defecta($id) {
+        $data = $this->m_inventory->save_defecta($id);
+        die(json_encode($data));
+    }
+    
+    function rencana_pemesanan() {
+        $data['title'] = 'Rencana Pemesanan';
+        $data['list_data'] = $this->m_inventory->rencana_pemesanan_load_data()->result();
+        $this->load->view('inventory/rencana-pemesanan', $data);
+    }
+    
+    function rencana_pemesanan_delete($id) {
+        $data = $this->db->delete('defecta', array('barang_packing_id' => $id));
+        die(json_encode($data));
     }
 }
 ?>

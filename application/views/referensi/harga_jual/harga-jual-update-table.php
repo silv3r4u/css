@@ -4,9 +4,22 @@ function set_harga_jual(i) {
     var hna = currencyToNumber($('#hna'+i).html());
     var margin = parseInt($('#margin'+i).val())/100;
     var diskon = parseInt($('#diskon'+i).val())/100;
-    var harga_jual = (hna+(hna*margin)) - ((hna+(hna*margin))*diskon);
-    $('#hj'+i).html(numberToCurrency(Math.ceil(harga_jual)));
+    //var harga_jual = (hna+(hna*margin)) - ((hna+(hna*margin))*diskon);
+    var harga_jual = (hna*(margin+1))-((hna*(margin+1))*diskon);
+    $('#harga_jual'+i).val(numberToCurrency(parseInt(harga_jual)));
     //($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
+}
+
+function set_margin(i) {
+    var hna = currencyToNumber($('#hna'+i).html());
+    var harga_jual = currencyToNumber($('#harga_jual'+i).val());
+    var diskon = parseInt($('#diskon'+i).val())/100;
+    var margin = (harga_jual - (hna+(hna*diskon)))/(hna - (hna*diskon));
+    var hsl = margin;
+    if (isNaN(margin)) {
+        var hsl = '';
+    }
+    $('#margin'+i).val(hsl*100);
 }
 $(function() {
     $('#update').button();
@@ -72,11 +85,11 @@ $harga_jual = ($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data-
 ?>
     <tr class="tr_rows <?= ($key%2==0)?'odd':'even' ?>">
         <td><?= form_hidden('id_pb[]', $data->barang_packing_id) ?><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terbesar ?></td>
-        <td align="right" id="hna<?= $key ?>"><?= inttocur($data->hna) ?></td>
+        <td align="right" id="hna<?= $key ?>"><?= inttocur($data->hna*$data->isi) ?></td>
         <td align="center"><?= form_input('margin[]', $data->margin, 'size=5 onkeyup=set_harga_jual('.$key.') id=margin'.$key) ?></td>
-        <td align="center"><?= form_input('diskon[]', $data->diskon, 'size=5 id=diskon'.$key) ?></td>
-        <td align="right" id="hj<?= $key ?>"><?= inttocur($harga_jual) ?></td>
-        <td align="center"><?= form_input('stokmin[]', $data->stok_minimal, 'size=5 id=stokmin'.$key) ?></td>
+        <td align="center"><?= form_input('diskon[]', $data->diskon, 'size=5 onkeyup=set_harga_jual('.$key.') id=diskon'.$key) ?></td>
+        <td align="right" id="hj<?= $key ?>"><?= form_input('harga_jual[]', inttocur($harga_jual*$data->isi), 'id=harga_jual'.$key.' size=10 onblur=FormNum(this) onkeyup=set_margin('.$key.')') ?></td>
+        <td align="center"><?= $data->stok_minimal ?></td>
     </tr>
 <?php 
 $jumlah++;

@@ -27,21 +27,32 @@
             $(function() {
                 initMenus();
                 $('#loading').hide();
-                var width = screen.width; 
                 $('.fixed').fadeOut(15000);
                 $("#loading").ajaxStart(function(){$(this).show();});
                 $("#loading").ajaxStop(function(){$(this).fadeOut();});
                 $('a.submenu').click(function() {
-                    $('.contentdata').remove();
+                    $('#loaddata').empty();
                     var val = $(this).attr('href');
                     $.ajax({
                         url: val,
                         cache: false,
                         success:function(data) {
-                            $('#loaddata').html('<div class="contentdata">'+data+'</div>');
+                            $('#loaddata').html(data);
                         }
                     });
                     return false;
+                });
+                $('#hide').click(function() {
+                    $('#hide').hide();
+                    $('#show').show();
+                    $(".menu-detail").hide("slide", { direction: "left" }, 500);
+                    $('#loaddata').css('width','100%');
+                });
+                $('#show').click(function() {
+                    $('#show').hide();
+                    $('#hide').show();
+                    $(".menu-detail").show("slide", { direction: "left" }, 500);
+                    $('#loaddata').css('width','80%');
                 });
             });
 
@@ -55,15 +66,16 @@
                     echo $this->load->view('navigasi');
                     ?>
                 </div>
-                
+                <div id="show" style="position: absolute; top: 14%;"><?= img('assets/images/left-arrow.png') ?></div>
+                <div id="hide" style="position: absolute; top: 14%;"><?= img('assets/images/right-arrow.png') ?></div>
                 <div class="menu-detail">
                     <div class="info-user">
                         <img src="<?= base_url('assets/images/user-aktif.png') ?>" align="left" /> Anda Login Sebagai:<br/> <b><?= $this->session->userdata('nama') ?></b><br/>
                         <?= anchor('user/logout', 'Logout') ?> - <span style="cursor: pointer; color: " onclick="ganti_pwd()">Ganti Password</span>
                     </div>
                     <div>
-                        <!--  id="menu4" class="menu collapsible expandfirst" -->
-                        <ul id="menu3" class="menu noaccordion">
+                        <!-- id="menu3" class="menu noaccordion"  -->
+                        <ul id="menu4" class="menu collapsible expandfirst">
                             <?php foreach ($master_menu as $menu) { ?>
                             <li>
                                 <a href="#" class="root"><img src="<?= base_url('assets/images/cpanel/'.$menu->icons) ?>" align="left" />&nbsp;<?= $menu->nama ?></a>

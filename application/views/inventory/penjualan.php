@@ -9,10 +9,10 @@ function form_open() {
     $('#form_pembayaran').dialog({
         autoOpen: true,
         modal: true,
-        width: 350,
-        height: 300,
+        width: 550,
+        height: 250,
         buttons: {
-            "Ok": function() {
+            "Simpan Pembayaran": function() {
                 $('input[name=bulat]').val($('#bulat').val());
                 $('input[name=bayar]').val($('#bayar').val());
                 $('#form_penjualan').submit();
@@ -144,28 +144,26 @@ $(function() {
             cache: false,
             success: function(msg) {
                 $('.form-inputan tbody').html(msg);
-                $('#total_tagihan_penjualan').html($('#total').html());
-                var nominal = currencyToNumber($('#total').html());
-                $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
-                
             }
         });
-        var id = data.pasien_penduduk_id;
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_data_penduduk_asuransi') ?>',
-            data: 'id_pembeli='+id,
-            cache: false,
-            success: function(msg) {
-                $('#asuransi').html((msg != 'null')?msg:'-');
-            }
-        });
+//        var id = data.pasien_penduduk_id;
+//        $.ajax({
+//            url: '<?= base_url('inv_autocomplete/load_data_penduduk_asuransi') ?>',
+//            data: 'id_pembeli='+id,
+//            cache: false,
+//            success: function(msg) {
+//                $('#asuransi').html((msg != 'null')?msg:'-');
+//            }
+//        });
         $('#ppn').focus();
     });
 });
 $(function() {
+    <?php if (!isset($list_data)) { ?>
     for(x = 0; x <= 1; x++) {
         add(x);
     }
+    <?php } ?>
     $('#addnewrow').click(function() {
         row = $('.tr_row').length;
         
@@ -191,14 +189,16 @@ function eliminate(el) {
 }
 function add(i) {
      str = '<tr class=tr_row>'+
-                '<td><input type=text name=nr[] id=bc'+i+' class=bc size=20 /></td>'+
-                '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
-                '<td id=hj'+i+' align=right></td>'+
-                '<td align=center id=diskon'+i+'></td>'+
-                '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
-                '<td id=subtotal'+i+' align="right"></td>'+
-                '<td class=aksi><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
-            '</tr>';
+        '<td><input type=text name=nr[] id=bc'+i+' class=bc size=20 /></td>'+
+        '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
+        '<td id=ed'+i+' align=center></td>'+
+        '<td id=hj'+i+' align=right></td>'+
+        '<td align=center id=diskon'+i+'></td>'+
+        '<td id=sisa'+i+' align=center></td>'+
+        '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
+        '<td id=subtotal'+i+' align="right"></td>'+
+        '<td class=aksi><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+    '</tr>';
 
     $('.form-inputan tbody').append(str);
     $('#bc'+i).live('keydown', function(e) {
@@ -376,6 +376,10 @@ function subTotal() {
         $('#ppn-hasil').html(numberToCurrency(Math.ceil(tagihan*ppn)));
         $('#total').html(numberToCurrency(Math.ceil(total)));
         $('input[name=total]').val(Math.ceil(tagihan - disc)+Math.ceil(tagihan*ppn));
+        
+        $('#total_tagihan_penjualan').html($('#total').html());
+        var nominal = currencyToNumber($('#total').html());
+        $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
 }
 function setKembali() {
         //var apoteker = currencyToNumber($('#jasa-apt').html());
@@ -408,7 +412,8 @@ function pembulatan_seratus(angka) {
 $(function() {
     $('#tanggal').datetimepicker();
     $('#reset').click(function() {
-        $('#loaddata').html('');
+        $('#form_pembayaran').dialog().remove();
+        $('#loaddata').empty();
         var url = '<?= base_url('inventory/penjualan') ?>';
         $('#loaddata').load(url);
     });
@@ -467,19 +472,19 @@ $(function() {
                     alert_tambah();
                 }
             }
-        })
+        });
         return false;
         
     });
     $('#id_penduduk').blur(function() {
-        if ($('#id_penduduk').val() != '') {
+        if ($('#id_penduduk').val() !== '') {
             var id = $('#id_penduduk').val();
             $.ajax({
                 url: '<?= base_url('inventory/fillField') ?>',
                 data: 'id_pasien=true&id='+id,
                 dataType: 'json',
                 success: function(val) {
-                    if (val.id == null) {
+                    if (val.id === null) {
                         alert('Data pasien tidak ditemukan !');
                         $('#id_penduduk, #pembeli, #id_pembeli').val('');
                         $('#id_penduduk').focus();
@@ -488,21 +493,21 @@ $(function() {
                         $('#id_pembeli').val(val.id);
                     }
                 }
-            })
+            });
         }
-    })
-})
+    });
+});
 </script>
 <title><?= $title ?></title>
 <div id="result_cetak" style="display: none;"></div>
 <div class="kegiatan">
     <h1><?= $title ?></h1>
     <?= form_open('inventory/penjualan', 'id=form_penjualan') ?>
-    <div class="data-input" id="form_pembayaran" title="Form Pembayaran" style="display: none;">
-        <label>Total (Rp.):</label><b><span id="total_tagihan_penjualan" class="label"></span></b>
-        <label>Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat onkeyup=FormNum(this) ') ?>
-        <label>Bayar (Rp):</label><?= form_input('', null, 'id=bayar ') ?>
-        <label>Kembalian (Rp):</label><span id="kembalian" class="label"></span>
+    <div class="data-input" id="form_pembayaran" title="Pembayaran Penjualan Resep" style="display: none;">
+        <label style="font-size: 18px;">Total (Rp.):</label><b><span style="font-size: 18px;" id="total_tagihan_penjualan" class="label"></span></b>
+        <label style="font-size: 18px;">Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat style="font-size: 18px;" onkeyup=FormNum(this) ') ?>
+        <label style="font-size: 18px;">Bayar (Rp):</label><?= form_input('', null, 'id=bayar  style="font-size: 18px;"') ?>
+        <label style="font-size: 18px;">Kembalian (Rp):</label><span id="kembalian" class="label" style="font-size: 18px;"></span>
     </div>
     <div class="data-input">
     <?= form_hidden('bulat') ?>
@@ -511,18 +516,18 @@ $(function() {
     <fieldset><legend>Summary</legend>
         <?= form_hidden('total', null, 'id=total_tagihan') ?>
         <?= form_hidden('jasa_apotek') ?>
-        <div class="left_side">
+        <div class="left_side" style="min-height: 160px;">
             <label>No.</label><span class="label" id="id_penjualan"><?= get_last_id('penjualan', 'id') ?> </span>
             <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
             <label>No. Resep </label>
                     <?= form_input('', isset($rows['resep_id'])?$rows['resep_id']:NULL, 'id=noresep size=30') ?> 
                     <?= form_hidden('id_resep', isset($rows['resep_id'])?$rows['resep_id']:NULL) ?>
             <label>Pasien</label><span id="pasien" class="label"></span>
-            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>
+<!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
             <label>PPN (%) </label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
-            <label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+            <!--<label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>-->
         </div>
-        <div class="right_side">
+        <div class="right_side" style="min-height: 160px;">
             <!--Jasa Apoteker</td><td id="jasa-apt"><?= isset($biaya['nominal'])?rupiah($biaya['nominal']):null ?>-->
             <label>Biaya Apoteker</label><span id="jasa-apt" class="label"></span>
             <label>Total Tagihan</label><span id="total-tagihan" class="label"></span>
@@ -536,50 +541,196 @@ $(function() {
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
-                <th>Barcode</th>
-                <th width="50%">Packing Barang</th>
-                <th width="15%">Harga Jual</th>
+                <th width="10%">Barcode</th>
+                <th width="45%">Kemasan Barang</th>
+                <th width="15%">ED</th>
+                <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
+                <th width="7%">Sisa Stok</th>
                 <th width="5%">Jumlah</th>
-                <th width="10%">Total</th>
+                <th width="10%">SubTotal</th>
                 <th>#</th>
             </tr>
             </thead>
             <tbody>
-                <?php
-                if (isset($_GET['id'])) { 
-                $penjualan = penjualan_muat_data($_GET['id']);
-                $no = 0;
-                foreach ($penjualan as $key => $data) {
-                    $hjual = ($data['hna']*($data['margin']/100))+$data['hna'];
-                ?>
-                <tr class="<?= ($key%2==0)?'odd':'even' ?> tr_row">
-                    <td align="center"><?= $data['barcode'] ?></td>
-                    <td><?= "$data[barang] ".(($data['kekuatan'] != '1')?$data['kekuatan']:null)." $data[satuan] $data[sediaan] $data[pabrik] @ ".(($data['isi']==1)?'':$data['isi'])." $data[satuan_terkecil]"; ?></td>
-                    <?php if (isset($_GET['id'])) { ?>
-                    <td align="center"><?= datefmysql($data['ed']) ?></td>
-                    <?php } ?>
-                    <td align="right" id="hj<?= $no ?>"><?= inttocur($hjual) ?></td>
-                    <td align="center" id="diskon<?= $no ?>"><?= $data['diskon'] ?></td>
-                    <td align="center" id="jl<?= $no ?>"><?= $data['keluar'] ?></td>
-                    <td align="right"><?= inttocur(($hjual - ($hjual*($data['diskon']/100)))*$data['keluar']) ?></td>
-                    <td></td>
-                </tr>
-                <?php $no++; } 
+                <?php if (isset($list_data)) {
+                    $no = 0;
+                    $total = 0; $disc = 0;
+                    foreach ($list_data as $key => $data) {
+                        $harga_jual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
+                        $subtotal = ($harga_jual - (($harga_jual*($data->percent/100))))*$data->pakai_jumlah;
+                        $total = $total + $subtotal;
+                        $disc = $disc + (($data->percent/100)*$harga_jual);
+                        $alert=NULL;
+                        if ($data->sisa <= 0) {
+                            $alert = "style=background:red";
+                        }
+                        ?>
+                        <tr <?= $alert ?> class="tr_row <?= ($key%2==0)?'odd':'even' ?>">
+                            <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
+                            <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
+                                <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" /></td>
+                                <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" />
+                            <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
+                            <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
+                            <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
+                            <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
+                            <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
+                            <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
+
+                            <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>
+                            <td class=aksi><a class=delete onclick="eliminate(this)"></a> 
+                                <input type=hidden name="disc[]" id="disc<?= $no ?>" value="<?= $data->percent ?>" />
+                                <input type=hidden name="harga_jual[]" id="harga_jual<?= $no ?>" value="<?= $harga_jual ?>" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            $(function() {
+                                <?php if ($data->sisa <= 0) { ?>
+                                    alert('Stok barang untuk <?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?> = 0 !');
+                                <?php } ?>
+                                $('#bc<?= $no ?>').live('keydown', function(e) {
+                                    if (e.keyCode==13) {
+                                        var bc = $('#bc<?= $no ?>').val();
+                                        $.ajax({
+                                            url: '<?= base_url('inventory/fillField') ?>',
+                                            data: 'do=getPenjualanField&barcode='+bc,
+                                            cache: false,
+                                            dataType: 'json',
+                                            success: function(data) {
+                                                if (data.nama != null) {
+                                                    var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
+                                                    if (data.isi != '1') { var isi = '@ '+data.isi; }
+                                                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
+                                                    if (data.satuan != null) { var satuan = data.satuan; }
+                                                    if (data.sediaan != null) { var sediaan = data.sediaan; }
+                                                    if (data.pabrik != null) { var pabrik = data.pabrik; }
+                                                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+                                                    if (data.id_obat == null) {
+                                                        $('#pb<?= $no ?>').val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                                    } else {
+                                                        if (data.generik == 'Non Generik') {
+                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                                        } else {
+                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                                        }
+
+                                                    }
+                                                    $('#id_pb<?= $no ?>').val(data.id);
+                                                    $('#kekuatan<?= $no ?>').html(data.kekuatan);
+                                                    $('#hj<?= $no ?>').html(numberToCurrency(Math.ceil(data.harga))); // text asli
+                                                    $('#harga_jual<?= $no ?>').val(data.harga);
+                                                    $('#disc<?= $no ?>').val(data.diskon);
+                                                    $('#diskon<?= $no ?>').html(data.diskon);
+                                                    subTotal(i);
+                                                    var jml = $('.tr_row').length;
+                                                    //alert(jml+' - '+i)
+                                                    if (jml - i == 1) {
+                                                        add(jml);
+                                                    }
+                                                    $('#jl<?= $no ?>').focus();
+                                                } else {
+                                                    alert('Barang yang diinputkan tidak ada !');
+                                                    $('#bc<?= $no ?>').val('');
+                                                    $('#pb<?= $no ?>').val('');
+                                                    $('#id_pb<?= $no ?>').val('');
+                                                    $('#kekuatan<?= $no ?>').html('');
+                                                    $('#hj<?= $no ?>').html(''); // text asli
+                                                    $('#harga_jual<?= $no ?>').val('');
+                                                    $('#disc<?= $no ?>').val('');
+                                                    $('#diskon<?= $no ?>').html('');
+                                                }
+                                            }
+                                        })
+                                        return false;
+                                    }
+                                });
+                                $('#pb<?= $no ?>').autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
+                                {
+                                    parse: function(data){
+                                        var parsed = [];
+                                        for (var i=0; i < data.length; i++) {
+                                            parsed[i] = {
+                                                data: data[i],
+                                                value: data[i].nama // nama field yang dicari
+                                            };
+                                        }
+                                        return parsed;
+                                    },
+                                    formatItem: function(data,i,max){
+                                        var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = '';
+                                        if (data.isi != '1') { var isi = '@ '+data.isi; }
+                                        if (data.satuan != null) { var satuan = data.satuan; }
+                                        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
+                                        if (data.sediaan != null) { var sediaan = data.sediaan; }
+                                        if (data.pabrik != null) { var pabrik = data.pabrik; }
+                                        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+                                        if (data.id_obat == null) {
+                                            var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                                        } else {
+                                            if (data.generik == 'Non Generik') {
+                                                var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                                            } else {
+                                                var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                                            }
+
+                                        }
+                                        return str;
+                                    },
+                                    width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+                                    dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+                                }).result(
+                                function(event,data,formated){
+                                    var sisa = data.sisa;
+                                    if (data.isi != '1') { var isi = '@ '+data.isi; }
+                                    if (data.satuan != null) { var satuan = data.satuan; }
+                                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
+                                    if (data.sediaan != null) { var sediaan = data.sediaan; }
+                                    if (data.pabrik != null) { var pabrik = data.pabrik; }
+                                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+                                    if (data.id_obat == null) {
+                                        $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                    } else {
+                                        if (data.generik == 'Non Generik') {
+                                            $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+                                        } else {
+                                            $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                        }
+
+                                    }
+                                    $('#id_pb<?= $no ?>').val(data.id);
+                                    $('#bc<?= $no ?>').val(data.barcode);
+                                });
+                            })
+                        </script>
+                    <?php 
+
+                    $no++;
+                }
                 } ?>
             </tbody>
         </table> 
     </div>
-    <?= form_submit('save', 'Simpan', 'id=save') ?>
+    <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
     <?= form_button(null, 'Delete', 'id=deletion') ?>
     <?= form_button('Reset', 'Reset', 'id=reset') ?>
     <?= form_button(null, 'Cetak Nota', 'id=print') ?>
     <?= form_close() ?>
 </div>
 <?php
-if (isset($_GET['id'])) { ?>
+if (isset($list_data)) { ?>
     <script>
-        subTotal();
-</script>
+        <?php if (count($list_data) == 0) { ?>
+            $('button[type=submit]').hide();
+        <?php } else { ?>
+            $('button[type=submit]').show();
+        <?php } ?>
+        $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
+        $('#total-diskon').html(<?= ceil($disc) ?>);
+        $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
+        var jumlah = $('.tr_row').length;
+        for (i = 1; i <= jumlah; i++) {
+            subTotal(i);
+        }
+    </script>
 <?php }
 ?>

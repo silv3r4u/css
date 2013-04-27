@@ -865,7 +865,7 @@ class Referensi extends CI_Controller {
     }
 
     function barang_obat() {
-        $data['satuan'] = $this->m_referensi->satuan_get_data(null);
+        $data['satuan'] = $this->m_referensi->satuans_get_data(null);
         $data['sediaan'] = $this->m_referensi->sediaan_get_data(null);
         $data['admr'] = $this->m_referensi->adm_r_get_data(null);
         $data['perundangan'] = $this->m_referensi->perundangan_get_data(null);
@@ -905,7 +905,8 @@ class Referensi extends CI_Controller {
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => ($this->input->post('kategori') == '') ? NULL : $this->input->post('kategori'),
-            'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik') == '') ? NULL : $this->input->post('id_pabrik')
+            'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik') == '') ? NULL : $this->input->post('id_pabrik'),
+            'hna' => currencyToNumber($this->input->post('hna_nb'))
         );
         $searchnull = 'null';
         switch ($mode) {
@@ -998,7 +999,8 @@ class Referensi extends CI_Controller {
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => '1',
-            'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat')
+            'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat'),
+            'hna' => currencyToNumber($this->input->post('hna'))
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',
@@ -1215,7 +1217,6 @@ class Referensi extends CI_Controller {
     function packing_barang() {
         $data['satuan'] = $this->m_referensi->satuan_get_data(null);
         $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
-        $data['kemasan'][''] = "Pilih Kemasan";
         $data['title'] = 'Kemasan Barang';
         $this->load->view('referensi/barang/packing', $data);
     }
@@ -1243,7 +1244,7 @@ class Referensi extends CI_Controller {
             'barang_id' => ($this->input->post('id_barang') == '') ? NULL : $this->input->post('id_barang'),
             'terbesar_satuan_id' => ($this->input->post('kemasan') == '') ? NULL : $this->input->post('kemasan'),
             'isi' => $this->input->post('isi'),
-            'terkecil_satuan_id' => ($this->input->post('satuan') == '') ? NULL : $this->input->post('satuan'),
+            'terkecil_satuan_id' => ($this->input->post('satuan') == '') ? NULL : $this->input->post('satuan')
         );
         $searchnull = 'null';
         switch ($mode) {
@@ -1440,6 +1441,7 @@ class Referensi extends CI_Controller {
             'telp' => $this->input->post('telp'),
             'darah_gol' => $this->input->post('gol_darah'),
             'lahir_tanggal' => date2mysql($this->input->post('tgl_lahir')),
+            'member' => $this->input->post('disc')
         );
 
         $dinamis = array(
@@ -1609,8 +1611,8 @@ class Referensi extends CI_Controller {
     }
 
     function harga_jual_load() {
-        $data['title'] = 'Administrasi Harga Jual';
-        $pb = $_GET['pb'];
+        $data['title'] = 'Administrasi Produk';
+        $pb = ($_GET['pb'] != 'undefined')?$_GET['pb']:'';
         $data['list_data'] = $this->m_referensi->harga_jual_load_data($pb)->result();
         $this->load->view('referensi/harga_jual/harga-jual', $data);
     }

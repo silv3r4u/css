@@ -8,6 +8,7 @@ class Pelayanan extends CI_Controller {
         $this->load->model('m_inventory');
         $this->load->model('m_referensi');
         $this->load->model('m_resep');
+        $this->load->helper('html');
         date_default_timezone_set('Asia/Jakarta');
     }
     

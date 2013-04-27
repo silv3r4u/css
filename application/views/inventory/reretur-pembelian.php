@@ -237,7 +237,7 @@ $(function() {
         
     <?= form_hidden('total', isset($kas)?rupiah($kas['penerimaan']):null, 'id=returan2') ?>
         <fieldset><legend>Summary</legend>
-            <div class="left_side">
+            <div class="one_side">
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>No. Retur:</label></label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>
         <label>Suplier:</label><span id="suplier" class="label"><?= isset($_GET['id'])?$data[0]['suplier']:null ?></span>

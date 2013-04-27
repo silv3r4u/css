@@ -51,13 +51,13 @@
     <h1 class="informasi"><?= $title ?></h1>
     <?php 
     foreach ($list_data as $key => $rows); 
-    $asuransi = $this->m_referensi->asuransi_kepersertaan_get_data($rows->pasien_penduduk_id);
+    //$asuransi = $this->m_referensi->asuransi_kepersertaan_get_data($rows->pasien_penduduk_id);
     $biaya_apoteker = $this->m_inventory->biaya_apoteker_by_penjualan($rows->transaksi_id)->row();
     ?>
     <div class="data-input">
         <?= form_hidden('total', null, 'id=total_tagihan') ?>
         <?= form_hidden('jasa_apotek', null, 'id=jasa_total_apotek') ?>
-        <div class="left_side">
+        <div class="left_side_detail">
             <label>No.</label><span id="transaksi_id" class="label"><?= $rows->transaksi_id ?></span>
             <label>No. Resep </label><span class="label"><?= isset($rows->resep_id)?$rows->resep_id:'-' ?></span>
             <label>Waktu </label><span class="label"><?= datetime($rows->waktu) ?></span>
@@ -66,15 +66,15 @@
             <?php } else { ?>
             <label>Pembeli</label><span id="pasien" class="label"><?= isset($rows->pembeli)?$rows->pembeli:'-' ?></span>
             <?php } ?>
-            <label>Produk Asuransi</label><span id="asuransi" class="label">
+<!--            <label>Produk Asuransi</label><span id="asuransi" class="label">
                 <?php
                 foreach ($asuransi as $asu) {
                     echo $asu->nama." - ".$asu->polis_no."<br />";
                 }?>
-            </span>
+            </span>-->
             <label>PPN (%) </label><span id="ppn" class="label"><?= $rows->ppn ?></span>
         </div>
-        <div class="right_side">
+        <div class="right_side_detail">
             <label>Biaya Apoteker</label><span id="jasa-apt" class="label"><?= isset($biaya_apoteker->jasa)?rupiah($biaya_apoteker->jasa):'-' ?></span>
             <label>Total Tagihan</label><span id="total-tagihan" class="label"><?= rupiah($rows->total) ?></span>
             <label>PPN</label><span id="ppn-hasil" class="label"><?= $rows->ppn ?></span>

@@ -18,10 +18,14 @@ foreach ($list_data as $key => $data) {
         <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
         <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
             <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" /></td>
+            <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" />
+        <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
         <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
         <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
+        <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
         <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
         <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
+        
         <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>
         <td class=aksi><a class=delete onclick="eliminate(this)"></a> 
             <input type=hidden name="disc[]" id="disc<?= $no ?>" value="<?= $data->percent ?>" />
@@ -41,21 +45,21 @@ foreach ($list_data as $key => $data) {
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
-                            if (data.nama !== null) {
+                            if (data.nama != null) {
                                 var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                                if (data.isi !== '1') { var isi = '@ '+data.isi; }
-                                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
-                                if (data.satuan !== null) { var satuan = data.satuan; }
-                                if (data.sediaan !== null) { var sediaan = data.sediaan; }
-                                if (data.pabrik !== null) { var pabrik = data.pabrik; }
-                                if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
-                                if (data.id_obat === null) {
+                                if (data.isi != '1') { var isi = '@ '+data.isi; }
+                                if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
+                                if (data.satuan != null) { var satuan = data.satuan; }
+                                if (data.sediaan != null) { var sediaan = data.sediaan; }
+                                if (data.pabrik != null) { var pabrik = data.pabrik; }
+                                if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+                                if (data.id_obat == null) {
                                     $('#pb<?= $no ?>').val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                 } else {
-                                    if (data.generik === 'Non Generik') {
-                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                    if (data.generik == 'Non Generik') {
+                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                     } else {
-                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                     }
                                     
                                 }
@@ -68,7 +72,7 @@ foreach ($list_data as $key => $data) {
                                 subTotal(i);
                                 var jml = $('.tr_row').length;
                                 //alert(jml+' - '+i)
-                                if (jml - i === 1) {
+                                if (jml - i == 1) {
                                     add(jml);
                                 }
                                 $('#jl<?= $no ?>').focus();
@@ -84,7 +88,7 @@ foreach ($list_data as $key => $data) {
                                 $('#diskon<?= $no ?>').html('');
                             }
                         }
-                    });
+                    })
                     return false;
                 }
             });
@@ -102,16 +106,16 @@ foreach ($list_data as $key => $data) {
                 },
                 formatItem: function(data,i,max){
                     var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = '';
-                    if (data.isi !== '1') { var isi = '@ '+data.isi; }
-                    if (data.satuan !== null) { var satuan = data.satuan; }
-                    if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
-                    if (data.sediaan !== null) { var sediaan = data.sediaan; }
-                    if (data.pabrik !== null) { var pabrik = data.pabrik; }
-                    if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
-                    if (data.id_obat === null) {
+                    if (data.isi != '1') { var isi = '@ '+data.isi; }
+                    if (data.satuan != null) { var satuan = data.satuan; }
+                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
+                    if (data.sediaan != null) { var sediaan = data.sediaan; }
+                    if (data.pabrik != null) { var pabrik = data.pabrik; }
+                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
+                    if (data.id_obat == null) {
                         var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                     } else {
-                        if (data.generik === 'Non Generik') {
+                        if (data.generik == 'Non Generik') {
                             var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                         } else {
                             var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';

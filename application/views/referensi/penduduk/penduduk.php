@@ -84,6 +84,10 @@
                             '<td width="25%">Jabatan:</td>'+
                             '<td><select name=jabatan id=jabatan><?php foreach ($jabatan as $rowg) { echo '<option value="'.$rowg.'">'.$rowg.'</option>'; } ?></select></td>'+
                         '</tr>'+
+                        '<tr>'+
+                            '<td>Diskon Member (%):</td>'+
+                            '<td><input type=text name=disc id=disc size=10 /></td>'+
+                        '</tr>'+
                     '</table></form>'+
                     '</div>';
             
@@ -142,7 +146,7 @@
             });
             $('#form_penduduk').dialog({
                 autoOpen: true,
-                height: 550,
+                height: 580,
                 width: 600,
                 modal: true,
                 title: 'Form Data Penduduk',
@@ -154,8 +158,8 @@
                         //$('#formpenduduk').submit();
                         save();
                     },
-                    "Reset": function() {
-                        reset_all();
+                    "Batal": function() {
+                        $(this).dialog().remove();
                     }
                 }
             });
@@ -231,7 +235,23 @@
                 $('#form_cari_pdd').dialog("open");
                 reset_all();
             });
-        
+            $("#kategori").change(function() {
+                var Url = '<?= base_url('referensi/manage_penduduk') ?>/search/';            
+                if(!request) {
+                    request =  $.ajax({
+                        type : 'POST',
+                        url: Url+$('.noblock').html(),               
+                        data: $(this).serialize(),
+                        cache: false,
+                        success: function(data) {
+                            $('#penduduk_list').html(data);                           
+                            $('#form_cari_pdd').dialog('close');
+                            request = null;                            
+                        }
+                    });
+                }
+                return false;
+            })
             $('#formcaripenduduk').submit(function(){
                 var Url = '<?= base_url('referensi/manage_penduduk') ?>/search/';            
                 if(!request) {
@@ -394,6 +414,7 @@
             $('#nosip').val(data[20]);
             $('#nosik').val(data[21]);
             $('#jabatan').val(data[22]);
+            $('#disc').val(data[23]);
             $( "#tab" ).tabs({selected: 0 });
             
         }
@@ -407,11 +428,12 @@
         <?= form_button('', 'Tambah Data', 'id=addpenduduk') ?>
         <?= form_button('', 'Tampilkan', 'class=resetan id=showAll') ?>
         <?= form_button('', 'Cari', 'id=bt_cari class=cari') ?>
-        <!-- end of form -->
+        <?= form_dropdown('kategori', array('' => 'Semua Data...', 'pasien' => 'Pasien', 'dokter' => 'Dokter', 'karyawan' => 'Karyawan'), isset($_POST['kategori'])?$_POST['kategori']:NULL, 'id=kategori style="padding: 3px; border: 1px solid #ccc"') ?>
+        
         <div id="konfirmasi" style="display: none;">
             <div id="text_konfirmasi"></div>
         </div>
-
+        
         <div id="penduduk_list"></div>
 
         <div id="form_cari_pdd" style="display: none;position: relative; background: #fff; padding: 10px;">

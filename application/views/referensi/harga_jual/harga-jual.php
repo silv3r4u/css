@@ -58,7 +58,7 @@
                             $('#result_load').dialog({
                                 autoOpen: true,
                                 modal: true,
-                                width: 700,
+                                width: 750,
                                 title: 'Update Harga Jual',
                                 height: 400,
                                 close: function() {
@@ -116,30 +116,28 @@
         <table class="sortable form-inputan" width="100%" id="table">
             <thead>
             <tr>
-                <th class="nosort"><h3>#</h3></th>
-                <th class="nosort"><h3>Tanggal</h3></th>
-                <th><h3>Packing Barang</h3></th>
-                <th class="sortright"><h3>HNA (Rp.)</h3></th>
+                <th class="nosort" width="10%"><h3>#</h3></th>
+                <th width="80%"><h3>Nama Barang</h3></th>
+                <!--<th class="sortright"><h3>HNA (Rp.)</h3></th>
                 <th class="nosort"><h3>Margin (%)</h3></th>
                 <th class="nosort"><h3>Diskon (%)</h3></th>
-                <th class="sortright"><h3>Harga Jual (Rp.)</h3></th>
-                <th class="nosort"><h3>Stok Minimal</h3></th>
+                <th class="sortright"><h3>Harga Jual (Rp.)</h3></th>-->
+                <th class="nosort" width="10%"><h3>Stok Minimal</h3></th>
             </tr>
             </thead>
             <tbody>
         <?php
         $jumlah = 0;
         foreach ($list_data as $key => $data) {
-        $harga_jual = ($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
+        //$harga_jual = ($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
         ?>
             <tr id="listdata<?= $key ?>" class="tr_row <?= ($key%2==0)?'odd':'even' ?>">
-                <td align="center"><?= form_checkbox('pb[]', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'')  ?></td>
-                <td align="center"><?= datefmysql($data->tanggal) ?></td>
-                <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terbesar ?></td>
-                <td align="right"><?= inttocur($data->hna) ?></td>
+                <td align="center"><?= form_checkbox('pb[]', $data->id, FALSE, 'class=check id=check'.$key.'')  ?></td>
+                <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->pabrik ?></td>
+                <!--<td align="right"><?= inttocur($data->hna) ?></td>
                 <td align="center"><?= $data->margin ?></td>
                 <td align="center"><?= $data->diskon ?></td>
-                <td align="right"><?= inttocur($harga_jual) ?></td>
+                <td align="right"><?= inttocur($harga_jual) ?></td>-->
                 <td align="center"><?= $data->stok_minimal ?></td>
             </tr>
         <?php 

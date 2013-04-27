@@ -14,7 +14,7 @@ class M_user extends CI_Model {
     function module_load_data($id=null) {
         $q = null;
         if ($id != null) {
-            $q.="where pp.penduduk_id = '$id' ";
+            $q.="where pp.penduduk_id = '$id' and m.show_desktop = '1'";
         }
         $sql = "select m.* from penduduk_privileges pp
             join privileges p on (pp.privileges_id = p.id)

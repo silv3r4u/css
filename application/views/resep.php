@@ -8,8 +8,32 @@ function cetakEtiket(val) {
     $(function() {
         $('.cetaketiket').click(function() {
             window.open('<?= base_url('cetak/transaksi/etiket') ?>?id=&no_r='+val,'mywindow','location=1,status=1,scrollbars=1,width=430px,height=300px');
-        })
-    })
+        });
+    });
+}
+
+function konfirmasi() {
+    var str = '<div id=konfirmasi_lanjut>'+
+            '<p><span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>'+
+            'Proses peresepan berhasil dilakukan, <br/>Apakah anda akan melanjutkann ke proses penjualan ?</p></div>';
+    $('#loaddata').append(str);
+    $('#konfirmasi_lanjut').dialog({
+        autoOpen: true,
+        title :'Konfirmasi',
+        height: 200,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Ya": function() {
+                var id_resep = $('#id_receipt').html();
+                $('#loaddata').load('<?= base_url('inventory/penjualan') ?>/'+id_resep);
+                $(this).dialog().remove();
+            },
+            "Tidak": function() {
+                $(this).dialog().remove();
+            }
+        }
+    });
 }
 $(function() {
     $('#copyresep, #print').hide();
@@ -100,7 +124,7 @@ $(function() {
                     $('button[type=submit], #addnewrow').hide();
                     $('#id_receipt').html(data.id_resep);
                     $('.etiket,#copyresep, #print').show();
-                    alert_tambah();
+                    konfirmasi();
                 } else {
 
                 }
@@ -341,13 +365,20 @@ function add(i) {
     }).result(
     function(event,data,formated){
         if (data.kekuatan == null) {
-            alert('Kekuatan untuk Produk yang dipilih tidak boleh null, silahkan ubah pada bagian master data obat');
-            $(this).val('');
-            $('#id_pb'+i+''+j).val('');
-            $('#bc'+i+''+j).val('');
-            $('#kekuatan'+i+''+j).html('');
-            $('#dr'+i+''+j).val('');
-            return false;
+            var ok=confirm('Kekuatan untuk Kemasan Barang yang dipilih = NULL, Anda yakin akan menambahkan dalam form resep?');
+            if (!ok) {
+                $(this).val('');
+                $('#id_pb'+i+''+j).val('');
+                $('#bc'+i+''+j).val('');
+                $('#kekuatan'+i+''+j).html('');
+                $('#dr'+i+''+j).val('');
+                return false;
+            } else {
+                $('#kekuatan'+i+''+j).html('1');
+                $('#jmlpakai'+i+''+j).html($('#jt'+i).val());
+                $('#dr'+i+''+j).val('1');
+                $('#jp'+i+''+j).val($('#jt'+i).val());
+            }
         }
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
         if (data.isi != '1') { var isi = '@ '+data.isi; }

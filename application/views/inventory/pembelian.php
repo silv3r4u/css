@@ -21,6 +21,21 @@ $(function() {
             return false;
         }
     });
+    $('#jenis').change(function() {
+        var nilai = $('#jenis').val();
+        if (nilai === 'konsinyasi') {
+            $('#label_sp,#nopemesanan,#tgl_tempo,#tempo').hide();
+        }
+        if (nilai === 'cash') {
+            $('#tgl_tempo,#tempo').show();
+            $('#tempo').val('<?= date("d/m/Y") ?>');
+            $('#label_sp,#nopemesanan').hide();
+        }
+        if (nilai === 'tempo') {
+            $('#tempo').val('');
+            $('#label_sp,#nopemesanan,#tgl_tempo,#tempo').show();
+        }
+    });
     $('#form_pembelian').submit(function() {
         var jumlah = $('.tr_row').length;
         for (i = 0; i <= jumlah; i++) {
@@ -136,20 +151,21 @@ $(function() {
             for (var i=0; i < data.length; i++) {
                 parsed[i] = {
                     data: data[i],
-                    value: data[i].nama // nama field yang dicari
+                    value: data[i].dokumen_no // nama field yang dicari
                 };
             }
             return parsed;
         },
         formatItem: function(data,i,max){
-            var str = '<div class=result>'+data.id+' - '+data.pabrik+'<br/>Sales: '+data.sales+'</div>';
+            var str = '<div class=result>'+data.dokumen_no+'<br/>Suplier: '+data.pabrik+'</div>';
             return str;
         },
         width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
-        $(this).val(data.id);
+        $(this).val(data.dokumen_no);
+        $('input[name=no_pemesanan]').val(data.id);
         $('#suplier').val(data.pabrik);
         $('input[name=id_suplier]').val(data.suplier_relasi_instansi_id);
         $('#sales').val(data.sales);
@@ -162,8 +178,7 @@ $(function() {
             success: function(msg) {
                 $('.form-inputan tbody').html(msg);
             }
-        })
-        //
+        });
     });
     
     $('#suplier').autocomplete("<?= base_url('inv_autocomplete/load_data_instansi_relasi/supplier') ?>",
@@ -219,16 +234,18 @@ function eliminate(el) {
     var jumlah = $('.tr_row').length-1;
     for (i = 0; i <= jumlah; i++) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').html((i+1));
-        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.jml').attr('id','jml'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.harga').attr('id','harga'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.diskon_pr').attr('id','diskon_pr'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.diskon_rp').attr('id','diskon_rp'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(8)').children('input[name=bonus]').attr('id','check'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(8)').children('input[name=bonus]').attr('class',i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.batch').attr('id','batch'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.pb').attr('id','pb'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.id_pb').attr('id','id_pb'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').children('.ed').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.jml').attr('id','jml'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.harga').attr('id','harga'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(7)').children('.isi').attr('id','isi'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(8)').children('.diskon_pr').attr('id','diskon_pr'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(9)').children('.diskon_rp').attr('id','diskon_rp'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(10)').attr('id','subtotal'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(11)').children('input[name=bonus]').attr('id','check'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(12)').children('input[name=bonus]').attr('class',i);
     }
     hitungDetail();
 }
@@ -237,11 +254,11 @@ function bonusthis() {
     var i = $(this).attr('class');
     if ($('#check'+i).is(':checked')) {
         $('#diskon_pr'+i).attr('value','100');
-        jmlSubTotal(i)
+        jmlSubTotal(i);
         hitungDetail();
     } else {
         $('#diskon_pr'+i).attr('value','0');
-        jmlSubTotal(i)
+        jmlSubTotal(i);
         hitungDetail();
     }
 }
@@ -249,11 +266,14 @@ function bonusthis() {
 function add(i) {
      str = '<tr class=tr_row>'+
         '<td align=center>'+(i+1)+'</td>'+
+        '<td><input type=text name=batch[] id=batch'+i+' size=10 class=batch />'+
         '<td><input type=text name=pb[] id=pb'+i+' size=50 class=pb />'+
         '<input type=hidden name=id_pb[] id=id_pb'+i+' class=pb /></td>'+
         '<td><input type=text name=ed[] id=ed'+i+' size=8 class=ed /></td>'+
         '<td><input type=text name=jml[] id=jml'+i+' size=2 class=jml onblur=jmlSubTotal('+i+') /></td>'+
         '<td><input type=text name=harga[] id=harga'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=harga /></td>'+
+        '<td align="center"><select style="border: 1px solid #ccc; width=100%;"></select></td>'+
+        '<td><input type=text name=isi[] id=isi'+i+' size=2 class=isi /></td>'+
         '<td><input type=text name=diskon_pr[] id=diskon_pr'+i+' size=2 class=diskon_pr onkeyup=jmlSubTotal('+i+') onblur=hitungDetail() class=diskon_pr maxlength=3 min=0 max=100 /></td>'+
         '<td><input type=text name=diskon_rp[] id=diskon_rp'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=diskon_rp />'+
         '<input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
@@ -340,10 +360,12 @@ $(function() {
             $('#nodoc').focus();
             return false;
         }
-        if ($('#nopemesanan').val() === '') {
-            alert('Nomor pemesanan tidak boleh kosong !');
-            $('#nopemesanan').focus();
-            return false;
+        if ($('#jenis').val() === 'tempo') {
+            if ($('#nopemesanan').val() === '') {
+                alert('Nomor pemesanan tidak boleh kosong !');
+                $('#nopemesanan').focus();
+                return false;
+            }
         }
         if ($('#ppn').val() === '') {
             alert('PPN tidak boleh kosong !');
@@ -356,10 +378,12 @@ $(function() {
             $('#materai').focus();
             return false;
         }
-        if ($('#tempo').val() === '') {
-            alert('Jatuh tempo tidak boleh kosong !');
-            $('#tempo').focus();
-            return false;
+        if ($('#jenis').val() === 'tempo') {
+            if ($('#tempo').val() === '') {
+                alert('Jatuh tempo tidak boleh kosong !');
+                $('#tempo').focus();
+                return false;
+            }
         }
     })
 });
@@ -407,13 +431,13 @@ function hitungDetail() {
         var ttl_ppn = Math.ceil(xdiskon*(ppn/100));
         var tagihan = xdiskon+ttl_ppn+materai;
         
-        $('#total-harga').html(numberToCurrency(xtotal));
-        $('#total-diskon').html(numberToCurrency(xtotal-xdiskon));
-        $('#total-pembelian').html(numberToCurrency(xdiskon));
-        $('#total-ppn').html(numberToCurrency(ttl_ppn));
-        $('#materai2').html(numberToCurrency(materai));
-        $('#total-tagihan').html(numberToCurrency(tagihan));
-    
+        $('#total-harga').html(numberToCurrency(Math.ceil(xtotal)));
+        $('#total-diskon').html(numberToCurrency(Math.ceil(xtotal-xdiskon)));
+        $('#total-pembelian').html(numberToCurrency(Math.ceil(xdiskon)));
+        $('#total-ppn').html(numberToCurrency(Math.ceil(ttl_ppn)));
+        $('#materai2').html(numberToCurrency(Math.ceil(materai)));
+        $('#total-tagihan').html(numberToCurrency(Math.ceil(tagihan)));
+        $('input[name=total_tagihan]').val(Math.ceil(tagihan));
 }
 
 </script>
@@ -422,11 +446,14 @@ function hitungDetail() {
     <h1><?= $title ?></h1>
     <?php if (isset($list_data)) { foreach ($list_data as $rows); } ?>
     <?= form_open('inventory/pembelian_save', 'id=form_pembelian') ?>
+    <?= form_hidden('total_tagihan') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="left_side">
+            <div class="left_side" style="min-height: 340px;">
             <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
-            <label>No. SP:</label><?= form_input('no_pemesanan', isset($rows->id)?$rows->id:null, 'id=nopemesanan size=20') ?>
+            <label>Jenis Pembelian</label><?= form_dropdown('jenis', array('tempo' => 'Tempo', 'cash' => 'Cash', 'konsinyasi' => 'Konsinyasi'), NULL, 'id=jenis') ?>
+            <label id="label_sp">No. SP:</label><?= form_input('no_dokumen', isset($rows->id)?$rows->id:null, 'id=nopemesanan size=20') ?>
+            <?= form_hidden('no_pemesanan') ?>
             <label>No. Faktur:</label><?= form_input('nodoc', null, 'size=20 id=nodoc') ?>
             <label>Tanggal:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
             <label>Supplier:</label><?= form_input(null, isset($rows->id)?$rows->suplier:null, 'id=suplier') ?> <?= form_hidden('id_suplier', isset($rows->id)?$rows->suplier_relasi_instansi_id:null) ?>
@@ -435,12 +462,12 @@ function hitungDetail() {
                 <span class="label"><?= form_radio('ttd', 'Tidak', FALSE, null) ?> Tidak</span>
             <label>PPN (%):</label><?= form_input('ppn', '0', 'id=ppn min=0 max=100 onblur=hitungDetail() ') ?>
             <label>Materai (Rp.):</label><?= form_input('materai', '0', 'id=materai size=10 onkeyup=FormNum(this) onblur=hitungDetail() ') ?>
-            <label>Tgl Jatuh Tempo:</label><?= form_input('tempo', null, 'id=tempo class=tanggals size=10') ?>
+            <label id="tgl_tempo">Tgl Jatuh Tempo:</label><?= form_input('tempo', null, 'id=tempo class=tanggals size=10') ?>
 
             <label>Keterangan:</label><?= form_textarea('keterangan',null, null) ?>
             <label></label><?= form_button('add','Tambah Baris', 'id=addnewrow') ?>
             </div>
-            <div class="right_side">
+            <div class="right_side" style="min-height: 340px;">
                     <label>Total Harga:</label><span class="label" id="total-harga"></span>
                     <label>Total Diskon:</label><span class="label" id="total-diskon"></span>
                     <label>Total Pembelian:</label><span class="label" id="total-pembelian"></span>
@@ -456,10 +483,13 @@ function hitungDetail() {
             <thead>
             <tr>
                 <th width="5%">No</th>
+                <th width="8%">No. Batch</th>
                 <th width="35%">Packing Barang</th>
                 <th width="8%">ED</th>
                 <th width="5%">Jumlah</th>
                 <th width="8%">Harga @</th>
+                <th width="5%">Kemasan</th>
+                <th width="5%">Isi</th>
                 <th width="5%">Disc(%)</th>
                 <th width="7%">Disc(Rp.)</th>
                 <th width="8%">SubTotal</th>
@@ -477,6 +507,13 @@ function hitungDetail() {
                     </td>
                     <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($data->ed) ?>" class=ed /></td>
                     <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $data->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
+                    <td><input type=text name=isi[] id="isi<?= $key ?>" size=2 value="" class="isi" /></td>
+                    <td><select name="kemasan[]" id="kemasan<?= $key ?>">
+                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($data->barang_id); 
+                        foreach ($array_kemasan as $rows) { ?>
+                            <option value="<?= $rows->id ?>"><?= $rows->nama ?></option>
+                        <?php } ?>
+                    </select></td>
                     <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
                     <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $data->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
                     <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $data->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
