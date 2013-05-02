@@ -10,8 +10,8 @@
                 <td align="center"><?= $prov->id ?></td>
                 <td><?= $prov->nama ?></td>
                 <td class="aksi">
-                    <a class="edit" onclick="edit_unit(<?= $prov->id ?>,'<?= $prov->nama ?>')"></a>
-                    <a class="delete" onclick="delete_unit(<?= $prov->id ?>)"></a>
+                    <span class="edit" onclick="edit_unit(<?= $prov->id ?>,'<?= $prov->nama ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_unit(<?= $prov->id ?>)"><?= img('assets/images/icons/delete.png') ?></span>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>

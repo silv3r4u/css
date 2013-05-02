@@ -50,8 +50,8 @@ h2 { font-size: 14px; display: block; }
 /*footer*/
 .footer { background: #66cc00; width:490px; right:0; margin-top: 3%; bottom: 0; height: 10px;  position: fixed; font-size: 9px; text-align: right; padding: 5px; text-transform: uppercase; }
 .alert .list { display: block; padding-left: 10px; }
-.alertyellow { background: yellow; }
-.alertred { background: red; color: #fff; }
+.alertyellow { background: yellow; height: 25px; }
+.alertred { background: red; color: #fff; height: 25px;}
 /*control panel*/
 .menu-master {
     color: #fff;

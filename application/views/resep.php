@@ -59,7 +59,7 @@ $(function() {
         icons: {
             primary: 'ui-icon-print'
         }
-    })
+    });
     $('#print').click(function() {
         var id = $('#id_receipt').html();
         $.get('<?= base_url('pelayanan/kitir_cetak_nota') ?>/'+id, function(data) {
@@ -69,33 +69,33 @@ $(function() {
                 modal: true,
                 width: 700,
                 height: 400
-            })
+            });
         });
-    })
+    });
     $('#form_resep').submit(function() {
-        if ($('input[name=id_dokter]').val() == '') {
+        if ($('input[name=nama_dokter]').val() === '') {
             alert('Nama dokter tidak boleh kosong !');
             $('#dokter').focus();
             return false;
         }
-        if ($('input[name=id_pasien]').val() == '') {
+        if ($('input[name=nama_pasien]').val() === '') {
             alert('Nama pasien tidak boleh kosong !');
             $('#pasien').focus();
             return false;
         }
         var jumlah = $('.tr_row').length-1;
         for (i = 0; i <= jumlah; i++) {
-            if ($('#jr'+i).val() == '') {
+            if ($('#jr'+i).val() === '') {
                 alert('Jumlah R tidak boleh kosong !');
                 $('#jr'+i).focus();
                 return false;
             }
-            if ($('#jt'+i).val() == '') {
+            if ($('#jt'+i).val() === '') {
                 alert('Jumlah tebus tidak boleh kosong !');
                 $('#jt'+i).focus();
                 return false;
             }
-            if ($('#ap'+i).val() == '') {
+            if ($('#ap'+i).val() === '') {
                 alert('Aturan pakai tidak boleh kosong !');
                 $('#ap'+i).focus();
                 return false;
@@ -119,7 +119,7 @@ $(function() {
             dataType: 'json',
             data: $(this).serialize(),
             success: function(data) {
-                if (data.status == true) {
+                if (data.status === true) {
                     $('input[type=text], select, input[type=radio], textarea').attr('disabled','disabled');
                     $('button[type=submit], #addnewrow').hide();
                     $('#id_receipt').html(data.id_resep);
@@ -129,19 +129,19 @@ $(function() {
 
                 }
             }
-        })
+        });
         return false;
-    })
+    });
     $('#cetakcsr').click(function() {
         var awal = $('#awal').val();
         var akhir= $('#akhir').val();
         var hambatan = $('#hambatan').val();
         window.open('<?= base_url('cetak/transaksi/statistika-resep') ?>?awal='+awal+'&akhir='+akhir+'&hambatan='+hambatan,'mywindow','location=1,status=1,scrollbars=1,width=730px,height=500px');
-    })
+    });
     $('#copyresep').click(function() {
-        var id = $('#id_receipt').html()
+        var id = $('#id_receipt').html();
         location.href='<?= base_url('laporan/salin_resep') ?>/'+id;
-    })
+    });
     
     $('#csr').click(function() {
         $('.csr').fadeIn('fast',function() {
@@ -149,13 +149,13 @@ $(function() {
             $('#tanggals').datepicker({
                 changeYear: true,
                 changeMonth: true
-            })
+            });
         });
         $('#hambatan').focus();
-    })
+    });
     $('#closehambatan').click(function() {
         $('.csr').fadeOut('fast');
-    })
+    });
     
     $('#dokter').autocomplete("<?= base_url('inv_autocomplete/load_data_penduduk_dokter') ?>",
     {
@@ -167,6 +167,7 @@ $(function() {
                     value: data[i].nama // nama field yang dicari
                 };
             }
+            $('input[name=id_dokter]').val('');
             return parsed;
         },
         formatItem: function(data,i,max){
@@ -190,6 +191,7 @@ $(function() {
                     value: data[i].nama // nama field yang dicari
                 };
             }
+            $('input[name=id_pasien]').val('');
             return parsed;
         },
         formatItem: function(data,i,max){
@@ -301,7 +303,7 @@ function addnoresep(i) {
                     '<label>Jumlah Tebus:</label><input type=text name=jt[] id=jt'+i+' class=jt onkeyup=Angka(this) size=20 />'+
                     '<label>Aturan Pakai:</label><input type=text name=ap[] id=ap'+i+' class=ap size=20 />'+
                     '<label>Iterasi:</label><input type=text name=it[] id=it'+i+' class=it size=10 value="0" onkeyup=Angka(this) />'+
-                    '<label>Biaya Apoteker:</label><select onchange="subTotal()" name=ja[] id=ja'+i+'><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'">'.$value->layanan.' '.$value->bobot.'</option>'; } ?></select>'+
+                    '<label>Biaya Apoteker:</label><select onchange="subTotal()" name=ja[] id=ja'+i+'><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'">'.$value->nama.' '.$value->bobot.' Rp. '.$value->nominal.'</option>'; } ?></select>'+
                     '<label></label><input type=button value="Tambah Produk" onclick=add('+i+') id="addition'+i+'" />'+
                     '<input type=button value="Hapus R/" id="deletion'+i+'" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket'+i+'" style="display: none" class="etiket" onclick=cetak_etiket('+(i+1)+') />'+
                 '</div>'+
@@ -329,7 +331,7 @@ function add(i) {
         
     $('#resepno'+i).append(str);
     $('.pb').watermark('Nama Produk');
-    $('#pb'+i+''+j).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
+    $('#pb'+i+''+j).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_obat') ?>",
     {
         parse: function(data){
             var parsed = [];
@@ -343,19 +345,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
                 var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                 }
             }
             return str;
@@ -364,7 +366,7 @@ function add(i) {
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
-        if (data.kekuatan == null) {
+        if (data.kekuatan === null) {
             var ok=confirm('Kekuatan untuk Kemasan Barang yang dipilih = NULL, Anda yakin akan menambahkan dalam form resep?');
             if (!ok) {
                 $(this).val('');
@@ -381,19 +383,19 @@ function add(i) {
             }
         }
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
         $('#id_pb'+i+''+j).val(data.id);
@@ -459,21 +461,21 @@ $(function() {
     $('#pmr_open').click(function() {
         var pasien = $('#id_pasien').val();
         var nama   = $('#pasien').val();
-        if (pasien == '') {
+        if (pasien === '') {
             alert('Silahkan isikan data pasien terlebih dahulu!');
             $('#pasien').focus();
         } else {
             location.href='<?= base_url('cetak/transaksi/pmr') ?>?id_pasien='+pasien+'&nama='+nama;
         }
-    })
+    });
     $('#id_penduduk').blur(function() {
-        if ($('#id_penduduk').val() != '') {
+        if ($('#id_penduduk').val() !== '') {
             var id = $('#id_penduduk').val();
             $.ajax({
                 url: '<?= base_url('inv_autocomplete/load_data_penduduk_pasien') ?>/'+id,
                 dataType: 'json',
                 success: function(val) {
-                    if (val.id == null) {
+                    if (val.id === null) {
                         $('#id_penduduk, #pasien, #id_pasien').val('');
                         $('#id_penduduk').focus();
                     } else {
@@ -482,10 +484,10 @@ $(function() {
                     }
 
                 }
-            })
+            });
         }
-    })
-})
+    });
+});
 </script>
     <h1><?= $title ?></h1>
     <?= form_open('pelayanan/resep', 'id=form_resep') ?>
@@ -496,8 +498,8 @@ $(function() {
     <fieldset><legend>Summary</legend>
         <label>No.:</label><span class="label" id="id_receipt"><?= isset($id_resep)?$id_resep:get_last_id('resep', 'id') ?></span>
         <label>Waktu:</label><?= form_input('tanggal', isset($id_resep)?datetimefmysql($rows->waktu,'true'):date("d/m/Y H:i:s"), 'id=tanggal') ?>
-        <label>Nama Dokter:</label><?= form_input('', isset($id_resep)?$rows->dokter:NULL, 'id=dokter size=40') ?> <?= form_hidden('id_dokter', isset($id_resep)?$rows->dokter_penduduk_id:NULL) ?>
-        <label>Nama Pasien: </label><?= form_input('', isset($id_resep)?$rows->pasien:NULL, 'id=pasien size=40') ?> <?= form_hidden('id_pasien', isset($id_resep)?$rows->pasien_penduduk_id:NULL) ?>
+        <label>Nama Dokter:</label><?= form_input('nama_dokter', isset($id_resep)?$rows->dokter:NULL, 'id=dokter size=40') ?> <?= form_hidden('id_dokter', isset($id_resep)?$rows->dokter_penduduk_id:NULL) ?>
+        <label>Nama Pasien: </label><?= form_input('nama_pasien', isset($id_resep)?$rows->pasien:NULL, 'id=pasien size=40') ?> <?= form_hidden('id_pasien', isset($id_resep)?$rows->pasien_penduduk_id:NULL) ?>
         <label>Absah:</label><span class="label"><?= form_radio('absah', 'Sah', (isset($id_resep) and $rows->sah == 'Sah')?TRUE:FALSE) ?>  Sah </span> <span class="label"><?= form_radio('absah', 'Tidak Sah', (isset($id_resep) and $rows->sah == 'Tidak Sah')?TRUE:FALSE) ?>  Tidak Sah</span>
         <label>Keterangan:</label><?= form_textarea('ket', isset($id_resep)?$rows->keterangan:NULL) ?> </td> </tr>
         
@@ -513,14 +515,14 @@ $(function() {
                     foreach ($list_data as $key => $data) { ?>
                     <div style="display: inline-block; width: 100%" class=tr_row>
                         <div class="masterresep" style="display: inline-block; width: 100%; border-bottom: 1px solid #f1f1f1; padding: 10px 0; ">
-                                <label>No. R/: </label><input style="border: none;" type=text name=nr[] id=nr<?= $key ?> value='<?= $noo ?>' class=nr size=20 onkeyup=Angka(this) readonly maxlength=2 />
-                                <label>Jumlah Permintaan:</label><input type=text name=jr[] value="<?= $data->resep_r_jumlah ?>" id=jr<?= $key ?> class=jr size=20 onkeyup=Angka(this) />
-                                <label>Jumlah Tebus:</label><input type=text name=jt[] value="<?= $data->tebus_r_jumlah ?>" id=jt<?= $key ?> class=jt onkeyup=Angka(this) size=20 />
+                                <label>No. R/: </label><input style="border: none;" type=text name=nr[] id=nr<?= $key ?> value='<?= $noo ?>' class=nr size=20 onkeyup=Angka(this); readonly maxlength=2 />
+                                <label>Jumlah Permintaan:</label><input type=text name=jr[] value="<?= $data->resep_r_jumlah ?>" id=jr<?= $key ?> class=jr size=20 onkeyup=Angka(this); />
+                                <label>Jumlah Tebus:</label><input type=text name=jt[] value="<?= $data->tebus_r_jumlah ?>" id=jt<?= $key ?> class=jt onkeyup=Angka(this); size=20 />
                                 <label>Aturan Pakai:</label><input type=text name=ap[] value="<?= $data->pakai_aturan ?>" id=ap<?= $key ?> class=ap size=20 />
-                                <label>Iterasi:</label><input type=text name=it[] value="<?= $data->iter ?>" id=it<?= $key ?> class=it size=10 value="0" onkeyup=Angka(this) />
-                                <label>Biaya Apoteker</label><select onchange="subTotal()" name=ja[] id=ja<?= $key ?>><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option '; if ($value->id == $data->tarif_id) echo 'selected'; echo ' value="'.$value->id.'-'.$value->nominal.'">'.$value->layanan.' '.$value->bobot.' '.$value->kelas.'</option>'; } ?></select>
-                                <label></label><input type=button value="Tambah Produk" onclick=add(<?= $key ?>) id="addition<?= $key ?>" />
-                                <input type=button value="Hapus R/" id="deletion<?= $key ?>" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket<?= $noo ?>" style="display: none" class="etiket" onclick="cetak_etiket(<?= $noo ?>)" />
+                                <label>Iterasi:</label><input type=text name=it[] value="<?= $data->iter ?>" id=it<?= $key ?> class=it size=10 value="0" onkeyup=Angka(this); />
+                                <label>Biaya Apoteker</label><select onchange="subTotal();" name=ja[] id=ja<?= $key ?>><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option '; if ($value->id == $data->tarif_id) echo 'selected'; echo ' value="'.$value->id.'-'.$value->nominal.'">'.$value->nama.' '.$value->bobot.' Rp. '.$value->nominal.'</option>'; } ?></select>
+                                <label></label><input type=button value="Tambah Produk" onclick=add(<?= $key ?>); id="addition<?= $key ?>" />
+                                <input type=button value="Hapus R/" id="deletion<?= $key ?>" onclick=eliminate(this); /> <input type=button value="Etiket" id="etiket<?= $noo ?>" style="display: none" class="etiket" onclick="cetak_etiket(<?= $noo ?>);" />
                         </div>
                         <div id=resepno<?= $key ?> style="display: inline-block;width: 100%"></div>
                     </div>

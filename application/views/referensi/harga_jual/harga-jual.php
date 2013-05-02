@@ -105,6 +105,11 @@
                 $('#form-update').fadeIn('fast').draggable();
             });
         });
+        function paging() {
+            var pb = '<?= isset($_GET['pb'])?$_GET['pb']:NULL ?>';
+            var limit = '<?= isset($_GET['limit'])?$_GET['limit']:NULL ?>';
+            $('#loaddata').load('<?= base_url('referensi/harga_jual_load') ?>/'+limit+'/'+pb);
+        }
     </script>
     <h1><?= $title ?></h1>
     <div id="result_load"></div>
@@ -149,6 +154,8 @@
 
         <?= form_submit('submit', 'Pilih', 'id=update style="margin-left:0"') ?>
         <?= form_close() ?>
+        
         </div>
+        
 
 </div>

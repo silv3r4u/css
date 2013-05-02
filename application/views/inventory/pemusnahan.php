@@ -1,6 +1,7 @@
 <?php $this->load->view('message'); ?>
 <script type="text/javascript">
 function loading() {
+    $('#loaddata').empty();
     var url = '<?= base_url('inventory/pemusnahan') ?>';
     $('#loaddata').load(url);
 }

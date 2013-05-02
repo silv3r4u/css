@@ -174,7 +174,7 @@ $(function() {
     });
 })
 $(function() {
-    i = 1;
+    i = 0;
     <?php
     if (!isset($_GET['id']) or (isset($_GET['id']) and !isset($_GET['do']))) { ?>
     for(x = 0; x <= i; x++) {
@@ -329,10 +329,6 @@ function add(i) {
                 $('#smax'+i).html(smax);
             }
         });
-        var jml = $('.tr_row').length;
-        if (jml - i === 1) {
-            add(jml);
-        }
         $('#jml'+i).focus();
     });
 }

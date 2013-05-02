@@ -14,7 +14,7 @@
         $('#print').click(function() {
             var id = $('input[name=id_penduduk]').val();
             if (id !== '') {
-                location.href='<?= base_url('klinis/cetak_excel') ?>/'+id;
+                location.href='<?= base_url('klinis/cetak_excel_diabetes') ?>/'+id;
             } else {
                 alert('Isikan terlebih dahulu data pasien !');
                 return false;
@@ -52,14 +52,14 @@
                 $('#telp').html(data.telp);
                 $('#pekerjaan').html(data.pekerjaan);
                 $.ajax({
-                    url: '<?= base_url('klinis/get_last_penyakit') ?>/'+data.id_penduduk,
+                    url: '<?= base_url('klinis/get_last_penyakit_diabetes') ?>/'+data.id_penduduk,
                     cache: false,
                     success: function(data) {
                         $('#last_penyakit').html(data);
                     }
                 });
                 $.ajax({
-                    url: '<?= base_url('klinis/get_last_pemeriksaan') ?>/'+data.id_penduduk,
+                    url: '<?= base_url('klinis/get_last_pemeriksaan_diabetes') ?>/'+data.id,
                     cache: false,
                     success: function(data) {
                         $('#last_pemeriksaan').html(data);
@@ -68,7 +68,7 @@
             });
             $('#simpan_klinis').submit(function() {
                 $.ajax({
-                    url: '<?= base_url('klinis/save') ?>',
+                    url: '<?= base_url('klinis/save_diabetes') ?>',
                     type:'POST',
                     dataType:'json',
                     data: $(this).serialize(),
@@ -85,7 +85,7 @@
 </script>
 <div class="kegiatan">
     <h1 class="informasi"><?= $title ?></h1>
-    <?= form_open('klinis/save', 'id=simpan_klinis') ?>
+    <?= form_open('klinis/save_diabetes', 'id=simpan_klinis') ?>
     <?= form_input('data', NULL, 'id=data size=30 style="margin-left:0 padding: 4px;"') ?><?= form_hidden('id_penduduk') ?>
     <div id="tabs">
         <ul>
@@ -94,13 +94,13 @@
             <li><a class="dinamis" href="#dinamis">Data Dinamis Pasien</a></li>
         </ul>
         <div id="demografi">
-            <?php $this->load->view('demografi') ?>
+            <?php $this->load->view('klinis/demografi') ?>
         </div>
         <div id="riwayat">
-            <?php $this->load->view('riwayat') ?>
+            <?php $this->load->view('klinis/riwayat') ?>
         </div>
         <div id="dinamis">
-            <?php $this->load->view('dinamis') ?>
+            <?php $this->load->view('klinis/dinamis') ?>
         </div>
     </div>
     <?= form_submit('simpan', 'Simpan') ?>

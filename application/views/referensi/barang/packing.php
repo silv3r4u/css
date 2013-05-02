@@ -126,6 +126,19 @@
         var request;
         $(function(){
             $('#key').watermark('Search ...');
+            $('#key').live('keyup', function(e) {
+                if (e.keyCode === 13) {
+                    $.ajax({
+                        type : 'POST',
+                        url: '<?= base_url('referensi/manage_packing') ?>/search',
+                        data: $(this).serialize(),
+                        cache: false,
+                        success: function(data) {
+                            $('#packing_list').html(data);
+                        }
+                    });
+                }
+            });
             $('#addpacking').click(function() {
                 create_dialog_packing();
             });
@@ -135,7 +148,7 @@
             $('#reset, #cetak_batal,.resetan').button({icons: {primary: 'ui-icon-folder-open'}}); 
             $('#bt_caripack').button({icons: {primary: 'ui-icon-search'}});
             $('#cetak-jumlah').button({icons: {primary: 'ui-icon-print'}});
-            get_packing_list(1);
+            get_packing_list(1, 'null');
             $('#packAll').click(function(){
                 $('#loaddata').empty();
                 $('#loaddata').load('<?= base_url('referensi/packing_barang') ?>');
@@ -320,10 +333,11 @@
             $('.msg').fadeOut('fast');
         
         }
-        function get_packing_list(p){
+        function get_packing_list(p, search){
             $.ajax({
                 type : 'GET',
                 url: '<?= base_url('referensi/manage_packing') ?>/list/'+p,
+                data: 'search='+search,
                 cache: false,
                 success: function(data) {
                     $('#packing_list').html(data);
@@ -367,8 +381,8 @@
         
         }
     
-        function paging(page, tab){
-            get_packing_list(page);
+        function paging(page, tab, cari){
+            get_packing_list(page, cari);
         }
     
         function cetak_barcode(barcode){
@@ -381,7 +395,7 @@
 
     <?= form_button('', 'Tambah Data', 'id=addpacking') ?>
     <?= form_button('', 'Tampilkan', 'class=resetan id=packAll') ?>
-    <div style="margin-bottom: 2px; float: right;"><?= form_input('key', null, 'id=key size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
+    <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=key size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
     
 
 

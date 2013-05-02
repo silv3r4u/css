@@ -541,6 +541,27 @@ class Laporan extends CI_Controller {
 
         $this->load->view('laporan/rujukan_list', $data);
     }
+    
+    function laba_rugi() {
+        $data['title'] = 'Laporan Laba Rugi';
+        $this->load->view('laporan/laba-rugi', $data);
+    }
+    
+    function laba_rugi_load_data() {
+        $awal = $_GET['awal'];
+        $akhir= $_GET['akhir'];
+        $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
+        /*penerimaan*/
+        $data['pendapatan_penjualan'] = $this->m_billing->pendapatan_penjualan_load_data($awal, $akhir)->row();
+        $data['pendapatan_jasa'] = $this->m_billing->pendapatan_jasa_load_data($awal, $akhir)->row();
+        $data['kas']= $this->m_billing->total_penerimaan_kas_load_data($awal, $akhir)->row();
+        $data['penerimaan'] = $this->m_billing->penerimaan_kas_load_data($awal, $akhir)->result();
+        /*pengeluaran*/
+        $data['hpp'] = $this->m_billing->hna_load_data($awal, $akhir)->row();
+        $data['total_keluar'] = $this->m_billing->total_pengeluaran_kas_load_data($awal, $akhir)->row();
+        $data['pengeluaran'] = $this->m_billing->pengeluaran_kas_load_data($awal, $akhir)->result();
+        $this->load->view('laporan/laba-rugi-table', $data);
+    }
 
 }
 

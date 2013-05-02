@@ -292,11 +292,11 @@ class M_referensi extends CI_Model {
         $page = "  limit $start ,$limit";
 
         if ($id != 'null') {
-            $w = " where k.id = $id ";
+            $w = " where k.id = '$id' ";
         }
         $sql = "select @row := @row + 1 as nomor, k.*, p.nama as provinsi, p.id as id_provinsi FROM kabupaten k
         join provinsi p on (k.provinsi_id = p.id), (SELECT @row := $start) rr $w
-            order by nama asc";
+            order by k.nama asc";
         $query = $this->db->query($sql . $page);
         $ret['data'] = $query->result();
         $ret['jumlah'] = $this->db->query($sql)->num_rows();
@@ -536,9 +536,7 @@ class M_referensi extends CI_Model {
     }
 
     function biaya_apoteker_load_data() {
-        $sql = "select t.id, l.nama as layanan, t.bobot, t.nominal, l.kelas from tarif t
-        join layanan l on (t.layanan_id = l.id)
-        where l.nama = 'Pelayanan Resep'";
+        $sql = "select * from tarif order by nama";
         return $this->db->query($sql);
     }
 
@@ -906,6 +904,7 @@ class M_referensi extends CI_Model {
         }
 
         $query = $this->db->query($sql . $where . $search . $order . $q);
+        
         $ret['data'] = $query->result();
         $ret['jumlah'] = $this->db->query($sql . $where . $search . $order)->num_rows();
         return $ret;
@@ -963,8 +962,8 @@ class M_referensi extends CI_Model {
             $w = " where id = '" . $id . "'";
         }
 
-        $sql = "select @row := @row + 1 as nomor , l.* from layanan l,
-            (SELECT @row := $start) rr $w order by l.nama, l.bobot, l.kelas asc";
+        $sql = "select @row := @row + 1 as nomor , l.* from tarif l,
+            (SELECT @row := $start) rr $w order by l.nama, l.bobot";
         $query = $this->db->query($sql . $q);
         $ret['data'] = $query->result();
         $ret['jumlah'] = $this->db->query($sql)->num_rows();
@@ -978,18 +977,18 @@ class M_referensi extends CI_Model {
     }
 
     function layanan_add_data($data) {
-        $this->db->insert('layanan', $data);
+        $this->db->insert('tarif', $data);
         return $this->db->insert_id();
     }
 
     function layanan_delete_data($id) {
-        $db = "delete from layanan where id = '$id'";
+        $db = "delete from tarif where id = '$id'";
         $this->db->query($db);
     }
 
     function layanan_edit_data($data) {
         $this->db->where('id', $data['id']);
-        $this->db->update('layanan', $data);
+        $this->db->update('tarif', $data);
     }
 
     function layanan_cek_data($data) {
@@ -1201,13 +1200,13 @@ class M_referensi extends CI_Model {
     function harga_jual_load_data($pb = null) {
         $q = null;
         if ($pb != null) {
-            $q.="and br.nama like ('%$pb%')";
+            $q.="where br.nama like ('%$pb%')";
         }
         $sql = "select br.*, br.nama as barang, r.nama as pabrik, o.kekuatan, s.nama as satuan from
             barang br
             left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
             left join obat o on (br.id = o.id)
-            left join satuan s on (o.satuan_id = s.id)
+            left join satuan s on (o.satuan_id = s.id) $q
             order by br.nama";
         //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);
@@ -1242,13 +1241,14 @@ class M_referensi extends CI_Model {
             $q.="and br.id in ($pb)";
         }
         $sql = "select b.id as barang_packing_id, br.stok_minimal, br.nama as barang, b.margin, b.id as id_pb, br.hna, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
-            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar from
+            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar, stn.nama as satuan_terkecil from
             barang_packing b
             join barang br on (br.id = b.barang_id)
             left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
             left join obat o on (b.id = o.id)
             left join satuan s on (s.id = o.satuan_id)
             left join satuan st on (st.id = b.terbesar_satuan_id)
+            left join satuan stn on (stn.id = b.terkecil_satuan_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
             where br.id in ($pb) order by br.nama";
         //echo "<pre>".$sql."</pre>";

@@ -57,14 +57,11 @@
             });
 
         </script>
-
         <body>
             <div id="loading">Loading ....</div>
             <div style="height: 100%">
                 <div class="mainribbon-min">
-                    <?php
-                    echo $this->load->view('navigasi');
-                    ?>
+                    
                 </div>
                 <div id="show" style="position: absolute; top: 14%;"><?= img('assets/images/left-arrow.png') ?></div>
                 <div id="hide" style="position: absolute; top: 14%;"><?= img('assets/images/right-arrow.png') ?></div>

@@ -84,7 +84,7 @@ foreach ($list_data as $key => $data) {
 $harga_jual = ($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
 ?>
     <tr class="tr_rows <?= ($key%2==0)?'odd':'even' ?>">
-        <td><?= form_hidden('id_pb[]', $data->barang_packing_id) ?><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terbesar ?></td>
+        <td><?= form_hidden('id_pb[]', $data->barang_packing_id) ?><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
         <td align="right" id="hna<?= $key ?>"><?= inttocur($data->hna*$data->isi) ?></td>
         <td align="center"><?= form_input('margin[]', $data->margin, 'size=5 onkeyup=set_harga_jual('.$key.') id=margin'.$key) ?></td>
         <td align="center"><?= form_input('diskon[]', $data->diskon, 'size=5 onkeyup=set_harga_jual('.$key.') id=diskon'.$key) ?></td>

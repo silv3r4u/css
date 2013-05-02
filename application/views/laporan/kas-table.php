@@ -115,8 +115,6 @@ if (isset($_GET['do'])) {
             <tr>
                 <td colspan="5" align="right"> Total Tagihan Penjualan</td>
                 <td align="right"><?= rupiah($tagihan) ?></td>
-                <td align="right"></td>
-                <td></td>
             </tr>
             <?php } ?>
         </tfoot>

@@ -11,7 +11,7 @@ a img {border: none;outline: none}
 /*a, a:visited {color: #2682BF}*/
 th a {color:#fff;text-decoration:none;font-size:9px}
 .hidden-obj {display: none}
-select { border: 1px inset #999; padding: 2px; min-width: 70px; }
+select { border: 1px solid #ccc; padding: 2px; min-width: 70px; }
 input[type=button]:active, input[type=submit]:active { position:relative; top:1px; }
 #image-home { position: fixed; top: 80px }
 #jam { float: right;}

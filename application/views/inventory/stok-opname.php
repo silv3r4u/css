@@ -73,6 +73,7 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.batch').attr('id','batch'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_barang').attr('id','id_barang'+i);
         $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','ed'+i);
         $('.tr_row:eq('+i+')').children('td:eq(3)').children('.hna').attr('id','hna'+i);
         $('.tr_row:eq('+i+')').children('td:eq(4)').children('.js').attr('id','js'+i);
@@ -82,7 +83,8 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=batch[] id=batch'+i+' class=batch /></td>'+
                 '<td><input type=text name=pb[] id=pb'+i+' class=pb size=45 />'+
-                    '<input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
+                    '<input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb />'+
+                    '<input type=hidden name=id_barang[] id=id_barang'+i+' class=id_barang /></td>'+
                 '<td><input type=text name=ed[] id=ed'+i+' class=ed size=8 /></td>'+
                 '<td><input type=text name=hna[] id=hna'+i+' class=hna size=5 onKeyup=FormNum(this) /></td>'+
                 '<td><input type=text name=js[] id=js'+i+' class=js size=5 /></td>'+
@@ -93,7 +95,7 @@ function add(i) {
     $('#ed'+i).datepicker({
         changeYear: true,
         changeMonth: true
-    })
+    });
     $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
     {
         parse: function(data){
@@ -108,19 +110,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
                 var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                 }
             }
             return str;
@@ -130,21 +132,22 @@ function add(i) {
     }).result(
     function(event,data,formated){
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
+        $('#id_barang'+i).val(data.id_barang);
         $('#id_pb'+i).val(data.id);
         $('#bc'+i).val(data.barcode);
         $('#ed'+i).val(data.ed);
@@ -182,21 +185,6 @@ function add(i) {
             </tr>
             </thead>
             <tbody>
-                <?php
-                if (isset($_GET['id'])) { 
-                foreach ($stok_opname as $key => $data) {
-                ?>
-                <tr class="<?= ($key%2==0)?'odd':'even' ?>">
-                    <td><?= $data['barang'] ?> <?= ($data['kekuatan']!='1')?$data['kekuatan']:null ?>  <?= $data['satuan'] ?> <?= $data['sediaan'] ?> <?= ($data['pabrik'] == 'Non Generik')?'':$data['pabrik'] ?> @ <?= ($data['isi']==1)?'':$data['isi'] ?> <?= $data['satuan_terbesar'] ?></td>
-                    <td align="center"><?= datefmysql($data['ed']) ?></td>
-                    <td align="right"><?= inttocur($data['hna']) ?></td>
-                    <td><?= $data['sisa'] ?></td>
-                    <td>#</td>
-                </tr>
-                <?php 
-                }
-                }
-                ?>
             </tbody>
         </table><br/>
         <?= form_submit('save', 'Simpan', 'id=submit') ?>

@@ -65,9 +65,9 @@ class M_inv_autocomplete extends CI_Model {
         if ($jns != NULL) {
             $sort.=" and pf.jenis = '$jns'";
         }
-        $sql = "select p.nama, p.id as id_penduduk, dp.*, kl.nama as kelurahan, pf.nama as  profesi from penduduk p
+        $sql = "select p.nama, p.id as id_penduduk, dp.*, kb.nama as kabupaten, pf.nama as  profesi from penduduk p
         join dinamis_penduduk dp on (p.id = dp.penduduk_id)
-        left join kelurahan kl on (kl.id = dp.kelurahan_id)
+        left join kabupaten kb on (kb.id = dp.kabupaten_id)
         left join profesi pf on (pf.id = dp.profesi_id)
         where p.nama like ('%$q%') $sort and dp.id in (select max(id) from dinamis_penduduk group by penduduk_id) order by locate('$q', p.nama)";
 //echo $sql;
@@ -99,6 +99,19 @@ class M_inv_autocomplete extends CI_Model {
         left join sediaan sd on (sd.id = o.sediaan_id)
         left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id)
         where b.nama like ('%$q%') $param order by locate ('$q', b.nama)";
+        return $this->db->query($sql);
+    }
+    
+    function load_data_packing_barang_obat($q) {
+        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, stb.nama as satuan_terbesar, o.kekuatan from barang_packing bp
+        join barang b on (b.id = bp.barang_id)
+        join obat o on (b.id = o.id)
+        left join satuan s on (s.id = o.satuan_id)
+        left join satuan st on (st.id = bp.terkecil_satuan_id)
+        left join satuan stb on (stb.id = bp.terbesar_satuan_id)
+        left join sediaan sd on (sd.id = o.sediaan_id)
+        left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id)
+        where b.nama like ('%$q%') order by locate ('$q', b.nama)";
         return $this->db->query($sql);
     }
     
@@ -187,6 +200,13 @@ class M_inv_autocomplete extends CI_Model {
             where d.transaksi_jenis != 'Pemesanan' and d.barang_packing_id = '$id' and d.unit_id = '".$this->session->userdata('id_unit')."' order by d.id desc limit 1";
         return $this->db->query($sql);
     }
+    
+    function get_harga_jual_barang_kemasan($id_barang, $id_kemasan) {
+        $row = $this->db->query("select hna from barang where id = '$id_barang'")->row();
+        $hna = $row->hna;
+        $sql = "select ($hna+($hna*(margin/100)) - ($hna*(diskon/100)))*isi as harga_jual from barang_packing where barang_id = '$id_barang' and terbesar_satuan_id = '$id_kemasan'";
+        return $this->db->query($sql);
+    }
 
     function get_nomor_pemesanan($q) {
         $sql = "select p.*, r.nama as pabrik from pemesanan p
@@ -200,7 +220,8 @@ class M_inv_autocomplete extends CI_Model {
             from pembelian p
             join transaksi_detail td on (td.transaksi_id = p.id)
             join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
-            where p.id = '$q' and td.transaksi_jenis = 'Pembelian' group by p.id";
+            where p.id like '%$q%' or p.dokumen_no like '%$q%' and td.transaksi_jenis = 'Pembelian'
+            group by p.id";
         return $this->db->query($sql);
     }
 
@@ -322,6 +343,13 @@ class M_inv_autocomplete extends CI_Model {
                     from transaksi_detail group by barang_packing_id
                     ) tm on (td.barang_packing_id = tm.barang_packing_id and td.id = tm.id_max)
                 where td.transaksi_jenis != 'Pemesanan' and rr.resep_id = '$noresep'";
+        return $this->db->query($sql);
+    }
+    
+    function load_attribute_penjualan_by_resep($id_resep) {
+        $sql = "select r.*, r.id as resep_id, p.nama as pasien from resep r
+            join penduduk p on (r.pasien_penduduk_id = p.id)
+            where r.id = '$id_resep'";
         return $this->db->query($sql);
     }
 

@@ -90,7 +90,7 @@
         });
         $('#form_obat').dialog({
             autoOpen: false,
-            height: 530,
+            height: 560,
             width: 500,
             modal: true,
             resizable : true,
@@ -163,13 +163,11 @@
                     dataType: 'json',
                     cache: false,
                     success: function(data) {
-                   
-                        if (data.status == false){
-                            $('#text_konfirmasi_obat').html('Nama Obat <b>"'+namaobat+'"</b> sudah ada<br/> Apakah anda yakin akan menambahkannya lagi?');            
+                        if (data.status === false){
+                            $('#text_konfirmasi_obat').html('Apakah anda yakin akan menyimpan data obat "'+namaobat+'"?');            
                         } else {
-                            $('#text_konfirmasi_obat').html('Nama Obat <b>"'+namaobat+'"</b> <br/> Apakah anda akan menyimpan data obat?');                    
+                            $('#text_konfirmasi_obat').html('Apakah anda yakin akan menyimpan data obat "'+namaobat+'"?');                    
                         }
-                        
                         $('#konfirmasi_obat').dialog("open");
                             
                     }
@@ -236,6 +234,7 @@
         $('input[name=id_pabriks_obat]').val('');
         $('#id_barang').val('');
         $('#hna').val('');
+        $('#stokmin').val('');
     }
     
     function get_obat_list(p,search){
@@ -284,6 +283,7 @@
         $('#dosis').val(data[14]);
         $('#kandungan').val(data[15]);
         $('#hna').val(numberToCurrency(data[16]));
+        $('#stokmin').val(data[17]);
         
         if(data[11] !=='Generik'){
             $('#c').attr('checked','checked');
@@ -364,6 +364,10 @@
         <tr>
             <td align="right">HNA (Rp.):</td>
             <td><?= form_input('hna', NULL, 'id=hna size=10 onkeyup=FormNum(this)') ?></td>
+        </tr>
+        <tr>
+            <td align="right">Stok Minimal:</td>
+            <td><?= form_input('stokmin', 0, 'id=stokmin size=10 onkeyup=Angka(this)') ?></td>
         </tr>
         <tr>
             <td width="15%"></td>

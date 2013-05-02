@@ -15,8 +15,8 @@ class Pelayanan extends CI_Controller {
     function resep($id_resep = null) {
         $data['title'] = 'Resep';
         $data['biaya_apoteker'] =  $this->m_referensi->biaya_apoteker_load_data()->result();
-        $id_dokter = $this->input->post('id_dokter');
-        $id_pasien = $this->input->post('id_pasien');
+        $id_dokter = $this->input->post('nama_dokter');
+        $id_pasien = $this->input->post('nama_pasien');
         if (isset($id_dokter) and $id_dokter != '' and isset($id_pasien) and $id_pasien != '') {
             $data = $this->m_inventory->resep_save();
             die(json_encode($data));
@@ -69,7 +69,7 @@ class Pelayanan extends CI_Controller {
     }
     
     function kitir_cetak_nota($id_resep) {
-        $data['title'] = 'Kitir';
+        $data['title'] = '';
         $data['jenis'] = '';
         $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
         

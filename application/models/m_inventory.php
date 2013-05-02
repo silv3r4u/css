@@ -3,7 +3,6 @@
 class M_inventory extends CI_Model {
     
     public $waktu = "";
-    
     function __construct() {
         parent::__construct();
         $this->waktu = gmdate('Y-m-d H:i:s' ,gmdate('U')+25200);
@@ -163,7 +162,7 @@ class M_inventory extends CI_Model {
             $tempo = date2mysql($this->input->post('tempo'));
         } else if ($jenis == 'cash') {
             $id_pemesanan = NULL;
-            $tempo = date2mysql($this->input->post('tempo'));
+            $tempo = date("Y-m-d");
         } else {
             $id_pemesanan = NULL;
             $tempo = NULL;
@@ -204,7 +203,9 @@ class M_inventory extends CI_Model {
                 $base_hna=$harga[$key];
                 $hna_ppn= ($this->input->post('ppn')/100)*$base_hna;
                 $hna = $base_hna+$hna_ppn;
-
+                
+                $kmsan = explode('-',$kemasan[$key]);
+                
                 $base_hpp 	= ((currencyToNumber($harga[$key])*$jumlah[$key]) - ((currencyToNumber($harga[$key])*$jumlah[$key]) * ($disk_pr[$key]/100))) / ($jumlah[$key]);
                 $hpp_ppn	= ($this->input->post('ppn')/100)*$base_hpp;
                 $hpp 	= $base_hpp+$hpp_ppn;
@@ -223,12 +224,12 @@ class M_inventory extends CI_Model {
                 $cek = $this->db->query("select sisa, date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and transaksi_id = '".$this->input->post('no_pemesanan')."' order by waktu desc limit 1")->row();
                 $beli= $this->db->query("select sisa, waktu from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$data' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1")->row();
                 $banding = isset($cek->tanggal)?$cek->tanggal:date("Y-m-d");
-                $sisa= (isset($jml->sisa)?$jml->sisa:0) + $isi[$key];
+                $sisa= (isset($jml->sisa)?$jml->sisa:0) + ($jumlah[$key]*$isi[$key]);
                 $leadTime = $this->db->query("select datediff('".date("Y-m-d")."','".$banding."') as selisih")->row();
                 $sekarang = gmdate('Y-m-d' ,gmdate('U')+25200);
                 $ss  = $this->db->query("select avg(sisa) as safetystock from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and date(waktu) between '".$banding."' and '$sekarang'")->row();
                 
-                $id_packing_barang = $this->db->query("select id from barang_packing where barang_id = '$barang_id[$key]' and terbesar_satuan_id = '$kemasan[$key]'")->row();
+                $id_packing_barang = $this->db->query("select id from barang_packing where barang_id = '$barang_id[$key]' and terbesar_satuan_id = '$kmsan[1][$key]'")->row();
                 
                 $data_trans = array(
                     'transaksi_id' => $id_pembelian,
@@ -248,13 +249,15 @@ class M_inventory extends CI_Model {
                     'hpp' => ($hpp/$isi[$key]),
                     'het' => '0',
                     'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                    'masuk' => $isi[$key],
+                    'masuk' => ($jumlah[$key]*$isi[$key]),
                     'sisa' => $sisa,
                     'leadtime_hours' => (isset($leadTime->selisih)?$leadTime->selisih:'0'),
                     'ss' => (isset($ss->safetystock)?$ss->safetystock:'0'),
                     'selisih_waktu_beli' => (isset($beli->waktu)?range_hours_between_two_dates($beli->waktu, date2mysql($this->input->post('tgldoc')).' '.date("H:i:s")):'0')
                 );
                 $this->db->insert('transaksi_detail', $data_trans);
+                $this->db->where('id', $barang_id[$key]);
+                $this->db->update('barang', array('hna' => ($hna/$isi[$key])));
                 if ($this->db->trans_status() === FALSE) {
                     $this->db->trans_rollback();
                 }
@@ -262,7 +265,7 @@ class M_inventory extends CI_Model {
         }
         if ($jenis == 'cash') {
             $data_inkaso = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date2mysql($this->input->post('tanggal')),
                 'pembelian_id' => $id_pembelian,
                 'pegawai_penduduk_id' => $this->session->userdata('id_user'),
                 'jumlah_bayar' => currencyToNumber($this->input->post('total_tagihan'))
@@ -271,7 +274,7 @@ class M_inventory extends CI_Model {
             $id_inkaso = $this->db->insert_id();
             $rows2 = $this->db->query("select * from kas order by waktu desc limit 1")->row();
             $data_kas2 = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date2mysql($this->input->post('tanggal')),
                 'transaksi_id' => $id_inkaso,
                 'transaksi_jenis' => 'Inkaso',
                 'awal_saldo' => (isset($rows2->akhir_saldo)?$rows2->akhir_saldo:'0'),
@@ -528,6 +531,7 @@ class M_inventory extends CI_Model {
         $sisa= $this->input->post('js');
         $batch = $this->input->post('nobatch');
         $tanggal = datetime2mysql($this->input->post('tanggal'));
+        $id_barang = $this->input->post('id_barang');
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
                 $jml = $this->db->query("select * from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$data' and ed = '".date2mysql($ed[$key])."' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1")->row();
@@ -550,6 +554,8 @@ class M_inventory extends CI_Model {
                     'sisa' => $sisa[$key]
                 );
                 $this->db->insert('transaksi_detail', $data_transaksi_detail);
+                $this->db->where('id', $id_barang[$key]);
+                $this->db->update('barang', array('hna' => $hna[$key]));
             }
         }
         if ($this->db->trans_status() === FALSE) {
@@ -1107,140 +1113,43 @@ class M_inventory extends CI_Model {
             'pembulatan' => currencyToNumber($this->input->post('bulat'))
         );
         $this->db->insert('penjualan', $data_penjualan);
+        $ed = $this->input->post('ed');
         $id_penjualan = $this->db->insert_id();
         $id_pb = $this->input->post('id_pb');
+        $kemasan = $this->input->post('kemasan');
         $jumlah = $this->input->post('jl');
         $this->session->set_userdata(array('sisa_stok' => NULL));
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
-                $fefo = $this->db->query("select td.* from transaksi_detail td
-                    inner join (
-                        SELECT barang_packing_id, max(id) as id_max FROM `transaksi_detail` 
-                        WHERE barang_packing_id = '$id_pb[$key]' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."' group by barang_packing_id, ed
-                    ) tm on (tm.barang_packing_id = td.barang_packing_id and td.id = tm.id_max) 
-                    where td.sisa > 0 and td.ed > '".$this->waktu."' order by td.ed asc")->result();
-                    foreach ($fefo as $num => $jml) {
-                        if ($this->session->userdata('sisa_stok') == NULL) {
-                            $sisa = $jml->sisa - $jumlah[$key];
-                            if ($sisa >= 0) {
-                                $data_trans = array(
-                                    'transaksi_id' => $id_penjualan,
-                                    'transaksi_jenis' => 'Penjualan',
-                                    'waktu' => datetime2mysql($this->input->post('tanggal')),
-                                    'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
-                                    'barang_packing_id' => $id_pb[$key],
-                                    'unit_id' => $this->session->userdata('id_unit'),
-                                    'ed' => $jml->ed,
-                                    'harga' => (isset($jml->harga)?$jml->harga:'0'),
-                                    'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                                    'hna' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'hpp' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'het' => (isset($jml->het)?$jml->het:'0'),
-                                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                                    'masuk' => '0',
-                                    'keluar' => $jumlah[$key],
-                                    'sisa' => $sisa
-                                );
-                                $this->session->set_userdata(array('sisa_stok' => $sisa));
-                                $this->db->insert('transaksi_detail', $data_trans);
-                            } else if ($sisa < 0) {
-                                $data_trans = array(
-                                    'transaksi_id' => $id_penjualan,
-                                    'transaksi_jenis' => 'Penjualan',
-                                    'waktu' => datetime2mysql($this->input->post('tanggal')),
-                                    'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
-                                    'barang_packing_id' => $id_pb[$key],
-                                    'unit_id' => $this->session->userdata('id_unit'),
-                                    'ed' => $jml->ed,
-                                    'harga' => (isset($jml->harga)?$jml->harga:'0'),
-                                    'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                                    'hna' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'hpp' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'het' => (isset($jml->het)?$jml->het:'0'),
-                                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                                    'masuk' => '0',
-                                    'keluar' => $jml->sisa,
-                                    'sisa' => '0'
-                                );
-                                $this->session->set_userdata(array('sisa_stok' => $sisa));
-                                $this->db->insert('transaksi_detail', $data_trans);
-                            }
-                        }
-                        else if ($this->session->userdata('sisa_stok') < '0') {
-                            $sisa = $jml->sisa - abs($this->session->userdata('sisa_stok'));
-                            if ($sisa >= 0) {
-                                $data_trans = array(
-                                    'transaksi_id' => $id_penjualan,
-                                    'transaksi_jenis' => 'Penjualan',
-                                    'waktu' => datetime2mysql($this->input->post('tanggal')),
-                                    'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
-                                    'barang_packing_id' => $id_pb[$key],
-                                    'unit_id' => $this->session->userdata('id_unit'),
-                                    'ed' => $jml->ed,
-                                    'harga' => (isset($jml->harga)?$jml->harga:'0'),
-                                    'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                                    'hna' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'hpp' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'het' => (isset($jml->het)?$jml->het:'0'),
-                                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                                    'masuk' => '0',
-                                    'keluar' => abs($this->session->userdata('sisa_stok')),
-                                    'sisa' => $sisa
-                                );
-                                $this->session->set_userdata(array('sisa_stok' => $sisa));
-                                $this->db->insert('transaksi_detail', $data_trans);
+                $value = explode("-", $kemasan[$key]);
+                $jml = $this->db->query("select * from transaksi_detail
+                    WHERE barang_packing_id = '$data' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."'
+                    and ed = '$ed[$key]' order by waktu desc limit 1")->row();
+                $sisa = (isset($jml->sisa)?$jml->sisa:'0') - ($jumlah[$key]*$value[1]);
+                    $data_trans = array(
+                        'transaksi_id' => $id_penjualan,
+                        'transaksi_jenis' => 'Penjualan',
+                        'waktu' => datetime2mysql($this->input->post('tanggal')),
+                        'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
+                        'barang_packing_id' => $id_pb[$key],
+                        'unit_id' => $this->session->userdata('id_unit'),
+                        'ed' => $jml->ed,
+                        'harga' => (isset($jml->harga)?$jml->harga:'0'),
+                        'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
+                        'hna' => (isset($jml->hna)?$jml->hna:'0'),
+                        'hpp' => (isset($jml->hna)?$jml->hna:'0'),
+                        'het' => (isset($jml->het)?$jml->het:'0'),
+                        'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
+                        'masuk' => '0',
+                        'keluar' => ($jumlah[$key]*$value[1]),
+                        'sisa' => $sisa
+                    );
+                
+                    $this->db->insert('transaksi_detail', $data_trans);
 
-                            } else if ($sisa < 0) {
-                                $data_trans = array(
-                                    'transaksi_id' => $id_penjualan,
-                                    'transaksi_jenis' => 'Penjualan',
-                                    'waktu' => datetime2mysql($this->input->post('tanggal')),
-                                    'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
-                                    'barang_packing_id' => $id_pb[$key],
-                                    'unit_id' => $this->session->userdata('id_unit'),
-                                    'ed' => $jml->ed,
-                                    'harga' => (isset($jml->harga)?$jml->harga:'0'),
-                                    'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                                    'hna' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'hpp' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'het' => (isset($jml->het)?$jml->het:'0'),
-                                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                                    'masuk' => '0',
-                                    'keluar' => $jml->sisa,
-                                    'sisa' => '0'
-                                );
-                                $this->session->set_userdata(array('sisa_stok' => $sisa));
-                                $this->db->insert('transaksi_detail', $data_trans);
-                            }
-                        }
-                        else {
-                            $sisa = $jml->sisa - $jumlah[$key];
-                                $data_trans = array(
-                                    'transaksi_id' => $id_penjualan,
-                                    'transaksi_jenis' => 'Penjualan',
-                                    'waktu' => datetime2mysql($this->input->post('tanggal')),
-                                    'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
-                                    'barang_packing_id' => $id_pb[$key],
-                                    'unit_id' => $this->session->userdata('id_unit'),
-                                    'ed' => $jml->ed,
-                                    'harga' => (isset($jml->harga)?$jml->harga:'0'),
-                                    'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                                    'hna' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'hpp' => (isset($jml->hna)?$jml->hna:'0'),
-                                    'het' => (isset($jml->het)?$jml->het:'0'),
-                                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                                    'masuk' => '0',
-                                    'keluar' => $jumlah[$key],
-                                    'sisa' => $sisa
-                                );
-                                $this->session->set_userdata(array('sisa_stok' => $sisa));
-                                $this->db->insert('transaksi_detail', $data_trans);
-                        }
-                        if ($this->db->trans_status() === FALSE) {
-                            $this->db->trans_rollback();
-                        }
-                    }
-                    
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                }
             }
             
         }
@@ -1332,10 +1241,23 @@ class M_inventory extends CI_Model {
     
     function resep_save() {
         $this->db->trans_begin();
+        $id_dokter = $this->input->post('id_dokter');
+        if ($this->input->post('id_dokter') == '') {
+            $this->db->insert('penduduk', array('nama' => $this->input->post('nama_dokter')));
+            $id_dokter = $this->db->insert_id();
+            $this->db->insert('dinamis_penduduk', array('tanggal' => date("Y-m-d"),'penduduk_id' => $id_dokter, 'profesi_id' => '2'));
+        }
+        
+        $id_pasien = $this->input->post('id_pasien');
+        if ($this->input->post('id_pasien') == '') {
+            $this->db->insert('penduduk', array('nama' => $this->input->post('nama_pasien')));
+            $id_pasien = $this->db->insert_id();
+            $this->db->insert('dinamis_penduduk', array('tanggal' => date("Y-m-d"),'penduduk_id' => $id_pasien));
+        }
         $data_resep = array(
             'waktu' => datetime2mysql($this->input->post('tanggal')),
-            'dokter_penduduk_id' => $this->input->post('id_dokter'),
-            'pasien_penduduk_id' => $this->input->post('id_pasien'),
+            'dokter_penduduk_id' => $id_dokter,
+            'pasien_penduduk_id' => $id_pasien,
             'sah' => $this->input->post('absah'),
             'keterangan' => $this->input->post('ket')
         );
@@ -2162,7 +2084,7 @@ class M_inventory extends CI_Model {
             inner join (
                 select barang_packing_id, max(id) as id_max from transaksi_detail GROUP BY barang_packing_id
             ) tm on (td.barang_packing_id = tm.barang_packing_id and td.id = tm.id_max)
-            where td.sisa <= b.stok_minimal and td.barang_packing_id not in (select barang_packing_id from defecta)";
+            where td.sisa <= b.stok_minimal and td.transaksi_jenis != 'Pemesanan' and td.barang_packing_id not in (select barang_packing_id from defecta)";
         return $this->db->query($sql);
     }
     
@@ -2207,7 +2129,7 @@ class M_inventory extends CI_Model {
     }
     
     function rencana_pemesanan_load_data() {
-        $sql = "select td.*, bp.id as id_pb, bp.stok_minimal, d.jumlah, d.hpp, o.generik, b.nama as barang, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, 
+        $sql = "select td.*, bp.id as id_pb, b.stok_minimal, d.jumlah, d.hpp, o.generik, b.nama as barang, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, 
             sd.nama as sediaan from transaksi_detail td
             join barang_packing bp on (td.barang_packing_id = bp.id)
             join defecta d on (d.barang_packing_id = bp.id)
@@ -2220,12 +2142,12 @@ class M_inventory extends CI_Model {
             inner join (
                 select barang_packing_id, max(id) as id_max from transaksi_detail GROUP BY barang_packing_id
             ) tm on (td.barang_packing_id = tm.barang_packing_id and td.id = tm.id_max)
-            where td.sisa <= bp.stok_minimal";
+            where td.sisa <= b.stok_minimal";
         return $this->db->query($sql);
     }
     
     function get_kemasan_by_barang($id) {
-        $sql = "select s.* from satuan s join barang_packing b on (s.id = b.terbesar_satuan_id) where b.barang_id = '$id'";
+        $sql = "select s.*, b.isi from satuan s join barang_packing b on (s.id = b.terbesar_satuan_id) where b.barang_id = '$id'";
         return $this->db->query($sql)->result();
     }
 }

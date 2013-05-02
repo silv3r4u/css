@@ -509,6 +509,9 @@ $(function() {
         <label style="font-size: 18px;">Bayar (Rp):</label><?= form_input('', null, 'id=bayar  style="font-size: 18px;"') ?>
         <label style="font-size: 18px;">Kembalian (Rp):</label><span id="kembalian" class="label" style="font-size: 18px;"></span>
     </div>
+    <?php if (isset($list_data)) { 
+        foreach ($atribute as $rows);
+    } ?>
     <div class="data-input">
     <?= form_hidden('bulat') ?>
     <?= form_hidden('bayar') ?>
@@ -517,12 +520,12 @@ $(function() {
         <?= form_hidden('total', null, 'id=total_tagihan') ?>
         <?= form_hidden('jasa_apotek') ?>
         <div class="left_side" style="min-height: 160px;">
-            <label>No.</label><span class="label" id="id_penjualan"><?= get_last_id('penjualan', 'id') ?> </span>
+            <label>No.</label><span class="label" id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></span>
             <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
             <label>No. Resep </label>
-                    <?= form_input('', isset($rows['resep_id'])?$rows['resep_id']:NULL, 'id=noresep size=30') ?> 
-                    <?= form_hidden('id_resep', isset($rows['resep_id'])?$rows['resep_id']:NULL) ?>
-            <label>Pasien</label><span id="pasien" class="label"></span>
+                    <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?> 
+                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?>
+            <label>Pasien</label><span id="pasien" class="label"><?= isset($rows->pasien)?$rows->pasien:NULL ?></span>
 <!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
             <label>PPN (%) </label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
             <!--<label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>-->
@@ -556,11 +559,13 @@ $(function() {
                 <?php if (isset($list_data)) {
                     $no = 0;
                     $total = 0; $disc = 0;
+                    $biaya_apoteker = 0;
                     foreach ($list_data as $key => $data) {
                         $harga_jual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
                         $subtotal = ($harga_jual - (($harga_jual*($data->percent/100))))*$data->pakai_jumlah;
                         $total = $total + $subtotal;
                         $disc = $disc + (($data->percent/100)*$harga_jual);
+                        $biaya_apoteker = $biaya_apoteker + $data->profesi_layanan_tindakan_jasa_total;
                         $alert=NULL;
                         if ($data->sisa <= 0) {
                             $alert = "style=background:red";
@@ -597,21 +602,21 @@ $(function() {
                                             cache: false,
                                             dataType: 'json',
                                             success: function(data) {
-                                                if (data.nama != null) {
+                                                if (data.nama !== null) {
                                                     var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                                                    if (data.isi != '1') { var isi = '@ '+data.isi; }
-                                                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                                                    if (data.satuan != null) { var satuan = data.satuan; }
-                                                    if (data.sediaan != null) { var sediaan = data.sediaan; }
-                                                    if (data.pabrik != null) { var pabrik = data.pabrik; }
-                                                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                                                    if (data.id_obat == null) {
+                                                    if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                                                    if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                                                    if (data.satuan !== null) { var satuan = data.satuan; }
+                                                    if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                                                    if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                                                    if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                                                    if (data.id_obat === null) {
                                                         $('#pb<?= $no ?>').val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                                     } else {
-                                                        if (data.generik == 'Non Generik') {
-                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                                        if (data.generik === 'Non Generik') {
+                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                                         } else {
-                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                                            $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                                         }
 
                                                     }
@@ -624,7 +629,7 @@ $(function() {
                                                     subTotal(i);
                                                     var jml = $('.tr_row').length;
                                                     //alert(jml+' - '+i)
-                                                    if (jml - i == 1) {
+                                                    if (jml - i === 1) {
                                                         add(jml);
                                                     }
                                                     $('#jl<?= $no ?>').focus();
@@ -719,18 +724,16 @@ $(function() {
 <?php
 if (isset($list_data)) { ?>
     <script>
-        <?php if (count($list_data) == 0) { ?>
-            $('button[type=submit]').hide();
-        <?php } else { ?>
-            $('button[type=submit]').show();
-        <?php } ?>
-        $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
-        $('#total-diskon').html(<?= ceil($disc) ?>);
-        $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
-        var jumlah = $('.tr_row').length;
-        for (i = 1; i <= jumlah; i++) {
-            subTotal(i);
-        }
+        $(function() {
+            $('#jasa-apt').html(numberToCurrency(<?= $biaya_apoteker ?>));
+            $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
+            $('#total-diskon').html(<?= ceil($disc) ?>);
+            $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
+            var jumlah = $('.tr_row').length;
+            for (i = 1; i <= jumlah; i++) {
+                subTotal(i);
+            }
+        });
     </script>
 <?php }
 ?>

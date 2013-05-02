@@ -87,8 +87,7 @@
             <label>Nama Transaksi</label><?= form_input('nama', isset($_GET['awal']) ? $_GET['nama'] : null, 'size=30 id=nama') ?>
             <label></label><?= form_button(null, 'Cari', 'id=search') ?> 
             <?= form_button('Reset', 'Reset', 'id=reset') ?> 
-            <?= form_button(null, 'Cetak Excel', 'id=cetak') ?> 
-            </table>
+            <?= form_button(null, 'Cetak Excel', 'id=cetak') ?>
         </fieldset>
     </div>
     <div id="result" class="data-list">

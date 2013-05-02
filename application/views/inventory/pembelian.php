@@ -59,6 +59,11 @@ $(function() {
                 $('#net'+i).focus();
                 return false;
             }
+            if ($('#kemasan'+i).val() === '') {
+                alert('Pilih kemasan yang akan di konversikan !');
+                $('#kemasan'+i).focus();
+                return false;
+            }
         }
         var url = $(this).attr('action');
         $.ajax({
@@ -388,7 +393,6 @@ $(function() {
     })
 });
 function jmlSubTotal(i) {
-        
         var dis_pr= komaKeTitik($('#diskon_pr'+i).val());
         var dis_rp= parseInt(currencyToNumber($('#diskon_rp'+i).val()));
         
@@ -397,16 +401,17 @@ function jmlSubTotal(i) {
         //$('#diskon_rp'+i).removeAttr('disabled');
         //$('#diskon_pr'+i).removeAttr('disabled');
         var subttl= (harga * jumlah);
-        if (dis_pr != 0 || dis_rp != '') {
+        if (dis_pr !== 0 || dis_rp !== '') {
             var subttl = subttl - ((dis_pr/100)*harga)*jumlah;
             //$('#diskon_rp'+i).attr('disabled','disabled');
         }
-        if (dis_rp != '' || dis_rp != 0) {
+        if (dis_rp !== '' || dis_rp !== 0) {
             var subttl = subttl - (dis_rp * jumlah);
             //$('#diskon_pr'+i).attr('disabled','disabled');
         }
         $('#subttl'+i).val(subttl);
         $('#subtotal'+i).html(numberToCurrency(subttl));
+        hitungDetail();
 }
 function hitungDetail() {
         
@@ -452,8 +457,8 @@ function hitungDetail() {
             <div class="left_side" style="min-height: 340px;">
             <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
             <label>Jenis Pembelian</label><?= form_dropdown('jenis', array('tempo' => 'Tempo', 'cash' => 'Cash', 'konsinyasi' => 'Konsinyasi'), NULL, 'id=jenis') ?>
-            <label id="label_sp">No. SP:</label><?= form_input('no_dokumen', isset($rows->id)?$rows->id:null, 'id=nopemesanan size=20') ?>
-            <?= form_hidden('no_pemesanan') ?>
+            <label id="label_sp">No. SP:</label><?= form_input('no_dokumen', isset($rows->dokumen_no)?$rows->dokumen_no:null, 'id=nopemesanan size=20') ?>
+            <?= form_hidden('no_pemesanan',isset($rows->id)?$rows->id:NULL) ?>
             <label>No. Faktur:</label><?= form_input('nodoc', null, 'size=20 id=nodoc') ?>
             <label>Tanggal:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
             <label>Supplier:</label><?= form_input(null, isset($rows->id)?$rows->suplier:null, 'id=suplier') ?> <?= form_hidden('id_suplier', isset($rows->id)?$rows->suplier_relasi_instansi_id:null) ?>
@@ -488,7 +493,7 @@ function hitungDetail() {
                 <th width="8%">ED</th>
                 <th width="5%">Jumlah</th>
                 <th width="8%">Harga @</th>
-                <th width="5%">Kemasan</th>
+                <th width="5%">Convert To</th>
                 <th width="5%">Isi</th>
                 <th width="5%">Disc(%)</th>
                 <th width="7%">Disc(Rp.)</th>
@@ -499,22 +504,25 @@ function hitungDetail() {
             </thead>
             <tbody>
             <?php if (isset($list_data)) { 
+                $no = 1;
                 foreach ($list_data as $key => $data) { ?>
                 <tr class="tr_row">
-                    <td align="center"><?= ++$key ?></td>
+                    <td align="center"><?= $no ?></td>
+                    <td align="center"><?= form_input('batch[]', NULL, 'id=batch size=10') ?></td>
                     <td><input type=text name=pb[] id="pb<?= $key ?>" style="width: 100%" value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?> <?= $data->satuan ?> <?= $data->sediaan ?> <?= (($data->generik == 'Non Generik')?'':$data->pabrik) ?> @ <?= ($data->isi=='1')?'':$data->isi ?> <?= $data->satuan_terkecil ?>" class=pb />
                     <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $data->barang_packing_id ?>" class=pb />
                     </td>
                     <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($data->ed) ?>" class=ed /></td>
                     <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $data->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
-                    <td><input type=text name=isi[] id="isi<?= $key ?>" size=2 value="" class="isi" /></td>
-                    <td><select name="kemasan[]" id="kemasan<?= $key ?>">
-                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($data->barang_id); 
-                        foreach ($array_kemasan as $rows) { ?>
-                            <option value="<?= $rows->id ?>"><?= $rows->nama ?></option>
+                    <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
+                    <td><?= form_hidden('barang_id[]', $rows->barang_id) ?>
+                    <select style="border: 1px solid #ccc;" name="kemasan[]" id="kemasan<?= $key ?>"><option value="">Pilih kemasan ...</option>
+                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($rows->barang_id); 
+                        foreach ($array_kemasan as $rowA) { ?>
+                            <option value="<?= $rowA->isi ?>-<?= $rowA->id ?>"><?= $rowA->nama ?></option>
                         <?php } ?>
                     </select></td>
-                    <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
+                    <td><input type=text name=isi[] readonly="readonly" id="isi<?= $key ?>" size=2 value="" class="isi" /></td>
                     <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $data->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
                     <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $data->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
                     <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />
@@ -527,6 +535,15 @@ function hitungDetail() {
                     $('#ed<?= $key ?>').datepicker({
                         changeYear: true,
                         changeMonth: true
+                    });
+                    $('#kemasan<?= $key ?>').change(function() {
+                        var isi = $(this).attr('value');
+                        var new_isi = isi.split("-");
+                        if (new_isi[0] !== '') {
+                            $('#isi<?= $key ?>').val(<?= $rows->isi ?>/new_isi[0]);
+                        } else {
+                            $('#isi<?= $key ?>').val('');
+                        }
                     });
                     $('#pb<?= $key ?>').autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
                         {
@@ -571,7 +588,9 @@ function hitungDetail() {
                             $('#sisa<?= $key ?>').html(sisa);
                         });
                 </script>
-                <?php }
+                <?php 
+                $no++;
+                }
             } ?>
             </tbody>
         </table><br/>

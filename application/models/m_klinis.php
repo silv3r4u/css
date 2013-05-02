@@ -2,9 +2,10 @@
 
 class M_klinis extends CI_Model {
     
-    function save() {
+    function save($penyakit) {
         $data = array(
             'penduduk_id' => $this->input->post('id_penduduk'),
+            'penyakit' => $penyakit,
             'tanggal' => date("Y-m-d"),
             'rpd' => $this->input->post('rpd'),
             'rpk' => $this->input->post('rpk'),
@@ -20,6 +21,7 @@ class M_klinis extends CI_Model {
         
         $data_pemerikasaan = array(
             'penduduk_id' => $this->input->post('id_penduduk'),
+            'penyakit' => $penyakit,
             'tanggal' => date("Y-m-d"),
             'subjektif' => $this->input->post('subjektif'),
             'suhu_badan' => $this->input->post('sb'),

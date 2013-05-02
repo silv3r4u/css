@@ -14,7 +14,7 @@ $data = $this->db->query("select * from dinamis_penduduk dp join penduduk p on (
 <td>
 <table width="100%" style="font-family: 'Lucida Sans Unicode'; color: #ffffff" bgcolor="#31849b">
     <tr><td colspan="12" align="center"><b><?= strtoupper($apt->nama) ?></b></td> </tr>
-    <tr><td colspan="12" align="center"><b><?= strtoupper($apt->alamat) ?> <?= strtoupper($apt->kelurahan) ?></b></td> </tr>
+    <tr><td colspan="12" align="center"><b><?= strtoupper($apt->alamat) ?> <?= strtoupper($apt->kabupaten) ?></b></td> </tr>
     <tr><td colspan="12" align="center"><b>TELP. <?= $apt->telp ?>,  FAX. <?= $apt->fax ?>, EMAIL <?= $apt->email ?></b></td> </tr>
 </table>
     <table width="100%">

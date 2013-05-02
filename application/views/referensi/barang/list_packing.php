@@ -66,5 +66,4 @@ $("#table").tablesorter({sortList:[[0,0]]});
     </tbody>
 </table>
 <br/>
-<?= $this->load->view('paging') ?>
 <div id="paging"><?= $paging ?></div>

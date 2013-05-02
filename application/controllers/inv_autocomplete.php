@@ -117,6 +117,12 @@ class Inv_autocomplete extends CI_Controller {
         $data = $this->m_inv_autocomplete->load_data_packing_barang($q, $extra_param)->result();
         die(json_encode($data));
     }
+    
+    function load_data_packing_barang_obat() {
+        $q = $_GET['q'];
+        $data = $this->m_inv_autocomplete->load_data_packing_barang_obat($q)->result();
+        die(json_encode($data));
+    }
 
     function load_data_rop() {
         $id = $_GET['id'];
@@ -137,6 +143,11 @@ class Inv_autocomplete extends CI_Controller {
     
     function get_harga_jual() {
         $data = $this->m_inv_autocomplete->get_harga_jual($_GET['id'])->row();
+        die(json_encode($data));
+    }
+    
+    function get_harga_jual_barang_kemasan($id_barang, $id_kemasan) {
+        $data = $this->m_inv_autocomplete->get_harga_jual_barang_kemasan($id_barang, $id_kemasan)->row();
         die(json_encode($data));
     }
     
@@ -272,7 +283,15 @@ class Inv_autocomplete extends CI_Controller {
         $data['list_data'] = $this->m_inv_autocomplete->load_data_retur_unit($id)->result();
         $this->load->view('inventory/penerimaan-retur-distribusi-table', $data);
     }
-
+    
+    function get_kemasan_barang($id_barang, $i) {
+        $array = $this->db->query("select s.*, bp.isi from barang_packing bp join satuan s on (bp.terbesar_satuan_id = s.id) where bp.barang_id = '$id_barang' order by bp.isi asc")->result();
+        echo "<select style='border: 1px solid #ccc; width:100%;' name='kemasan[]' onchange='get_harga_jual(".$i.")' id='kemasan".$i."'>";
+            foreach ($array as $rows) {
+                echo "<option value='".$rows->id."-".$rows->isi."'>".$rows->nama." @ ".$rows->isi."</option>";
+            }
+        echo "</select>";
+    }
 }
 
 ?>

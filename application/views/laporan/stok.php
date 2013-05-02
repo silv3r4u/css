@@ -336,11 +336,11 @@
                         <td align="center"><?= ($data->transaksi_jenis == 'Pemesanan') ? '-' : datefmysql($data->ed) ?></td>
                         <td align="right"><?= inttocur($data->hna) ?></td>
                         <?php if (isset($_GET['sort']) and $_GET['sort'] == 'History') { ?>
-                        <td align="center"><?= $awal ?></td>
+                        <td align="center"><?= $data->awal ?></td>
                         <td align="center"><?= $data->masuk ?></td>
                         <td align="center"><?= $data->keluar ?></td>
                         <?php } ?>
-                        <td align="center"><?= ($awal+$data->masuk-$data->keluar) ?></td>
+                        <td align="center"><?= ($data->sisa) ?></td>
                     </tr>
                     <?php
                     $hpp = $hpp+$data->hpp;
@@ -370,9 +370,10 @@
         <?php  ?>
         </table>
     <br/>
+    <div style="border: 1px solid #000; width: 16px; height: 16px; background: yellow; float: left; margin-right: 5px;">&nbsp;</div> Barang mendekati ED (< 6 Bulan) <br/><br/><div style="border: 1px solid #000; width: 16px; height: 16px; background: red; float: left; margin-right: 5px;">&nbsp;</div> Barang <= ED
     <?php
     if (isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir')) { ?>
-    <table style="border: 1px solid #ccc;">
+    <table style="border: 1px solid #ccc; float: right;">
         <tr><td style="font-size: 16px; font-weight: bold;">Total Asset:</td><td style="font-size: 16px; font-weight: bold;"><?= rupiah($asset) ?></td></tr>
     </table>
     <?php } ?>

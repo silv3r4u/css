@@ -24,14 +24,13 @@ class M_resep extends CI_Model {
         if ($detail != null) {
             $q.="";
         }
-        $sql = "select pd.id as id_pasien, r.*, pdk.nama as apoteker, l.nama as layanan, l.bobot, l.kelas, rr.profesi_layanan_tindakan_jasa_total, rr.r_no, rr.resep_id, pd.lahir_tanggal, bp.isi, s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar, ri.nama as pabrik, o.kekuatan,  rr.resep_r_jumlah, rr.tebus_r_jumlah,
+        $sql = "select pd.id as id_pasien, r.*, pdk.nama as apoteker, t.nama as tarif, t.bobot, rr.profesi_layanan_tindakan_jasa_total, rr.r_no, rr.resep_id, pd.lahir_tanggal, bp.isi, s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar, ri.nama as pabrik, o.kekuatan,  rr.resep_r_jumlah, rr.tebus_r_jumlah,
             rr.pakai_aturan, rr.iter, p.nama dokter, pd.nama as pasien, b.nama as barang, bp.barcode, rrr.dosis_racik, rrr.pakai_jumlah
             from resep r
             left join penduduk p on (r.dokter_penduduk_id = p.id)
             left join penduduk pd on (r.pasien_penduduk_id = pd.id)
             left join resep_r rr on (rr.resep_id = r.id)
             left join tarif t on (rr.tarif_id = t.id)
-            left join layanan l on (t.layanan_id = l.id)
             left join penduduk pdk on (pdk.id = rr.pegawai_penduduk_id)
             left join resep_racik_r_detail rrr on (rr.id = rrr.r_resep_id)
             left join barang_packing bp on (bp.id = rrr.barang_packing_id)
@@ -145,9 +144,9 @@ class M_resep extends CI_Model {
     }
     
     function get_data_pmr_penduduk($pasien) {
-        $sql = "select p.*, d.*, p.id as penduduk_id, pk.nama as pekerjaan, kl.nama as kelurahan, pd.nama as pendidikan, pr.nama profesi from penduduk p
+        $sql = "select p.*, d.*, p.id as penduduk_id, pk.nama as pekerjaan, kb.nama as kabupaten, pd.nama as pendidikan, pr.nama profesi from penduduk p
             left join dinamis_penduduk d on (p.id = d.penduduk_id)
-            left join kelurahan kl on (d.kelurahan_id = kl.id)
+            left join kabupaten kb on (d.kabupaten_id = kb.id)
             left join pendidikan pd on (d.pendidikan_id = pd.id)
             left join profesi pr on (d.profesi_id = pr.id)
             left join pekerjaan pk on (pk.id = d.pekerjaan_id)

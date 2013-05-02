@@ -9,7 +9,7 @@
         <th width="10%">No.</th>
         <th>Nama</th>
         <th>Bobot</th>
-        <th>Kelas</th>
+        <th>Nominal</th>
         <th width="10%">Aksi</th>
     </tr>
     <?php if (count($layanan) == 0) : ?>
@@ -29,16 +29,16 @@
                 <td align="center"><?= $data->nomor ?></td>
                 <td><?= $data->nama ?></td>
                 <td align="center"><?= $data->bobot ?></td>
-                <td align="center"><?= $data->kelas ?></td>
+                <td align="center"><?= rupiah($data->nominal) ?></td>
                 <td class="aksi">
                     <?php
                     $str = $data->id
                             . "#" . $data->nama
                             . "#" . $data->bobot
-                            . "#" . $data->kelas;
+                            . "#" . $data->nominal;
                     ?>
-                    <a class="edit" onclick="edit_layanan('<?= $str ?>')"></a>
-                    <a class="delete" onclick="delete_layanan('<?= $data->id ?>')"></a>
+                    <span class="edit" onclick="edit_layanan('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="delete" onclick="delete_layanan('<?= $data->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>   
             </tr>
         <?php endforeach; ?>

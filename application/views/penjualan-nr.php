@@ -105,6 +105,7 @@ $(function() {
         $('#pembeli').val(data.nama);
         $('input[name=id_pembeli]').val(data.penduduk_id);
         $('#disk_penjualan').html(data.member);
+        subTotal();
     });
 });
 function eliminate(el) {
@@ -116,19 +117,21 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.bc').attr('id','bc'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','diskon'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.ed').attr('id','exp'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').children('.jl').attr('id','jl'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','subtotal'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_barang').attr('id','id_barang'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','diskon'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.ed').attr('id','exp'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
     }
     subTotal();
 }
 function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nr[] id=bc'+i+' class=bc size=10 /></td>'+
-                '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
+                '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input id=id_barang'+i+' class=id_barang name=id_barang[] type=hidden /> </td>'+
+                '<td id=unit'+i+' align=center><select style="border: 1px solid #ccc; width: 100%;"></select></td>'+
                 '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
@@ -139,28 +142,28 @@ function add(i) {
 
     $('.form-inputan tbody').append(str);
     $('#bc'+i).live('keydown', function(e) {
-        if (e.keyCode==13) {
+        if (e.keyCode===13) {
             var bc = $('#bc'+i).val();
             $.ajax({
                 url: '<?= base_url('inv_autocomplete/get_penjualan_field') ?>/'+bc,
                 cache: false,
                 dataType: 'json',
                 success: function(data) {
-                    if (data.nama != null) {
+                    if (data.nama !== null) {
                         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                        if (data.isi != '1') { var isi = '@ '+data.isi; }
-                        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                        if (data.satuan != null) { var satuan = data.satuan; }
-                        if (data.sediaan != null) { var sediaan = data.sediaan; }
-                        if (data.pabrik != null) { var pabrik = data.pabrik; }
-                        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                        if (data.id_obat == null) {
+                        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                        if (data.satuan !== null) { var satuan = data.satuan; }
+                        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                        if (data.id_obat === null) {
                             $('#pb'+i).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                         } else {
-                            if (data.generik == 'Non Generik') {
-                                $('#pb'+i).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+                            if (data.generik === 'Non Generik') {
+                                $('#pb'+i).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
                             } else {
-                                $('#pb'+i).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                $('#pb'+i).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                             }
                         }
                         $('#id_pb'+i).val(data.id);
@@ -173,7 +176,7 @@ function add(i) {
                         subTotal(i);
                         var jml = $('.tr_row').length;
                         //alert(jml+' - '+i)
-                        if (jml - i == 1) {
+                        if (jml - i === 1) {
                             add(jml);
                         }
                         $('#bc'+(i+1)).focus();
@@ -189,7 +192,7 @@ function add(i) {
                         $('#diskon'+i).val('');
                     }
                 }
-            })
+            });
             return false;
         }
     });
@@ -248,7 +251,16 @@ function add(i) {
         $('#bc'+i).val(data.barcode);
         $('#ed'+i).html(datefmysql(data.ed));
         $('#exp'+i).val(data.ed);
+        $('#id_barang'+i).val(data.id_barang);
         $('#kekuatan'+i).html(data.kekuatan);
+        var id_barang = data.barang_id;
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/get_kemasan_barang') ?>/'+id_barang+'/'+i,
+            cache: false,
+            success: function(data) {
+                $('#unit'+i).html(data);
+            }
+        }); 
         var id_packing = data.id;
         $.ajax({
             url: '<?= base_url('inv_autocomplete/get_harga_barang_penjualan') ?>/'+id_packing,
@@ -263,20 +275,19 @@ function add(i) {
             }
         });
         $('#jl'+i).val('1');
-        subTotal(i);
         var jml = $('.tr_row').length;
-        //alert(jml+' - '+i)
         if (jml - i === 1) {
             add(jml);
         }
         $('#bc'+(i+1)).focus();
+        subTotal(i);
     });
 }
 
 function pembulatan_seratus(angka) {
     var kelipatan = 100;
     var sisa = angka % kelipatan;
-    if (sisa != 0) {
+    if (sisa !== 0) {
         var kekurangan = kelipatan - sisa;
         var hasilBulat = angka + kekurangan;
         return Math.ceil(hasilBulat);
@@ -286,6 +297,27 @@ function pembulatan_seratus(angka) {
     
     
 }
+
+function get_harga_jual(i) {
+    var id_barang = $('#id_barang'+i).val();
+    var id_kemasan= $('#kemasan'+i).val();
+    var value = id_kemasan.split('-');
+    var kemasan = value[0];
+    $.ajax({
+        url: '<?= base_url('inv_autocomplete/get_harga_jual_barang_kemasan') ?>/'+id_barang+'/'+kemasan,
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            $('#hj'+i).html(numberToCurrency(data.harga_jual));
+            var h_jual = currencyToNumber($('#hj'+i).html());
+            var jumlah = $('#jl'+i).val();
+            var subtotal = h_jual*jumlah;
+            $('#subtotal'+i).html(numberToCurrency(subtotal));
+            subTotal();
+        }
+    });
+}
+
 function subTotal() {
         var jumlah = $('.tr_row').length-1;
         var tagihan = 0;
@@ -297,20 +329,14 @@ function subTotal() {
             
             var harga = currencyToNumber($('#hj'+i).html());
             var diskon= parseInt($('#diskon'+i).val())/100;
-            
-            <?php 
-            if (isset($_GET['id'])) { ?>
-            var jml= parseInt($('#jl'+i).html());                
-            <?php } else { ?>
             var jml= parseInt($('#jl'+i).val());
-            <?php } ?>
             var subtotal = numberToCurrency(Math.ceil((harga - (harga*diskon))*jml));
             $('#subtotal'+i).html(subtotal);
             $('#subttl'+i).val(subtotal);
             var harga = parseInt(currencyToNumber($('#hj'+i).html()));
             var diskon= parseInt($('#diskon'+i).val())/100;
             //var jumlah= parseInt($('#jl'+i).val());
-            var subtotall = 0;
+            subtotall = 0;
             //alert(harga); alert(diskon); alert(jumlah);
             if (!isNaN(harga) && !isNaN(diskon) && !isNaN(jml)) {
                 if (parseInt($('#subttl'+i).val()) !== '') {
@@ -320,9 +346,7 @@ function subTotal() {
                 var disc = disc + ((diskon*harga)*jml);
                 var tagihan = tagihan + subtotall;
             }
-            
         }
-        
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
         $('#total-tagihan').html(numberToCurrency(tagihan));
         var totallica = (tagihan - disc)+jasa_apt;
@@ -441,7 +465,7 @@ function create_dialog() {
     $('#penjualan_non_resep_bayar').dialog({
         autoOpen: true,
         modal: true,
-        width: 300,
+        width: 330,
         height: 320,
         title: 'Entri Pembayaran',
         close: function() {
@@ -465,7 +489,7 @@ function create_dialog() {
     <?= form_open('pelayanan/penjualan_nr', 'id=form_penjualan_non_resep') ?>
     <div id="penjualan_non_resep_bayar" class="data-input" style="display: none">
 	<label style="font-size: 18px">Total:</label><span style="font-size: 18px; padding-left: 3px;" class=label id=totalopen></span>
-	<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px;" type=text id=bayar size=25 />
+	<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px;" type=text id=bayar size=5 />
         <label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px; padding-left: 3px; padding-top: 7px;" id="kembalian_nr" class="label"></span>
     </div>
     <div class="data-list">
@@ -474,7 +498,8 @@ function create_dialog() {
             <thead>
             <tr>
                 <th width="10%">Barcode</th>
-                <th width="40%">Packing Barang</th>
+                <th width="30%">Packing Barang</th>
+                <th width="10%">Unit Kemasan</th>
                 <th width="10%">ED</th>
                 <th width="15%">Harga Jual</th>
                 <th width="7%">Diskon</th>

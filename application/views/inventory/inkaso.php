@@ -30,7 +30,7 @@ $(function() {
                     parsed[i] =
                     {
                         data: data[i],
-                        value: data[i].id // nama field yang dicari
+                        value: data[i].dokumen_no // nama field yang dicari
                     };
                 }
                 return parsed;
@@ -38,7 +38,7 @@ $(function() {
             formatItem: function(data,i,max)
             {
                 if (data.id !== null) {
-                    var str = '<div class=result>'+data.id+' - '+datefmysql(data.dokumen_tanggal)+' - '+data.instansi+'</div>';
+                    var str = '<div class=result>'+data.id+' - '+data.dokumen_no+' <br/>'+data.instansi+'</div>';
                 }
                 return str;
             },
@@ -134,7 +134,7 @@ $(function() {
         
             <label>No.:</label><span class="label"> <?= isset($_GET['id'])?$_GET['id']:get_last_id('inkaso', 'id') ?></span>
             <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-            <label>No. Pembelian:</label><?= form_input('nopembelian', isset($_GET['id'])?$rows['id_pembelian']:null, 'id=nopembelian size=30') ?> <?= form_hidden('nopemb', isset($_GET['id'])?$rows['id_pembelian']:null) ?>
+            <label>No. Faktur / Pembelian:</label><?= form_input('nopembelian', isset($_GET['id'])?$rows['id_pembelian']:null, 'id=nopembelian size=30') ?> <?= form_hidden('nopemb', isset($_GET['id'])?$rows['id_pembelian']:null) ?>
             <label>Suplier:</label> <span class="label" id="suplier"><?= isset($_GET['id'])?$rows['nama']:null ?></span>
             <label>Total Tagihan (Rp.):</label><span class="label" id="total_tagihan"></span>
             <label>Total Terbayar (Rp.):</label><span class="label" id="total_terbayar"></span>

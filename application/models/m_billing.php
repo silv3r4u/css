@@ -423,6 +423,41 @@ class M_billing extends CI_Model {
         $result['id_kunjungan'] = $id;
         return $result;
     }
+    
+    function pendapatan_penjualan_load_data($awal, $akhir) {
+        $sql = "select sum(penerimaan) as penjualan_barang from kas where transaksi_jenis like ('Penjualan%') and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
+    function pendapatan_jasa_load_data($awal, $akhir) {
+        $sql = "select sum(rr.profesi_layanan_tindakan_jasa_total) as jasa from resep_r rr join resep r on (r.id = rr.resep_id) where date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
+    function penerimaan_kas_load_data($awal, $akhir) {
+        $sql = "select penerimaan, penerimaan_pengeluaran_nama from kas where transaksi_jenis = 'Penerimaan dan Pengeluaran' and penerimaan != '0' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
+    function total_penerimaan_kas_load_data($awal, $akhir) {
+        $sql = "select sum(penerimaan) as penerimaan_total from kas where transaksi_jenis = 'Penerimaan dan Pengeluaran' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
+    function hna_load_data($awal, $akhir) {
+        $sql = "select sum(hna*keluar) as total_hna from transaksi_detail where transaksi_jenis = 'Penjualan' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
+    function pengeluaran_kas_load_data($awal, $akhir) {
+        $sql = "select pengeluaran, penerimaan_pengeluaran_nama from kas where transaksi_jenis = 'Penerimaan dan Pengeluaran' and pengeluaran != '0' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    function total_pengeluaran_kas_load_data($awal, $akhir) {
+        $sql = "select sum(pengeluaran) as pengeluaran_total from kas where transaksi_jenis = 'Penerimaan dan Pengeluaran' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        return $this->db->query($sql);
+    }
+    
 
 }
 

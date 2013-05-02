@@ -184,6 +184,7 @@ class Inventory extends CI_Controller {
             die(json_encode($data));
         }
         if ($id != null) {
+            $data['atribute'] = $this->m_inv_autocomplete->load_attribute_penjualan_by_resep($id)->result();
             $data['list_data'] = $this->m_inv_autocomplete->load_penjualan_by_no_resep($id)->result();
         }
         $this->load->view('inventory/penjualan', $data);

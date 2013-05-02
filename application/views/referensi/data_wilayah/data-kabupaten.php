@@ -1,7 +1,7 @@
 <script type="text/javascript">
     function create_form_kabupaten() {
         var str = '<div id=datainput><div class="msg"></div>'+
-                '<form action="" id=formpro>'+
+                '<form action="" id=formkab>'+
                 '<input type=hidden name=tipe value=add /><input type=hidden name=id />'+
                 '<table>'+
                     '<tr><td align=right>Nama Provinsi:</td><td><input type=text name=provinsi class=provinsi-kab size=30 /><input type=hidden name=idprovinsikab /></td></tr>'+
@@ -38,7 +38,7 @@
             $('input[name=idprovinsikab]').val(data.id);
         });
         $('#datainput').dialog({
-            title: 'Form Referensi Provinsi',
+            title: 'Form Referensi Kabupaten',
             autoOpen: true,
             height: 200,
             width: 350,
@@ -46,6 +46,7 @@
             buttons: {
                 "Simpan": function() {
                     save_kab();
+                    $(this).dialog().remove();
                 },
                 "Batal": function() {
                     $(this).dialog().remove();
@@ -215,6 +216,7 @@
     }
     
     function edit_kabupaten(id, nama,p_id,p_nama,kode){
+        create_form_kabupaten();
         $('input[name=tipe]').val('edit');
         $('input[name=id]').val(id);
         $('#kabupaten').val(nama);

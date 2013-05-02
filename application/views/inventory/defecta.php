@@ -44,20 +44,25 @@
             $('#loaddata').load('<?= base_url('inventory/rencana_pemesanan') ?>');
         })
         $('#form_defecta').submit(function() {
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                cache: false,
-                dataType: 'json',
-                success: function(data) {
-                    if (data.status === true) {
-                        alert_tambah();
-                    } else {
-                        alert('Failed to process transaction !');
+            var data = $('.check').is(':checked');
+            if (data === false) {
+                alert('Pilih salah satu barang !');
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status === true) {
+                            alert_tambah();
+                        } else {
+                            alert('Failed to process transaction !');
+                        }
                     }
-                }
-            });
+                });
+            }
             return false;
         });
     </script>

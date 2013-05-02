@@ -57,7 +57,8 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->sediaan_id . "#" . $rows->atc . "#" . $rows->ddd . "#" . $rows->adm_r
                             . "#" . $rows->perundangan . "#" . $rows->generik . "#" . $rows->formularium
                             . "#" . $rows->indikasi . "#" . $rows->dosis
-                            . "#" . $rows->kandungan .'#'. $rows->hna;
+                            . "#" . $rows->kandungan .'#'. $rows->hna
+                            . "#" . $rows->stok_minimal;
                     ?>
                     <span class="edit" onclick="edit_obat('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_obat('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>

@@ -89,9 +89,6 @@
                 if($('#nama').val()===''){
                     $('.msg').fadeIn('fast').html('Nama instansi tidak boleh kosong !');
                     $('#nama').focus();
-                } else if($('#jenis').val()===''){
-                    $('.msg').fadeIn('fast').html('Pilih jenis instansi !');
-                    $('#jenis').focus();
                 } else{    
                     save();
                     return false;
@@ -109,8 +106,8 @@
                     "Simpan": function() {
                         $('#formadd').submit();
                     },
-                    "Reset": function() {
-                        reset_all();
+                    "Batal": function() {
+                        $(this).dialog().remove();
                     }
                 }
             });

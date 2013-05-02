@@ -1000,7 +1000,8 @@ class Referensi extends CI_Controller {
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => '1',
             'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat'),
-            'hna' => currencyToNumber($this->input->post('hna'))
+            'hna' => currencyToNumber($this->input->post('hna')),
+            'stok_minimal' => $this->input->post('stokmin')
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',
@@ -1249,6 +1250,7 @@ class Referensi extends CI_Controller {
         $searchnull = 'null';
         switch ($mode) {
             case 'list':
+                $searchnull = $_GET['search'];
                 $data = $this->get_packing_list($limit, $page, 'null', $searchnull);
                 $this->load->view('referensi/barang/list_packing', $data);
                 break;
@@ -1335,10 +1337,11 @@ class Referensi extends CI_Controller {
 
     function manage_layanan($mode, $page = null) {
         $limit = 15;
+        $bobot = $this->input->post('bobot');
         $add = array(
             'nama' => $this->input->post('nama'),
-            'bobot' => $this->input->post('bobot'),
-            'kelas' => ($this->input->post('kelas') != 'pilih') ? $this->input->post('kelas') : NULL
+            'bobot' => ($bobot == '')?NULL:$bobot,
+            'nominal' => currencyToNumber($this->input->post('nominal'))
         );
         $searchnull = 'null';
         switch ($mode) {
