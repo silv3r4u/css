@@ -35,7 +35,7 @@
                 <label>No.:</label> <span class="label" id="id_pembelian"><?= $rows->id_pembelian ?></span>
                 <label>No. Faktur:</label> <span class="label"> <?= $rows->dokumen_no ?> </span>
                 <label>Tanggal Faktur:</label><span class="label"><?= datefrompg($rows->dokumen_tanggal) ?></span>
-                <label>No. Pemesanan:</label><span class="label"><?= $rows->dokumen_no ?></span>
+<!--                <label>No. Pemesanan:</label><span class="label"><?= $rows->dokumen_no ?></span>-->
                 <label>Supplier:</label><span class="label"><?= $rows->pabrik ?></span>
 <!--                <label>Salesman:</label><span class="label"><?= $rows->salesman ?></span>-->
                 <label>Ttd Penerimaan:</label><span class="label"><?= $rows->ada_penerima_ttd ?></span>

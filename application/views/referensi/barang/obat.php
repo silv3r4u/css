@@ -23,6 +23,7 @@
     }
     var request;
     $(function(){
+        $('input,textarea').removeAttr('disabled');
         $( "#addobat" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -233,6 +234,7 @@
         $('input[name=id_pabrik_obat]').val('');
         $('input[name=id_pabriks_obat]').val('');
         $('#id_barang').val('');
+        $('#konsinyasi').removeAttr('checked');
         $('#hna').val('');
         $('#stokmin').val('');
     }
@@ -284,7 +286,10 @@
         $('#kandungan').val(data[15]);
         $('#hna').val(numberToCurrency(data[16]));
         $('#stokmin').val(data[17]);
-        
+        $('#konsinyasi').removeAttr('checked');
+        if (data[18] === '1') {
+            $('#konsinyasi').attr('checked','checked');
+        }
         if(data[11] !=='Generik'){
             $('#c').attr('checked','checked');
             $('#a').removeAttr('checked');
@@ -368,6 +373,10 @@
         <tr>
             <td align="right">Stok Minimal:</td>
             <td><?= form_input('stokmin', 0, 'id=stokmin size=10 onkeyup=Angka(this)') ?></td>
+        </tr>
+        <tr>
+            <td align="right">Konsinyasi?:</td>
+            <td><?= form_checkbox('konsinyasi', 'ya', FALSE, 'id=konsinyasi') ?></td>
         </tr>
         <tr>
             <td width="15%"></td>

@@ -18,24 +18,24 @@
                     }
                 });
                 $('#cetakrl').click(function() {
-                    var awal = $('#awal').val();
-                    var akhir= $('#akhir').val();
-                    if (awal == '') {
+                    var awal = ($('#awal').val() === '')?$('#awal').val():'';
+                    var akhir= ($('#akhir').val() === '')?$('#akhir').val():'';
+                    if (awal === '') {
                         alert('Tanggal tidak boleh kosong !');
                         $('#awal').focus();
                         return false;
                     } 
-                    if (akhir == '') {
+                    if (akhir === '') {
                         alert('Tanggal tidak boleh kosong !');
                         $('#akhir').focus();
                         return false;
                     }
                     location.href='<?= base_url('laporan/rekap_laporan') ?>?awal='+awal+'&akhir='+akhir;
             
-                })
+                });
                 $('button[id=reset]').click(function() {
                     $('#hasil').html('');
-                })
+                });
                 $('input[type=submit]').each(function(){
                     $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
                 });
@@ -48,27 +48,27 @@
                     icons: {
                         primary: 'ui-icon-print'
                     }
-                })
+                });
                 $('#excel').click(function() {
                     var perundangan = '<?= (isset($_GET['perundangan']) and $_GET['perundangan'] != '') ? $_GET['perundangan'] : NULL ?>';
                     if (perundangan != 'Narkotika') {
                         location.href='<?= base_url('laporan/print_stok') ?>?<?= generate_get_parameter($_GET) ?>';
                     } else {
-                        var awal = $('#awal').val();
-                        var akhir= $('#akhir').val();
+                        var awal = ($('#awal').val() === '')?$('#awal').val():'';
+                        var akhir= ($('#akhir').val() === '')?$('#akhir').val():'';
                         window.open('<?= base_url('laporan/narkotika') ?>?awal='+awal+'&akhir='+akhir,'mywindow','location=1,status=1,scrollbars=1,width=730px,height=500px');
                     }
-                })
+                });
                 $('#cetakabc').click(function() {
                     var awal = $('#awal').val();
                     var akhir= $('#akhir').val();
                     location.href='<?= base_url('laporan/laporan_abc') ?>?awal='+awal+'&akhir='+akhir;
-                })
+                });
                 $('#stelling').click(function() {
                     var awal = $('#awal').val();
                     var akhir= $('#akhir').val();
                     var id = $('input[name=id_pb]').val();
-                    if (id != '') {
+                    if (id !== '') {
                         $.ajax({
                             url: '<?= base_url('laporan/stelling') ?>',
                             data: 'id_pb='+id+'&awal='+awal+'&akhir='+akhir,
@@ -87,7 +87,7 @@
                     } else {
                         alert('Pilih terlebih dahulu nama packing barang!');
                     }
-                })
+                });
                 $('#excelpsi').click(function() {
                     var awal = $('#awal').val();
                     var akhir= $('#akhir').val();
@@ -105,23 +105,23 @@
                                 modal: true
                             });
                         }
-                    })
-                })
+                    });
+                });
                 $('#awal, #akhir').datepicker({
                     changeYear: true,
                     changeMonth: true
-                })
+                });
                 $('#last').click(function() {
-                    if ($('#last').is(':checked') == true) {
+                    if ($('#last').is(':checked') === true) {
                 
-                        $('#awal,#akhir').val('').attr('disabled', 'disabled');
+                        $('#awal,#akhir').val('').attr('readonly', 'readonly');
                     }
-                })
+                });
                 $('#history').click(function() {
-                    if ($('#history').is(':checked') == true) {
-                        $('#awal,#akhir').removeAttr('disabled', 'disabled');
+                    if ($('#history').is(':checked') === true) {
+                        $('#awal,#akhir').removeAttr('readonly');
                     }
-                })
+                });
                 $('#pb').autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
                 {
                     parse: function(data){
@@ -216,7 +216,7 @@
             $disabled = null;
             if (isset($_GET['sort'])) {
                 if ($_GET['sort'] == 'Terakhir') {
-                    $disabled = "disabled";
+                    $disabled = "readonly";
                 }
             }
             ?>
@@ -225,7 +225,7 @@
             <span class="label"><?= form_radio('sort', 'History', isset($_GET['sort']) and ($_GET['sort'] == 'History') ? TRUE : FALSE, 'id=history ') ?> Rincian</span>
             <label>Range:</label><?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : NULL, 'id=awal size=10 ' . $disabled) ?> <span class="label"> s . d </span><?= form_input('akhir', isset($_GET['akhir']) ? $_GET['akhir'] : NULL, 'id=akhir size=10 ' . $disabled) ?>
             <label>Jenis Transaksi:</label><?= form_dropdown('transaksi_jenis', $jenis_transaksi, isset($_GET['transaksi_jenis']) ? $_GET['transaksi_jenis'] : null) ?></td></tr>
-            <label>Jenis Barang:</label><?= form_dropdown('jenis', array('' => 'Semua Jenis ...', 'Obat' => 'Obat','Non Obat' => 'Non Obat'), isset($_GET['jenis'])?$_GET['jenis']:NULL) ?>
+            <label>Jenis Barang:</label><?= form_dropdown('jenis', array('' => 'Semua Jenis ...', 'Obat' => 'Obat','Non Obat' => 'Non Obat', 'Konsinyasi' => 'Konsinyasi'), isset($_GET['jenis'])?$_GET['jenis']:NULL) ?>
             <label>Nama Barang:</label><?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=50') ?> <?= form_hidden('id_pb', isset($_GET['id_pb']) ? $_GET['id_pb'] : null) ?>
             <label>Sediaan:</label><?= form_dropdown('sediaan', $sediaan, isset($_GET['pb']) ? $_GET['sediaan'] : null) ?>
             <label>Perundangan:</label><?= form_dropdown('perundangan', $perundangan, isset($_GET['perundangan']) ? $_GET['perundangan'] : null) ?>

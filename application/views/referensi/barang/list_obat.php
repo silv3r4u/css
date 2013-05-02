@@ -58,7 +58,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->perundangan . "#" . $rows->generik . "#" . $rows->formularium
                             . "#" . $rows->indikasi . "#" . $rows->dosis
                             . "#" . $rows->kandungan .'#'. $rows->hna
-                            . "#" . $rows->stok_minimal;
+                            . "#" . $rows->stok_minimal. "#".$rows->is_konsinyasi;
                     ?>
                     <span class="edit" onclick="edit_obat('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_obat('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>

@@ -94,7 +94,7 @@ if (!isset($_GET['do'])) {
                 <tr>
                     <th width="10%"><h3>Jatuh Tempo</h3></th>
                     <th width="30%"><h3>Supplier</h3></th>
-                    <th width="10%"><h3>No. Doc</h3></th>
+                    <th width="10%"><h3>No. Faktur</h3></th>
                     <th width="10%"><h3>Total/Faktur (Rp.)</h3></th>
                     <th width="10%"><h3>Inkaso (Rp.)</h3></th>
                 </tr>

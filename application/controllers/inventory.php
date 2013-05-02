@@ -109,7 +109,7 @@ class Inventory extends CI_Controller {
         $id_pembelian = $this->input->post('nopembelian');
         if (isset($id_pembelian) and $id_pembelian != '') {
             $data['result'] = $this->m_inventory->inkaso_save();
-            $data['detail'] = $this->m_inv_autocomplete->get_nomor_pembelian($id_pembelian)->row();
+            $data['detail'] = $this->m_inv_autocomplete->cek_inkaso($id_pembelian)->row();
             die(json_encode($data));
         }
         $this->load->view('inventory/inkaso', $data);
@@ -324,8 +324,8 @@ class Inventory extends CI_Controller {
     
     function retur_pembelian_save() {
         $data['title'] = 'Retur Pembelian';
-        $salesman = $this->input->post('id_sales');
-        if (isset($salesman) and $salesman != '') {
+        $tanggal = $this->input->post('tanggal');
+        if (isset($tanggal) and $tanggal != '') {
             $data = $this->m_inventory->retur_pembelian_save();
             die(json_encode($data));
         }
@@ -437,7 +437,7 @@ class Inventory extends CI_Controller {
         $this->load->view('inventory/defecta', $data);
     }
     
-    function save_defecta($id) {
+    function save_defecta($id = null) {
         $data = $this->m_inventory->save_defecta($id);
         die(json_encode($data));
     }

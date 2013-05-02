@@ -273,11 +273,11 @@ function add(i) {
         '<td align=center>'+(i+1)+'</td>'+
         '<td><input type=text name=batch[] id=batch'+i+' size=10 class=batch />'+
         '<td><input type=text name=pb[] id=pb'+i+' size=50 class=pb />'+
-        '<input type=hidden name=id_pb[] id=id_pb'+i+' class=pb /></td>'+
+        '<input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input type=hidden name=barang_id[] id=barang_id'+i+' class=barang_id /></td>'+
         '<td><input type=text name=ed[] id=ed'+i+' size=8 class=ed /></td>'+
         '<td><input type=text name=jml[] id=jml'+i+' size=2 class=jml onblur=jmlSubTotal('+i+') /></td>'+
         '<td><input type=text name=harga[] id=harga'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=harga /></td>'+
-        '<td align="center"><select style="border: 1px solid #ccc; width=100%;"></select></td>'+
+        '<td align="center" id=unit'+i+'><select id=kemasan'+i+' style="border: 1px solid #ccc; width=100%;"></select></td>'+
         '<td><input type=text name=isi[] id=isi'+i+' size=2 class=isi /></td>'+
         '<td><input type=text name=diskon_pr[] id=diskon_pr'+i+' size=2 class=diskon_pr onkeyup=jmlSubTotal('+i+') onblur=hitungDetail() class=diskon_pr maxlength=3 min=0 max=100 /></td>'+
         '<td><input type=text name=diskon_rp[] id=diskon_rp'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=diskon_rp />'+
@@ -344,9 +344,28 @@ function add(i) {
                 $(this).val(data.nama+' '+((data.kekuatan === '1')?'':data.kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
-        
         $('#id_pb'+i).val(data.id);
+        $('#barang_id'+i).val(data.barang_id);
+        var id_barang = data.barang_id;
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/get_kemasan_barang_pembelian') ?>/'+id_barang+'/'+i,
+            cache: false,
+            success: function(data) {
+                $('#unit'+i).html(data);
+            }
+        });
     });
+    
+}
+
+function get_isi_kemasan(i) {
+    var isi = $('#kemasan'+i).val();
+    var new_isi = isi.split("-");
+    if (new_isi[0] !== '') {
+        $('#isi'+i).val(new_isi[0]);
+    } else {
+        $('#isi'+i).val('');
+    }
 }
 $(function() {
     <?php if (!isset($list_data)) { ?>

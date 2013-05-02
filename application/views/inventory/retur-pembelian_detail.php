@@ -24,16 +24,15 @@ $(function() {
     foreach ($list_data as $data);
     //$retur = _select_unique_result("select sum(hpp) as total_retur from transaksi_detail where transaksi_jenis = 'Pembelian' and transaksi_id = '$_GET[id]'");
     ?><div class="data-input">
-        <table width="100%" class="tabel-input">
+        <table width="100%">
             <tr><td width="10%">No.:</td><td id="retur_pembelian_id"><?= $data->transaksi_id ?></td> </tr>
             <tr><td>Waktu:</td><td><?= datetime($data->waktu) ?></td></tr>
             <tr><td>Suplier:</td><td><?= $data->suplier ?></td> </tr>
-            <tr><td>Salesman:</td><td><?= $data->salesman ?></td> </tr>
             <tr><td>Total:</td><td id="retur"></td></tr>
         </table>
         </div>
     
-    <div class="data-list">
+    
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
@@ -63,6 +62,5 @@ $(function() {
         <script>
             $('#retur').html(numberToCurrency(<?= $total ?>));
         </script>
-    </div>
 <?= form_button(null, 'Delete', 'id=delete_retur_pembelian') ?>
 </div>

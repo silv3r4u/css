@@ -427,6 +427,7 @@ class Laporan extends CI_Controller {
 
     function stelling() {
         $data['title'] = 'Kartu Stelling';
+        $data['atribute'] = $this->m_inventory->stelling_load_data_atribute($_GET['id_pb'])->result();
         $data['stelling'] = $this->m_inventory->stelling_load_data($_GET['id_pb'], $_GET['awal'], $_GET['akhir'])->result();
         $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
         $this->load->view('inventory/print/stelling', $data);

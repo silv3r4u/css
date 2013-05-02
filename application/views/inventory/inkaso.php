@@ -53,19 +53,29 @@ $(function() {
                 $('#suplier').html(data.instansi);
                 $('#total_tagihan').html(numberToCurrency(Math.ceil(data.total)));
                 $('#total_terbayar').html(numberToCurrency(Math.ceil(data.jumlah_terbayar)));
-                var sisa = data.total-data.jumlah_terbayar;
-                if (sisa <= 0) {
-                    var hasil_sisa = numberToCurrency(Math.ceil(sisa));
-                    $('#simpan').hide();
-                    $('#bayar, #tanggal').attr('disabled','disabled');
-                    $('#tanggal, #bayar').attr('disabled', 'disabled');
-                } else {
-                    $('#simpan').show();
-                    var hasil_sisa = Math.ceil(sisa);
-                    $('#tanggal, #bayar').removeAttr('disabled', 'disabled');
-                }
-                $('#sisa_tagihan').html(numberToCurrency(hasil_sisa));
-                $('#bayar').val(numberToCurrency(hasil_sisa));
+                $.ajax({
+                    url: '<?= base_url('inv_autocomplete/cek_inkaso') ?>/'+data.id,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(hsl) {
+                        var terbayar = (hsl.jumlah_terbayar !== null)?hsl.jumlah_terbayar:'0';
+                        var sisa = data.total-terbayar;
+                        if (sisa <= 0) {
+                            alert('Sisa tagihan untuk nomor faktur '+data.dokumen_no+' adalah Rp. 0, \nsilahkan entrikan nomer pembelian / faktur dengan benar');
+                            var hasil_sisa = numberToCurrency(Math.ceil(sisa));
+                            $('#simpan').hide();
+                            $('input').attr('disabled','disabled');
+                        } else {
+                            $('#simpan').show();
+                            var hasil_sisa = Math.ceil(sisa);
+                            $('#tanggal, #bayar').removeAttr('disabled', 'disabled');
+                        }
+                        $('#sisa_tagihan').html(numberToCurrency(hasil_sisa));
+                        $('#bayar').val(numberToCurrency(hasil_sisa));
+                    }
+                });
+                
+                
             }
         );
         $('#bayar, #serahuang').keyup(function() {
@@ -105,7 +115,7 @@ $(function() {
                 dataType: 'json',
                 success: function(data) {
                     if (data['result'].status == true) {
-                        $('#bayar, #nopembelian').attr('disabled', 'disabled');
+                        $('#bayar, #nopembelian, #tanggal').attr('disabled', 'disabled');
                         $('button[type=submit]').hide();
                         $('input[name=nopemb]').val(data['detail'].id);
                         $('#no_pembelian').html(data['detail'].id);

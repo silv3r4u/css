@@ -995,13 +995,14 @@ class Referensi extends CI_Controller {
 
     function manage_barang_obat($mode, $page = null) {
         $limit = 15;
-
+        $is_konsi = $this->input->post('konsinyasi');
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => '1',
             'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat'),
             'hna' => currencyToNumber($this->input->post('hna')),
-            'stok_minimal' => $this->input->post('stokmin')
+            'stok_minimal' => $this->input->post('stokmin'),
+            'is_konsinyasi' => (isset($is_konsi)?'1':'0')
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',

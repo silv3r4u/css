@@ -147,11 +147,12 @@ function add(i) {
                 $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
+        
         $('#id_barang'+i).val(data.id_barang);
         $('#id_pb'+i).val(data.id);
         $('#bc'+i).val(data.barcode);
         $('#ed'+i).val(data.ed);
-        $('#hna'+i).val(data.hna);
+        $('#hna'+i).val(numberToCurrency(data.hna));
         $('#hpp'+i).val(data.hpp);
         $('#het'+i).val(data.het);
     });

@@ -90,7 +90,7 @@ class M_inv_autocomplete extends CI_Model {
         if ($extra_param != NULL) {
             $param.=" and b.id = '$extra_param'";
         }
-        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, stb.nama as satuan_terbesar, o.kekuatan from barang_packing bp
+        $sql = "select o.id as id_obat, b.hna, o.generik, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, stb.nama as satuan_terbesar, o.kekuatan from barang_packing bp
         join barang b on (b.id = bp.barang_id)
         left join obat o on (b.id = o.id)
         left join satuan s on (s.id = o.satuan_id)
@@ -216,12 +216,19 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function get_nomor_pembelian($q) {
-        $sql = "select distinct sum(td.subtotal)+(sum(td.subtotal)*(p.ppn/100))+p.materai as total, p.*, r.nama as instansi, (select sum(jumlah_bayar) from inkaso where pembelian_id = '$q') as jumlah_terbayar 
+        $sql = "select p.total_pembelian as total, p.*, r.nama as instansi, (select sum(jumlah_bayar) from inkaso where pembelian_id = '$q') as jumlah_terbayar
             from pembelian p
-            join transaksi_detail td on (td.transaksi_id = p.id)
             join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
-            where p.id like '%$q%' or p.dokumen_no like '%$q%' and td.transaksi_jenis = 'Pembelian'
-            group by p.id";
+            where (p.id = '$q' or p.dokumen_no like '%$q%')";
+        return $this->db->query($sql);
+    }
+    
+    function cek_inkaso($id_pembelian) {
+        $sql = "select sum(jumlah_bayar) as jumlah_terbayar, p.*, p.total_pembelian as total, r.nama as instansi 
+            from inkaso i 
+            join pembelian p on (i.pembelian_id = p.id) 
+            join relasi_instansi r on (r.id = p.suplier_relasi_instansi_id)
+            where i.pembelian_id = '$id_pembelian'";
         return $this->db->query($sql);
     }
 

@@ -24,11 +24,11 @@
 <div class="layout-printer" id="mydiv">
 <table class="header-printer" style="border-bottom: 1px solid #000;" width="100%">
     <tr><td colspan="4" align="center" style="text-transform: uppercase"><?= $apt->nama ?></td> </tr>
-    <tr><td colspan="4" align="center"><?= $apt->alamat ?> <?= $apt->kelurahan ?> <?= $apt->kecamatan ?></td> </tr>
+    <tr><td colspan="4" align="center"><?= $apt->alamat ?> <?= $apt->kabupaten ?></td> </tr>
     <tr><td colspan="4" align="center">Telp. <?= $apt->telp ?>,  Fax. <?= $apt->fax ?>, Email <?= $apt->email ?></td> </tr>
 </table>
 <?php
-foreach ($stelling as $data);
+foreach ($atribute as $data);
 ?>
 <title><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $_GET['awal'].'sd'.$_GET['akhir'] ?></title>
 <table class="header-printer">

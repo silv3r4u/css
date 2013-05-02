@@ -1,9 +1,9 @@
 <table width="100%">
     <tr><td colspan="7" align="center" style="text-transform: uppercase"><?= $datas->nama ?></td> </tr>
-    <tr><td colspan="7" align="center"><?= $datas->alamat ?> <?= $datas->kelurahan ?></td> </tr>
+    <tr><td colspan="7" align="center"><?= $datas->alamat ?> <?= $datas->kabupaten ?></td> </tr>
     <tr><td colspan="7" align="center">Telp. <?= $datas->telp ?>,  Fax. <?= $datas->fax ?>, Email <?= $datas->email ?></td> </tr>
 </table>
-<table class="list-data-printer" width="100%" style="margin-top: 10px;">
+<table class="tabel" width="100%" style="margin-top: 10px;">
     <tr>
         <th rowspan="2">Barang</th>
         <th rowspan="2">Saldo Awal</th>
