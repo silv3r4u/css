@@ -73,16 +73,14 @@ $(function() {
             success: function(msg) {
                 $('.form-inputan tbody').html(msg);
             }
-        })
-        //
+        });
     });
-    
-})
+});
 function eliminate(el) {
     var parent = el.parentNode.parentNode;
     parent.parentNode.removeChild(parent);
     var jumlah = $('.tr_row').length;
-    hitungDetail()
+    hitungDetail();
     for (i = 0; i <= jumlah; i++) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.pb').attr('id','pb'+(i+1));
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.id_pb').attr('id','id_pb'+(i+1));
@@ -94,11 +92,11 @@ function eliminate(el) {
 function bonusthis(i) {
     if ($('#check'+i).is(':checked')) {
         $('#diskon_pr'+i).attr('value','100');
-        jmlSubTotal(i)
+        jmlSubTotal(i);
         hitungDetail();
     } else {
         $('#diskon_pr'+i).attr('value','0');
-        jmlSubTotal(i)
+        jmlSubTotal(i);
         hitungDetail();
     }
 }
@@ -133,19 +131,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
             if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
             if (data.satuan != null) { var satuan = data.satuan; }
             if (data.sediaan != null) { var sediaan = data.sediaan; }
             if (data.pabrik != null) { var pabrik = data.pabrik; }
             if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
+            if (data.id_obat === null) {
                 var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                 }
             }
             return str;
@@ -161,13 +159,13 @@ function add(i) {
         if (data.sediaan != null) { var sediaan = data.sediaan; }
         if (data.pabrik != null) { var pabrik = data.pabrik; }
         if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
         $('#id_pb'+i).val(data.id);
@@ -235,13 +233,12 @@ $(function() {
     <?= form_open('inventory/reretur_pembelian_save', 'id=form_reretur_pembelian') ?>
     <div class="data-input">
         
-    <?= form_hidden('total', isset($kas)?rupiah($kas['penerimaan']):null, 'id=returan2') ?>
+    <?= form_hidden('total') ?>
         <fieldset><legend>Summary</legend>
             <div class="one_side">
         <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>No. Retur:</label></label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>
         <label>Suplier:</label><span id="suplier" class="label"><?= isset($_GET['id'])?$data[0]['suplier']:null ?></span>
-        <label>Salesman:</label><span id="salesman" class="label"><?= isset($_GET['id'])?$data[0]['salesman']:null ?></span>
         <label>Total:</label><span class="label" id="returan"><?= isset($kas)?rupiah($kas['penerimaan']):null ?></span>
         <label></label>
             <span class="label"><?= form_radio('berupa', 'barang', TRUE, 'id=barang') ?> Barang</span> 

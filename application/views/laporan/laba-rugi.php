@@ -26,7 +26,7 @@
             $('#cetak').click(function() {
                 var awal = $('#awal').val();
                 var akhir = $('#akhir').val();
-                location.href='<?= base_url('laporan/laba_rugi_load_data') ?>?awal='+awal+'&akhir='+akhir+'&do=cetak';
+                location.href='<?= base_url('laporan/laba_rugi_load_data_excel') ?>?awal='+awal+'&akhir='+akhir+'&do=cetak';
             });
             $('#awal,#akhir').datepicker({
                 changeYear: true,

@@ -30,7 +30,7 @@ header_excel("stok-".date("d-m-Y").".xls");
         <td align="center"><?= $data->transaksi_id ?></td>
         <td><?= $data->transaksi_jenis ?></td>
         <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
-        <td align="right"><?= inttocur($data->hna) ?></td>
+        <td align="right"><?= $data->hna ?></td>
         <td><?= $data->awal ?></td>
         <td><?= $data->masuk ?></td>
         <td><?= $data->keluar ?></td>

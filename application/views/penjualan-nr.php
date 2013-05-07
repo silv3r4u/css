@@ -118,6 +118,7 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_barang').attr('id','id_barang'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','unit'+i);
         $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','ed'+i);
         $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','hj'+i);
         $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','diskon'+i);
@@ -276,11 +277,12 @@ function add(i) {
         });
         $('#jl'+i).val('1');
         var jml = $('.tr_row').length;
+        
         if (jml - i === 1) {
             add(jml);
         }
         $('#bc'+(i+1)).focus();
-        subTotal(i);
+        //subTotal();
     });
 }
 
@@ -308,11 +310,11 @@ function get_harga_jual(i) {
         cache: false,
         dataType: 'json',
         success: function(data) {
-            $('#hj'+i).html(numberToCurrency(data.harga_jual));
+            $('#hj'+i).html(numberToCurrency(Math.ceil(data.harga_jual)));
             var h_jual = currencyToNumber($('#hj'+i).html());
             var jumlah = $('#jl'+i).val();
             var subtotal = h_jual*jumlah;
-            $('#subtotal'+i).html(numberToCurrency(subtotal));
+            $('#subtotal'+i).html(numberToCurrency(Math.ceil(subtotal)));
             subTotal();
         }
     });
@@ -322,23 +324,22 @@ function subTotal() {
         var jumlah = $('.tr_row').length-1;
         var tagihan = 0;
         var disc = 0;
-        //alert(jumlah)
+        
         var jasa_apt = 0;
         var ppn = $('#ppn').val()/100;
         for (i = 0; i <= jumlah; i++) {
-            
-            var harga = currencyToNumber($('#hj'+i).html());
-            var diskon= parseInt($('#diskon'+i).val())/100;
-            var jml= parseInt($('#jl'+i).val());
-            var subtotal = numberToCurrency(Math.ceil((harga - (harga*diskon))*jml));
-            $('#subtotal'+i).html(subtotal);
-            $('#subttl'+i).val(subtotal);
-            var harga = parseInt(currencyToNumber($('#hj'+i).html()));
-            var diskon= parseInt($('#diskon'+i).val())/100;
-            //var jumlah= parseInt($('#jl'+i).val());
-            subtotall = 0;
+            if ($('#id_pb'+i).val() !== '') {
+                var harga  = currencyToNumber($('#hj'+i).html());
+                var diskon = $('#diskon'+i).val()/100;
+                var jml    = $('#jl'+i).val();
+                
+                var subtotal = numberToCurrency(Math.ceil((harga - (harga*diskon))*jml));
+                $('#subtotal'+i).html(subtotal);
+                $('#subttl'+i).val(subtotal);
+                //var jumlah= parseInt($('#jl'+i).val());
+                subtotall = 0;
             //alert(harga); alert(diskon); alert(jumlah);
-            if (!isNaN(harga) && !isNaN(diskon) && !isNaN(jml)) {
+            
                 if (parseInt($('#subttl'+i).val()) !== '') {
                     //var subtotall = parseInt($('#subttl'+i).val());
                     var subtotall = harga*jml;
@@ -357,7 +358,7 @@ function subTotal() {
         $('#total, #total_tagihan_penjualan_nr').html(numberToCurrency(Math.ceil(new_totallica)));
         if (tagihan !== 0) {
             $('#bulat').val(numberToCurrency(pembulatan_seratus(Math.ceil(new_totallica))));
-        }
+        } else { $('#bulat').val(''); }
 }
 function setKembali() {
         //var apoteker = currencyToNumber($('#jasa-apt').html());

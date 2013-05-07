@@ -14,18 +14,6 @@
     });
     $(function() {
         $('#checkall').button();
-        $('#checkall').live('click', function() {
-            $('.ui-button-text').html('Uncheck all');
-            $('#checkall').attr('id', 'uncheckall');
-            $('.check').attr('checked', 'checked');
-            selected_item();
-        });
-        $('#uncheckall').live('click', function() {
-            $('.ui-button-text').html('Check all');
-            $('#uncheckall').attr('id', 'checkall');
-            $('.check').removeAttr('checked');
-            selected_item();
-        });
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
         $('#batal').button({icons: {secondary: 'ui-icon-refresh'}});

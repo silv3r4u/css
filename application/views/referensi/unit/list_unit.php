@@ -1,13 +1,13 @@
-<table cellpadding="0" cellspacing="0" class="tabel" width="30%">
+<table cellpadding="0" cellspacing="0" class="tabel" width="50%">
     <tr>
         <th width="10%">ID</th>
-        <th>Unit</th>
+        <th width="75%">Unit</th>
         <th width="15%">Aksi</th>
     </tr>
     <?php if ($unit != null): ?>
         <?php foreach ($unit as $key => $prov) : ?>
             <tr class="<?= ($key % 2) ? "even" : "odd" ?>">
-                <td align="center"><?= $prov->id ?></td>
+                <td align="center"><?= ++$key ?></td>
                 <td><?= $prov->nama ?></td>
                 <td class="aksi">
                     <span class="edit" onclick="edit_unit(<?= $prov->id ?>,'<?= $prov->nama ?>')"><?= img('assets/images/icons/edit.png') ?></span>

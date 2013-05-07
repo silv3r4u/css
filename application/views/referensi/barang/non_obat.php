@@ -1,6 +1,7 @@
 <script type="text/javascript">
     var request;
     $(function(){
+        $('#keys').watermark('Search ...');
         $( "#addnewrow" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -9,7 +10,7 @@
         get_nonobat_list(1,'null');
         $('#form_non').dialog({
             autoOpen: false,
-            height: 230,
+            height: 260,
             width: 400,
             modal: true,
             resizable : false,
@@ -96,7 +97,19 @@
             $('.dinamis').hide();
             
         });
-        
+        $('#keys').live('keyup', function(e) {
+            if (e.keyCode === 13) {
+                $.ajax({
+                    type : 'GET',
+                    url: '<?= base_url('referensi/manage_barang_non') ?>/search',
+                    data: 'search='+$('#keys').val(),
+                    cache: false,
+                    success: function(data) {
+                        $('#obat_list').html(data);
+                    }
+                });
+            }
+        });
         $('.pabrik').autocomplete("<?= base_url('inv_autocomplete/load_data_pabrik') ?>",
         {
             parse: function(data){
@@ -265,7 +278,12 @@
         $('#kategori').val(data[2]);
         $('.pabrik').val(data[4]);
         $('input[name=id_pabrik]').val(data[3]);
-        
+        $('#hna_nb').val(numberToCurrency(data[5]));
+        $('#b_konsinyasi').removeAttr('checked');
+        if (data[6] === '1') {
+            $('#b_konsinyasi').attr('checked','checked');
+        }
+        $('#stok_min').val(data[7]);
         $('#savebarang').removeAttr('disabled');
          
         $('input[name=tipe]').val('edit');
@@ -274,11 +292,9 @@
     }
 </script>
 
-<div style="display: inline-block; padding-left: 2px;">
     <?= form_button('', 'Tambah Data', 'id=addnewrow style="margin-left: 0px;"') ?>
-    <?= form_button('', 'Cari', 'id=bt_carinon style="margin-left: 0px;"') ?>
     <?= form_button('', 'Tampilkan', 'class=resetan id=showAll style="margin-left: 0px;"') ?>  
-</div>
+    <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=keys size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
 
 <div id="form_non" style="display: none;position: static; background: #fff; padding: 10px;">
     <div class="msg" id="msg_non"></div>
@@ -305,33 +321,20 @@
             <td align="right">HNA (Rp.)</td>
             <td><?= form_input('hna_nb', null, 'id=hna_nb onkeyup=FormNum(this)') ?></td>
         </tr>
+        <tr>
+            <td align="right">Konsinyasi?:</td>
+            <td><?= form_checkbox('b_konsinyasi', '1', FALSE, 'id=b_konsinyasi') ?></td>
+        </tr>
+        <tr>
+            <td align="right">Stok Minimal</td>
+            <td><?= form_input('stok_min', null, 'id=stok_min onkeyup=FormNum(this)') ?></td>
+        </tr>
     </table>
     <?= form_close() ?>
 </div>
 
 <div id="konfirmasi_brg" style="padding: 20px;">
     <div id="text_konfirmasi_brg"></div>
-</div>
-
-<div id="carinonobat" style="display: none; background: #fff; padding: 10px">
-    <?= form_open('', 'id=form_carinon') ?>
-    <?= form_hidden('kat') ?>
-    <?= form_hidden('id_barang') ?>
-    <div class="msg" id="msg_carinon"></div>
-    <table width="100%">
-        <tr>
-            <td width="20%" align="right">Nama Barang:</td>
-            <td><?= form_input('nama', '', 'id=nama_cari class=nama size=40') ?> </td>
-        </tr>
-        <tr>
-            <td width="20%" align="right">Pabrik:</td>
-            <td>
-                <?= form_input('pabrik', '', 'class=pabrik size=40') ?>
-                <?= form_hidden('id_pabriks') ?>
-            </td>
-        </tr>
-    </table>
-    <?= form_close() ?>
 </div>
 
 <div id="non_list" class="data-list"></div>

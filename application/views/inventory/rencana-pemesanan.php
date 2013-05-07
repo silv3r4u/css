@@ -8,10 +8,14 @@
             primary: 'ui-icon-arrowthickstop-1-s'
         }
     });
-    $('#update').button({
+    $('#reset').button({
         icons: {
-            primary: 'ui-icon-calculator'
+            primary: 'ui-icon-refresh'
         }
+    });
+    $('#reset').click(function() {
+        $('#loaddata').empty();
+        $('#loaddata').load('<?= base_url('inventory/rencana_pemesanan') ?>');
     });
     $('#suplier').autocomplete("<?= base_url('inv_autocomplete/load_data_instansi_relasi/supplier') ?>",
     {
@@ -97,7 +101,8 @@
 </script>
 <div class="kegiatan">
     <h1><?= $title ?></h1>
-    <?= form_open('inventory/save_pemesanan', 'id=form_rencana'); ?>
+    <?= form_open('inventory/save_pemesanan_defecta', 'id=form_rencana'); ?>
+    <?= form_hidden('defecta','yeaah') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
             <div class="one_side">
@@ -114,12 +119,10 @@
             <tr>
                 <th width="5%" class="nosort"><h3>No.</h3></th>
                 <th width="50%"><h3>Nama Barang</h3></th>
-                <th width="10%"><h3>Expired Date</h3></th>
+                <th width="10%">Kemasan</th>
                 <th width="5%"><h3>Sisa Stok</h3></th>
                 <th width="5%"><h3>Stok Min</h3></th>
-                <th width="10%"><h3>Harga Beli</h3></th>
                 <th width="5%"><h3>Jumlah</h3></th>
-                <th width="15%"><h3>Subtotal</h3></th>
                 <th width="5%"><h3>Aksi</h3></th>
             </tr>
             </thead>
@@ -128,18 +131,23 @@
                 foreach ($list_data as $key => $data) { ?>
                 <tr class="tr_row" id="listdata<?= $key ?>">
                     <td align="center"><?= ++$key ?></td>
-                    <td><?= form_hidden('id_pb[]',$data->barang_packing_id) ?><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
-                    <td align="center"><?= datefmysql($data->ed) ?></td>
+                    <td><?= form_hidden('id_pb[]',$data->barang_packing_id) ?><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?><!-- @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?>--></td>
+                    <td><?= form_hidden('barang_id[]', $data->barang_id) ?>
+                    <select style="border: 1px solid #ccc;" name="kemasan[]" id="kemasan<?= $key ?>"><option value="">Pilih kemasan ...</option>
+                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($data->barang_id); 
+                        foreach ($array_kemasan as $rowA) { ?>
+                            <option value="<?= $rowA->isi ?>-<?= $rowA->id ?>"><?= $rowA->nama ?></option>
+                        <?php } ?>
+                    </select></td>
                     <td align="center"><?= $data->sisa ?></td>
                     <td align="center"><?= $data->stok_minimal ?></td>
-                    <td align="right" id="hpp<?= $key ?>"><?= rupiah($data->hpp) ?></td>
                     <td><?= form_input('jml[]', $data->jumlah, 'id=jml'.$key.' size=5 onkeyup=hitungSubtotal('.$key.')') ?></td>
-                    <td align="right" id="subtotal<?= $key ?>"><?= rupiah($data->hpp*$data->jumlah) ?></td>
                     <td align="center"><span onclick="delete_rencana(<?= $data->barang_packing_id ?>);"><?= img('assets/images/icons/delete.png') ?></span></td>
                 </tr>
                 <?php }  ?>
             </tbody></table>
     </div>
     <?= form_close() ?>
-    <?= form_button(null, 'Update Jumlah', 'id=update') ?> <?= form_button(NULL, 'Selesai', 'id=done') ?>
+    <?= form_button(NULL, 'Pesan Barang', 'id=done') ?>
+    <?= form_button(null, 'Reset', 'id=reset') ?>
 </div>

@@ -245,6 +245,8 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(3)').children('.ed').attr('id','ed'+i);
         $('.tr_row:eq('+i+')').children('td:eq(4)').children('.jml').attr('id','jml'+i);
         $('.tr_row:eq('+i+')').children('td:eq(5)').children('.harga').attr('id','harga'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','unit'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.kemasan').attr('id','kemasan'+i);
         $('.tr_row:eq('+i+')').children('td:eq(7)').children('.isi').attr('id','isi'+i);
         $('.tr_row:eq('+i+')').children('td:eq(8)').children('.diskon_pr').attr('id','diskon_pr'+i);
         $('.tr_row:eq('+i+')').children('td:eq(9)').children('.diskon_rp').attr('id','diskon_rp'+i);
@@ -277,7 +279,7 @@ function add(i) {
         '<td><input type=text name=ed[] id=ed'+i+' size=8 class=ed /></td>'+
         '<td><input type=text name=jml[] id=jml'+i+' size=2 class=jml onblur=jmlSubTotal('+i+') /></td>'+
         '<td><input type=text name=harga[] id=harga'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=harga /></td>'+
-        '<td align="center" id=unit'+i+'><select id=kemasan'+i+' style="border: 1px solid #ccc; width=100%;"></select></td>'+
+        '<td align="center" id=unit'+i+'><select class=kemasan id=kemasan'+i+' style="border: 1px solid #ccc; width=100%;"></select></td>'+
         '<td><input type=text name=isi[] id=isi'+i+' size=2 class=isi /></td>'+
         '<td><input type=text name=diskon_pr[] id=diskon_pr'+i+' size=2 class=diskon_pr onkeyup=jmlSubTotal('+i+') onblur=hitungDetail() class=diskon_pr maxlength=3 min=0 max=100 /></td>'+
         '<td><input type=text name=diskon_rp[] id=diskon_rp'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=diskon_rp />'+
@@ -369,7 +371,7 @@ function get_isi_kemasan(i) {
 }
 $(function() {
     <?php if (!isset($list_data)) { ?>
-    for(x = 0; x <= 1; x++) {
+    for(x = 0; x <= 0; x++) {
         add(x);
     }
     <?php } ?>
@@ -525,17 +527,19 @@ function hitungDetail() {
             <?php if (isset($list_data)) { 
                 $no = 1;
                 foreach ($list_data as $key => $data) { ?>
+                
                 <tr class="tr_row">
                     <td align="center"><?= $no ?></td>
-                    <td align="center"><?= form_input('batch[]', NULL, 'id=batch size=10') ?></td>
+                    <td align="center"><input type="text" name="batch[]" id="batch<?= $key ?>" class="batch" /></td>
                     <td><input type=text name=pb[] id="pb<?= $key ?>" style="width: 100%" value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?> <?= $data->satuan ?> <?= $data->sediaan ?> <?= (($data->generik == 'Non Generik')?'':$data->pabrik) ?> @ <?= ($data->isi=='1')?'':$data->isi ?> <?= $data->satuan_terkecil ?>" class=pb />
-                    <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $data->barang_packing_id ?>" class=pb />
+                    <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $data->barang_packing_id ?>" class=id_pb />
+                    <input type="hidden" name="barang_id[]" id="barang_id<?= $key ?>" value="<?= $data->barang_id ?>" class="barang_id" />
                     </td>
                     <td><input type=text name=ed[] id="ed<?= $key ?>" size=8 value="<?= datefrompg($data->ed) ?>" class=ed /></td>
                     <td><input type=text name=jml[] id="jml<?= $key ?>" size=2 value="<?= $data->masuk ?>" class=jml onblur="jmlSubTotal(<?= $key ?>);" /></td>
                     <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
-                    <td><?= form_hidden('barang_id[]', $rows->barang_id) ?>
-                    <select style="border: 1px solid #ccc;" name="kemasan[]" id="kemasan<?= $key ?>"><option value="">Pilih kemasan ...</option>
+                    <td>
+                    <select style="border: 1px solid #ccc;" class="kemasan" name="kemasan[]" id="kemasan<?= $key ?>"><option value="">Pilih kemasan ...</option>
                         <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($rows->barang_id); 
                         foreach ($array_kemasan as $rowA) { ?>
                             <option value="<?= $rowA->isi ?>-<?= $rowA->id ?>"><?= $rowA->nama ?></option>

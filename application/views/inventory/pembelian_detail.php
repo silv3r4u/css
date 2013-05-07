@@ -65,7 +65,6 @@
                 <th width="5%">Disc(%)</th>
                 <th width="7%">Disc(Rp.)</th>
                 <th width="8%">SubTotal</th>
-                <th width="7%">HET</th>
                 <th width="2%">Bonus</th>
             </tr>
             </thead>
@@ -85,16 +84,15 @@
                     <td style="white-space: nowrap"><?= $packing ?></td>
                     <td align="center"><?= datefmysql($data->ed) ?></td>
                     <td><?= round($data->masuk) ?></td>
-                    <td align="right"><?= inttocur($data->harga) ?></td>
+                    <td align="right"><?= inttocur($data->hna) ?></td>
                     <td align="center"><?= $data->beli_diskon_percentage ?></td>
-                    <td align="right"><?= inttocur($data->harga*($data->beli_diskon_percentage/100)) ?></td>
+                    <td align="right"><?= inttocur(($data->hna*($data->beli_diskon_percentage/100))*$data->masuk) ?></td>
                     <td align="right"><?= inttocur($data->subtotal) ?></td>
-                    <td align="right"><?= inttocur($data->het) ?></td>
                     <td align="center"><?= ($data->beli_diskon_percentage == '100')?'Bonus':'-' ?></td>
                 </tr>
             <?php 
-            $total = $total + $data->subtotal;
-            $diskon= $diskon+ ($data->harga*($data->beli_diskon_percentage/100));
+            $total = $total + ($data->masuk*$data->hna);
+            $diskon= $diskon+ (($data->hna*($data->beli_diskon_percentage/100))*$data->masuk);
             
             }?>
             </tbody>
@@ -104,10 +102,10 @@
         
         <script>
             $(function() {
-                $('#total-harga').html(numberToCurrency(<?= $total ?>));
-                $('#total-diskon').html(numberToCurrency(<?= $diskon ?>));
-                $('#total-pembelian').html(numberToCurrency(<?= $total-$diskon ?>));
-                $('#total-ppn').html(numberToCurrency(<?= ($rows->ppn/100)*$total ?>));
-                $('#total-tagihan').html(numberToCurrency(<?= $rows->materai+($total-$diskon)+(($rows->ppn/100)*$total) ?>));
+                $('#total-harga').html(numberToCurrency(Math.ceil(<?= $total ?>)));
+                $('#total-diskon').html(numberToCurrency(Math.ceil(<?= $diskon ?>)));
+                $('#total-pembelian').html(numberToCurrency(Math.ceil(<?= $total-$diskon ?>)));
+                $('#total-ppn').html(numberToCurrency(Math.ceil(<?= ($rows->ppn/100)*$total ?>)));
+                $('#total-tagihan').html(numberToCurrency(Math.ceil(<?= $rows->materai+($total-$diskon)+(($rows->ppn/100)*$total) ?>)));
             })
         </script>

@@ -3,6 +3,11 @@
 $(function() {
     $("#tanggal").datetimepicker();
     $('#form_stok_opname').submit(function() {
+        if ($('#alasan').val() == '') {
+            alert('Alasan stok opname tidak boleh kosong !');
+            $('#alasan').focus();
+            return false;
+        }
         var url = $(this).attr('action');
         $.ajax({
             type: 'POST',

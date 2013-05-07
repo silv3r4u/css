@@ -7,6 +7,7 @@ class Inv_autocomplete extends CI_Controller {
         $this->load->model('m_inv_autocomplete');
         $this->load->model('m_billing');
         $this->load->model('configuration');
+        $this->load->helper('html');
     }
 
     public function load_data_instansi_relasi($jenis) {

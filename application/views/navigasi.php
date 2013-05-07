@@ -12,17 +12,7 @@
         document.getElementById("jam").innerHTML = tanggal.getHours()+":"+tanggal.getMinutes()+":"+tanggal.getSeconds();
     }
     
-    function ganti_pwd(){
-        $('.logoutbutton').toggle();
-        $.ajax({
-            type : 'GET',
-            url: '<?= base_url('referensi/ganti_password') ?>',
-            cache: false,
-            success: function(data) {
-                $('#loaddata').html(data);
-            }
-        });
-    }
+    
 </script>
 <div class="main-menu-user">
     

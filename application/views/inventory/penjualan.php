@@ -23,6 +23,7 @@ function form_open() {
     });
 }
 $(function() {
+    $('#print').hide();
     $('input,select').live('keydown', function(e) {
         if (e.keyCode === 120) {
             form_open();
@@ -465,7 +466,7 @@ $(function() {
             success: function(data) {
                 if (data.status === true) {
                     $('#deletion,#print').show();
-                    $('button[type=submit]').hide();
+                    $('#print').show();
                     $('#id_penjualan').html(data.id_penjualan);
                     $('input[name=bulat]').val('');
                     $('input[name=bayar]').val('');

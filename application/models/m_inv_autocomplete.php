@@ -362,9 +362,9 @@ class M_inv_autocomplete extends CI_Model {
 
     function reretur_pembelian_load_id($id) {
         $sql = "select p.*, pdd.nama as pegawai, pdk.nama as salesman, r.nama as suplier from pembelian_retur p 
-            join penduduk pdd on (p.pegawai_penduduk_id = pdd.id)
-            join penduduk pdk on (p.salesman_penduduk_id = pdk.id)
-            join relasi_instansi r on (r.id = p.suplier_relasi_instansi)
+            left join penduduk pdd on (p.pegawai_penduduk_id = pdd.id)
+            left join penduduk pdk on (p.salesman_penduduk_id = pdk.id)
+            left join relasi_instansi r on (r.id = p.suplier_relasi_instansi)
             where p.id like ('%$id%') order by locate ('$id', p.id)";
         return $this->db->query($sql);
     }

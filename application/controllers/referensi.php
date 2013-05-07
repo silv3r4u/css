@@ -168,8 +168,8 @@ class Referensi extends CI_Controller {
     function master_unit_edit() {
         $id = $this->input->post('id_edit');
         $param = array(
-            'id' => $this->input->post('id_edit'),
-            'nama' => $this->input->post('unit_edit')
+            'id' => $this->input->post('id_unit'),
+            'nama' => $this->input->post('unit')
         );
         $this->m_referensi->edit_unit($param);
         $this->master_unit_list();
@@ -881,16 +881,16 @@ class Referensi extends CI_Controller {
         $data['page'] = $page;
         $data['limit'] = $limit;
         $data['start'] = $start;
-        if (isset($search['nama'])) {
-            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, null, $search['nama'], $search['id_pabrik'], null, $search['indikasi'], $search['dosis'], $search['kandungan']);
+        if (isset($search)) {
+            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, null, $search);
 
-            if (($search['nama'] != '') & ($search['id_pabrik'] != '')) {
-                $str = $search['nama'] . "-" . $search['id_pabrik'] . "-" . $search['pabrik'];
+            if ($search) {
+                $str = $search;
             }
-        } else if (isset($search['id'])) {
-            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, $search['id'], null, null, null);
+        } else if (isset($search)) {
+            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, null, null);
         } else {
-            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, null, null, null, null);
+            $query = $this->m_referensi->barang_get_data($limit, $start, $tipe, null, null);
         }
 
         $data['barang'] = $query['data'];
@@ -906,33 +906,15 @@ class Referensi extends CI_Controller {
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => ($this->input->post('kategori') == '') ? NULL : $this->input->post('kategori'),
             'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik') == '') ? NULL : $this->input->post('id_pabrik'),
-            'hna' => currencyToNumber($this->input->post('hna_nb'))
+            'hna' => currencyToNumber($this->input->post('hna_nb')),
+            'is_konsinyasi' => (($this->input->post('b_konsinyasi') != '')?'1':'0')
         );
         $searchnull = 'null';
         switch ($mode) {
             case 'list':
-                $search['nama'] = '';
-                $search['id_pabrik'] = '';
-                $search['indikasi'] = '';
-                $search['dosis'] = '';
-                $search['kandungan'] = '';
-                $param = $_GET['search'];
-                if ($param != 'null') {
-                    $a = explode("-", $param);
-                    $search['nama'] = $a[0];
-                    $search['id_pabrik'] = $a[1];
-                    $search['pabrik'] = $a[2];
-                }
-                $cek = $this->db->query("select count(*) as jumlah from barang")->row();
-                if ($cek->jumlah == 50) {
-                    echo "<script>alert('Maximal barang yang dapat dimasukkan adalah 50')</script>";
-                }
-                $data = $this->get_barang_list($limit, $page, 1, 'Non Obat', $search);
-                if ($param != 'null') {
-                    $data['key'] = $search['nama'];
-                    $data['pabrik'] = $search['pabrik'];
-                }
-
+                $search['nama'] = isset($_GET['search'])?$_GET['search']:NULL;
+                $data = $this->get_barang_list($limit, $page, 1, 'Non Obat', $search['nama']);
+                
                 $this->load->view('referensi/barang/list_non_obat', $data);
                 break;
             case 'add':
@@ -979,12 +961,9 @@ class Referensi extends CI_Controller {
 
             case 'search':
                 $data['key'] = '';
-                $search['nama'] = $this->input->post('nama');
-                $search['id_pabrik'] = $this->input->post('id_pabriks');
-                $search['pabrik'] = $this->input->post('pabrik');
-                $data = $this->get_barang_list($limit, $page, 1, 'Non Obat', $search);
+                $search['nama'] = isset($_GET['search'])?$_GET['search']:NULL;
+                $data = $this->get_barang_list($limit, 1, 1, 'Non Obat', $search['nama']);
                 $data['key'] = $search['nama'];
-                $data['pabrik'] = $search['pabrik'];
                 $this->load->view('referensi/barang/list_non_obat', $data);
                 break;
 
@@ -995,14 +974,13 @@ class Referensi extends CI_Controller {
 
     function manage_barang_obat($mode, $page = null) {
         $limit = 15;
-        $is_konsi = $this->input->post('konsinyasi');
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => '1',
             'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat'),
             'hna' => currencyToNumber($this->input->post('hna')),
             'stok_minimal' => $this->input->post('stokmin'),
-            'is_konsinyasi' => (isset($is_konsi)?'1':'0')
+            'is_konsinyasi' => (($this->input->post('konsinyasi') != '')?'1':'0')
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',
@@ -1018,31 +996,14 @@ class Referensi extends CI_Controller {
         $searchnull = 'null';
         switch ($mode) {
             case 'list':
-                $search['nama'] = '';
-                $search['id_pabrik'] = '';
-                $search['indikasi'] = '';
-                $search['dosis'] = '';
-                $search['kandungan'] = '';
-                $param = $_GET['search'];
-                if ($param != 'null') {
-                    $a = explode("-", $param);
-                    $search['nama'] = $a[0];
-                    $search['id_pabrik'] = $a[1];
-                    $search['pabrik'] = $a[2];
-                }
-                $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search);
-                if ($param != 'null') {
-                    $data['key'] = $search['nama'];
-                    $data['pabrik'] = $search['pabrik'];
-                }
-
+                $search['nama'] = isset($_GET['search'])?$_GET['search']:NULL;
+                $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search['nama']);
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
             case 'add':
                 $insert['barang'] = $add;
                 $insert['obat'] = $obat;
                 $search['id'] = $this->m_referensi->barang_add_data($insert, 'Obat');
-                
                 $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search);
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
@@ -1054,7 +1015,7 @@ class Referensi extends CI_Controller {
                 $update['barang'] = $add;
                 $update['obat'] = $obat;
                 $this->m_referensi->barang_edit_data($update, 'Obat');
-                $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search);
+                $data = $this->get_barang_list($limit, 1, 2, 'Obat', $search);
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
 
@@ -1077,15 +1038,9 @@ class Referensi extends CI_Controller {
 
             case 'search':
                 $data['key'] = '';
-                $search['nama'] = $this->input->post('nama');
-                $search['id_pabrik'] = $this->input->post('id_pabriks_obat');
-                $search['pabrik'] = $this->input->post('pabrik');
-                $search['indikasi'] = $this->input->post('indikasi_obat');
-                $search['dosis'] = $this->input->post('dosis_obat');
-                $search['kandungan'] = $this->input->post('kandungan');
-                $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search);
-                $data['key'] = $search['nama'] .' '. $search['pabrik'] .' '. $search['indikasi'] .' '. $search['dosis'].' '.$search['kandungan'];
-                $data['pabrik'] = $search['pabrik'];
+                $search['nama'] = isset($_GET['search'])?$_GET['search']:NULL;
+                $data = $this->get_barang_list($limit, 1, 2, 'Obat', $search['nama']);
+                $data['key'] = $search;
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
 
@@ -1212,8 +1167,99 @@ class Referensi extends CI_Controller {
 
     /* Tarif Jasa */
 
+    /*Administrasi harga jual*/
+    
+    function harga_jual() {
+        $data['satuan'] = $this->m_referensi->satuan_get_data(null);
+        $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
+        $data['title'] = 'Administrasi Harga Jual';
+        $this->load->view('referensi/harga_jual/harga-jual', $data);
+    }
 
+    function get_harga_jual_list($limit, $page, $id, $search) {
+        if ($page == 'undefined') {
+            $page = 1;
+        }
+        $start = ($page - 1) * $limit;
+        $data['page'] = $page;
+        $data['limit'] = $limit;
+        $data['start'] = $start;
+        
+        //$this->m_referensi->harga_jual_load_data($pb)->result();
+        $query = $this->m_referensi->harga_jual_get_data($limit, $start, $id, $search);
+        $data['jumlah'] = $query['jumlah'];
+        $data['barang'] = $query['data'];
+        $data['paging'] = paging_ajax($data['jumlah'], $limit, $page, 1, $search);
+        return $data;
+    }
 
+    
+    function manage_harga_jual($mode, $page = null) {
+        $limit = 15;
+        $add = array(
+            'barcode' => $this->input->post('barcode'),
+            'barang_id' => ($this->input->post('id_barang') == '') ? NULL : $this->input->post('id_barang'),
+            'terbesar_satuan_id' => ($this->input->post('kemasan') == '') ? NULL : $this->input->post('kemasan'),
+            'isi' => $this->input->post('isi'),
+            'terkecil_satuan_id' => ($this->input->post('satuan') == '') ? NULL : $this->input->post('satuan')
+        );
+        $searchnull = 'null';
+        switch ($mode) {
+            case 'list':
+                $searchnull = $_GET['search'];
+                $data = $this->get_harga_jual_list($limit, $page, 'null', $searchnull);
+                $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+                break;
+            case 'add':
+                $search = $this->m_referensi->harga_jual_add_data($add);
+                $data = $this->get_harga_jual_list($limit, $page, $search, $searchnull);
+                $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+                break;
+
+            case 'edit':
+                $add['id'] = $this->input->post('id');
+                $this->m_referensi->harga_jual_edit_data($add);
+                $data = $this->get_harga_jual_list($limit, $page, $add['id'], $searchnull);
+                $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+                break;
+
+            case 'delete':
+                $id = $_GET['id'];
+                $this->m_referensi->harga_jual_delete_data($id);
+                $data = $this->get_harga_jual_list($limit, $page, 'null', $searchnull);
+                if ($data['harga_jual'] == null) {
+                    $data = $this->get_harga_jual_list($limit, 1, 'null', $searchnull);
+                }
+                $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+
+                break;
+            case 'cek':
+                $ins = array(
+                    'barcode' => $_GET['barcode'],
+                    'id_barang' => $_GET['id_barang'],
+                    'kemasan' => $_GET['kemasan'],
+                    'isi' => $_GET['isi'],
+                    'satuan' => $_GET['satuan']
+                );
+                $cek = $this->m_referensi->harga_jual_cek_data($ins);
+                die(json_encode(array('status' => $cek)));
+                break;
+
+            case 'search':
+
+                $search = $this->input->post('barang_cari');
+                $data = $this->get_harga_jual_list($limit, 1, 'null', $search);
+                $data['key'] = '';
+                $data['key'] = $search;
+                $this->load->view('referensi/harga_jual/harga-jual-table', $data);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    /*End of administrasi harga jual*/
     /* Packing Barang */
 
     function packing_barang() {
@@ -1608,18 +1654,13 @@ class Referensi extends CI_Controller {
         $this->load->view('referensi/penduduk/list_dinamis', $query);
     }
 
-    function harga_jual() {
-        $data['title'] = 'Administrasi Produk';
-        $data['list_data'] = $this->m_referensi->harga_jual_load_data()->result();
-        $this->load->view('referensi/harga_jual/harga-jual', $data);
-    }
-
     function harga_jual_load() {
         $data['title'] = 'Administrasi Produk';
         $pb = ($_GET['pb'] != 'undefined')?$_GET['pb']:'';
         $data['list_data'] = $this->m_referensi->harga_jual_load_data($pb)->result();
         $this->load->view('referensi/harga_jual/harga-jual', $data);
     }
+
 
     function harga_jual_update() {
         $data['title'] = 'Update Harga Jual';

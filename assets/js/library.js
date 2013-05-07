@@ -2,7 +2,7 @@
  
  var message="Sorry, right-click has been disabled";
  
-
+ var a;
 function clickIE() {
            if (document.all) {
                       (message);
@@ -246,11 +246,10 @@ function numberToCurrency2(a){
     }
 }
 
-function currencyToNumber(a){
+function currencyToNumber(a) {
     var b=a.toString();
-    
     var c='';
-    if(a!=null){
+    if(a!==null){
         c=b.replace(/\.+/g, '');
     }
     

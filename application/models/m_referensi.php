@@ -695,7 +695,7 @@ class M_referensi extends CI_Model {
         );
     }
 
-    function barang_get_data($limit = null, $start = null, $status = null, $id = null, $nama = null, $pabrik = null, $sort = null, $indikasi = null, $dosis = null, $kandungan = null) {
+    function barang_get_data($limit = null, $start = null, $status = null, $id = null, $nama = null) {
         $q = null;
         if ($status != null) {
             if ($status == 'Obat') {
@@ -709,35 +709,23 @@ class M_referensi extends CI_Model {
         } else if ($id != null and $status == null) {
             $q.=" where b.id = '$id'";
         }
-        if (($nama != null) & ($nama != '')) {
-            $q.=" and b.nama like ('%$nama%')";
-        }
-        if ($pabrik != null) {
-            $q.=" and b.pabrik_relasi_instansi_id = '$pabrik'";
-        }
-        if ($indikasi != null) {
-            $q.=" and o.indikasi like ('%$indikasi%')";
-        }
-        if ($dosis != null) {
-            $q.=" and o.dosis like ('%$dosis%')";
-        }
-        if ($kandungan != null) {
-            $q.=" and o.kandungan like ('%$kandungan%')";
-        }
-        if ($sort != null) {
-            if ($sort == 'asc') {
-                $q.=" order by b.nama asc";
-            } else {
-                $q.=" order by b.nama desc";
+        if ($status == 'Obat') {
+            if (($nama != 'null') and !isset($nama['id'])) {
+                $q.=" and (b.nama like ('%$nama%') or r.nama like '%$nama%' or o.indikasi like ('%$nama%') or o.dosis like ('%$nama%') or o.kandungan like ('%$nama%'))";
+            }
+        } else {
+            if (($nama != 'null') and !isset($nama['id'])) {
+                $q.=" and (b.nama like ('%$nama%') or r.nama like '%$nama%')";
             }
         }
-        if ($sort == null) {
-            $q.=" order by b.nama asc";
+        if (isset($nama['id'])) {
+            $q.=" and b.id = '$nama[id]'";
         }
+        $q.=" order by nama asc";
         $limitation = null;
         $limitation.=" limit $start , $limit";
 
-
+        
 
         $sql = "select o.*, b.*, bk.nama as kategori, r.id as id_pabrik, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan from barang b
         left join barang_kategori bk on (b.barang_kategori_id = bk.id)
@@ -778,11 +766,11 @@ class M_referensi extends CI_Model {
     }
 
     function barang_add_data($data, $tipe) {
-        $cek = $this->db->query("select count(*) as jumlah from barang")->row();
         $this->db->insert('barang', $data['barang']);
         if ($tipe == 'Obat') {
             $data['obat']['id'] = $this->db->insert_id();
             $this->db->insert('obat', $data['obat']);
+            return $data['obat']['id'];
         }
         return $this->db->insert_id();
     }
@@ -905,6 +893,32 @@ class M_referensi extends CI_Model {
 
         $query = $this->db->query($sql . $where . $search . $order . $q);
         
+        $ret['data'] = $query->result();
+        $ret['jumlah'] = $this->db->query($sql . $where . $search . $order)->num_rows();
+        return $ret;
+    }
+    
+    function harga_jual_get_data($limit, $start, $id, $cari) {
+        $where = '';
+        $search = '';
+        $q = null;
+        $q.=" limit " . $start . ", $limit";
+        $order = ' order by br.nama asc';
+        $sql = "select br.*, br.nama as barang, r.nama as pabrik, o.kekuatan, s.nama as satuan from
+            barang br
+            left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
+            left join obat o on (br.id = o.id)
+            left join satuan s on (o.satuan_id = s.id) where br.id is not NULL";
+
+        if ($id != 'null') {
+            $where = " and bp.id = '" . $id . "' ";
+        }
+        if ($cari != 'null') {
+            $search = " and br.nama like '%" . $cari . "%' ";
+        }
+
+        $query = $this->db->query($sql . $where . $search . $order . $q);
+        //echo $sql . $where . $search . $order . $q;
         $ret['data'] = $query->result();
         $ret['jumlah'] = $this->db->query($sql . $where . $search . $order)->num_rows();
         return $ret;
@@ -1240,17 +1254,20 @@ class M_referensi extends CI_Model {
         if ($pb != null) {
             $q.="and br.id in ($pb)";
         }
-        $sql = "select b.id as barang_packing_id, br.stok_minimal, br.nama as barang, b.margin, b.id as id_pb, br.hna, br.nama as barang, b.diskon, o.kekuatan, b.isi, r.nama as pabrik, 
-            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terbesar, stn.nama as satuan_terkecil from
-            barang_packing b
-            join barang br on (br.id = b.barang_id)
-            left join relasi_instansi r on (r.id = br.pabrik_relasi_instansi_id)
+        $sql = "select bp.id as barang_packing_id, b.stok_minimal, b.nama as barang, bp.margin, bp.id as id_pb, 
+            b.hna, b.nama as barang, bp.diskon, o.kekuatan, bp.isi, r.nama as pabrik, 
+            s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terkecil, stb.nama as satuan_terbesar 
+            from barang_packing bp
+            join barang b on (b.id = bp.barang_id)
             left join obat o on (b.id = o.id)
             left join satuan s on (s.id = o.satuan_id)
-            left join satuan st on (st.id = b.terbesar_satuan_id)
-            left join satuan stn on (stn.id = b.terkecil_satuan_id)
+            left join satuan st on (st.id = bp.terkecil_satuan_id)
+            left join satuan stb on (stb.id = bp.terbesar_satuan_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
-            where br.id in ($pb) order by br.nama";
+            left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id)
+            where b.id in ($pb) order by b.nama";
+        
+        
         //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);
     }

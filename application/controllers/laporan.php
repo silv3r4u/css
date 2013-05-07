@@ -350,6 +350,12 @@ class Laporan extends CI_Controller {
         }
         $this->load->view('laporan/laporan-utang', $data);
     }
+    
+    function hutang_excel() {
+        $data['title'] = 'Laporan Hutang';
+        $data['list_data'] = $this->m_inventory->hutang_load_data($_GET['awal'], $_GET['akhir'])->result();
+        $this->load->view('laporan/laporan-utang-excel', $data);
+    }
 
     function laporan_utang_cetak() {
         $this->load->view('laporan/print/laporan-utang', $data);
@@ -447,7 +453,16 @@ class Laporan extends CI_Controller {
         $data['list_data'] = $this->m_inventory->kas_load_data($awal, $akhir, $jenis, $nama)->result();
         $this->load->view('laporan/kas-table', $data);
     }
-
+    
+    function kas_load_data_cetak() {
+        $awal = $_GET['awal'];
+        $akhir = $_GET['akhir'];
+        $jenis = $_GET['jenis'];
+        $nama = $_GET['nama'];
+        $data['list_data'] = $this->m_inventory->kas_load_data($awal, $akhir, $jenis, $nama)->result();
+        $this->load->view('inventory/print/kas', $data);
+    }
+    
     function reimbursement() {
         $data['title'] = 'Laporan Reimbursement';
         if (isset($_GET['awal'])) {
@@ -562,6 +577,22 @@ class Laporan extends CI_Controller {
         $data['total_keluar'] = $this->m_billing->total_pengeluaran_kas_load_data($awal, $akhir)->row();
         $data['pengeluaran'] = $this->m_billing->pengeluaran_kas_load_data($awal, $akhir)->result();
         $this->load->view('laporan/laba-rugi-table', $data);
+    }
+    
+    function laba_rugi_load_data_excel() {
+        $awal = $_GET['awal'];
+        $akhir= $_GET['akhir'];
+        $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
+        /*penerimaan*/
+        $data['pendapatan_penjualan'] = $this->m_billing->pendapatan_penjualan_load_data($awal, $akhir)->row();
+        $data['pendapatan_jasa'] = $this->m_billing->pendapatan_jasa_load_data($awal, $akhir)->row();
+        $data['kas']= $this->m_billing->total_penerimaan_kas_load_data($awal, $akhir)->row();
+        $data['penerimaan'] = $this->m_billing->penerimaan_kas_load_data($awal, $akhir)->result();
+        /*pengeluaran*/
+        $data['hpp'] = $this->m_billing->hna_load_data($awal, $akhir)->row();
+        $data['total_keluar'] = $this->m_billing->total_pengeluaran_kas_load_data($awal, $akhir)->row();
+        $data['pengeluaran'] = $this->m_billing->pengeluaran_kas_load_data($awal, $akhir)->result();
+        $this->load->view('laporan/laba-rugi-excel', $data);
     }
 
 }

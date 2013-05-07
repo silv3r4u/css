@@ -1,5 +1,65 @@
 <?php $this->load->view('message') ?>
 <script type="text/javascript">
+    function create_form_unit() {
+        var str = '<div id=form-add><form action="<?= base_url('referensi/master_unit_save') ?>" id="formsave">'+
+        '<table>'+
+            '<tr><td align="right">Nama unit:</td><td><input type=text name=unit id=unit size=30 /><input type=hidden name=id_unit id=id_unit /></td></tr>'+
+        '</table></form>'+
+        '</div>';
+        $('#loaddata').append(str);
+        $('#form-add').dialog({
+            autoOpen: true,
+            title:'tambah Unit',
+            height: 170,
+            width: 350,
+            modal: true,
+            close : function(){
+                $('#form-add').dialog().remove();
+            },
+            buttons: {
+                "Simpan": function() {
+                    $('#formsave').submit();
+                    $('#form-add').dialog().remove();
+                },
+                "Batal": function() {
+                    $('#form-add').dialog().remove();
+                }
+            }
+        });
+        $('#formsave').submit(function(){
+            if($('#id_unit').val() === '') {
+                $.ajax({
+                    type : 'POST',
+                    url: $('#formsave').attr('action'),               
+                    data: $('#formsave').serialize(),
+                    cache: false,
+                    success: function(data) {
+                        $('#unit_list').html(data);
+                        $('#form-add').dialog('close');
+                        reset_all();
+                        alert_tambah();
+                    }
+                });
+                return false;
+            } 
+            if($('#id_unit').val() !== '') {
+                $.ajax({
+                    type : 'POST',
+                    url: '<?= base_url('referensi/master_unit_edit') ?>',               
+                    data: $(this).serialize(),
+                    cache: false,
+                    success: function(data) {
+                        $('#unit_list').html(data);
+                        $('#form-prov-edit').dialog('close');
+                        reset_all();
+                        alert_edit();
+                    }
+                });
+            }
+                
+            return false;
+        });
+    }
     $(function() {
         // initial
         get_unit_list();
@@ -15,46 +75,15 @@
         });
         $('#reset, #resetproedit').button({icons: {secondary: 'ui-icon-refresh'}});
         //initial
-        $('#form-prov, #form-prov-edit').dialog({
-            autoOpen: false,
-            title:'tambah Unit',
-            height: 170,
-            width: 400,
-            modal: true,
-            resizable : false,
-            close : function(){
-                reset_all();
-            }
-        });
+        
         
         $('#addnewrow').click(function() {
-            $('#form-prov').dialog('open');
-        });
-        
-        $('#formsave').submit(function(){
-            if($('#unit').val() != ''){
-                $.ajax({
-                    type : 'POST',
-                    url: '<?= base_url('referensi/master_unit_save') ?>',               
-                    data: $(this).serialize(),
-                    cache: false,
-                    success: function(data) {
-                        $('#unit_list').html(data);
-                        $('#form-prov').dialog('close');
-                        reset_all();
-                        alert_tambah();
-                    
-                    }
-                });
-            }else{
-                $('.msg').fadeIn('fast').html('Nama unit tidak boleh kosong !');
-            }
-                
-            return false;
+            //$('#form-prov').dialog('open');
+            create_form_unit();
         });
         
         $('#formedit').submit(function(){
-            if($('#unit_edit').val() == ''){
+            if($('#unit_edit').val() === ''){
                 $('#msg_edit').fadeIn('fast').html('Nama unit tidak boleh kosong !');
             }else{
                 $.ajax({
@@ -129,10 +158,9 @@
     }
     
     function edit_unit(id, nama){
-        $('#unit_edit').val(nama);
-        $('input[name=id_edit]').val(id);
-        $('#form-prov-edit').dialog('open');
-        
+        create_form_unit();
+        $('#unit').val(nama);
+        $('input[name=id_unit]').val(id);
     }
     function reset_all(){
         $('#unit').val('');
@@ -145,35 +173,11 @@
 
 
     <?= form_button('', 'Tambah data', 'id=addnewrow') ?>
-    <div id="form-prov" style="display: none">
-        <div class="msg"></div>
-        <?= form_open('', 'id = formsave') ?>
-        <table>
-            <tr><td>Nama unit</td><td><?= form_input('unit', null, 'id=unit size=30') ?></td></tr>
-            <tr><td></td><td><?= form_submit('addunit', 'Simpan', 'id=simpan') ?>
-                    <?= form_button('', 'Reset', 'id=reset') ?></td> </tr>
-        </table>
-        <?= form_close() ?>
-    </div>
+    
 
 
-    <div id="form-prov-edit" style="display: none">
-         <div class="msg" id="msg_edit"></div>
-        <?= form_open('', 'id = formedit') ?>
-        <table>
-            <tr><td>Nama unit:</td><td><?= form_hidden('id_edit') ?><?= form_input('unit_edit', '', 'id=unit_edit size=30') ?></td></tr>
-            <tr><td></td>
-                <td>
-                    <?= form_submit('editunit', 'Simpan', 'id=edit_unit') ?>
-                    <?= form_button('', 'Reset', 'id=resetproedit') ?>
-                </td>
-            </tr>
-        </table>
-        <?= form_close() ?>
-    </div>
     <div class="data-list">
         <div id="unit_list"></div>
-
     </div>
 
 </div>

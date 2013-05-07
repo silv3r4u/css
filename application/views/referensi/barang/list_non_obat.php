@@ -1,17 +1,6 @@
 <script>
 $("#table").tablesorter({sortList:[[0,0]]});
 </script>
-<?php if (isset($key)): ?>
-    <div id="pencarian">
-        <br/>
-        <h3>
-            Pencarian dengan kata kunci "<?= $key ?>" 
-            <?php if ($pabrik!=""): ?>
-                dan pabrik "<?= $pabrik ?>"   
-            <?php endif; ?>
-        </h3>
-    </div>
-<?php endif; ?>
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>
@@ -43,7 +32,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td><?= $rowA->nama ?></td>
                 <td><?= isset($rowA->kategori) ? $rowA->kategori : '-' ?></td>
                 <td><?= $rowA->pabrik ?></td>
-                <?php $str = $rowA->id . "#" . $rowA->nama . "#" . $rowA->barang_kategori_id . "#" . $rowA->id_pabrik . "#" . $rowA->pabrik; ?>
+                <?php $str = $rowA->id . "#" . $rowA->nama . "#" . $rowA->barang_kategori_id . "#" . $rowA->id_pabrik . "#" . $rowA->pabrik ."#". $rowA->hna ."#".$rowA->is_konsinyasi."#".$rowA->stok_minimal; ?>
                 <td class="aksi" align="center"> 
                     <span class="edit" onclick="edit_non('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_non('<?= $rowA->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
@@ -56,3 +45,6 @@ $("#table").tablesorter({sortList:[[0,0]]});
 <br/>
 <?= $this->load->view('paging') ?>
 <div id="paging"><?= $paging ?></div>
+<?php
+
+?>

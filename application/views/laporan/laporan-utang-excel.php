@@ -113,8 +113,8 @@ if (!isset($_GET['do'])) {
                             <td align="center"><?= datefmysql($data->tanggal_jatuh_tempo) ?></td>
                             <td><?= $data->nama ?></td>
                             <td align="center"><?= anchor('inventory/pembelian_detail/'.$data->id.'?awal='.$_GET['awal'].'&akhir='.$_GET['akhir'], $data->dokumen_no, 'class=view_transaction') ?></td>
-                            <td align="right"><?= rupiah($total_faktur) ?></td>
-                            <td align="right"><?= rupiah($inkaso->inkaso) ?></td>
+                            <td align="right"><?= ($total_faktur) ?></td>
+                            <td align="right"><?= ($inkaso->inkaso) ?></td>
                         </tr>
                         <?php
                         $t_faktur = $t_faktur + $total_faktur;
@@ -126,14 +126,14 @@ if (!isset($_GET['do'])) {
             <tfoot>
                 <tr class="odd">
                     <td colspan="3" align="center">Total</td>
-                    <td align="right" style="font-weight: bold"><?= (isset($_GET['awal']) ? rupiah($t_faktur) : null) ?></td>
-                    <td align="right" style="font-weight: bold"><?= (isset($_GET['awal']) ? rupiah($t_inkaso) : null) ?></td>
+                    <td align="right" style="font-weight: bold"><?= (isset($_GET['awal']) ? ($t_faktur) : null) ?></td>
+                    <td align="right" style="font-weight: bold"><?= (isset($_GET['awal']) ? ($t_inkaso) : null) ?></td>
                 </tr>
             </tfoot>
         </table>
         <div style="text-align: right; font-weight: bold; font-size: 13px;">
             <table>
-                <tr><td>HUTANG (Rp.) </td><td>:</td> <td><?= isset($_GET['awal']) ? rupiah($t_faktur - $t_inkaso) : null ?></td></tr>
+                <tr><td>HUTANG (Rp.) </td><td>:</td> <td><?= isset($_GET['awal']) ? ($t_faktur - $t_inkaso) : null ?></td></tr>
             </table>
 
         </div>

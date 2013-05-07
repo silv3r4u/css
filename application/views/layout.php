@@ -24,6 +24,17 @@
 
 
         <script type="text/javascript">
+            function ganti_pwd() {
+                $('.logoutbutton').toggle();
+                $.ajax({
+                    type : 'GET',
+                    url: '<?= base_url('referensi/ganti_password') ?>',
+                    cache: false,
+                    success: function(data) {
+                        $('#loaddata').html(data);
+                    }
+                });
+            }
             $(function() {
                 initMenus();
                 $('#loading').hide();

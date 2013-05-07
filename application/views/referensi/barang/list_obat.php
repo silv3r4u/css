@@ -1,17 +1,6 @@
 <script>
 $("#table").tablesorter({sortList:[[0,0]]});
 </script>
-<?php if (isset($key)): ?>
-    <div id="pencarian">
-        <br/>
-        <h3>
-            Pencarian dengan kata kunci "<?= $key ?>" 
-            <?php if ($pabrik != ""): ?>
-                dan pabrik "<?= $pabrik ?>"   
-            <?php endif; ?>
-        </h3>
-    </div>
-<?php endif; ?>
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>

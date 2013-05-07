@@ -71,6 +71,57 @@ class M_inventory extends CI_Model {
                     'sisa' => (isset($row->sisa)?$row->sisa:'0')
                 );
                 $this->db->insert('transaksi_detail', $data_trans);
+                $this->db->delete('defecta', array('barang_packing_id' => $data));
+            }
+        }
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $status = FALSE;
+        } else {
+            $this->db->trans_commit();
+            $status = TRUE;
+        }
+        $result['status'] = $status;
+        $result['id_pemesanan'] = $id_pemesanan;
+        return $result;
+    }
+    
+    function save_pemesanan_defecta() {
+        $this->db->trans_begin();
+        $noDoc = get_last_id('pemesanan', 'id') . "/".date("dmY");
+        $data1 = array(
+            'dokumen_no' => $noDoc,
+            'pegawai_penduduk_id' => $this->session->userdata('id_user'),
+            'suplier_relasi_instansi_id' => $this->input->post('id_suplier')
+        );
+        $this->db->insert('pemesanan', $data1);
+        $id_pemesanan = $this->db->insert_id();
+        $bc     = $this->input->post('bc');
+        $id_pb  = $this->input->post('id_pb');
+        $jml    = $this->input->post('jml');
+        $id_barang = $this->input->post('barang_id');
+        $kemasan = $this->input->post('kemasan');
+        foreach ($id_pb as $key => $data) {
+            $packing = explode("-", $kemasan[$key]);
+            if ($data != '') {
+                $rows = $this->db->query("select * from barang_packing where barang_id = '$id_barang[$key]' and terbesar_satuan_id = '$packing[1]'")->row();
+                //$this->db->get_where('transaksi_detail', array('barang_packing_id' => $data, 'transaksi_jenis' => 'Pemesanan', 'unit_id' => $this->session->userdata('id_unit')), '1');
+                $sql = $this->db->query("select * from transaksi_detail where barang_packing_id = '".$rows->id."' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1");
+                $row = $sql->row();
+                $data_trans = array(
+                    'transaksi_id' => $id_pemesanan,
+                    'transaksi_jenis' => 'Pemesanan',
+                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'ed' => isset($row->ed)?$row->ed:NULL,
+                    'barang_packing_id' => $rows->id,
+                    'unit_id' => $this->session->userdata('id_unit'),
+                    'awal' => isset($row->sisa)?$row->sisa:'0',
+                    'masuk' => $jml[$key],
+                    'keluar' => '0',
+                    'sisa' => (isset($row->sisa)?$row->sisa:'0')
+                );
+                $this->db->insert('transaksi_detail', $data_trans);
+                $this->db->delete('defecta', array('barang_packing_id' => $rows->id));
             }
         }
         if ($this->db->trans_status() === FALSE) {
@@ -258,7 +309,7 @@ class M_inventory extends CI_Model {
                 );
                 $this->db->insert('transaksi_detail', $data_trans);
                 $this->db->where('id', $barang_id[$key]);
-                $this->db->update('barang', array('hna' => $hna[$key]));
+                $this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
                 if ($this->db->trans_status() === FALSE) {
                     $this->db->trans_rollback();
                 }
@@ -266,7 +317,7 @@ class M_inventory extends CI_Model {
         }
         if ($jenis == 'cash') {
             $data_inkaso = array(
-                'waktu' => date2mysql($this->input->post('tanggal')),
+                'waktu' => $this->waktu,
                 'pembelian_id' => $id_pembelian,
                 'pegawai_penduduk_id' => $this->session->userdata('id_user'),
                 'jumlah_bayar' => currencyToNumber($this->input->post('total_tagihan'))
@@ -275,7 +326,7 @@ class M_inventory extends CI_Model {
             $id_inkaso = $this->db->insert_id();
             $rows2 = $this->db->query("select * from kas order by waktu desc limit 1")->row();
             $data_kas2 = array(
-                'waktu' => date2mysql($this->input->post('tanggal')),
+                'waktu' => $this->waktu,
                 'transaksi_id' => $id_inkaso,
                 'transaksi_jenis' => 'Inkaso',
                 'awal_saldo' => (isset($rows2->akhir_saldo)?$rows2->akhir_saldo:'0'),
@@ -1137,6 +1188,7 @@ class M_inventory extends CI_Model {
         $id_pb = $this->input->post('id_pb');
         $kemasan = $this->input->post('kemasan');
         $jumlah = $this->input->post('jl');
+        $diskon = $this->input->post('diskon');
         $this->session->set_userdata(array('sisa_stok' => NULL));
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
@@ -1158,6 +1210,7 @@ class M_inventory extends CI_Model {
                         'hna' => (isset($jml->hna)?$jml->hna:'0'),
                         'hpp' => (isset($jml->hna)?$jml->hna:'0'),
                         'het' => (isset($jml->het)?$jml->het:'0'),
+                        'jual_diskon_percentage' => $diskon[$key],
                         'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
                         'masuk' => '0',
                         'keluar' => ($jumlah[$key]*$value[1]),
@@ -1202,7 +1255,7 @@ class M_inventory extends CI_Model {
             $q.="and p.id = '$id_penjualan'";
         }
         $sql = "select td.*, p.resep_id, p.bayar, p.total, p.pembulatan, p.id as id_penjualan, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
-            o.kekuatan, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan, pdk.nama as pegawai, p.pembeli_penduduk_id, pdd.nama as pasien, pd.nama as pembeli, pdd.nama, rs.pasien_penduduk_id, p.ppn, p.total, p.bayar, p.pembulatan
+            o.kekuatan, r.nama as pabrik, s.nama as satuan, pd.member as diskon_member, sd.nama as sediaan, pdk.nama as pegawai, p.pembeli_penduduk_id, pdd.nama as pasien, pd.nama as pembeli, pdd.nama, rs.pasien_penduduk_id, p.ppn, p.total, p.bayar, p.pembulatan
             from penjualan p
             left join transaksi_detail td on (p.id = td.transaksi_id)
             left join resep rs on (rs.id = p.resep_id)
@@ -1359,7 +1412,7 @@ class M_inventory extends CI_Model {
         $data_retur = array(
             'pembelian_id' => $this->input->post('id_pembelian'),
             'pegawai_penduduk_id' => $this->session->userdata('id_user'),
-            'salesman_penduduk_id' => ($this->input->post('id_sales') != '')?$this->input->post('id_sales'):NULL,
+            'salesman_penduduk_id' => (($this->input->post('id_sales') != '')?$this->input->post('id_sales'):NULL),
             'suplier_relasi_instansi' => $this->input->post('id_suplier')
         );
         $this->db->insert('pembelian_retur', $data_retur);
@@ -1637,6 +1690,7 @@ class M_inventory extends CI_Model {
         $disc = $this->input->post('disc');
         $harga_jual = $this->input->post('harga_jual');
         $ed = $this->input->post('ed');
+        $diskon = $this->input->post('diskon');
         
         $this->session->set_userdata(array('sisa_stok' => NULL));
         foreach ($id_pb as $key => $data) {
@@ -2148,7 +2202,7 @@ class M_inventory extends CI_Model {
     }
     
     function rencana_pemesanan_load_data() {
-        $sql = "select td.*, bp.id as id_pb, b.stok_minimal, d.jumlah, d.hpp, o.generik, b.nama as barang, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, 
+        $sql = "select b.id as barang_id, td.*, bp.id as id_pb, b.stok_minimal, d.jumlah, d.hpp, o.generik, b.nama as barang, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, 
             sd.nama as sediaan from transaksi_detail td
             join barang_packing bp on (td.barang_packing_id = bp.id)
             join defecta d on (d.barang_packing_id = bp.id)

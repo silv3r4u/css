@@ -28,7 +28,7 @@
                 var akhir = $('#akhir').val();
                 var jenis = $('#jenis').val();
                 var nama = $('#nama').val();
-                location.href='<?= base_url('laporan/kas_load_data') ?>?awal='+awal+'&akhir='+akhir+'&jenis='+jenis+'&nama='+nama+'&do=cetak';
+                location.href='<?= base_url('laporan/kas_load_data_cetak') ?>?awal='+awal+'&akhir='+akhir+'&jenis='+jenis+'&nama='+nama+'&do=cetak';
             })
             $('#awal,#akhir').datepicker({
                 changeYear: true,

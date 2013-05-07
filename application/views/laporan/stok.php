@@ -233,7 +233,7 @@
             <label></label>
             <?= form_submit('cari', 'Cari', null) ?>  
             <?= form_button('Reset', 'Reset', 'id=reset') ?>
-            <?= form_button('Cetak ', 'Cetak Psikotropika', 'id=excelpsi') ?>    
+            <?= form_button('Cetak ', 'Cetak Psikotropika', 'id=excelpsi') ?>
             <?= form_button('Cetak ', 'Cetak', 'id=excel') ?>
             <?= form_button(null, 'Cetak Kartu Stelling', 'id=stelling') ?>
             </table>
@@ -303,7 +303,7 @@
                     $time = mktime(0, 0, 0, date("m"), date("d") + 180, date("Y"));
                     $new = date("Y-m-d", $time);
                     if ($data->transaksi_jenis != 'Pemesanan') {
-                        if ($data->ed < date("Y-m-d")) {
+                        if ($data->ed <= date("Y-m-d")) {
                             $class = "class=alertred";
                         } else if ($data->ed > date("Y-m-d") and $data->ed <= $new) {
                             $class = "class=alertyellow";
@@ -357,6 +357,7 @@
                     ?>
                     <tr class="<?= ($i % 2 == 1) ? 'odd' : 'even' ?>">
                         <td align="center">&nbsp;</td>
+                        <td align="center"></td>
                         <td align="center"></td>
                         <td align="center"></td>
                         <td align="center"></td>

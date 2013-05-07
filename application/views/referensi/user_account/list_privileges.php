@@ -2,12 +2,12 @@
     $(function() {
         $(".sortable").tablesorter({sortList:[[1,0]]});
         $('#checkall').live('click', function() {
-            $('#checkall').html('Uncheck all');
+            $('#checkall .ui-button-text').html('Uncheck all');
             $('#checkall').attr('id', 'uncheckall');
             $('.check').attr('checked', 'checked');
         });
         $('#uncheckall').live('click', function() {
-            $('#uncheckall').html('Check all');
+            $('#uncheckall .ui-button-text').html('Check all');
             $('#uncheckall').attr('id', 'checkall');
             $('.check').removeAttr('checked');
         });

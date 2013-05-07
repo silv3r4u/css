@@ -23,7 +23,8 @@
     }
     var request;
     $(function(){
-        $('input,textarea').removeAttr('disabled');
+        $('#key').watermark('Search ...');
+        $('input,textarea,select').removeAttr('disabled');
         $( "#addobat" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -31,7 +32,7 @@
         $('#bt_cariobat').button({icons: {primary: 'ui-icon-search'}});
         get_obat_list(1,'null');
         $('#showObatAll').click(function(){
-            get_obat_list(1,'null');
+            $('#loaddata').load('<?= base_url('referensi/barang') ?>');
         });
         $('#bt_cariobat').click(function(){           
             $('#cariobat').dialog({
@@ -126,8 +127,19 @@
                 } 
             ]
         });
-        
-               
+        $('#key').live('keyup', function(e) {
+            if (e.keyCode === 13) {
+                $.ajax({
+                    type : 'GET',
+                    url: '<?= base_url('referensi/manage_barang_obat') ?>/search',
+                    data: 'search='+$('#key').val(),
+                    cache: false,
+                    success: function(data) {
+                        $('#obat_list').html(data);
+                    }
+                });
+            }
+        });
         $('#form_cariobat').submit(function(){
             var Url = '<?= base_url('referensi/manage_barang_obat') ?>/search/';             
             if(!request) {
@@ -137,7 +149,7 @@
                     data: $(this).serialize(),
                     cache: false,
                     success: function(data) {
-                        $('#obat_list').html(data);                           
+                        $('#obat_list').html(data);
                         $('#cariobat').dialog('close');
                         reset_all(); 
                         request = null;                            
@@ -243,7 +255,7 @@
         $.ajax({
             type : 'GET',
             url: '<?= base_url('referensi/manage_barang_obat') ?>/list/'+p,
-            data :'search='+search,
+            data : 'search='+search+'&'+$('#form_cariobat').serialize(),
             cache: false,
             success: function(data) {
                 $('#obat_list').html(data);
@@ -313,8 +325,8 @@
 </script>
 
 <?= form_button('', 'Tambah Data', 'id=addobat class=newrow style="margin-left: 2px;"') ?>
-<?= form_button('', 'Cari', 'id=bt_cariobat class=cari style="margin-left: 0px;"') ?>
 <?= form_button('', 'Tampilkan', 'class=resetan id=showObatAll style="margin-left: 0px;"') ?>
+<div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=key size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
 <br/><br/>
 <div id="form_obat" style="display: none;">
     <div class="msg" id="msg_obat"></div>
@@ -336,7 +348,7 @@
         </tr>
         <tr>
             <td width="15%" align="right">Kekuatan:</td>
-            <td><?= form_input('kekuatan', '1', 'id=kekuatan size=10 onkeyup=Angka(this)') ?> </td>
+            <td><?= form_input('kekuatan', '1', 'id=kekuatan size=10') ?> </td>
         </tr>
         <tr>
             <td width="15%" align="right">Satuan:</td>
@@ -376,7 +388,7 @@
         </tr>
         <tr>
             <td align="right">Konsinyasi?:</td>
-            <td><?= form_checkbox('konsinyasi', 'ya', FALSE, 'id=konsinyasi') ?></td>
+            <td><?= form_checkbox('konsinyasi', '1', FALSE, 'id=konsinyasi') ?></td>
         </tr>
         <tr>
             <td width="15%"></td>
@@ -392,46 +404,6 @@
 
 <div id="konfirmasi_obat" style="display: none;">
     <div id="text_konfirmasi_obat"></div>
-</div>
-
-<div id="cariobat" style="display: none;" title="Parameter Pencarian">
-    <?= form_open('', 'id=form_cariobat') ?>
-    <?= form_hidden('kat_obat') ?>
-    <?= form_hidden('id_barang_obat') ?>
-    <div class="msg" id="msg_cariobat"></div>
-    <table width="100%">
-        <tr>
-            <td width="15%" align="right">Nama Obat:</td>
-            <td><?= form_input('nama', null, 'id=nama class=nama size=60') ?> </td>
-        </tr>
-        <tr>
-            <td width="15%" align="right">Pabrik:</td>
-            <td>
-                <?= form_input('pabrik', null, 'class=pabrik size=60') ?>
-                <?= form_hidden('id_pabriks_obat', null, 'class=id_pabrik') ?>
-            </td>
-        </tr>
-        <tr>
-            <td width="15%" align="right">Indikasi:</td>
-            <td>
-                <?= form_input('indikasi_obat', null, 'class=indikasi_obat size=60') ?>
-            </td>
-        </tr>
-        <tr>
-            <td width="15%" align="right">Dosis:</td>
-            <td>
-                <?= form_input('dosis_obat', null, 'class=dosis_obat size=60') ?>
-            </td>
-        </tr>
-        <tr>
-            <td width="15%" align="right">Kandungan:</td>
-            <td>
-                <?= form_input('kandungan', null, 'class=kandungan size=60') ?>
-            </td>
-        </tr>
-        
-    </table>
-    <?= form_close() ?>
 </div>
     
 <div class="data-list" id="obat_list">

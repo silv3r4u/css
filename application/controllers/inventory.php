@@ -448,6 +448,11 @@ class Inventory extends CI_Controller {
         $this->load->view('inventory/rencana-pemesanan', $data);
     }
     
+    function save_pemesanan_defecta() {
+        $data = $this->m_inventory->save_pemesanan_defecta();
+        die(json_encode($data));
+    }
+    
     function rencana_pemesanan_delete($id) {
         $data = $this->db->delete('defecta', array('barang_packing_id' => $id));
         die(json_encode($data));
