@@ -62,7 +62,7 @@ $(function() {
     });
     $('#print').click(function() {
         var id = $('#id_receipt').html();
-        $.get('<?= base_url('pelayanan/kitir_cetak_nota') ?>/'+id, function(data) {
+        $.get('<?= base_url('pelayanan/kitir') ?>/'+id, function(data) {
             $('#result_cetak').html(data);
             $('#result_cetak').dialog({
                 autoOpen: true,
@@ -627,6 +627,6 @@ $(function() {
         <?= form_submit('save', 'Simpan', 'id=submit') ?>
         <?= form_button('Reset', 'Reset', 'id=reset') ?>
         <?= form_button('copyresep', 'Cetak', 'id=copyresep') ?>
-        <!--<?= form_button(null, 'Cetak Kitir', 'id=print') ?>-->
+        <?= form_button(null, 'Cetak Kitir', 'id=print') ?>
     <?= form_close() ?>
 </div>

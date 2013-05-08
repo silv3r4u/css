@@ -1,16 +1,29 @@
 <title><?= $title ?></title>
-<style>
-    * { font-family: tahoma; font-size: 10px; }
-</style>
+
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-print.min.js') ?>"></script>
 <script type="text/javascript">
-    function PrintElem() {
-        window.print();
-        window.close();
+    function PrintElem(elem) {
+        $('#cetak').hide();
+        Popup($(elem).printElement());
+        $('#cetak').show();
+    }
+
+    function Popup(data) {
+        //var mywindow = window.open('<?= $title ?>', 'Print', 'height=400,width=800');
+        mywindow.document.write('<html><head><title> <?= $title ?> </title>');
+        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
     }
 
 </script>
-<body onload="PrintElem()">
+<div id="mydiv">
 <?php
     foreach ($penjualan as $rows);
 ?>
@@ -21,19 +34,17 @@
 </table>
     <center><h1><?= $title ?></h1></center>
 <table class="content-printer" style="border-bottom: 1px solid #000; width: 100%">
-    <tr><td>No.:</td><td><?= $rows->transaksi_id ?></td></tr>
-    <?php if ($jenis == '') {?>
+    <tr><td>No.:</td><td><?= $rows->id ?></td></tr>
     <tr><td>Nama:</td><td><?= $rows->pasien ?></td></tr>
-    <?php } ?>
-    <tr><td>Petugas:</td><td><?= $rows->pegawai ?></td></tr>
+    <tr><td>Dokter:</td><td><?= $rows->dokter ?></td></tr>
 </table>
 
 <table width="100%" style="border-bottom: 1px solid #000">
     <tr>
-        <th align="left" width="20%">Barang</th>
-        <th width="15%">Harga</th>
-        <th width="15%">Diskon(%)</th>
-        <th width="15%">Jumlah</th>
+        <th align="left" width="20%" style="border-bottom: 1px dashed #ccc;">Barang</th>
+        <th width="15%" align="right" style="border-bottom: 1px dashed #ccc;">Harga</th>
+        <th width="15%" style="border-bottom: 1px dashed #ccc;">Diskon(%)</th>
+        <th width="15%" style="border-bottom: 1px dashed #ccc;">Jumlah</th>
     </tr>
 <?php
 
@@ -76,11 +87,9 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     <tr><td>Diskon:</td><td align="right"><?= ($diskon_member) ?></td></tr>
     <tr><td>PPN (%):</td><td align="right"><?= $jml_ppn ?></td></tr>
     <tr><td>Total:</td><td align="right"><?= inttocur($totals) ?></td></tr>
-    <?php if ($rows->bayar != '0') { 
-    $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
-    ?>
-    <tr><td>Bayar:</td><td align="right"><?= inttocur($money->bayar) ?></td></tr>
-    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-$totals) ?></td></tr>
-    <?php } ?>
 </table>
-</body>
+<p align="center">
+    <span id="SCETAK"><input type="button" class="tombol" value="Cetak" id="cetak" onClick="PrintElem('#mydiv')"/></span>
+</p>
+</div>
+<?php die; ?>

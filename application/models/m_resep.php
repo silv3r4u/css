@@ -98,6 +98,28 @@ class M_resep extends CI_Model {
         return $this->db->query($sql);
     }
     
+    function cetak_kitir_load_data($id_resep) {
+        $sql = "select rr.resep_id, bp.id as id_packing, b.hna, bp.margin, rrr.pakai_jumlah as keluar, bp.diskon as jual_diskon_percentage, pd.member as diskon_member, o.kekuatan, r.*, rr.r_no, pd.lahir_tanggal, bp.isi, s.nama as satuan, sd.nama as sediaan, st.nama as satuan_terkecil, 
+        stb.nama as satuan_terbesar, ri.nama as pabrik, o.kekuatan,  rr.resep_r_jumlah, rr.tebus_r_jumlah,
+            rr.pakai_aturan, rr.iter, p.nama dokter, pd.nama as pasien, b.nama as barang, bp.barcode, rrr.dosis_racik, rrr.pakai_jumlah
+            from resep r
+            left join penduduk p on (r.dokter_penduduk_id = p.id)
+            left join penduduk pd on (r.pasien_penduduk_id = pd.id)
+            left join resep_r rr on (rr.resep_id = r.id)
+            left join resep_racik_r_detail rrr on (rr.id = rrr.r_resep_id)
+            left join barang_packing bp on (bp.id = rrr.barang_packing_id)
+            left join barang b on (b.id = bp.barang_id)
+            left join obat o on (o.id = b.id)
+            left join sediaan sd on (o.sediaan_id = sd.id)
+            left join satuan st on (bp.terkecil_satuan_id = st.id)
+            left join satuan stb on (stb.id = bp.terbesar_satuan_id)
+            left join relasi_instansi ri on (ri.id = b.pabrik_relasi_instansi_id)
+            left join satuan s on (s.id = o.satuan_id)
+            where r.id = '$id_resep'";
+        //echo $sql;
+        return $this->db->query($sql);
+    }
+    
     function data_resep_load_data($id) {
         $sql = "select r.*, rr.id as id_rr, rr.tarif_id, rr.r_no, pd.nama as pasien, pd.lahir_tanggal, rr.resep_r_jumlah, rr.tebus_r_jumlah,
             rr.pakai_aturan, rr.iter, p.nama dokter, t.nominal, pd.id as pasien_id

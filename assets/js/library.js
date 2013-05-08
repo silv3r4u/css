@@ -249,7 +249,7 @@ function numberToCurrency2(a){
 function currencyToNumber(a) {
     var b=a.toString();
     var c='';
-    if(a!==null){
+    if(a!==''){
         c=b.replace(/\.+/g, '');
     }
     

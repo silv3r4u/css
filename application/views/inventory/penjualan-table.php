@@ -7,7 +7,7 @@ if (count($list_data) == 0) {?>
 foreach ($list_data as $key => $data) { 
     $harga_jual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
     $subtotal = ($harga_jual - (($harga_jual*($data->percent/100))))*$data->pakai_jumlah;
-    $total = $total + $subtotal;
+    $total = $total + ($harga_jual*$data->pakai_jumlah);
     $disc = $disc + (($data->percent/100)*$harga_jual);
     $alert=NULL;
     if ($data->sisa <= 0) {
@@ -162,12 +162,14 @@ $no++;
         <?php } else { ?>
             $('button[type=submit]').show();
         <?php } ?>
+        var diskon_member = $('input[name=diskon_member]').val();
+        var diskon_total = (<?= $total ?>*(diskon_member/100));
         $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
-        $('#total-diskon').html(<?= ceil($disc) ?>);
+        //$('#total-diskon').html();
         $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
         var jumlah = $('.tr_row').length;
         for (i = 1; i <= jumlah; i++) {
             subTotal(i);
         }
-    })
+    });
 </script>

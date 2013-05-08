@@ -463,13 +463,15 @@ class M_inventory extends CI_Model {
             'Retur Pembelian' => 'Retur Pembelian',
             'Penerimaan Retur Pembelian' => 'Penerimaan Retur Pembelian',
             'Penerimaan Retur Distribusi' => 'Penerimaan Retur Distribusi',
-            'Penjualan' => 'Penjualan',
+            'Penjualan Resep' => 'Penjualan Resep',
+            'Penjualan Non Resep' => 'Penjualan Non Resep',
+            'Penjualan' => 'Penjualan Total',
             'Retur Penjualan' => 'Retur Penjualan'
         );
     }
     
     function informasi_stok_load_data($param) {
-        $q = null; $last = null; $order = null; $where = null; $jml = null;
+        $q = null; $last = null; $order = null; $where = null; $jml = null; $join_extra= null; $extra = null;
         if ($param['awal'] != null and $param['akhir'] != NULL) {
             $q.=" and date(td.waktu) between '". datetopg($param['awal'])."' and '". datetopg($param['akhir'])."'";
         }
@@ -496,8 +498,19 @@ class M_inventory extends CI_Model {
             $unit=" and td.unit_id = '$param[unit]'"; 
         }
         if ($param['jenis'] != NULL) {
-            $q.=" and td.transaksi_jenis = '$param[jenis]'";
-            $where = " where transaksi_jenis = '$param[jenis]'";
+            $jenis = $param['jenis'];
+            if ($param['jenis'] == 'Penjualan Resep') {
+                $jenis = "Penjualan";
+                $join_extra = "join penjualan p on (p.id = td.transaksi_id)";
+                $extra = "and p.resep_id is not NULL";
+            }
+            if ($param['jenis'] == 'Penjualan Non Resep') {
+                $jenis = "Penjualan";
+                $join_extra = "join penjualan p on (p.id = td.transaksi_id)";
+                $extra = "and p.resep_id is NULL";
+            }
+            $q.=" and td.transaksi_jenis = '$jenis' $extra";
+            $where = " where transaksi_jenis = '$jenis'";
         }
         if ($param['jns_barang'] != NULL) {
             if ($param['jns_barang'] == 'Obat') {
@@ -546,6 +559,7 @@ class M_inventory extends CI_Model {
             left join satuan s on (s.id = o.satuan_id)
             left join satuan st on (st.id = bp.terkecil_satuan_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
+            $join_extra
             $last
             where td.id is not null $unit
             $q 

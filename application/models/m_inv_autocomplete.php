@@ -319,7 +319,7 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function load_data_no_resep($q) {
-        $sql = "select r.*, p.nama as dokter, pd.nama as pasien from resep r
+        $sql = "select r.*, p.nama as dokter, pd.nama as pasien, pd.member as diskon from resep r
             join penduduk p on (r.dokter_penduduk_id = p.id)
             join penduduk pd on (r.pasien_penduduk_id = pd.id)
             where r.id like '%$q%' order by locate ('$q', r.id)";

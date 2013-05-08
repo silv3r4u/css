@@ -245,7 +245,7 @@
             <tr>
                 <th>Tanggal</th>
                 <th>No.Transaksi</th>
-                <?php if (isset($_GET['transaksi_jenis']) and $_GET['transaksi_jenis'] == 'Penjualan') { ?>
+                <?php if (isset($_GET['transaksi_jenis']) and ($_GET['transaksi_jenis'] == 'Penjualan' or $_GET['transaksi_jenis'] == 'Penjualan Resep' or $_GET['transaksi_jenis'] == 'Penjualan Non Resep')) { ?>
                 <th>Pembeli / Pasien</th>
                 <?php } ?>
                 <th>Jenis Transaksi</th>
@@ -320,7 +320,7 @@
                     <tr <?= $class ?>>
                         <td align="center"><?= datetimefmysql($data->waktu) ?></td>
                         <td align="center"><a class="view_transaction" href="<?= base_url($link . '/' . $data->transaksi_id.'?'.  generate_get_parameter($_GET)) ?>"><?= $data->transaksi_id ?></a></td>
-                        <?php if (isset($_GET['transaksi_jenis']) and $_GET['transaksi_jenis'] == 'Penjualan') { 
+                        <?php if (isset($_GET['transaksi_jenis']) and ($_GET['transaksi_jenis'] == 'Penjualan' or $_GET['transaksi_jenis'] == 'Penjualan Resep' or $_GET['transaksi_jenis'] == 'Penjualan Non Resep')) { 
                             $pembeli = $this->db->query("select pd.nama, pdd.nama as pasien
                                 from penjualan p 
                                 left join penduduk pd on (pd.id = p.pembeli_penduduk_id) 

@@ -55,7 +55,8 @@ $(function() {
     $('#print').hide();
     $('#print').click(function() {
         var id = $('#id_penjualan').html();
-        $.get('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', function(data) {
+        window.open('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', 'cetak nota', 'width=600px, height=400px, resizable=1, scrollbars=1');
+        /*$.get('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', function(data) {
             $('#result_cetak').html(data);
             $('#result_cetak').dialog({
                 autoOpen: true,
@@ -63,7 +64,7 @@ $(function() {
                 width: 350,
                 height: 400
             });
-        });
+        });*/
     });
     
     $('#pembayaran').change(function() {
@@ -94,7 +95,7 @@ $(function() {
         },
         formatItem: function(data,i,max){
             var kelurahan = '-';
-            if (data.kelurahan != null) { var kelurahan = data.kelurahan; }
+            if (data.kelurahan !== null) { var kelurahan = data.kelurahan; }
             var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
             return str;
         },

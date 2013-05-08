@@ -129,6 +129,7 @@ $(function() {
         $('input[name=id_resep]').val(data.id);
         $('#pasien').html(data.pasien);
         $('input[name=id_pasien]').val(data.no_rm);
+        $('input[name=diskon_member]').val(data.diskon);
         //$('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
         var id_resep = data.id;
         $.ajax({
@@ -182,16 +183,20 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(0)').children('.bc').attr('id','bc'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','diskon'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(1)').children('.ed').attr('id','exp'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','diskon'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','sisa'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
     }
     subTotal();
 }
 function add(i) {
      str = '<tr class=tr_row>'+
         '<td><input type=text name=nr[] id=bc'+i+' class=bc size=20 /></td>'+
-        '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /></td>'+
+        '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input type=hidden name=ed[] id=exp'+i+' class=ed /></td>'+
         '<td id=ed'+i+' align=center></td>'+
         '<td id=hj'+i+' align=right></td>'+
         '<td align=center id=diskon'+i+'></td>'+
@@ -203,7 +208,7 @@ function add(i) {
 
     $('.form-inputan tbody').append(str);
     $('#bc'+i).live('keydown', function(e) {
-        if (e.keyCode==13) {
+        if (e.keyCode===13) {
             var bc = $('#bc'+i).val();
             $.ajax({
                 url: '<?= base_url('inventory/fillField') ?>',
@@ -211,21 +216,21 @@ function add(i) {
                 cache: false,
                 dataType: 'json',
                 success: function(data) {
-                    if (data.nama != null) {
+                    if (data.nama !== null) {
                         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                        if (data.isi != '1') { var isi = '@ '+data.isi; }
-                        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                        if (data.satuan != null) { var satuan = data.satuan; }
-                        if (data.sediaan != null) { var sediaan = data.sediaan; }
-                        if (data.pabrik != null) { var pabrik = data.pabrik; }
-                        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                        if (data.id_obat == null) {
+                        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                        if (data.satuan !== null) { var satuan = data.satuan; }
+                        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                        if (data.id_obat === null) {
                             $('#pb'+i).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                         } else {
-                            if (data.generik == 'Non Generik') {
-                                $('#pb'+i).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+                            if (data.generik === 'Non Generik') {
+                                $('#pb'+i).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
                             } else {
-                                $('#pb'+i).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                $('#pb'+i).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                             }
                         }
                         $('#id_pb'+i).val(data.id);
@@ -238,7 +243,7 @@ function add(i) {
                         subTotal(i);
                         var jml = $('.tr_row').length;
                         //alert(jml+' - '+i)
-                        if (jml - i == 1) {
+                        if (jml - i === 1) {
                             add(jml);
                         }
                         $('#bc'+(i+1)).focus();
@@ -254,11 +259,11 @@ function add(i) {
                         $('#diskon'+i).html('');
                     }
                 }
-            })
+            });
             return false;
         }
     });
-    $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
+    $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_per_ed') ?>",
     {
         parse: function(data){
             var parsed = [];
@@ -272,19 +277,19 @@ function add(i) {
         },
         formatItem: function(data,i,max){
             var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-            if (data.isi != '1') { var isi = '@ '+data.isi; }
-            if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-            if (data.satuan != null) { var satuan = data.satuan; }
-            if (data.sediaan != null) { var sediaan = data.sediaan; }
-            if (data.pabrik != null) { var pabrik = data.pabrik; }
-            if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-            if (data.id_obat == null) {
-                var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+            if (data.isi !== '1') { var isi = '@ '+data.isi; }
+            if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+            if (data.satuan !== null) { var satuan = data.satuan; }
+            if (data.sediaan !== null) { var sediaan = data.sediaan; }
+            if (data.pabrik !== null) { var pabrik = data.pabrik; }
+            if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+            if (data.id_obat === null) {
+                var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>ED: '+datefmysql(data.ed)+'</div>';
             } else {
-                if (data.generik == 'Non Generik') {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
+                if (data.generik === 'Non Generik') {
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'<br/>ED: '+datefmysql(data.ed)+'</div>';
                 } else {
-                    var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
+                    var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>ED: '+datefmysql(data.ed)+'</div>';
                 }
             }
             return str;
@@ -294,24 +299,26 @@ function add(i) {
     }).result(
     function(event,data,formated){
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-        if (data.isi != '1') { var isi = '@ '+data.isi; }
-        if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-        if (data.satuan != null) { var satuan = data.satuan; }
-        if (data.sediaan != null) { var sediaan = data.sediaan; }
-        if (data.pabrik != null) { var pabrik = data.pabrik; }
-        if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-        if (data.id_obat == null) {
+        if (data.isi !== '1') { var isi = '@ '+data.isi; }
+        if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+        if (data.satuan !== null) { var satuan = data.satuan; }
+        if (data.sediaan !== null) { var sediaan = data.sediaan; }
+        if (data.pabrik !== null) { var pabrik = data.pabrik; }
+        if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+        if (data.id_obat === null) {
             $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
         } else {
-            if (data.generik == 'Non Generik') {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
+            if (data.generik === 'Non Generik') {
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
             } else {
-                $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
         $('#id_pb'+i).val(data.id);
         $('#bc'+i).val(data.barcode);
         $('#kekuatan'+i).html(data.kekuatan);
+        $('#exp'+i).val(data.ed);
+        $('#ed'+i).html(datefmysql(data.ed));
         var id_packing = data.id;
         $.ajax({
             url: '<?= base_url('inv_autocomplete/get_harga_jual') ?>',
@@ -335,7 +342,7 @@ function subTotal() {
         var disc = 0;
         var ppn = $('#ppn').val()/100;
         var jasa_apt = currencyToNumber($('#jasa-apt').html());
-        if (isNaN(jasa_apt)) { jasa_apt = 0; } else { jasa_apt = jasa_apt; }
+        if (isNaN(jasa_apt)) { jasa_apt = 0; } else { var jasa_apt = jasa_apt; }
         for (i = 0; i <= jumlah; i++) {
             var harga = currencyToNumber($('#hj'+i).html());
             var diskon= parseInt($('#diskon'+i).html())/100;
@@ -376,7 +383,7 @@ function subTotal() {
         var total = totalllica+(tagihan*ppn);
         $('#ppn-hasil').html(numberToCurrency(Math.ceil(tagihan*ppn)));
         $('#total').html(numberToCurrency(Math.ceil(total)));
-        $('input[name=total]').val(Math.ceil(tagihan - disc)+Math.ceil(tagihan*ppn));
+        $('input[name=total]').val(Math.ceil(total));
         
         $('#total_tagihan_penjualan').html($('#total').html());
         var nominal = currencyToNumber($('#total').html());
@@ -510,7 +517,7 @@ $(function() {
         <label style="font-size: 18px;">Bayar (Rp):</label><?= form_input('', null, 'id=bayar  style="font-size: 18px;"') ?>
         <label style="font-size: 18px;">Kembalian (Rp):</label><span id="kembalian" class="label" style="font-size: 18px;"></span>
     </div>
-    <?php if (isset($list_data)) { 
+    <?php if (isset($list_data)) {
         foreach ($atribute as $rows);
     } ?>
     <div class="data-input">
@@ -518,8 +525,9 @@ $(function() {
     <?= form_hidden('bayar') ?>
     <?= form_hidden('id_pasien', null, 'id=id_pasien') ?>
     <fieldset><legend>Summary</legend>
-        <?= form_hidden('total', null, 'id=total_tagihan') ?>
+        <?= form_hidden('total', null) ?>
         <?= form_hidden('jasa_apotek') ?>
+        <?= form_hidden('diskon_member') ?>
         <div class="left_side" style="min-height: 160px;">
             <label>No.</label><span class="label" id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></span>
             <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>

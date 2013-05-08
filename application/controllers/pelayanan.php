@@ -77,6 +77,15 @@ class Pelayanan extends CI_Controller {
         $this->load->view('inventory/print/kitir', $data);
     }
     
+    function kitir($id_resep) {
+        $data['title'] = '';
+        $data['jenis'] = '';
+        $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
+        
+        $data['penjualan'] = $this->m_resep->cetak_kitir_load_data($id_resep)->result();
+        $this->load->view('inventory/print/kitir_cetak', $data);
+    }
+    
     function cetak_etiket() {
         $data['title'] = 'Etiket';
         $data['list_data'] = $this->m_resep->cetak_etiket($_GET['no_resep'], $_GET['no_r'])->result();
