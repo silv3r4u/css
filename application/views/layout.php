@@ -72,7 +72,7 @@
             <div id="loading">Loading ....</div>
             <div style="height: 100%">
                 <div class="mainribbon-min">
-                    
+                    <div class="logo-apotek">&nbsp;</div>
                 </div>
                 <div id="show" style="position: absolute; top: 14%;"><?= img('assets/images/left-arrow.png') ?></div>
                 <div id="hide" style="position: absolute; top: 14%;"><?= img('assets/images/right-arrow.png') ?></div>

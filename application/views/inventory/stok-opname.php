@@ -18,6 +18,7 @@ $(function() {
                 if (data.status === true) {
                     $('button[type=submit]').hide();
                     $('#stok_opname').html(data.id_opname_stok);
+                    $('input[type=text]').attr('disabled','disabled');
                     alert_tambah();
                 } else {
                     

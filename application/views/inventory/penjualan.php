@@ -529,7 +529,7 @@ $(function() {
             <label>Pasien</label><span id="pasien" class="label"><?= isset($rows->pasien)?$rows->pasien:NULL ?></span>
 <!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
             <label>PPN (%) </label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
-            <!--<label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>-->
+            <label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
         </div>
         <div class="right_side" style="min-height: 160px;">
             <!--Jasa Apoteker</td><td id="jasa-apt"><?= isset($biaya['nominal'])?rupiah($biaya['nominal']):null ?>-->

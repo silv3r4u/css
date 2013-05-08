@@ -1,0 +1,138 @@
+.alert {color: #ae0000; border: 1px solid #ae0000; background: #ffcecd; padding: 5px; margin: 10px -35px !important; text-align: center; font-size: 11px;}
+.body-login { background: #24a2ef; font-family: Arial; font-size: 11px; }
+.body-login .base-first { width: 100%; position: fixed; background: url(../../images/bg-stripping-login.png) repeat-x; margin: 0; padding: 0; left: 0; right: 0; z-index: 999; height: 180px; top: 42%;}
+.body-login .logo { background: url(../../images/logo.png) no-repeat; width: 800px; height: 200px; margin: auto; position: fixed; left: 0; right: 0; top: 41%; z-index: 100; }
+.body-login .transparent { background: url(../../images/logo-transparan.png) no-repeat; width: 800px; height: 343px; margin: auto; position: fixed; left: 0; right: 0; top: -5%; z-index: 100;  }
+.content-chooser { width: 87%; margin: 0 auto; padding: 20px; position: fixed; top: 50%; }
+.login-wrapper { width:80%; height: 100%; color: #666; position: fixed; left: 0; right: 0; margin: auto; }
+.login-wrapper input[type=text], .login-wrapper input[type=password] { width: 100%; }
+.login-body {  width: 300px; height: 26%; text-align: left;  padding: 25px; color: #fff; background: #24a2ef; bottom: 0; position: absolute; right: 15%;}
+.login-button { background-image: url(../../images/login-button.jpg); background-position: 100% -76px; width: 96px; height: 38px; border: 0px; }
+.login-button:hover { background-position: 100% -38px; }
+.icons {border: 0px solid #999999;padding: 0px;margin: 0px; height:13px; width:13px;}
+.buttonsave {
+    -moz-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+    box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #c8e08f), color-stop(1, #8cb82b) );
+    background:-moz-linear-gradient( center top, #c8e08f 5%, #8cb82b 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c8e08f', endColorstr='#8cb82b');
+    background-color:#c8e08f;
+    border:1px solid #82b033;
+    display:inline-block;
+    color:#ffffff;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #689324;
+    margin-left: 0;
+    margin-top: 20px;
+}.buttonsave:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8cb82b), color-stop(1, #c8e08f) );
+    background:-moz-linear-gradient( center top, #8cb82b 5%, #c8e08f 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#c8e08f');
+    background-color:#8cb82b;
+}.buttonsave:active { position:relative; top:1px; }
+input.inputbox{
+    padding:5px;
+    border:1px solid #ccc;
+    border-bottom:1px solid #eee;
+    border-right:1px solid #eee;
+    background:#fff url(../images/background/inner-shadow.jpg) repeat-x 0 0;
+    color:#aaa;
+}
+input.inputbox:hover,
+input.inputbox:focus{
+    color:#333;
+}
+
+button{
+    padding:4px;
+    border:1px solid #999999;
+    cursor:pointer;
+    background:#fafafa url(../images/background/button-bg.jpg) repeat-x 0 0;
+    color:#333333;
+    font-size:12px;
+    font-weight:bold;
+    float:right;
+    margin:10px 0 0;
+}
+
+
+.loadingbox{
+    position:relative;
+    overflow:hidden;
+    width:262px;
+    height:27px;
+}
+.loadingbox .loadingbar{
+    background:#8d8df5 url(../images/background/loadingbar.jpg) repeat-x;
+    border:1px solid #6565dd;
+    position:absolute;
+    bottom:0;
+    left:0px;
+    z-index:10;
+    width:0px;
+    height:23px;
+    line-height:23px;
+    text-align:center;
+    display:none;
+    opacity:0.8;
+}
+.loadingbox .loadingbar span{
+    color:#fff;
+    text-shadow:0px -1px 0px #7b7be3;
+    display:none;
+}
+
+#loading {
+    position: fixed;
+    width:200px;
+    height:13px;
+    border: 5px solid #ccc;
+    padding:10px;
+    z-index:200;
+    margin: 5% auto;
+    top: 18%;
+    left: 0;
+    right: 0;
+    display: none;
+    -webkit-border-radius: 4px;
+    background: #fff url('../images/icons/warning.png') no-repeat left;
+    padding-left: 40px;
+    font-size: 12px;
+    color: red;
+}
+.panel-icon {
+    padding:14px;
+    border-radius:5px;
+    display:inline-block;
+    text-decoration: none;
+    color:#fff;
+    text-align:center;
+    margin-right:7px;
+    margin-bottom:10px;
+    width:128px;
+    height: 140px;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-top: 10px;
+}
+.panel-icon:hover {
+    background: url(../images/hover.png) no-repeat bottom;
+    padding:14px;
+    border-radius:5px;
+    display:inline-block;
+    text-decoration: none;
+    color:#fff;
+    text-align:center;
+    margin-right:7px;
+    margin-bottom:10px;
+    width:128px;
+    height: 110px;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-top: 10px;
+}
