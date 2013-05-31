@@ -14,12 +14,12 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_barang').attr('id','id_barang'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','unit'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','diskon'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.ed').attr('id','exp'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','exp'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','unit'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','diskon'+i);
         $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
     }
     subTotal();
@@ -28,11 +28,11 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nr[] id=bc'+i+' class=bc size=10 /></td>'+
                 '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input id=id_barang'+i+' class=id_barang name=id_barang[] type=hidden /> </td>'+
+                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=number min="1" name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=unit'+i+' align=right><select style="width: 100%;"></select></td>'+
                 '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
-                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=number min="1" name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=subtotal'+i+' align=right></td>'+
                 '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
             '</tr>';
@@ -490,11 +490,11 @@ $(function() {
             <tr>
                 <th width="10%">Barcode</th>
                 <th width="35%">Barang</th>
+                <th width="10%">Jumlah</th>
                 <th width="10%">Unit Kemasan</th>
                 <th width="7%">ED</th>
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
-                <th width="10%">Jumlah</th>
                 <th width="10%">Sub Total</th>
                 <th width="5%">Aksi</th>
             </tr>
