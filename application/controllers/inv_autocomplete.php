@@ -307,6 +307,16 @@ class Inv_autocomplete extends CI_Controller {
             }
         echo "</select>";
     }
+    
+    function load_data_resep() {
+        $data['list_data'] = $this->m_inv_autocomplete->load_data_resep()->result();
+        $this->load->view('inventory/resep-load', $data);
+    }
+    
+    function load_data_resep_byid($id) {
+        $data = $this->m_inv_autocomplete->load_data_resep($id)->row();
+        die(json_encode($data));
+    }
 }
 
 ?>

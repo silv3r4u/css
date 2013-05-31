@@ -516,6 +516,19 @@ class M_inv_autocomplete extends CI_Model {
     function load_data_penjualan_jasa($id_penduduk) {
         
     }
+    
+    function load_data_resep($id = null) {
+        $q = null;
+        if ($id != NULL) {
+            $q.=" and r.id = '$id'";
+        }
+        $sql = "select r.*, p.nama as pasien, pd.nama as dokter, p.member as diskon from resep r
+            join penduduk p on (r.pasien_penduduk_id = p.id)
+            join penduduk pd on (r.dokter_penduduk_id = pd.id)
+            where r.id not in (select resep_id from penjualan where resep_id is not NULL) $q
+            order by r.waktu desc";
+        return $this->db->query($sql);
+    }
 }
 
 ?>

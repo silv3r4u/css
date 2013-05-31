@@ -289,8 +289,17 @@ function searchs() {
         title: 'Pencarian Nomor Resep',
         autoOpen: true,
         modal: true,
-        width: 500,
+        width: 800,
         height: 300,
+        open: function() {
+            $.ajax({
+                url: '<?= base_url('inv_autocomplete/load_data_resep') ?>',
+                cache: false,
+                success: function(data) {
+                    $('#searchs').html(data);
+                }
+            });
+        },
         close: function() {
             $(this).dialog().remove();
         },
@@ -517,6 +526,40 @@ $(function() {
             });
         }
     });
+    $('.choosen').live('dblclick', function() {
+        var id_resep = $(this).attr('id');
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_data_resep_byid') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#noresep').val(data.id);
+                $('#display-apt').show();
+                $('input[name=id_resep]').val(data.id);
+                $('#pasien').html(data.pasien);
+                $('input[name=id_pasien]').val(data.pasien_penduduk_id);
+                $('input[name=diskon_member]').val(data.diskon);
+            }
+        });
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
+            }
+        });
+        var id = $(this).attr('id');
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id,
+            cache: false,
+            success: function(msg) {
+                $('.form-inputan tbody').html(msg);
+                $('#searchs').dialog().remove();
+            }
+        });
+        $('#ppn').focus();
+    });
 });
 
 </script>
@@ -543,7 +586,7 @@ $(function() {
                 <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
                 <tr><td>No. Resep:</td><td>
                     <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?> 
-                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?><?= form_button(null, 'Cari', 'id=search onclick="searchs()"') ?>
+                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?><?= form_button(null, 'Cari', 'id=search onclick="searchs()" style="font-size: 9px;"') ?>
                 <tr><td>Pasien:</td><td id="pasien"><?= isset($rows->pasien)?$rows->pasien:NULL ?></td></tr>
 <!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
             <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
