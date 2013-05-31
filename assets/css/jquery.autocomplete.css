@@ -1,7 +1,7 @@
 .ac_inputs {
 	background: url(autocomplete_leftcap.gif) right center no-repeat #fff;
         border: 1px solid #ccc;
-        padding: 2px;
+/*        padding: 2px;*/
 }
 .ac_results {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;

@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="<?= base_url('../favicon.ico') ?>" />
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/workspace.css') ?>" media="all" />
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/base.css') ?>" media="screen" /> 
-        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery-ui-1.10.2.custom.css') ?>" media="all" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery-ui-1.9.1.custom.css') ?>" media="all" />
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.autocomplete.css') ?>" media="all" />
         <link rel="stylesheet" href="<?= base_url('assets/js/sorter/style.css') ?>" media="all" />
         
@@ -15,7 +15,6 @@
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.9.2.custom.js') ?>"></script>
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-timepicker-addon.js') ?>"></script>
         <script type="text/javascript" src="<?= base_url('assets/js/jquery.tablesorter.js') ?>"></script>
-
 
         <script type="text/javascript" src="<?= base_url('assets/js/jquery.autocomplete.js') ?>"></script>
         <script type="text/javascript" src="<?= base_url('assets/js/library.js') ?>"></script>
@@ -39,7 +38,6 @@
                 initMenus();
                 $('#loading').hide();
                 $('.fixed').fadeOut(15000);
-                $("#loading").ajaxStart(function(){$(this).show();});
                 $("#loading").ajaxStop(function(){$(this).fadeOut();});
                 $('a.submenu').click(function() {
                     $('#loaddata').empty();
@@ -47,6 +45,9 @@
                     $.ajax({
                         url: val,
                         cache: false,
+                        beforeSend: function() {
+                            $("#loading").show();
+                        },
                         success:function(data) {
                             $('#loaddata').html(data);
                         }
@@ -69,7 +70,6 @@
 
         </script>
         <body>
-            <div id="loading">Loading ....</div>
             <div style="height: 100%">
                 <div class="mainribbon-min">
                     <div class="logo-apotek">&nbsp;</div>
@@ -102,9 +102,9 @@
                 <!--            <div class="arrow-left">&nbsp;</div>
                             <div class="arrow-right">&nbsp;</div>-->
 
-
+                <div id="loading"></div>
                 <div id="loaddata">
-                    <?= $this->load->view('registrasi') ?>
+                    <?php $this->load->view('registrasi') ?>
                 </div>
                 
             </div>

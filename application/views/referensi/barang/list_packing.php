@@ -1,5 +1,9 @@
-<script>
+<script type="text/javascript" src="<?= base_url('assets/js/colResizable-1.3.min.js') ?>"></script>
+<script type="text/javascript">
 $("#table").tablesorter({sortList:[[0,0]]});
+$(function() {
+    $("#table").colResizable();
+});
 </script>
 <?php if (isset($key)): ?>
     <div id="pencarian">

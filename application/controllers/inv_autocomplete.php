@@ -292,7 +292,7 @@ class Inv_autocomplete extends CI_Controller {
     
     function get_kemasan_barang($id_barang, $i) {
         $array = $this->db->query("select s.*, bp.isi from barang_packing bp join satuan s on (bp.terbesar_satuan_id = s.id) where bp.barang_id = '$id_barang' order by bp.isi asc")->result();
-        echo "<select style='border: 1px solid #ccc; width:100%;' name='kemasan[]' onchange='get_harga_jual(".$i.")' id='kemasan".$i."'>";
+        echo "<select name='kemasan[]' onchange='get_harga_jual(".$i.")' id='kemasan".$i."'>";
             foreach ($array as $rows) {
                 echo "<option value='".$rows->id."-".$rows->isi."'>".$rows->nama." @ ".$rows->isi."</option>";
             }
@@ -301,7 +301,7 @@ class Inv_autocomplete extends CI_Controller {
     
     function get_kemasan_barang_pembelian($id_barang, $i) {
         $array = $this->db->query("select s.*, bp.isi from barang_packing bp join satuan s on (bp.terbesar_satuan_id = s.id) where bp.barang_id = '$id_barang' order by bp.isi asc")->result();
-        echo "<select style='border: 1px solid #ccc; width:100%;' name='kemasan[]' onchange='get_isi_kemasan(".$i.")' id='kemasan".$i."'><option value=''>Pilih... </option>";
+        echo "<select name='kemasan[]' onchange='get_isi_kemasan(".$i.")' id='kemasan".$i."'><option value=''>Pilih... </option>";
             foreach ($array as $rows) {
                 echo "<option value='".$rows->isi."-".$rows->id."'>".$rows->nama." @ ".$rows->isi."</option>";
             }

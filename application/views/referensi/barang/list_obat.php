@@ -1,15 +1,36 @@
-<script>
+<script type="text/javascript" src="<?= base_url('assets/js/colResizable-1.3.min.js') ?>"></script>
+<script type="text/javascript">
 $("#table").tablesorter({sortList:[[0,0]]});
+$(function() {
+    var onSampleResized = function(e){
+            var columns = $(e.currentTarget).find("th");
+            var msg = "columns widths: ";
+            columns.each(function(){ msg += $(this).width() + "px; "; });
+
+    };
+    $("#table").colResizable({
+        liveDrag:true,
+        gripInnerHtml:"<div class='grip'></div>", 
+        draggingClass:"dragging", 
+        onResize:onSampleResized
+    });
+});
 </script>
+
 <table class="sortable" id="table" width="100%">
     <thead>
     <tr>
         <th class="nosort" width="5%"><h3>No.</h3> </th>
         <th width="20%"><h3>Nama</h3> </th>
-        <th width="10%"><h3>Kekuatan</h3></th>
-        <th width="15%"><h3>Bentuk Sediaan</h3></th>
-        <th width="25%"><h3>Kandungan</h3></th>
-        <th width="25%"><h3>Indikasi</h3></th>
+        <th width="10%"><h3>HNA</h3></th>
+        <th width="5%"><h3>Kekuatan</h3></th>
+        <th width="5%"><h3>Sediaan</h3></th>
+        <th width="5%"><h3>Adm R</h3></th>
+        <th width="10%"><h3>Perundangan</h3></th>
+        <th width="10%"><h3>Generik</h3></th>
+        <th width="20%"><h3>Kandungan</h3></th>
+        <th width="20%"><h3>Indikasi</h3></th>
+        <th width="20%"><h3>Dosis</h3></th>
         <th class="nosort" width="10%"><h3>Aksi</h3></th>
     </tr>
     </thead>
@@ -24,9 +45,11 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="aksi">
-
-                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="aksi"></td>
             </tr>
         <?php endfor; ?>
     <?php else: ?>
@@ -34,10 +57,15 @@ $("#table").tablesorter({sortList:[[0,0]]});
             <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= (++$key+$start) ?></td>
                 <td><?= $rows->nama ?></td>
-                <td><?= $rows->kekuatan ?></td>
+                <td align="right"><?= rupiah($rows->hna) ?></td>
+                <td align="center"><?= $rows->kekuatan ?></td>
                 <td><?= $rows->sediaan ?></td>
+                <td><?= $rows->adm_r ?></td>
+                <td align="center"><?= $rows->perundangan ?></td>
+                <td align="center"><?= $rows->generik ?></td>
                 <td><?= $rows->kandungan ?></td>
                 <td><?= $rows->indikasi ?></td>
+                <td><?= $rows->dosis ?></td>
                 <td class="aksi" align="center"> 
                     <?php
                     $str = $rows->id . "#" . $rows->nama

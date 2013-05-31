@@ -304,21 +304,21 @@ function addnoresep(i) {
                     '<label>Aturan Pakai:</label><input type=text name=ap[] id=ap'+i+' class=ap size=20 />'+
                     '<label>Iterasi:</label><input type=text name=it[] id=it'+i+' class=it size=10 value="0" onkeyup=Angka(this) />'+
                     '<label>Biaya Apoteker:</label><select onchange="subTotal()" name=ja[] id=ja'+i+'><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'">'.$value->nama.' '.$value->bobot.' Rp. '.$value->nominal.'</option>'; } ?></select>'+
-                    '<label></label><input type=button value="Tambah Produk" onclick=add('+i+') id="addition'+i+'" />'+
+                    '<label>&nbsp;</label><input type=button value="Tambah Obat" onclick=add('+i+') id="addition'+i+'" />'+
                     '<input type=button value="Hapus R/" id="deletion'+i+'" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket'+i+'" style="display: none" class="etiket" onclick=cetak_etiket('+(i+1)+') />'+
                 '</div>'+
                 '<div id=resepno'+i+' style="display: inline-block;width: 100%"></div>'+
             '</div>';
     
     $('#psdg-middle').append(str);
-    
+    $('input[type=button]').button();
 }
 
 function add(i) {
     var j = $('.detailobat'+i).length;
     str = ' <div class=tr_rows style="width: 100%; display: block;">'+
-                '<table align=right width=95% style="border-bottom: 1px solid #f1f1f1" class="detailobat'+i+'">'+
-                '<tr><td>Produk</td><td>  <input type=text name=pb'+i+'[] id=pb'+i+''+j+' class=pb size=60 />'+
+                '<table align=right width=95% style="border-bottom: 1px solid #f1f1f1;" class="detailobat'+i+'">'+
+                '<tr><td>Produk</td><td>  <input type=text name=pb'+i+'[] id=pb'+i+''+j+' class=pb />'+
                     '<input type=hidden name=id_pb'+i+'[] id=id_pb'+i+''+j+' class=id_pb />'+
                     '<input type=hidden name=kr'+i+'[] id=kr'+i+''+j+' class=kr />'+
                     '<input type=hidden name=jp'+i+'[] id=jp'+i+''+j+' class=jp /></td></tr>'+
@@ -497,7 +497,7 @@ $(function() {
     <?= form_hidden('id_resep', isset($id_resep)?$id_resep:NULL) ?>
     <fieldset><legend>Summary</legend>
         <label>No.:</label><span class="label" id="id_receipt"><?= isset($id_resep)?$id_resep:get_last_id('resep', 'id') ?></span>
-        <label>Waktu:</label><?= form_input('tanggal', isset($id_resep)?datetimefmysql($rows->waktu,'true'):date("d/m/Y H:i:s"), 'id=tanggal') ?>
+        <label>Waktu:</label><?= form_input('tanggal', isset($id_resep)?datetimefmysql($rows->waktu,'true'):date("d/m/Y H:i"), 'id=tanggal') ?>
         <label>Nama Dokter:</label><?= form_input('nama_dokter', isset($id_resep)?$rows->dokter:NULL, 'id=dokter size=40') ?> <?= form_hidden('id_dokter', isset($id_resep)?$rows->dokter_penduduk_id:NULL) ?>
         <label>Nama Pasien: </label><?= form_input('nama_pasien', isset($id_resep)?$rows->pasien:NULL, 'id=pasien size=40') ?> <?= form_hidden('id_pasien', isset($id_resep)?$rows->pasien_penduduk_id:NULL) ?>
         <label>Absah:</label><span class="label"><?= form_radio('absah', 'Sah', (isset($id_resep) and $rows->sah == 'Sah')?TRUE:FALSE) ?>  Sah </span> <span class="label"><?= form_radio('absah', 'Tidak Sah', (isset($id_resep) and $rows->sah == 'Tidak Sah')?TRUE:FALSE) ?>  Tidak Sah</span>
@@ -521,7 +521,7 @@ $(function() {
                                 <label>Aturan Pakai:</label><input type=text name=ap[] value="<?= $data->pakai_aturan ?>" id=ap<?= $key ?> class=ap size=20 />
                                 <label>Iterasi:</label><input type=text name=it[] value="<?= $data->iter ?>" id=it<?= $key ?> class=it size=10 value="0" onkeyup=Angka(this); />
                                 <label>Biaya Apoteker</label><select onchange="subTotal();" name=ja[] id=ja<?= $key ?>><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option '; if ($value->id == $data->tarif_id) echo 'selected'; echo ' value="'.$value->id.'-'.$value->nominal.'">'.$value->nama.' '.$value->bobot.' Rp. '.$value->nominal.'</option>'; } ?></select>
-                                <label></label><input type=button value="Tambah Produk" onclick=add(<?= $key ?>); id="addition<?= $key ?>" />
+                                <label>&nbsp;</label><input type=button value="Tambah Produk" onclick=add(<?= $key ?>); id="addition<?= $key ?>" />
                                 <input type=button value="Hapus R/" id="deletion<?= $key ?>" onclick=eliminate(this); /> <input type=button value="Etiket" id="etiket<?= $noo ?>" style="display: none" class="etiket" onclick="cetak_etiket(<?= $noo ?>);" />
                         </div>
                         <div id=resepno<?= $key ?> style="display: inline-block;width: 100%"></div>

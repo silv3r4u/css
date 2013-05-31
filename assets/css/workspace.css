@@ -1,11 +1,10 @@
-* { font-family: Arial, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
-button { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px;}
-fieldset { border: 1px solid #ccc; font-size: 13px;}
-#useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px; font-size: 10px; }
-#useractive .label { text-transform: none; font-style: italic; font-size: 11px; }
+* { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
+fieldset { border: 1px solid #ccc; }
+#useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px;  }
+#useractive .label { text-transform: none; font-style: italic;  }
 body {margin:0; overflow-x:hidden; color: #000;}
 a {text-decoration: none}
-h1 { font-size: 20px; display: block; font-weight: normal; color: #000; background: url(../images/icons/title.png) left no-repeat; text-indent: 18px;}
+h1 { font-size: 14px; display: block; font-weight: normal; color: #000; }
 h2 { font-size: 14px; display: block; }
 
 .menu-upper a { color: #000;  padding: 6px 10px;}
@@ -15,21 +14,21 @@ h2 { font-size: 14px; display: block; }
 /*-- tabel mode-- */
 .home { background: url(../images/home.png) no-repeat left; padding-left: 10px; margin: 0px 5px;  }
 .tabel {border-top: 1px solid #cccccc; border-left: 1px solid #c6d5e1; empty-cells: show; border-radius:5px; overflow:auto; margin-top:5px; clear: both;border-collapse: collapse; background: #fff; color: #000}
-.tabel input[type=text] { width: 100%; }
-.tabel td {border-bottom: 1px solid #cccccc; border-right:1px solid #c6d5e1; padding: 0 3px 0 1px; font-family: tahoma,arial,verdana;font-size: 13px; }
+.tabel input[type=text] { width: 100%; margin: 0; }
+.tabel input[type=text]:focus { border: none; }
+.tabel input[type=number] { border: none; margin: 0; padding-top: 2px; background: #fff; }
+.tabel td {border-bottom: 1px solid #cccccc; border-right:1px solid #c6d5e1; padding: 0; height: 20px; }
 .tabel th { 
-    font-size: 12px;
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfaf3), color-stop(1, #faf6d1) );
     background:-moz-linear-gradient( center top, #fbfaf3 5%, #faf6d1 100% );
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfaf3', endColorstr='#faf6d1'); 
     color:#666666; border-right:none; white-space: nowrap; height: 25px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1; padding: 0 2px;
 }
-.tabel th:last-child { 
-    font-size: 12px;
+.tabel th:last-child {
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfaf3), color-stop(1, #faf6d1) );
     background:-moz-linear-gradient( center top, #fbfaf3 5%, #faf6d1 100% );
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfaf3', endColorstr='#faf6d1'); 
-    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-right:1px solid #c6d5e1;
+    color:#666666; border-right:none; white-space: nowrap; height: 25px; border-right:1px solid #c6d5e1; 
 }
 .tabel th.left { text-align: left; }
 .tabel th.right { text-align: right; }
@@ -37,9 +36,10 @@ h2 { font-size: 14px; display: block; }
 .tabel .odd { background: #fff; height: 25px; }
 .tabel th a { color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
 .tabel .total-sum {background: #f4f4f4}
-.tabel select { border: 1px solid #666; width: 1em; }
+.tabel select { border: 1px solid #fff; width: 1em; }
+.tabel input[type=text] { border: none; }
 .tabel-input td input[type=text] { min-width: 200px; }
-.tabel-input td:first-child { width: 150px; height: 20px; font-size: 12px; text-align: right ;color: #666;}
+.tabel-input td:first-child { width: 150px; height: 20px;  text-align: right ;color: #666;}
 .tabel-input textarea { height: 40px; float: left; min-width: 25em; border: 1px inset #CCCCCC;padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .tabel-input textarea:focus { height: 40px; float: left; min-width: 25em; padding:3px;margin-right: 5px; font: 12px tahoma,arial lighter !important}
 .right {text-align:right}
@@ -59,7 +59,7 @@ h2 { font-size: 14px; display: block; }
     padding: 10px;
     margin-bottom: 5px;
     width: 88px;
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
     cursor: pointer;
     white-space: nowrap;
@@ -72,7 +72,7 @@ h2 { font-size: 14px; display: block; }
     padding: 10px;
     margin-bottom: 5px;
     width: 88px;
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
     cursor: pointer;
 }
@@ -108,18 +108,11 @@ fieldset, .circle{
     border:1px solid #d6d5d3;
     color:#000;
     background-color:#fff;
-    margin-bottom: 5px;
-    padding-bottom: 10px;
 }
 input[type='text'], input[type='password'], input[type=number], textarea, select {
     color: #666;
     border: 1px solid #ccc;
-    padding: 2px;
-}
-input[type='text']:focus,input[type='password']:focus, textarea:focus, select:focus {
-    color:#666;
-    outline:none;
-    padding: 2px;
+    margin-left: 0;
 }
 .kegiatan {
     margin: 5px 10px 15px 10px;
@@ -193,8 +186,8 @@ input[type='text']:focus,input[type='password']:focus, textarea:focus, select:fo
 .tabel td.aksi a { border: none; }
 .csr { background: #fff; padding: 10px; -webkit-box-shadow: 0 0 2px #D0D0D0; margin: auto; z-index: 999; top: 100px; }
 .fixed { position: absolute; right: 10px; }
-.msg { color: red; background: url(../images/icons/warning.png) no-repeat left; padding-left: 17px; font-size: 10px; display: none }
-.msg_ok { color: green; padding-left: 17px; font-size: 10px; display: none; background: url(../images/5.png) no-repeat left; }
+.msg { color: red; background: url(../images/icons/warning.png) no-repeat left; padding-left: 17px;  display: none }
+.msg_ok { color: green; padding-left: 17px;  display: none; background: url(../images/5.png) no-repeat left; }
 .total-retur { float: right; position: absolute; right: 30px; background: #f4f4f4; border: 1px dotted #ccc; padding: 3px 10px; }
 .tab { -moz-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
        -webkit-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
@@ -221,11 +214,11 @@ input[type='text']:focus,input[type='password']:focus, textarea:focus, select:fo
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#c8e08f');
     background:#8cb82b;
 }
-.layout-printer { width: 21.1cm; height: 14cm; padding: 10px; border-radius: 3px; font-size: 12px; font-family: "Lucida Sans Unicode";}
-.layout-printer li { font-size: 12px; }
-.header-printer td { font-size: 12px; font-weight: bold; font-family: "Lucida Sans Unicode"; }
+.layout-printer { width: 21.1cm; height: 14cm; padding: 10px; border-radius: 3px;  font-family: "Lucida Sans Unicode";}
+.layout-printer li {  }
+.header-printer td {  font-weight: bold; font-family: "Lucida Sans Unicode"; }
 .content-printer { margin-top: 10px; }
-.content-printer td { font-size: 12px; }
+.content-printer td {  }
 .content-printer .result td { text-transform: lowercase; }
 
 status {
@@ -293,12 +286,9 @@ status {
     border: 1px solid #ccc;
     float: left;
     border-radius: 3px;
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #eaeaea), color-stop(0.20, #fff) );
-    background:-moz-linear-gradient( center top, #eaeaea 5%, #fff 20% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eaeaea');
     width: 50%;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 .right_side{
@@ -306,14 +296,12 @@ status {
     border: 1px solid #ccc;
     position: relative; right: 0;
     float: right;
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #eaeaea), color-stop(0.20, #fff) );
-    background:-moz-linear-gradient( center top, #eaeaea 5%, #fff 20% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eaeaea');
     width: 49%;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
-
+.left_side table, .right_side table { margin-left: 5px; }
+.left_side table td, .right_side table td { height: 20px; padding: 0; }
 .one_side {
     border-radius: 3px;
     border: 1px solid #ccc;

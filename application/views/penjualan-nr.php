@@ -1,114 +1,9 @@
+<?php $this->load->view('message'); ?>
 <title><?= $title ?></title>
 <div id="result_cetak" style="display: none"></div>
-<?php $this->load->view('message'); ?>
+<div class="kegiatan">
+<script type="text/javascript" src="<?= base_url('assets/js/colResizable-1.3.min.js') ?>"></script>
 <script type="text/javascript">
-    $('#reset').click(function() {
-        $('#penjualan_non_resep_bayar').dialog().remove();
-        $('#loaddata').empty();
-        var url = '<?= base_url('pelayanan/penjualan_nr') ?>';
-        $('#loaddata').load(url+'?_='+Math.random());
-    });
-$(function() {
-    add(0);
-    $('input').live('keyup', function(e) {
-        if (e.keyCode === 120) {
-            create_dialog();
-            //$('#penjualan_non_resep_bayar').dialog().remove();
-            $('#bayar').focus();
-        }
-    });
-    $('button[id=reset]').button({
-        icons: {
-            primary: 'ui-icon-refresh'
-        }
-    });
-    $('button[id=print]').button({
-        icons: {
-            primary: 'ui-icon-print'
-        }
-    });
-    $('button[id=retur]').button({
-        icons: {
-            primary: 'ui-icon-transferthick-e-w'
-        }
-    });
-    $('button[id=addnewrow]').button({
-        icons: {
-            secondary: 'ui-icon-circle-plus'
-        }
-    });
-    
-    $('input[type=submit]').each(function(){
-        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
-    });
-    $('button[type=submit]').button({
-        icons: {
-            primary: 'ui-icon-circle-check'
-        }
-    });
-    $('button[id=deletion]').button({
-        icons: {
-            primary: 'ui-icon-circle-close'
-        }
-    });
-    $('#noresep').focus();
-    $('#print').hide();
-    $('#print').click(function() {
-        var id = $('#id_penjualan').html();
-        window.open('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', 'cetak nota', 'width=600px, height=400px, resizable=1, scrollbars=1');
-        /*$.get('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', function(data) {
-            $('#result_cetak').html(data);
-            $('#result_cetak').dialog({
-                autoOpen: true,
-                modal: true,
-                width: 350,
-                height: 400
-            });
-        });*/
-    });
-    
-    $('#pembayaran').change(function() {
-        var id = $('#pembayaran').val();
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/get_diskon_instansi_relasi') ?>/'+id,
-            cache: false,
-            dataType: 'json',
-            success: function(msg) {
-                //alert(msg.diskon_penjualan)
-                $('#disc_bank').html((msg.diskon_penjualan === null)?'0':msg.diskon_penjualan);
-                $('#diskon_bank').val((msg.diskon_penjualan === null)?'0':msg.diskon_penjualan);
-                subTotal();
-            }
-        });
-    });
-    $('#pembeli').autocomplete("<?= base_url('inv_autocomplete/load_data_penduduk_pasien') ?>",
-    {
-        parse: function(data){
-            var parsed = [];
-            for (var i=0; i < data.length; i++) {
-                parsed[i] = {
-                    data: data[i],
-                    value: data[i].nama // nama field yang dicari
-                };
-            }
-            return parsed;
-        },
-        formatItem: function(data,i,max){
-            var kelurahan = '-';
-            if (data.kelurahan !== null) { var kelurahan = data.kelurahan; }
-            var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
-            return str;
-        },
-        width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-        dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-    }).result(
-    function(event,data,formated){
-        $('#pembeli').val(data.nama);
-        $('input[name=id_pembeli]').val(data.penduduk_id);
-        $('#disk_penjualan').html(data.member);
-        subTotal();
-    });
-});
 function eliminate(el) {
     var parent = el.parentNode.parentNode;
     parent.parentNode.removeChild(parent);
@@ -133,11 +28,11 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nr[] id=bc'+i+' class=bc size=10 /></td>'+
                 '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input id=id_barang'+i+' class=id_barang name=id_barang[] type=hidden /> </td>'+
-                '<td id=unit'+i+' align=center><select style="border: 1px solid #ccc; width: 100%;"></select></td>'+
+                '<td id=unit'+i+' align=right><select style="width: 100%;"></select></td>'+
                 '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
-                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
+                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=number min="1" name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=subtotal'+i+' align=right></td>'+
                 '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
             '</tr>';
@@ -198,6 +93,7 @@ function add(i) {
             return false;
         }
     });
+    var lebar = $('#pb'+i).width();
     $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_per_ed') ?>",
     {
         parse: function(data){
@@ -229,7 +125,7 @@ function add(i) {
             }
             return str;
         },
-        width: 440, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
@@ -282,7 +178,7 @@ function add(i) {
         if (jml - i === 1) {
             add(jml);
         }
-        $('#bc'+(i+1)).focus();
+        $('#jl'+i).focus();
         //subTotal();
     });
 }
@@ -378,7 +274,146 @@ function setKembali() {
         $('#kembalian, #kembalian_nr').html(kembali);
         $('input[name=total]').val(total);
 }
+
+function create_dialog() {
+    var str = '<div id="penjualan_non_resep_bayar" class="data-input" style="display: none">'+
+	'<table width=100%><tr><td width=30% style="font-size: 18px">Total:</td><td style="font-size: 18px;" id=totalopen></td></tr>'+
+	'<tr><td style="font-size: 18px">Bayar (Rp):</td><td><input style="font-size: 18px;" type=text id=bayar size=5 /></td></tr>'+
+        '<tr><td colspan=2>&nbsp;</td></tr>'+
+        '<tr><td colspan=2>&nbsp;</td></tr>'+
+        '<tr><td style="font-size: 18px">Kembalian (Rp):</td><td style="font-size: 18px;" id="kembalian_nr"></td></tr></table>'+
+    '</div>';
+    $('#form_penjualan_non_resep').append(str);
+    $('#totalopen').html($('#bulat').val());
+    $('#penjualan_non_resep_bayar').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 500,
+        height: 320,
+        title: 'Entri Pembayaran',
+        close: function() {
+            $(this).dialog().remove();
+        }, buttons: {
+            "Simpan Pembayaran": function() {
+                $('#bayar_nr').val($('#bayar').val());
+                $('#form_penjualan_non_resep').submit();
+                $(this).dialog().remove();
+            }
+        }
+    });
+    $('#bayar').keyup(function() {
+        FormNum(this);
+        setKembali();  
+    });
+}
+
 $(function() {
+    $('#reset').click(function() {
+        $('.kegiatan').remove();
+        $('#loaddata').empty().load('<?= base_url('pelayanan/penjualan_nr') ?>');
+    });
+    var onSampleResized = function(e){
+        var columns = $(e.currentTarget).find("th");
+        var msg = "columns widths: ";
+        columns.each(function(){ msg += $(this).width() + "px; "; });
+    };
+    $(".tabel").colResizable({
+        liveDrag:true,
+        gripInnerHtml:"<div class='grip'></div>", 
+        draggingClass:"dragging", 
+        onResize:onSampleResized
+    });
+    for (i = 0; i <= 5; i++) {
+        add(i);
+    }
+    $(document).live('keydown', function(e) {
+        if (e.keyCode === 120) {
+            $('#penjualan_non_resep_bayar').remove();
+            create_dialog();
+        }
+    });
+    $('button[id=reset]').button({
+        icons: {
+            primary: 'ui-icon-refresh'
+        }
+    });
+    $('button[id=print]').button({
+        icons: {
+            primary: 'ui-icon-print'
+        }
+    });
+    $('button[id=retur]').button({
+        icons: {
+            primary: 'ui-icon-transferthick-e-w'
+        }
+    });
+    $('button[id=addnewrow]').button({
+        icons: {
+            secondary: 'ui-icon-circle-plus'
+        }
+    });
+    
+    $('input[type=submit]').each(function(){
+        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
+    });
+    $('button[type=submit]').button({
+        icons: {
+            primary: 'ui-icon-circle-check'
+        }
+    });
+    $('button[id=deletion]').button({
+        icons: {
+            primary: 'ui-icon-circle-close'
+        }
+    });
+    $('#noresep').focus();
+    $('#print').hide();
+    $('#print').click(function() {
+        var id = $('#id_penjualan').html();
+        window.open('<?= base_url('pelayanan/penjualan_cetak_nota') ?>/'+id+'/nonresep', 'cetak nota', 'width=600px, height=400px, resizable=1, scrollbars=1');
+    });
+    
+    $('#pembayaran').change(function() {
+        var id = $('#pembayaran').val();
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/get_diskon_instansi_relasi') ?>/'+id,
+            cache: false,
+            dataType: 'json',
+            success: function(msg) {
+                //alert(msg.diskon_penjualan)
+                $('#disc_bank').html((msg.diskon_penjualan === null)?'0':msg.diskon_penjualan);
+                $('#diskon_bank').val((msg.diskon_penjualan === null)?'0':msg.diskon_penjualan);
+                subTotal();
+            }
+        });
+    });
+    $('#pembeli').autocomplete("<?= base_url('inv_autocomplete/load_data_penduduk_pasien') ?>",
+    {
+        parse: function(data){
+            var parsed = [];
+            for (var i=0; i < data.length; i++) {
+                parsed[i] = {
+                    data: data[i],
+                    value: data[i].nama // nama field yang dicari
+                };
+            }
+            return parsed;
+        },
+        formatItem: function(data,i,max){
+            var kelurahan = '-';
+            if (data.kelurahan !== null) { var kelurahan = data.kelurahan; }
+            var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
+            return str;
+        },
+        width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+    }).result(
+    function(event,data,formated){
+        $('#pembeli').val(data.nama);
+        $('input[name=id_pembeli]').val(data.penduduk_id);
+        $('#disk_penjualan').html(data.member);
+        subTotal();
+    });
     $('#bulat').focus(function() {
         var kembalian = $('#kembalian').html();
         $('#kembalian').html(numberToCurrency(kembalian));
@@ -386,6 +421,9 @@ $(function() {
         for (i = 1; i <= jumlah; i++) {
             subTotal(i);
         }
+    });
+    $('#bayar_nr').focus(function() {
+        create_dialog();
     });
     $('#bayar').focus(function() {
         var jumlah = $('.tr_row').length;
@@ -438,108 +476,65 @@ $(function() {
             }
         });
         return false;
-        
-    });
-    $('#id_penduduk').blur(function() {
-        if ($('#id_penduduk').val() !== '') {
-            var id = $('#id_penduduk').val();
-            $.ajax({
-                url: '<?= base_url('inventory/fillField') ?>',
-                data: 'id_pasien=true&id='+id,
-                dataType: 'json',
-                success: function(val) {
-                    if (val.id === null) {
-                        alert('Data pasien tidak ditemukan !');
-                        $('#id_penduduk, #pembeli, #id_pembeli').val('');
-                        $('#id_penduduk').focus();
-                    } else {
-                        $('#pembeli').val(val.nama);
-                        $('#id_pembeli').val(val.id);
-                    }
-
-                }
-            });
-        }
     });
 });
-function create_dialog() {
-    $('#totalopen').html($('#bulat').val());
-    $('#penjualan_non_resep_bayar').dialog({
-        autoOpen: true,
-        modal: true,
-        width: 330,
-        height: 320,
-        title: 'Entri Pembayaran',
-        close: function() {
-            $(this).dialog('close');
-        }, buttons: {
-            "Simpan Pembayaran": function() {
-                $('#bayar_nr').val($('#bayar').val());
-                $('#form_penjualan_non_resep').submit();
-                $(this).dialog().remove();
-            }
-        }
-    });
-    $('#bayar').keyup(function() {
-        FormNum(this);
-        setKembali();  
-    });
-}
+
 </script>
-<div class="kegiatan">
-    <h1><?= $title ?></h1>
-    <?= form_open('pelayanan/penjualan_nr', 'id=form_penjualan_non_resep') ?>
-    <div id="penjualan_non_resep_bayar" class="data-input" style="display: none">
-	<label style="font-size: 18px">Total:</label><span style="font-size: 18px; padding-left: 3px;" class=label id=totalopen></span>
-	<label style="font-size: 18px">Bayar (Rp):</label><input style="font-size: 18px;" type=text id=bayar size=5 />
-        <label style="font-size: 18px">Kembalian (Rp):</label><span style="font-size: 18px; padding-left: 3px; padding-top: 7px;" id="kembalian_nr" class="label"></span>
-    </div>
+<h1><?= $title ?></h1>
+<?= form_open('pelayanan/penjualan_nr', 'id=form_penjualan_non_resep') ?>
+    
     <div class="data-list">
         <!--<?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>-->
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
                 <th width="10%">Barcode</th>
-                <th width="30%">Packing Barang</th>
+                <th width="35%">Barang</th>
                 <th width="10%">Unit Kemasan</th>
-                <th width="10%">ED</th>
-                <th width="15%">Harga Jual</th>
+                <th width="7%">ED</th>
+                <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="10%">Jumlah</th>
                 <th width="10%">Sub Total</th>
-                <th>#</th>
+                <th width="5%">Aksi</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table> 
     </div>
-   <div class="data-input">
-        <fieldset><legend>Summary</legend>
+    <div class="data-input">
+        <fieldset>
         <?= form_hidden('total') ?>
-            <div class="left_side" style="min-height: 160px">
-                <label>No.</label> <span class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </span>
-                <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-                <label>Pembayaran Bank</label><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?>
-                <label>PPN (%)</label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
-                <label>Pembeli</label><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?>
-                <label>Total Tagihan</label><span class="label" id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </span>
-                
-            </div><div class="right_side" style="min-height: 160px">
-                <label>Total Diskon Barang</label><span class="label" id="total-diskon"></span>
-                <label>Diskon Bank (%)</label><span id="disc_bank" class="label">0</span><?= form_hidden('diskon_bank', 0) ?>
-                <label>Diskon Penjualan (%)</label><span id="disk_penjualan" class="label"></span>
-                <label>Total</label><span id="total" class="label"></span>
-                <label>Pembulatan Total</label><?= form_input('bulat', NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?>
-                <label>Bayar (Rp)</label><?= form_input('bayar', null, 'id=bayar_nr size=30 ') ?>
-                <!--<label>Kembalian (Rp)</label><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
-                
+            <div class="left_side" style="min-height: 150px; margin-bottom: 10px;">
+                <table width="100%">
+                    <tr><td width="25%">No.:</td> <td class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </td></tr>
+                    <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+                    <tr><td>Pembayaran Bank:</td><td><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?></td></tr>
+                    <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+                    <tr><td>Pembeli:</td><td><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?></td></tr>
+                    <tr><td>Total Tagihan:</td><td id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </td></tr>
+                </table>
             </div>
+            <div class="right_side" style="min-height: 150px; margin-bottom: 10px;">
+                <table width="100%">
+                    <tr><td width="25%">Total Diskon Barang:</td><td class="label" id="total-diskon"></td></tr>
+                    <tr><td>Diskon Bank (%):</td><td><span id="disc_bank" class="label">0</span><?= form_hidden('diskon_bank', 0) ?></td></tr>
+                    <tr><td>Diskon Penjualan (%):</td><td id="disk_penjualan" class="label"></td></tr>
+                    <tr><td>Total:</td><td id="total" class="label"></td></tr>
+                    <tr><td>Pembulatan Total:</td><td><?= form_input('bulat', NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?></td></tr>
+                    <tr><td>Bayar (Rp):</td><td><?= form_input('bayar', null, 'id=bayar_nr size=30 ') ?></td></tr>
+                <!--<tr><td>Kembalian (Rp)</td><td><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
+                </table>
+            </div>
+            <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
+            <?= form_button(null, 'Cetak Nota', 'id=print') ?>
         </fieldset>
+<!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
+    
+     <!--<?= form_button(null, 'Retur Penjualan', 'id=retur') ?>-->
+        
     </div>
-    <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
-    <?= form_button('Reset', 'Reset', 'id=reset') ?>
-    <?= form_button(null, 'Cetak Nota', 'id=print') ?>
-    <!--<?= form_button(null, 'Retur Penjualan', 'id=retur') ?>-->
+    
     <?= form_close() ?>
 </div>

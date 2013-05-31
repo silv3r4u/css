@@ -1,179 +1,5 @@
 <?php $this->load->view('message'); ?>
 <script type="text/javascript">
-function loading() {
-    var url = '<?= base_url('inventory/penjualan') ?>';
-    $('#loaddata').load(url);
-}
-
-function form_open() {
-    $('#form_pembayaran').dialog({
-        autoOpen: true,
-        modal: true,
-        width: 550,
-        height: 250,
-        buttons: {
-            "Simpan Pembayaran": function() {
-                $('input[name=bulat]').val($('#bulat').val());
-                $('input[name=bayar]').val($('#bayar').val());
-                $('#form_penjualan').submit();
-                $(this).dialog("close");
-                $('#noresep').focus();
-            }
-        }
-    });
-}
-$(function() {
-    $('#print').hide();
-    $('input,select').live('keydown', function(e) {
-        if (e.keyCode === 120) {
-            form_open();
-            $('#bayar').focus();
-        }
-    });
-    $('button[id=reset]').button({
-        icons: {
-            primary: 'ui-icon-refresh'
-        }
-    });
-    $('button[id=cetak]').button({
-        icons: {
-            primary: 'ui-icon-print'
-        }
-    });
-    $('button[id=retur]').button({
-        icons: {
-            primary: 'ui-icon-transferthick-e-w'
-        }
-    });
-    $('button[id=addnewrow]').button({
-        icons: {
-            secondary: 'ui-icon-circle-plus'
-        }
-    });
-    
-    $('input[type=submit]').each(function(){
-        $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
-    });
-    $('button[type=submit]').button({
-        icons: {
-            primary: 'ui-icon-circle-check'
-        }
-    });
-    $('button[id=deletion]').button({
-        icons: {
-            primary: 'ui-icon-circle-close'
-        }
-    });
-    $('button[id=print]').button({
-        icons: {
-            primary: 'ui-icon-print'
-        }
-    });
-    $('#noresep').focus();
-    $('#bayar').keyup(function() {
-        FormNum(this);
-        setKembali();
-        
-    })
-    $('#deletion').hide();
-    $('#cetak').click(function() {
-        var id = $('#id_resep').val();
-        if (id == '') {
-            var id = '<?= isset($_GET['id'])?$_GET['id']:NULL ?>';
-            window.open('<?= base_url('cetak/inventory/kitir') ?>?penjualan=bebas&id='+id,'mywindow','location=1,status=1,scrollbars=1,width=820px,height=570px');
-        } else {
-            var id = '<?= isset($_GET['id'])?$_GET['id']:NULL ?>';
-            window.open('<?= base_url('cetak/inventory/kitir') ?>?id='+id,'mywindow','location=1,status=1,scrollbars=1,width=820px,height=500px');
-        }
-    })
-    $('#deletion').click(function() {
-        var ok=confirm('Anda yakin akan menghapus transaksi ini ?');
-        if (ok) {
-            var id = $('#id_penjualan').html();
-            $.get('<?= base_url('inventory/penjualan_delete') ?>/'+id, function(data) {
-                if (data.status == true) {
-                    $('#deletion').show();
-                    alert_delete();
-                    loading();
-                }
-            },'json');
-        } else {
-            return false;
-        }
-    })
-    $('#noresep').autocomplete("<?= base_url('inv_autocomplete/load_data_no_resep') ?>",
-    {
-        parse: function(data){
-            var parsed = [];
-            for (var i=0; i < data.length; i++) {
-                parsed[i] = {
-                    data: data[i],
-                    value: data[i].id // nama field yang dicari
-                };
-            }
-            return parsed;
-            
-        },
-        formatItem: function(data,i,max){
-            if (data.id != null) {
-                var str = '<div class=result>'+data.id+' - '+data.pasien+'<br/>Dokter: '+data.dokter+'</div>';
-            }
-            return str;
-        },
-        width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-        dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
-    }).result(
-    function(event,data,formated){
-        $(this).val(data.id);
-        $('#display-apt').show();
-        $('input[name=id_resep]').val(data.id);
-        $('#pasien').html(data.pasien);
-        $('input[name=id_pasien]').val(data.no_rm);
-        $('input[name=diskon_member]').val(data.diskon);
-        //$('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
-        var id_resep = data.id;
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
-            cache: false,
-            dataType: 'json',
-            success: function(data) {
-                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
-            }
-        })
-        var id = data.id;
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id,
-            cache: false,
-            success: function(msg) {
-                $('.form-inputan tbody').html(msg);
-            }
-        });
-//        var id = data.pasien_penduduk_id;
-//        $.ajax({
-//            url: '<?= base_url('inv_autocomplete/load_data_penduduk_asuransi') ?>',
-//            data: 'id_pembeli='+id,
-//            cache: false,
-//            success: function(msg) {
-//                $('#asuransi').html((msg != 'null')?msg:'-');
-//            }
-//        });
-        $('#ppn').focus();
-    });
-});
-$(function() {
-    <?php if (!isset($list_data)) { ?>
-    for(x = 0; x <= 1; x++) {
-        add(x);
-    }
-    <?php } ?>
-    $('#addnewrow').click(function() {
-        row = $('.tr_row').length;
-        
-        add(row);
-        i++;
-    });
-    
-});
 function eliminate(el) {
     var parent = el.parentNode.parentNode;
     parent.parentNode.removeChild(parent);
@@ -193,6 +19,7 @@ function eliminate(el) {
     }
     subTotal();
 }
+
 function add(i) {
      str = '<tr class=tr_row>'+
         '<td><input type=text name=nr[] id=bc'+i+' class=bc size=20 /></td>'+
@@ -203,7 +30,7 @@ function add(i) {
         '<td id=sisa'+i+' align=center></td>'+
         '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=subtotal'+i+' align="right"></td>'+
-        '<td class=aksi><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+        '<td class=aksi align=center><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
     '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -263,6 +90,7 @@ function add(i) {
             return false;
         }
     });
+    var lebar = $('#pb'+i).width();
     $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_per_ed') ?>",
     {
         parse: function(data){
@@ -294,7 +122,7 @@ function add(i) {
             }
             return str;
         },
-        width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
@@ -417,7 +245,192 @@ function pembulatan_seratus(angka) {
     
     
 }
+
+function loading() {
+    var url = '<?= base_url('inventory/penjualan') ?>';
+    $('#loaddata').load(url);
+}
+
+function form_open() {
+    var str = '<div class="data-input" id="form_pembayaran" title="Pembayaran Penjualan Resep">'+
+        '<table width=100%><tr><td width=30% style="font-size: 18px;">Total (Rp.):</td><td style="font-size: 18px;" id="total_tagihan_penjualan"></td></tr>'+
+        '<tr><td style="font-size: 18px;">Pembulatan(Rp.):</td><td><?= form_input('', null, 'id=bulat style="font-size: 18px;" onkeyup=FormNum(this) ') ?></td></tr>'+
+        '<tr><td style="font-size: 18px;">Bayar (Rp):</td><td><?= form_input('', null, 'id=bayar  style="font-size: 18px;" onkeyup=FormNum(this); onblur=setKembali();') ?></td></tr>'+
+        '<tr><td style="font-size: 18px;">Kembalian (Rp):</td><td id="kembalian" style="font-size: 18px;"></td></tr></table>'+
+    '</div>';
+    $('#form_penjualan').append(str);
+    $('#total_tagihan_penjualan').html($('#total').html());
+    $('#bulat').val($('#total').html());
+    $('#bayar').focus();
+    $('#form_pembayaran').dialog({
+        autoOpen: true,
+        modal: true,
+        width: 580,
+        height: 250,
+        buttons: {
+            "Simpan Pembayaran": function() {
+                $('input[name=bulat]').val($('#bulat').val());
+                $('input[name=bayar]').val($('#bayar').val());
+                $('#form_penjualan').submit();
+                $(this).dialog().remove();
+                $('#noresep').focus();
+            }
+        },
+        close: function() {
+            $(this).dialog().remove();
+        }
+    });
+}
+
+function searchs() {
+    var str = '<div id=searchs></div>';
+    $('#loaddata').append(str);
+    $('#searchs').dialog({
+        title: 'Pencarian Nomor Resep',
+        autoOpen: true,
+        modal: true,
+        width: 500,
+        height: 300,
+        close: function() {
+            $(this).dialog().remove();
+        },
+        buttons: {
+            "OK": function() {
+                
+            }, "Batal": function() {
+                $(this).dialog().remove();
+            }
+        }
+    });
+}
+
 $(function() {
+    <?php if (!isset($list_data)) { ?>
+    for(x = 0; x <= 1; x++) {
+        add(x);
+    }
+    <?php } ?>
+    $('#addnewrow').click(function() {
+        row = $('.tr_row').length;
+        add(row);
+        i++;
+    });
+    $('#print').hide();
+    $(document).live('keydown', function(e) {
+        if (e.keyCode === 120) {
+            $('#form_pembayaran').dialog().remove();
+            form_open();
+        }
+    });
+    $('button[id=reset]').button({
+        icons: {
+            primary: 'ui-icon-refresh'
+        }
+    });
+    $('button[id=cetak]').button({
+        icons: {
+            primary: 'ui-icon-print'
+        }
+    });
+    $('button[id=retur]').button({
+        icons: {
+            primary: 'ui-icon-transferthick-e-w'
+        }
+    });
+    $('button[id=addnewrow]').button({
+        icons: {
+            secondary: 'ui-icon-circle-plus'
+        }
+    });
+    $('button[id=deletion]').button({
+        icons: {
+            primary: 'ui-icon-circle-close'
+        }
+    });
+    $('button[id=print]').button({
+        icons: {
+            primary: 'ui-icon-print'
+        }
+    });
+    $('#noresep').focus();
+    $('#deletion').hide();
+    $('#cetak').click(function() {
+        var id = $('#id_resep').val();
+        if (id === '') {
+            var id = '<?= isset($_GET['id'])?$_GET['id']:NULL ?>';
+            window.open('<?= base_url('cetak/inventory/kitir') ?>?penjualan=bebas&id='+id,'mywindow','location=1,status=1,scrollbars=1,width=820px,height=570px');
+        } else {
+            var id = '<?= isset($_GET['id'])?$_GET['id']:NULL ?>';
+            window.open('<?= base_url('cetak/inventory/kitir') ?>?id='+id,'mywindow','location=1,status=1,scrollbars=1,width=820px,height=500px');
+        }
+    });
+    $('#deletion').click(function() {
+        var ok=confirm('Anda yakin akan menghapus transaksi ini ?');
+        if (ok) {
+            var id = $('#id_penjualan').html();
+            $.get('<?= base_url('inventory/penjualan_delete') ?>/'+id, function(data) {
+                if (data.status === true) {
+                    $('#deletion').show();
+                    alert_delete();
+                    loading();
+                }
+            },'json');
+        } else {
+            return false;
+        }
+    });
+    $('#noresep').dblclick(function() {
+        searchs();
+    });
+    $('#noresep').autocomplete("<?= base_url('inv_autocomplete/load_data_no_resep') ?>",
+    {
+        parse: function(data){
+            var parsed = [];
+            for (var i=0; i < data.length; i++) {
+                parsed[i] = {
+                    data: data[i],
+                    value: data[i].id // nama field yang dicari
+                };
+            }
+            return parsed;
+            
+        },
+        formatItem: function(data,i,max){
+            if (data.id !== null) {
+                var str = '<div class=result>'+data.id+' - '+data.pasien+'<br/>Dokter: '+data.dokter+'</div>';
+            }
+            return str;
+        },
+        width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+    }).result(
+    function(event,data,formated){
+        $(this).val(data.id);
+        $('#display-apt').show();
+        $('input[name=id_resep]').val(data.id);
+        $('#pasien').html(data.pasien);
+        $('input[name=id_pasien]').val(data.no_rm);
+        $('input[name=diskon_member]').val(data.diskon);
+        //$('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
+        var id_resep = data.id;
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
+            }
+        });
+        var id = data.id;
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id,
+            cache: false,
+            success: function(msg) {
+                $('.form-inputan tbody').html(msg);
+            }
+        });
+        $('#ppn').focus();
+    });
     $('#tanggal').datetimepicker();
     $('#reset').click(function() {
         $('#form_pembayaran').dialog().remove();
@@ -505,18 +518,14 @@ $(function() {
         }
     });
 });
+
 </script>
 <title><?= $title ?></title>
 <div id="result_cetak" style="display: none;"></div>
 <div class="kegiatan">
     <h1><?= $title ?></h1>
     <?= form_open('inventory/penjualan', 'id=form_penjualan') ?>
-    <div class="data-input" id="form_pembayaran" title="Pembayaran Penjualan Resep" style="display: none;">
-        <label style="font-size: 18px;">Total (Rp.):</label><b><span style="font-size: 18px;" id="total_tagihan_penjualan" class="label"></span></b>
-        <label style="font-size: 18px;">Pembulatan(Rp.):</label><?= form_input('', null, 'id=bulat style="font-size: 18px;" onkeyup=FormNum(this) ') ?>
-        <label style="font-size: 18px;">Bayar (Rp):</label><?= form_input('', null, 'id=bayar  style="font-size: 18px;"') ?>
-        <label style="font-size: 18px;">Kembalian (Rp):</label><span id="kembalian" class="label" style="font-size: 18px;"></span>
-    </div>
+    
     <?php if (isset($list_data)) {
         foreach ($atribute as $rows);
     } ?>
@@ -528,24 +537,27 @@ $(function() {
         <?= form_hidden('total', null) ?>
         <?= form_hidden('jasa_apotek') ?>
         <?= form_hidden('diskon_member') ?>
-        <div class="left_side" style="min-height: 160px;">
-            <label>No.</label><span class="label" id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></span>
-            <label>Waktu</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-            <label>No. Resep </label>
+        <div class="left_side" style="min-height: 150px;">
+            <table width="100%">
+                <tr><td width="25%">No.:</td><td id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></td></tr>
+                <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
+                <tr><td>No. Resep:</td><td>
                     <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?> 
-                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?>
-            <label>Pasien</label><span id="pasien" class="label"><?= isset($rows->pasien)?$rows->pasien:NULL ?></span>
+                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?><?= form_button(null, 'Cari', 'id=search onclick="searchs()"') ?>
+                <tr><td>Pasien:</td><td id="pasien"><?= isset($rows->pasien)?$rows->pasien:NULL ?></td></tr>
 <!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
-            <label>PPN (%) </label><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?>
-            <label></label><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+            <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+            <tr><td></td><td><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?></td></tr>
+            </table>
         </div>
-        <div class="right_side" style="min-height: 160px;">
-            <!--Jasa Apoteker</td><td id="jasa-apt"><?= isset($biaya['nominal'])?rupiah($biaya['nominal']):null ?>-->
-            <label>Biaya Apoteker</label><span id="jasa-apt" class="label"></span>
-            <label>Total Tagihan</label><span id="total-tagihan" class="label"></span>
-            <label>PPN</label><span id="ppn-hasil" class="label"></span>
-            <label>Total Diskon</label><span id="total-diskon" class="label"></span>
-            <label>Total</label><span id="total" class="label"></span>
+        <div class="right_side" style="min-height: 150px;">
+            <table width="100%">
+                <tr style="height: 22px;"><td width="27%">Biaya Apoteker (Rp.):</td><td id="jasa-apt"></td></tr>
+                <tr style="height: 22px;"><td>Total Tagihan (Rp.):</td><td id="total-tagihan"></td></tr>
+                <tr style="height: 22px;"><td>PPN (Rp.):</td><td id="ppn-hasil"></td></tr>
+                <tr style="height: 22px;"><td>Total Diskon (Rp.):</td><td id="total-diskon" class="label"></td></tr>
+                <tr style="height: 22px;"><td>Total (Rp.):</td><td id="total" class="label"></td></tr>
+            </table>
         </div>
         </fieldset>
     </div>
@@ -554,7 +566,7 @@ $(function() {
             <thead>
             <tr>
                 <th width="10%">Barcode</th>
-                <th width="45%">Kemasan Barang</th>
+                <th width="40%">Kemasan Barang</th>
                 <th width="15%">ED</th>
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
@@ -723,11 +735,13 @@ $(function() {
                 } ?>
             </tbody>
         </table> 
+        <br/>
+        <?= form_button(null, 'Delete', 'id=deletion') ?>
+        <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
+        <?= form_button(null, 'Cetak Nota', 'id=print') ?>
     </div>
     <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
-    <?= form_button(null, 'Delete', 'id=deletion') ?>
-    <?= form_button('Reset', 'Reset', 'id=reset') ?>
-    <?= form_button(null, 'Cetak Nota', 'id=print') ?>
+    
     <?= form_close() ?>
 </div>
 <?php

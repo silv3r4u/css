@@ -869,6 +869,7 @@ class Referensi extends CI_Controller {
         $data['sediaan'] = $this->m_referensi->sediaan_get_data(null);
         $data['admr'] = $this->m_referensi->adm_r_get_data(null);
         $data['perundangan'] = $this->m_referensi->perundangan_get_data(null);
+        $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
         $this->load->view('referensi/barang/obat', $data);
     }
 
@@ -901,7 +902,7 @@ class Referensi extends CI_Controller {
     }
 
     function manage_barang_non($mode, $page = null) {
-        $limit = 15;
+        $limit = 10;
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => ($this->input->post('kategori') == '') ? NULL : $this->input->post('kategori'),
@@ -973,7 +974,7 @@ class Referensi extends CI_Controller {
     }
 
     function manage_barang_obat($mode, $page = null) {
-        $limit = 15;
+        $limit = 10;
         $add = array(
             'nama' => $this->input->post('nama'),
             'barang_kategori_id' => '1',
@@ -993,6 +994,7 @@ class Referensi extends CI_Controller {
             'dosis' => $this->input->post('dosis'),
             'kandungan' => $this->input->post('kandungan')
         );
+        
         $searchnull = 'null';
         switch ($mode) {
             case 'list':
@@ -1004,6 +1006,7 @@ class Referensi extends CI_Controller {
                 $insert['barang'] = $add;
                 $insert['obat'] = $obat;
                 $search['id'] = $this->m_referensi->barang_add_data($insert, 'Obat');
+                $this->m_referensi->kemasan_barang_save($search['id']);
                 $data = $this->get_barang_list($limit, $page, 2, 'Obat', $search);
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
@@ -1015,6 +1018,7 @@ class Referensi extends CI_Controller {
                 $update['barang'] = $add;
                 $update['obat'] = $obat;
                 $this->m_referensi->barang_edit_data($update, 'Obat');
+                $this->m_referensi->kemasan_barang_save_edit($search['id']);
                 $data = $this->get_barang_list($limit, 1, 2, 'Obat', $search);
                 $this->load->view('referensi/barang/list_obat', $data);
                 break;
@@ -1049,6 +1053,13 @@ class Referensi extends CI_Controller {
         }
     }
 
+    function load_data_edit_kemasan($id_barang) {
+        $data['satuan'] = $this->m_referensi->satuans_get_data(null);
+        $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
+        $data['list_data'] = $this->m_referensi->load_data_edit_kemasan($id_barang)->result();
+        $this->load->view('referensi/barang/packing-table', $data);
+    }
+    
     /* Barang */
 
 

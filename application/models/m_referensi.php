@@ -9,7 +9,7 @@ class M_referensi extends CI_Model {
 
     function kelas_layanan_get_data() {
         return array(
-            'pilih' => 'Pilih kelas', 'VIP' => 'VIP', 'III' => 'III'
+            'pilih' => 'Pilih kelas...', 'VIP' => 'VIP', 'III' => 'III'
         );
     }
 
@@ -38,7 +38,7 @@ class M_referensi extends CI_Model {
         $sql = "select id, nama from unit $sort order by nama";
 
         $query = $this->db->query($sql)->result();
-        $data[''] = "Pilih Unit";
+        $data[''] = "Pilih Unit...";
         foreach ($query as $value) {
             $data[$value->id] = $value->nama;
         }
@@ -92,7 +92,7 @@ class M_referensi extends CI_Model {
             'Oral', 'Rektal', 'Infus', 'Topikal', 'Sublingual', 'Intrakutan', 'Subkutan', 'Intravena', 'Intramuskuler', 'Vagina', 'Injeksi', 'Intranasal', 'Intraokuler', 'Intraaurikuler', 'Intrapulmonal', 'Implantasi', 'Intralumbal', 'Intrarteri'
         );
         sort($array);
-        $rows[] = 'Pilih';
+        $rows[] = 'Pilih...';
         foreach ($array as $val) {
             $rows[$val] = $val;
         }
@@ -652,7 +652,7 @@ class M_referensi extends CI_Model {
         }
         $sql = "select * from satuan $q order by nama asc";
         $query = $this->db->query($sql)->result();
-        $data[''] = 'Pilih Sediaan';
+        $data[''] = 'Pilih Satuan...';
         foreach ($query as $value) {
             $data[$value->id] = $value->nama;
         }
@@ -676,7 +676,7 @@ class M_referensi extends CI_Model {
         }
         $sql = "select * from sediaan $q order by nama asc";
         $query = $this->db->query($sql)->result();
-        $data[''] = 'Pilih Sediaan';
+        $data[''] = 'Pilih Sediaan...';
         foreach ($query as $value) {
             $data[$value->id] = $value->nama;
         }
@@ -685,7 +685,7 @@ class M_referensi extends CI_Model {
 
     function perundangan_get_data() {
         return array(
-            '' => 'Pilih',
+            '' => 'Pilih...',
             'Bebas' => 'Bebas',
             'Bebas Terbatas' => 'Bebas Terbatas',
             'OWA' => 'OWA',
@@ -773,6 +773,70 @@ class M_referensi extends CI_Model {
             return $data['obat']['id'];
         }
         return $this->db->insert_id();
+    }
+    
+    function kemasan_barang_save($id_barang) {
+        $barcode = $this->input->post('barcode');
+        $kemasan = $this->input->post('kemasan');
+        $isi = $this->input->post('isi');
+        $satuan = $this->input->post('satuan_kecil');
+        $margin = $this->input->post('margin');
+        $diskon = $this->input->post('diskon');
+        foreach ($kemasan as $i => $data) {
+            if ($data != '' and $satuan[$i] != '') {
+                $data_kemasan = array(
+                    'barcode' => $barcode[$i],
+                    'barang_id' => $id_barang,
+                    'terbesar_satuan_id' => $data,
+                    'isi' => $isi[$i],
+                    'terkecil_satuan_id' => $satuan[$i],
+                    'margin' => $margin[$i],
+                    'diskon' => $diskon[$i]
+                );
+                $this->db->insert('barang_packing', $data_kemasan);
+            }
+        }
+    }
+    
+    function kemasan_barang_save_edit($id_barang) {
+        $barcode = $this->input->post('barcode');
+        $kemasan = $this->input->post('kemasan');
+        $id_kemasan_barang = $this->input->post('id_kemasan');
+        $isi = $this->input->post('isi');
+        $satuan = $this->input->post('satuan_kecil');
+        $margin = $this->input->post('margin');
+        $diskon = $this->input->post('diskon');
+        foreach ($kemasan as $i => $data) {
+            if ($id_kemasan_barang[$i] != '') {
+                $data_kemasan = array(
+                    'barcode' => $barcode[$i],
+                    'terbesar_satuan_id' => $data,
+                    'isi' => $isi[$i],
+                    'terkecil_satuan_id' => $satuan[$i],
+                    'margin' => $margin[$i],
+                    'diskon' => $diskon[$i]
+                );
+                $this->db->where('id', $id_kemasan_barang[$i]);
+                $this->db->update('barang_packing', $data_kemasan);
+            }
+            if ($id_kemasan_barang[$i] == '' and $data != '' and $satuan[$i] != '' and $isi[$i] != '' and $margin[$i] != '' and $diskon[$i] != '') {
+                $data_kemasan = array(
+                    'barcode' => $barcode[$i],
+                    'barang_id' => $id_barang,
+                    'terbesar_satuan_id' => $data,
+                    'isi' => $isi[$i],
+                    'terkecil_satuan_id' => $satuan[$i],
+                    'margin' => $margin[$i],
+                    'diskon' => $diskon[$i]
+                );
+                $this->db->insert('barang_packing', $data_kemasan);
+            }
+        }
+    }
+    
+    function load_data_edit_kemasan($id_barang) {
+        $sql = "select bp.*, b.hna from barang_packing bp join barang b on (b.id = bp.barang_id) where bp.barang_id = '$id_barang'";
+        return $this->db->query($sql);
     }
 
     function barang_edit_data($data, $tipe) {
@@ -1163,7 +1227,7 @@ class M_referensi extends CI_Model {
 
     function posisi_keluarga_get_data() {
         return array(
-            '' => 'Pilih',
+            '' => 'Pilih...',
             'Ayah' => 'Ayah',
             'Ibu' => 'Ibu',
             'Anak' => 'Anak',
@@ -1172,7 +1236,7 @@ class M_referensi extends CI_Model {
 
     function jabatan_get_data() {
         return array(
-            '' => 'Pilih',
+            '' => 'Pilih...',
             'PSA' => 'Pemegang Saham Apotek',
             'APA' => 'Apoteker Pengelola Apotek',
             'Akuntan' => 'Akuntan',
