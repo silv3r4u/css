@@ -1,6 +1,7 @@
 <script type="text/javascript">
     var request;
     $(function(){
+        $('#form_non').tabs();
         $('#keys').watermark('Search ...');
         $( "#addnewrow" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
@@ -10,10 +11,9 @@
         get_nonobat_list(1,'null');
         $('#form_non').dialog({
             autoOpen: false,
-            height: 260,
-            width: 400,
+            height: 360,
+            width: 600,
             modal: true,
-            resizable : false,
             buttons: {
                 "Simpan": function() {
                     save_barang_non();
@@ -297,6 +297,11 @@
     <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=keys size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
     <br/><br/>
 <div id="form_non" style="display: none;position: static; background: #fff; padding: 10px;">
+    <ul>
+        <li><a href="#tabs-1">Atribut Obat</a></li>
+        <li><a href="#tabs-2">Kemasan Barang & Adm. Harga</a></li>
+    </ul>
+    <div id="tabs-1">
     <div class="msg" id="msg_non"></div>
     <?= form_open('', 'id=formnon') ?>
     <?= form_hidden('tipe') ?>
@@ -330,6 +335,26 @@
             <td><?= form_input('stok_min', null, 'id=stok_min onkeyup=FormNum(this)') ?></td>
         </tr>
     </table>
+    </div>
+    <div id="tabs-2">
+        <table class="tabel kemasan" width="100%">
+            <thead>
+                <tr>
+                    <th width="15%">Barcode</th>
+                    <th width="15%">Kemasan</th>
+                    <th width="10%">Isi @</th>
+                    <th width="15%">Satuan</th>
+                    <th width="10%">Margin %</th>
+                    <th width="10%">Diskon %</th> 
+                    <th width="15%">Harga Jual (Rp.)</th>
+                    <th width="10%">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table><br/>
+        <?= form_button(NULL, 'Tambah Kemasan', 'id=add_kemasan') ?>
+    </div>
     <?= form_close() ?>
 </div>
 
