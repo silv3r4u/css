@@ -188,7 +188,7 @@ class M_inventory extends CI_Model {
         if ($id_user != null) {
             $q.=" and t.unit_id = '".$this->session->userdata('id_unit')."'";
         }
-        $sql = "select o.id as id_obat, o.generik, o.perundangan, p.*, bp.barang_id, b.nama as barang, bp.isi, r.nama as pabrik, o.kekuatan, bp.id as id_pb, b.id as id_barang, bp.barcode, 
+        $sql = "select o.id as id_obat, ri.diskon_supplier, o.generik, o.perundangan, p.*, bp.barang_id, b.nama as barang, bp.isi, r.nama as pabrik, o.kekuatan, bp.id as id_pb, b.id as id_barang, bp.barcode, 
         bp.isi, s.nama as satuan, pdd.nama as petugas, t.awal, t.masuk, sd.nama as sediaan, t.leadtime_hours, t.ss, ri.nama as suplier,
         t.sisa, t.awal, r.alamat, st.nama as satuan_terkecil, t.barang_packing_id, t.ed, t.beli_diskon_percentage, t.beli_diskon_rupiah, k.nama as kabupaten from pemesanan p
             join transaksi_detail t on (p.id = t.transaksi_id)
@@ -1742,7 +1742,9 @@ class M_inventory extends CI_Model {
                         'masuk' => '0',
                         'keluar' => $jumlah[$key],
                         'sisa' => $sisa,
-                        'leadtime_hours' => (isset($leadtime->loadtime_hours)?$leadtime->loadtime_hours:'0')
+                        'leadtime_hours' => (isset($leadtime->loadtime_hours)?$leadtime->loadtime_hours:'0'),
+                        'is_jual_resep' => '1',
+                        'h_jual_resep' => $harga_jual[$key]
                     );
                     $this->db->insert('transaksi_detail', $data_trans);
             }

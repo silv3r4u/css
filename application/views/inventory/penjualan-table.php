@@ -4,8 +4,10 @@ $total = 0; $disc = 0;
 if (count($list_data) == 0) {?>
 <span style="color: red; ">Tidak ada data di stok !</span>
 <?php }
+$set = $this->m_referensi->get_setting()->row();
 foreach ($list_data as $key => $data) { 
-    $harga_jual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
+    $hjual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
+    $harga_jual = $hjual+($hjual*($set->h_resep/100));
     $subtotal = ($harga_jual - (($harga_jual*($data->percent/100))))*$data->pakai_jumlah;
     $total = $total + ($harga_jual*$data->pakai_jumlah);
     $disc = $disc + (($data->percent/100)*$harga_jual);
@@ -164,7 +166,7 @@ $no++;
         <?php } ?>
         var diskon_member = $('input[name=diskon_member]').val();
         var diskon_total = (<?= $total ?>*(diskon_member/100));
-        $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
+        $('#total-tagihan').html(numberToCurrency(parseInt(<?= $total ?>)));
         //$('#total-diskon').html();
         $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
         var jumlah = $('.tr_row').length;

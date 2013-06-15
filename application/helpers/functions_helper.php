@@ -417,15 +417,15 @@ function paging_ajax($jmldata, $dataPerPage, $klik, $tab = NULL, $search) {
         if ($klik > 1) {
             $prev = "onClick=\"paging(" . ($klik - 1) . "," . $tab . ", '" . $search . "')\" ";
         }
-        echo "<span class='page-prev' $prev>prev</span>";
+        echo "<div class='page-prev' $prev>prev</div>";
         for ($page = 1; $page <= $jumPage; $page++) {
             if ((($page >= $noPage - 3) && ($page <= $noPage + 3)) || ($page == 1) || ($page == $jumPage)) {
                 if (($showPage == 1) && ($page != 2))
-                    echo "...";
+                    echo "<div class='titik'>...</div>";
                 if (($showPage != ($jumPage - 1)) && ($page == $jumPage))
-                    echo "...";
+                    echo "<div class='titik'>...</div>";
                 if ($page == $noPage)
-                    echo " <span class='noblock'>" . $page . "</span> ";
+                    echo " <div class='noblock'>" . $page . "</div> ";
                 else {
                     $get['page'] = $page;
                     if ($tab != NULL) {
@@ -434,9 +434,9 @@ function paging_ajax($jmldata, $dataPerPage, $klik, $tab = NULL, $search) {
                     $next = "onClick=\"paging(" . $page . "," . $tab . ", '" . $search . "')\" ";
                     //echo " <a class='block' href='?" . generate_get_parameter($get) . "'>" . $page . "</a> ";
                     if ($page == $jumPage) {
-                        echo '<span  class="block" ' . $next . '>' . $page . '</span>';
+                        echo '<div  class="block" ' . $next . '>' . $page . '</div>';
                     } else {
-                        echo '<span class="block" ' . $next . '>' . $page . '</span>';
+                        echo '<div class="block" ' . $next . '>' . $page . '</div>';
                     }
                 }
                 $showPage = $page;
@@ -446,7 +446,7 @@ function paging_ajax($jmldata, $dataPerPage, $klik, $tab = NULL, $search) {
         if ($klik < $jumPage) {
             $next = "onClick=\"paging(" . ($klik + 1) . "," . $tab . ", '" . $search . "')\" ";
         }
-        echo "<span class='page-next' $next >next</span>";
+        echo "<div class='page-next' $next >next</div>";
     }
     echo "</div>";
 

@@ -279,7 +279,7 @@ function add(i) {
         '<td><input type=text name=ed[] id=ed'+i+' size=8 class=ed /></td>'+
         '<td><input type=text name=jml[] id=jml'+i+' size=2 class=jml onblur=jmlSubTotal('+i+') /></td>'+
         '<td><input type=text name=harga[] id=harga'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=harga /></td>'+
-        '<td align="center" id=unit'+i+'><select class=kemasan id=kemasan'+i+' style="border: 1px solid #ccc; width=100%;"></select></td>'+
+        '<td align="center" id=unit'+i+'><select class=kemasan id=kemasan'+i+'></select></td>'+
         '<td><input type=text name=isi[] id=isi'+i+' size=2 class=isi /></td>'+
         '<td><input type=text name=diskon_pr[] id=diskon_pr'+i+' size=2 class=diskon_pr onkeyup=jmlSubTotal('+i+') onblur=hitungDetail() class=diskon_pr maxlength=3 min=0 max=100 /></td>'+
         '<td><input type=text name=diskon_rp[] id=diskon_rp'+i+' size=6 onkeyup=FormNum(this) onblur=jmlSubTotal('+i+') class=diskon_rp />'+
@@ -475,7 +475,7 @@ function hitungDetail() {
     <?= form_hidden('total_tagihan') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="left_side" style="min-height: 340px;">
+            <div class="left_side" style="min-height: 300px;">
             <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
             <label>Jenis Pembelian</label><?= form_dropdown('jenis', array('tempo' => 'Tempo', 'cash' => 'Cash', 'konsinyasi' => 'Konsinyasi'), NULL, 'id=jenis') ?>
             <label id="label_sp">No. SP:</label><?= form_input('no_dokumen', isset($rows->dokumen_no)?$rows->dokumen_no:null, 'id=nopemesanan size=20') ?>
@@ -493,7 +493,7 @@ function hitungDetail() {
             <label>Keterangan:</label><?= form_textarea('keterangan',null, null) ?>
             <label></label><?= form_button('add','Tambah Baris', 'id=addnewrow') ?>
             </div>
-            <div class="right_side" style="min-height: 340px;">
+            <div class="right_side" style="min-height: 300px;">
                     <label>Total Harga:</label><span class="label" id="total-harga"></span>
                     <label>Total Diskon:</label><span class="label" id="total-diskon"></span>
                     <label>Total Pembelian:</label><span class="label" id="total-pembelian"></span>

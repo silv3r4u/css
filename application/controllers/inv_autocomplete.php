@@ -4,9 +4,7 @@ class Inv_autocomplete extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model('m_inv_autocomplete');
-        $this->load->model('m_billing');
-        $this->load->model('configuration');
+        $this->load->model(array('configuration','m_referensi','m_billing','m_inv_autocomplete'));
         $this->load->helper('html');
     }
 

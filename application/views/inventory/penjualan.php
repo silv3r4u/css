@@ -450,15 +450,16 @@ $(function() {
     $('#print').click(function() {
         var id = $('#noresep').val();
         var id_penjualan = $('#id_penjualan').html();
-        $.get('<?= base_url('pelayanan/kitir_cetak_nota') ?>/'+id+'/'+id_penjualan, function(data) {
-            $('#result_cetak').html(data);
-            $('#result_cetak').dialog({
-                autoOpen: true,
-                modal: true,
-                width: 350,
-                height: 400
-            });
-        });
+        window.open('<?= base_url('pelayanan/kitir_cetak_nota') ?>/'+id+'/'+id_penjualan, 'penjualan nota', 'width=300px, height=550px, resizable=1, scrollable=1');
+//        $.get('<?= base_url('pelayanan/kitir_cetak_nota') ?>/'+id+'/'+id_penjualan, function(data) {
+//            $('#result_cetak').html(data);
+//            $('#result_cetak').dialog({
+//                autoOpen: true,
+//                modal: true,
+//                width: 350,
+//                height: 400
+//            });
+//        });
     });
     $("#form_penjualan").submit(function() {
         if ($('#id_pembeli').val() === '') {

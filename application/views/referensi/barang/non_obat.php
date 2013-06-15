@@ -293,7 +293,7 @@
 </script>
 
     <?= form_button('', 'Tambah Data', 'id=addnewrow style="margin-left: 2px;"') ?>
-    <?= form_button('', 'Tampilkan', 'class=resetan id=showAll style="margin-left: 0px;"') ?>  
+    <?= form_button('', 'Reset', 'class=resetan id=showAll style="margin-left: 0px;"') ?>  
     <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=keys size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
     <br/><br/>
 <div id="form_non" style="display: none;position: static; background: #fff; padding: 10px;">

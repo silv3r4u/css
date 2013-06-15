@@ -277,7 +277,7 @@
         $('input[name=id_pabriks_obat]').val('');
         $('#id_barang').val('');
         $('#konsinyasi').removeAttr('checked');
-        $('#hna').val('');
+        $('#hna,#dosis,#indikasi,#kandungan,#lokasi_rak').val('');
         $('#stokmin').val('');
     }
     
@@ -329,6 +329,7 @@
         $('#hna').val(numberToCurrency(data[16]));
         $('#stokmin').val(data[17]);
         $('#konsinyasi').removeAttr('checked');
+        $('#lokasi_rak').val(data[19]);
         if (data[18] === '1') {
             $('#konsinyasi').attr('checked','checked');
         }
@@ -427,7 +428,7 @@
 </script>
 
 <?= form_button('', 'Tambah Data', 'id=addobat class=newrow style="margin-left: 2px;"') ?>
-<?= form_button('', 'Tampilkan', 'class=resetan id=showObatAll style="margin-left: 0px;"') ?>
+<?= form_button('', 'Reset', 'class=resetan id=showObatAll style="margin-left: 0px;"') ?>
 <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=key size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
 <br/><br/>
 <div id="form_obat" style="display: none;" class="data-input">
@@ -493,6 +494,10 @@
         <tr>
             <td align="right">Stok Minimal:</td>
             <td><?= form_input('stokmin', 0, 'id=stokmin size=10 onkeyup=Angka(this)') ?></td>
+        </tr>
+        <tr>
+            <td align="right">Lokasi Rak:</td>
+            <td><?= form_input('lokasi_rak', NULL, 'id=lokasi_rak') ?></td>
         </tr>
         <tr>
             <td align="right">Konsinyasi?:</td>

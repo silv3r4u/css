@@ -41,7 +41,7 @@
                         '</tr>'+
                         '<tr>'+
                             '<td width=15%>Jenis:</td>'+
-                            '<td><select name=jenis>'+
+                            '<td><select name=jenis id=jenis_ir>'+
                             '<?php foreach ($jenis as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?>'+
                             '</select></td>'+
                         '</tr>'+
@@ -50,9 +50,8 @@
                             '<td><input type=text name=diskon_penjualan id=diskon_penjualan size=5 /></td>'+
                         '</tr>'+
                         '<tr>'+
-                            '<td></td>'+
-                            '<td>'+
-                            '</td>'+
+                            '<td>Diskon Supplier:</td>'+
+                            '<td><input type=text name=disk_supplier id=disk_supplier size=5 /></td>'+
                         '</tr>'+
                     '</table>'+
             '</div>';
@@ -301,9 +300,13 @@
             $('#fax').val(data[6]);
             $('#email').val(data[7]);
             $('#website').val(data[8]);
-            $('#jenis').val(data[9]);
+            $('#jenis_ir').val(data[9]);
             $('#diskon_penjualan').val(data[10]);
-
+            if (data[9] === '2') {
+                $('#disk_supplier').val(data[11]);
+            } else {
+                $('#disk_supplier').parent().parent().remove();
+            }
             $('#form').dialog("option",  "title", "Edit Data Instansi");
             $('#form').dialog("open");
         }
@@ -320,7 +323,7 @@
     <!--<?= form_button('', 'Cari', 'id=carirelasi class=cari') ?>-->
     <?= form_button('', 'Reset', 'class=resetan id=showAll') ?>  
     <?= form_dropdown('jenis', $jns_prsh, isset($_GET['search'])?$_GET['search']:NULL, 'id=jenis style="padding: 3px 5px 5px 3px; border: 1px solid #ccc"') ?>
-    <div style="margin-bottom: 2px; float: right;"><?= form_input('cari', isset($_POST['nama'])?$_POST['nama']:NULL, 'id=searching size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
+    <div style="margin-bottom: 2px; float: right;"><?= form_input('cari', isset($_POST['cari'])?$_POST['cari']:NULL, 'id=searching size=30 style="padding: 4px 5px 5px 5px;"') ?></div>
     <div id="konfirmasi" style="display: none; padding: 20px;">
         <div id="text_konfirmasi"></div>
     </div>

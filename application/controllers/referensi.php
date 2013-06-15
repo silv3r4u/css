@@ -630,7 +630,8 @@ class Referensi extends CI_Controller {
             'email' => $this->input->post('email'),
             'website' => $this->input->post('website'),
             'relasi_instansi_jenis_id' => ($this->input->post('jenis') == '') ? NULL : $this->input->post('jenis'),
-            'diskon_penjualan' => $this->input->post('disk_penjualan')
+            'diskon_penjualan' => $this->input->post('disk_penjualan'),
+            'diskon_supplier' => $this->input->post('disk_supplier')
         );
         $searchnull = 'null';
         switch ($mode) {
@@ -974,6 +975,7 @@ class Referensi extends CI_Controller {
     }
 
     function manage_barang_obat($mode, $page = null) {
+        $data['set'] = $this->m_referensi->get_setting()->row();
         $limit = 10;
         $add = array(
             'nama' => $this->input->post('nama'),
@@ -981,7 +983,8 @@ class Referensi extends CI_Controller {
             'pabrik_relasi_instansi_id' => ($this->input->post('id_pabrik_obat') == '') ? NULL : $this->input->post('id_pabrik_obat'),
             'hna' => currencyToNumber($this->input->post('hna')),
             'stok_minimal' => $this->input->post('stokmin'),
-            'is_konsinyasi' => (($this->input->post('konsinyasi') != '')?'1':'0')
+            'is_konsinyasi' => (($this->input->post('konsinyasi') != '')?'1':'0'),
+            'lokasi_rak' => $this->input->post('lokasi_rak')
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',

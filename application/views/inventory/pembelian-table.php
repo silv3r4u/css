@@ -18,7 +18,7 @@ foreach ($list_data as $no => $rows) { ?>
             <?php } ?>
         </select></td>
         <td><input type=text name=isi[] readonly="readonly" id="isi<?= $key ?>" size=2 value="" class="isi" /></td>
-        <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $rows->beli_diskon_percentage ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
+        <td><input type=text name=diskon_pr[] id="diskon_pr<?= $key ?>" size=2 value="<?= $rows->diskon_supplier ?>" class=diskon_pr onkeyup="jmlSubTotal(<?= $key ?>);" /></td>
         <td><input type=text name=diskon_rp[] id="diskon_rp<?= $key ?>" size=6 value="<?= $rows->beli_diskon_rupiah ?>" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=diskon_rp />
         <input type=hidden name=subtotal[] id="subttl<?= $key ?>" class="subttl" />
         </td>

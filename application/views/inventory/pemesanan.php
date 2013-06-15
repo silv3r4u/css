@@ -85,15 +85,12 @@ $(function() {
         }
         var jumlah = $('.tr_row').length-1;
         for (i = 0; i <= jumlah; i++) {
-            if ($('#id_pb'+i).val() === '') {
-                alert('Data packing barang tidak boleh kosong !');
-                $('#pb'+i).focus();
-                return false;
-            }
-            if (($('#jml'+i).val() === '') || ($('#jml'+i).val() === '0')) {
-                alert('Jumlah pemesanan tidak boleh kosong !');
-                $('#jml'+i).val('').focus();
-                return false;
+            if ($('#id_pb'+i).val() !== '') {
+                if (($('#jml'+i).val() === '') || ($('#jml'+i).val() === '0')) {
+                    alert('Jumlah pemesanan tidak boleh kosong !');
+                    $('#jml'+i).val('').focus();
+                    return false;
+                }
             }
         }
         var url = $(this).attr('action');
@@ -239,7 +236,7 @@ function add(i) {
             '</tr>';
     
     $('.form-inputan tbody').append(str);
-    
+    var lebar = $('#pb'+i).width();
     $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang') ?>",
     {
         parse: function(data){
@@ -272,7 +269,7 @@ function add(i) {
             }
             return str;
         },
-        width: 430, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
@@ -340,22 +337,20 @@ function add(i) {
     <?= form_hidden('id', NULL) ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-        <div class="one_side">
-        <label>No.:</label><span id="id_auto" class="label"><?= get_last_id('pemesanan', 'id') ?></span>
-        <label>No. Dokumen:</label><span id="no_doc" class="label"><?= !isset($_GET['id'])?get_last_id('pemesanan', 'id').'/'.date("dmY"):$rows['dokumen_no'] ?></span>
-        <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-        <label>Supplier:</label><?= form_input(null, null, 'id=suplier') ?>
-        <?= form_hidden('id_suplier') ?></td> </tr>
-        
-        <label></label><?= form_button('Tambah Baris', 'Tambah Baris', 'id=tambahrow') ?>
-        </div>
+        <table width="100%">
+            <tr><td width="15%">No.:</td><td id="id_auto" class="label"><?= get_last_id('pemesanan', 'id') ?></td></tr>
+            <tr><td>No. Dokumen:</td><td id="no_doc" class="label"><?= !isset($_GET['id'])?get_last_id('pemesanan', 'id').'/'.date("dmY"):$rows['dokumen_no'] ?></td></tr>
+            <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+            <tr><td>Supplier:</td><td><?= form_input(null, null, 'id=suplier') ?><?= form_hidden('id_suplier') ?></td></tr>
+            <tr><td></td><td><?= form_button('Tambah Baris', 'Tambah Baris', 'id=tambahrow') ?></td></tr>
+        </table>
     </fieldset>
     </div>
     <div class="data-list">
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>
-                <th width="30%">Packing Barang</th>
+                <th width="30%">Barang</th>
                 <th width="10%">Jumlah Sisa</th>
                 <th width="10%">ROP</th>
 <!--                <th width="10%">Bia. Pemesanan</th>

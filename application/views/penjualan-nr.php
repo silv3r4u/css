@@ -28,13 +28,13 @@ function add(i) {
      str = '<tr class=tr_row>'+
                 '<td><input type=text name=nr[] id=bc'+i+' class=bc size=10 /></td>'+
                 '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input id=id_barang'+i+' class=id_barang name=id_barang[] type=hidden /> </td>'+
-                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=number min="1" name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
+                '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=unit'+i+' align=right><select style="width: 100%;"></select></td>'+
                 '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
                 '<td id=subtotal'+i+' align=right></td>'+
-                '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+                //'<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
             '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -145,6 +145,7 @@ function add(i) {
                 $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
             }
         }
+        
         $('#id_pb'+i).val(data.id);
         $('#bc'+i).val(data.barcode);
         $('#ed'+i).html(datefmysql(data.ed));
@@ -496,7 +497,7 @@ $(function() {
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="10%">Sub Total</th>
-                <th width="5%">Aksi</th>
+<!--                <th width="5%">Aksi</th>-->
             </tr>
             </thead>
             <tbody>

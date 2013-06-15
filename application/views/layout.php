@@ -80,6 +80,7 @@
                     <div class="info-user">
                         <img src="<?= base_url('assets/images/user-aktif.png') ?>" align="left" /> Anda Login Sebagai:<br/> <b><?= $this->session->userdata('nama') ?></b><br/>
                         <?= anchor('user/logout', 'Logout') ?> - <span style="cursor: pointer; color: " onclick="ganti_pwd()">Ganti Password</span>
+                        <br /><?= anchor('import/', 'Import Data', null) ?>
                     </div>
                     <div>
                         <!-- id="menu3" class="menu noaccordion"  -->

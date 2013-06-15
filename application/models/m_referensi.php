@@ -704,8 +704,10 @@ class M_referensi extends CI_Model {
                 $q.=" where (bk.nama != 'Obat' or bk.nama IS NULL)";
             }
         }
+        
         if ($id != null and $status != null) {
             $q.=" and b.id = '$id'";
+            
         } else if ($id != null and $status == null) {
             $q.=" where b.id = '$id'";
         }
@@ -718,8 +720,12 @@ class M_referensi extends CI_Model {
                 $q.=" and (b.nama like ('%$nama%') or r.nama like '%$nama%')";
             }
         }
+        $inner = "inner join (
+            select barang_id, id, min(isi) from barang_packing group by barang_id
+        ) bm on (bp.barang_id = bm.barang_id and bp.id = bm.id)";
         if (isset($nama['id'])) {
-            $q.=" and b.id = '$nama[id]'";
+            $q.=" and b.id = '$nama[id]' group by b.id";
+            $inner = "";
         }
         $q.=" order by nama asc";
         $limitation = null;
@@ -727,13 +733,16 @@ class M_referensi extends CI_Model {
 
         
 
-        $sql = "select o.*, b.*, bk.nama as kategori, r.id as id_pabrik, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan from barang b
+        $sql = "select o.*, b.*, bp.margin, bp.diskon, bk.nama as kategori, bp.isi, r.id as id_pabrik, 
+        r.nama as pabrik, s.nama as satuan, sd.nama as sediaan from barang b
         left join barang_kategori bk on (b.barang_kategori_id = bk.id)
         left join relasi_instansi r on (b.pabrik_relasi_instansi_id = r.id)
         left join obat o on (b.id = o.id)
         left join satuan s on (s.id = o.satuan_id)
-        left join sediaan sd on (sd.id = o.sediaan_id)";
-        //echo $sql . $q . $limitation;
+        left join barang_packing bp on (b.id = bp.barang_id)
+        left join sediaan sd on (sd.id = o.sediaan_id)
+        $inner";
+        //echo "<pre>".$sql . $q . $limitation."</pre>";
         $query = $this->db->query($sql . $q . $limitation);
         $queryAll = $this->db->query($sql . $q);
         $data['data'] = $query->result();
@@ -1398,6 +1407,11 @@ class M_referensi extends CI_Model {
 
     function layanan_profesi_delete($id_tindakan) {
         $this->db->delete('tindakan_layanan_profesi_jasa', array('id' => $id_tindakan));
+    }
+    
+    function get_setting() {
+        $sql = "select * from setting";
+        return $this->db->query($sql);
     }
 
 }

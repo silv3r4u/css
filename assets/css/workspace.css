@@ -1,4 +1,4 @@
-* { font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
+* { font-family: Arial, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
 fieldset { border: 1px solid #ccc; }
 #useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px;  }
 #useractive .label { text-transform: none; font-style: italic;  }
@@ -38,7 +38,7 @@ h2 { font-size: 14px; display: block; }
 .tabel .odd { background: #fff; height: 25px; }
 .tabel th a { color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
 .tabel .total-sum {background: #f4f4f4}
-.tabel select { border: 1px solid #fff; width: 1em; }
+.tabel select { border: none; width: 100%; }
 .tabel input[type=text] { border: none; }
 .tabel-input td input[type=text] { min-width: 200px; }
 .tabel-input td:first-child { width: 150px; height: 20px;  text-align: right ;color: #666;}
@@ -285,7 +285,7 @@ status {
 }
 
 .left_side{
-    border: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     float: left;
     border-radius: 3px;
     width: 50%;
@@ -295,7 +295,7 @@ status {
 
 .right_side{
     border-radius: 3px;
-    border: 1px solid #ccc;
+    border: none;
     position: relative; right: 0;
     float: right;
     width: 49%;
