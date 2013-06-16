@@ -531,10 +531,11 @@ $(function() {
                 <!--<tr><td>Kembalian (Rp)</td><td><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
                 </table>
             </div>
-            
-        </fieldset>
-        <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
+            <br/>
+            <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
         <?= form_button(null, 'Cetak Nota', 'id=print') ?>
+        </fieldset>
+        
 <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
     
      <!--<?= form_button(null, 'Retur Penjualan', 'id=retur') ?>-->
