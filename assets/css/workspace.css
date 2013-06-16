@@ -306,7 +306,7 @@ status {
 .left_side table td, .right_side table td { height: 20px; padding: 0; }
 .one_side {
     border-radius: 3px;
-    border: 1px solid #ccc;
+    border: none;
     position: relative; right: 0;
     float: right;
 /*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #eaeaea), color-stop(0.20, #fff) );

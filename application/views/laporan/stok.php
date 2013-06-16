@@ -223,10 +223,10 @@
             <label>Group Berdasar:</label>
             <span class="label"><?= form_radio('sort', 'Terakhir', isset($_GET['sort']) and ($_GET['sort'] == 'Terakhir') ? TRUE : FALSE, 'id=last ') ?> Stok Terakhir</span>
             <span class="label"><?= form_radio('sort', 'History', isset($_GET['sort']) and ($_GET['sort'] == 'History') ? TRUE : FALSE, 'id=history ') ?> Rincian</span>
-            <label>Range:</label><?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : NULL, 'id=awal size=10 ' . $disabled) ?> <span class="label"> s . d </span><?= form_input('akhir', isset($_GET['akhir']) ? $_GET['akhir'] : NULL, 'id=akhir size=10 ' . $disabled) ?>
+            <label>Range:</label><?= form_input('awal', isset($_GET['awal']) ? $_GET['awal'] : NULL, 'id=awal size=10 ' . $disabled) ?> <span class="labelrange"> s . d </span><?= form_input('akhir', isset($_GET['akhir']) ? $_GET['akhir'] : NULL, 'id=akhir size=10 ' . $disabled) ?>
             <label>Jenis Transaksi:</label><?= form_dropdown('transaksi_jenis', $jenis_transaksi, isset($_GET['transaksi_jenis']) ? $_GET['transaksi_jenis'] : null) ?></td></tr>
             <label>Jenis Barang:</label><?= form_dropdown('jenis', array('' => 'Semua Jenis ...', 'Obat' => 'Obat','Non Obat' => 'Non Obat', 'Konsinyasi' => 'Konsinyasi'), isset($_GET['jenis'])?$_GET['jenis']:NULL) ?>
-            <label>Nama Barang:</label><?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=50') ?> <?= form_hidden('id_pb', isset($_GET['id_pb']) ? $_GET['id_pb'] : null) ?>
+            <label>Nama Barang:</label><?= form_input('pb', isset($_GET['pb']) ? $_GET['pb'] : null, 'id=pb size=40') ?> <?= form_hidden('id_pb', isset($_GET['id_pb']) ? $_GET['id_pb'] : null) ?>
             <label>Sediaan:</label><?= form_dropdown('sediaan', $sediaan, isset($_GET['pb']) ? $_GET['sediaan'] : null) ?>
             <label>Perundangan:</label><?= form_dropdown('perundangan', $perundangan, isset($_GET['perundangan']) ? $_GET['perundangan'] : null) ?>
             <label>Generik:</label><?= form_dropdown('generik', $generik, isset($_GET['generik']) ? $_GET['generik'] : null) ?>
