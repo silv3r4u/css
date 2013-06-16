@@ -40,8 +40,10 @@
 $no = 1;
 $tagihan = 0;
 $diskon = 0;
+$set = $this->m_referensi->get_setting()->row();
 foreach ($penjualan as $key => $data) {
-    $harga = ($data->hna*($data->margin/100))+$data->hna;
+    $hjual = ($data->hna*($data->margin/100))+$data->hna;
+    $harga = $hjual+($hjual*($set->h_resep/100));
     ?>
     <tr valign="top" class="<?= ($key%2==0)?'even':'odd' ?> tr_row">
         <td width="60%"><?= $data->barang." ".(($data->kekuatan == '1')?'':$data->kekuatan)." ". $data->satuan." ".$data->sediaan." @ ".(($data->isi==1)?'':$data->isi)." ".$data->satuan_terkecil ?></td>

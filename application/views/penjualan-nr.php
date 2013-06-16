@@ -34,7 +34,7 @@ function add(i) {
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
                 '<td id=subtotal'+i+' align=right></td>'+
-                //'<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+                '<td class=aksi><span class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
             '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -98,10 +98,10 @@ function add(i) {
     {
         parse: function(data){
             var parsed = [];
-            for (var i=0; i < data.length; i++) {
-                parsed[i] = {
-                    data: data[i],
-                    value: data[i].nama // nama field yang dicari
+            for (var j=0; j < data.length; j++) {
+                parsed[j] = {
+                    data: data[j],
+                    value: data[j].nama // nama field yang dicari
                 };
             }
             return parsed;
@@ -324,7 +324,7 @@ $(function() {
         draggingClass:"dragging", 
         onResize:onSampleResized
     });
-    for (i = 0; i <= 5; i++) {
+    for (i = 0; i <= 1; i++) {
         add(i);
     }
     $(document).live('keydown', function(e) {
@@ -497,7 +497,7 @@ $(function() {
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="10%">Sub Total</th>
-<!--                <th width="5%">Aksi</th>-->
+                <th width="5%">Aksi</th>
             </tr>
             </thead>
             <tbody>
