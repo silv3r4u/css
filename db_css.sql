@@ -3,18 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2013 at 05:44 PM
+-- Generation Time: Jun 16, 2013 at 02:48 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `db_css`
@@ -8804,7 +8798,7 @@ INSERT INTO `barang` (`id`, `nama`, `barang_kategori_id`, `pabrik_relasi_instans
 (12494, 'PAPAVERIN 40 MG BOTOL', 1, NULL, 0, 0, 100, ''),
 (12495, 'PAPAVERIN INJEKSI', 1, NULL, 0, 0, 1900, ''),
 (12496, 'PARACETAMOL 500 strip', 1, NULL, 0, 0, 100, ''),
-(12497, 'PARACETAMOL GHF sir', 1, NULL, 0, 0, 0, ''),
+(12497, 'PARACETAMOL GHF sir', 1, NULL, 0, 0, 7000, ''),
 (12498, 'PARACETAMOL Hexpharm tab 500mg', 1, NULL, 0, 0, 1000, ''),
 (12499, 'PARACETAMOL Imfarmind kpt 500mg', 1, NULL, 0, 0, 0, ''),
 (12500, 'PARACETAMOL Nufarindo sir', 1, NULL, 0, 0, 0, ''),
@@ -12517,7 +12511,7 @@ INSERT INTO `barang` (`id`, `nama`, `barang_kategori_id`, `pabrik_relasi_instans
 (16203, 'ZYVOX infus 2mg/ml', 1, NULL, 0, 0, 0, ''),
 (16204, 'ZYVOX susp 100mg/5ml', 1, NULL, 0, 0, 0, ''),
 (16205, 'ZYVOX tab 600mg', 1, NULL, 0, 0, 0, ''),
-(16206, 'Kertas Puyer', 3, 2770, 1, 0, 100, ''),
+(16206, 'Kertas Puyer', 3, 2770, 0, 0, 100, ''),
 (16209, 'Plastik Obat', 3, 2770, 0, 0, 100, ''),
 (16210, 'Panadol / Pantuku', 1, 2921, 0, 0, 0, ''),
 (16211, 'Panas dingin', 1, NULL, 0, 0, 0, ''),
@@ -12571,7 +12565,7 @@ CREATE TABLE IF NOT EXISTS `barang_packing` (
   KEY `id_satuan_terkecil` (`terkecil_satuan_id`),
   KEY `barang_id` (`barang_id`),
   KEY `terbesar_satuan_id` (`terbesar_satuan_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=16340 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=16341 ;
 
 --
 -- Dumping data for table `barang_packing`
@@ -25001,7 +24995,8 @@ INSERT INTO `barang_packing` (`id`, `barcode`, `barang_id`, `terbesar_satuan_id`
 (16331, '12323423423', 16220, 2, 1, 2, 25, 0),
 (16332, '1232', 3804, 1, 10, 2, 0, 0),
 (16338, '10123909', 16232, 1, 10, 2, 10, 0),
-(16339, '10123909', 16232, 2, 1, 2, 50, 0);
+(16339, '10123909', 16232, 2, 1, 2, 50, 0),
+(16340, '16325', 16206, 29, 100, 14, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -25165,7 +25160,7 @@ CREATE TABLE IF NOT EXISTS `kas` (
   `akhir_saldo` double NOT NULL,
   PRIMARY KEY (`id`),
   KEY `transaksi_id` (`transaksi_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
 
 --
 -- Dumping data for table `kas`
@@ -25221,7 +25216,11 @@ INSERT INTO `kas` (`id`, `waktu`, `transaksi_id`, `transaksi_jenis`, `penerimaan
 (47, '2013-06-04 18:19:00', 25, 'Penjualan Resep', '', -734868, 4560, 0, -730308),
 (48, '2013-06-04 18:20:00', 26, 'Penjualan Resep', '', -730308, 24276, 0, -706032),
 (49, '2013-06-04 18:21:00', 27, 'Penjualan Resep', '', -706032, 14620, 0, -691412),
-(50, '2013-06-04 17:58:00', 28, 'Penjualan Non Resep', '', -691412, 4625, 0, -686787);
+(50, '2013-06-04 17:58:00', 28, 'Penjualan Non Resep', '', -691412, 4625, 0, -686787),
+(51, '2013-06-16 09:18:00', 29, 'Penjualan Resep', '', -691412, 135600, 0, -555812),
+(52, '2013-06-16 16:08:00', 30, 'Penjualan Non Resep', '', -555812, 5000, 0, -550812),
+(53, '2013-06-16 16:14:00', 31, 'Penjualan Non Resep', '', -550812, 14000, 0, -536812),
+(54, '2013-06-16 16:24:00', 32, 'Penjualan Non Resep', '', -536812, 19900, 0, -516912);
 
 -- --------------------------------------------------------
 
@@ -25288,7 +25287,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `icons` varchar(255) NOT NULL,
   `show_desktop` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `module`
@@ -37778,7 +37777,7 @@ CREATE TABLE IF NOT EXISTS `opname_stok` (
   `alasan` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `pegawai_penduduk_id` (`pegawai_penduduk_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=762 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=763 ;
 
 --
 -- Dumping data for table `opname_stok`
@@ -37811,7 +37810,8 @@ INSERT INTO `opname_stok` (`id`, `pegawai_penduduk_id`, `alasan`) VALUES
 (758, 7, 'Awal'),
 (759, 7, 'Awal'),
 (760, 7, 'Inisialisasi Data Awal'),
-(761, 7, 'Inisialisasi Data Awal');
+(761, 7, 'Inisialisasi Data Awal'),
+(762, 7, 'Inisialisasi Data Awal');
 
 -- --------------------------------------------------------
 
@@ -38153,7 +38153,7 @@ CREATE TABLE IF NOT EXISTS `penjualan` (
   KEY `pegawai_penduduk_id` (`pegawai_penduduk_id`),
   KEY `resep_id` (`resep_id`),
   KEY `pembeli_penduduk_id` (`pembeli_penduduk_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 --
 -- Dumping data for table `penjualan`
@@ -38172,7 +38172,11 @@ INSERT INTO `penjualan` (`id`, `pegawai_penduduk_id`, `pembeli_penduduk_id`, `re
 (25, 7, NULL, 9, 0, 0, 4560, 5000, 4560),
 (26, 7, NULL, 7, 0, 0, 24276, 25000, 24276),
 (27, 7, NULL, 8, 0, 0, 14620, 15000, 14620),
-(28, 7, NULL, NULL, 0, 0, 4625, 5000, 4625);
+(28, 7, NULL, NULL, 0, 0, 4625, 5000, 4625),
+(29, 7, NULL, 13, 0, 0, 135600, 150000, 135600),
+(30, 7, NULL, NULL, 0, 0, 5000, 5000, 5000),
+(31, 7, NULL, NULL, 0, 0, 14000, 20000, 14000),
+(32, 7, NULL, NULL, 0, 0, 19859, 20000, 19900);
 
 -- --------------------------------------------------------
 
@@ -38407,23 +38411,23 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2742, 'PT BIOFARMA', 'Jl. Pasteur 28BANDUNG 40016 Tilp. 0222033755 Fax 022 2041306 PO Box1136/BANDUNG 40016', NULL, '', '', '', '', 1, '', 0, 0),
 (2743, 'PT CHANDRA NUSANTARA', 'Jl.Terusan Kiaracondong No. 440BANDUNG', NULL, '', '', '', '', 1, '', 0, 0),
 (2744, 'PT CENDO PRATAMA', 'Jl. Moch.Toha Km 6.7 Cisirung PalasariBANDUNG 40255. Tilp 022 503999505888 Fax 022 503997', NULL, '', '', '', '', 1, '', 0, 0),
-(2745, 'PT COMBIPHAR ', 'Jl. RayaSimpang 383 PADALARANG 40553Tilp. 022 6809129 Fax 022 6809128', NULL, '', '', '', '', 1, '', 0, 0),
-(2746, 'PT DELTA MULIA CHEMICALINDUSTRIES', 'Jl. Leuwigajah No.89A Kel. Cigugur CIMAHI 40522Tilp. 022 6031870 Fax 022 6038562  bubar ', NULL, '', '', '', '', 1, '', 0, 0),
+(2745, 'PT COMBIPHAR ', 'Jl. RayaSimpang 383 PADALARANG 40553Tilp. 022 6809129 Fax 022 6809128', NULL, '', '', '', '', 1, '', 0, 0),
+(2746, 'PT DELTA MULIA CHEMICALINDUSTRIES', 'Jl. Leuwigajah No.89A Kel. Cigugur CIMAHI 40522Tilp. 022 6031870 Fax 022 6038562  bubar ', NULL, '', '', '', '', 1, '', 0, 0),
 (2747, 'PT ERRITA PharmaceuticalIndustries', 'Desa Bojongsalam RT 04RW 07 Kec. Rancaekek Kab.Bandung 40395 Kotakpos No.4/RCK/UJB BANDUNG 40394 Telp.022 7949062 Fax 022 7949063', NULL, '', '', '', '', 1, '', 0, 0),
 (2748, 'PT GRACIA PHARMINDO', 'Kawasan Industri Dwipapuri Blok M-30 Jl. Raya Rancaekek Km 24.5BANDUNG 45364 Tilp. 0227780033 Fax. 022 7791045', NULL, '', '', '', '', 1, '', 0, 0),
 (2749, 'PT HOLI PHARMACEUTICALINDUSTRIES', 'Jl. Leuwigajah No.100 Cimindi CIMAHI 40522', NULL, '', '', '', '', 1, '', 0, 0),
 (2750, 'PT IPHA LABORATORIES', 'Jl.Raya Batujajar Desa LaksanamekarPadalarang BANDUNG 40553 Tilp.022 6866056 Fax. 022 6866057 atauJl. Gempol Wetan No. 215BANDUNG 40115 Tilp. 0224237930 Fax 022 4236621', NULL, '', '', '', '', 1, '', 0, 0),
-(2751, 'PT KIMIA FARMA', 'Jl. Cicendo No. 43 BANDUNG 40173 Tilp. 0224204043 Fax. 022 4237079', NULL, '', '', '', '', 1, '', 0, 0),
+(2751, 'PT KIMIA FARMA', 'Jl. Cicendo No. 43 BANDUNG 40173 Tilp. 0224204043 Fax. 022 4237079', NULL, '', '', '', '', 1, '', 0, 0),
 (2752, 'Lembaga Farmasi Angkatan Udaraâ€œRoostiyan Effendieâ€', 'Jl.Abdurachman Saleh Lanud HuseinSastranegara BANDUNG', NULL, '023-02020910', '-', '-', '-', 1, '', 0, 0),
 (2753, 'PT LUCAS JAYA', ' Jl. Belitung No.7 BANDUNG', NULL, '', '', '', '', 1, '', 0, 0),
 (2754, 'PT MARIN LIZA FARMA', 'Terusan Kiaracondong No. 43BANDUNG 40115', NULL, '', '', '', '', 1, '', 0, 0),
-(2755, 'PT MEDION', ' Jl. Babakan Ciparay No. 282 BANDUNG 40223 Tilp. 0226030612 Fax 022 6015625', NULL, '', '', '', '', 1, '', 0, 0),
-(2756, 'PT MEDITRIKA AGUNGINDONESIA', ' Jl. Cihideung Balong No. 32 TASIKMALAYA Tilp./ Fax0265 331189', NULL, '', '', '', '', 1, '', 0, 0),
+(2755, 'PT MEDION', ' Jl. Babakan Ciparay No. 282 BANDUNG 40223 Tilp. 0226030612 Fax 022 6015625', NULL, '', '', '', '', 1, '', 0, 0),
+(2756, 'PT MEDITRIKA AGUNGINDONESIA', ' Jl. Cihideung Balong No. 32 TASIKMALAYA Tilp./ Fax0265 331189', NULL, '', '', '', '', 1, '', 0, 0),
 (2757, 'PT MEPROFARM', ' Jl. SukarnoHatta 789 BANDUNG 40294 Tilp.022 7805588 Fax 022 7805577', NULL, '', '', '', '', 1, '', 0, 0),
 (2758, 'PT OTTO PHARMACEUTICALINDUSTRIES Ltd', 'Jl. Dr.Setiabudhi Km 12.1 BANDUNG40391 Tilp. 022 2786068 2786137 Fax 022 2786818', NULL, '', '', '', '', 1, '', 0, 0),
-(2759, 'PT PALVINDRA', ' Jl. Wangsareja No. 3 BANDUNG 40261 Tilp. 022345095', NULL, '', '', '', '', 1, '', 0, 0),
+(2759, 'PT PALVINDRA', ' Jl. Wangsareja No. 3 BANDUNG 40261 Tilp. 022345095', NULL, '', '', '', '', 1, '', 0, 0),
 (2760, 'PT ROHTO LaboratoriesIndonesia', ' Jl. Raya Cimareme 203PADALARANG 40552 Tilp. 0226809742 6807046 Fax 022 6808050', NULL, '', '', '', '', 1, '', 0, 0),
-(2761, 'PT SANBE FARMA', ' Jl. Industri I No. 9  Desa Utama LeuwigajahCimindi CIMAHI 40552 Tilp. 022630036 Fax. 022 630050', NULL, '', '', '', '', 1, '', 0, 0),
+(2761, 'PT SANBE FARMA', ' Jl. Industri I No. 9  Desa Utama LeuwigajahCimindi CIMAHI 40552 Tilp. 022630036 Fax. 022 630050', NULL, '', '', '', '', 1, '', 0, 0),
 (2762, 'PT SANDOZ INDONESIA', ' Jl.Raya Caringin 363 PADALARANG40553 POB Box 7074/BDKBBANDUNG 40262 Tilp. 0226866228 Fax. 022 6866227', NULL, '', '', '', '', 1, '', 0, 0),
 (2763, 'PT SEGER SURYA', ' Jl. SoekarnoHatta No. 76 BANDUNG Tilp. 022220976', NULL, '', '', '', '', 1, '', 0, 0),
 (2764, 'PT SIDOLAPHARMACEUTICAL', ' Jl.Purnawarman No. 52 RT 02/01Tamansari BANDUNG 40116 Tilp.022 4205861 Fax 022 4232747', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38431,32 +38435,32 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2766, 'PT SUMBER TANUSHU FARMA', 'Jl. Cihanjuang No. 28 Cimahi 40153Tilp. 022 6634468 Fax 022 6652904', NULL, '', '', '', '', 1, '', 0, 0),
 (2767, 'PT TANABE INDONESIA', ' Jl.Rumahsakit 104 Ujungberung POBox 24 Ujungberung BANDUNG40612 Tilp. 022 7800001 Fax 0227800081', NULL, '', '', '', '', 1, '', 0, 0),
 (2768, 'PT TRIFA RAYA Laboratories', ' jl.Sukarno Hatta 219 BojongloaBANDUNG 40223', NULL, '', '', '', '', 1, '', 0, 0),
-(2769, 'PT TRIMAN PharmaceuticalIndustries', ' jl. Peundeuy Km 1Rancaekek BANDUNG Tilp. 0227949361 Fax 022 7949361 d/a Jl.Banten No. 6 BANDUNGDEPOK ', NULL, '', '', '', '', 1, '', 0, 0),
+(2769, 'PT TRIMAN PharmaceuticalIndustries', ' jl. Peundeuy Km 1Rancaekek BANDUNG Tilp. 0227949361 Fax 022 7949361 d/a Jl.Banten No. 6 BANDUNGDEPOK ', NULL, '', '', '', '', 1, '', 0, 0),
 (2770, 'PT ABBOT INDONESIA', ' Jl. RayaJakarta Bogor Km 30 CimanggisDEPOK PO Box 2387/JKT 10001Tilp.021 8752802 8751735-36', NULL, '', '', '', '', 1, '', 0, 0),
-(2771, 'PT BAYER INDONESIA', ' Bayer HealthCara Consumer care Jl. RayaBogor Km 32 Cisalak SukmajayaDEPOK 16416 Telp 021 8717833Fax 021 8701990', NULL, '', '', '', '', 1, '', 0, 0),
+(2771, 'PT BAYER INDONESIA', ' Bayer HealthCara Consumer care Jl. RayaBogor Km 32 Cisalak SukmajayaDEPOK 16416 Telp 021 8717833Fax 021 8701990', NULL, '', '', '', '', 1, '', 0, 0),
 (2772, 'PT MINOROCK MANDIRI', 'Kampung Palsigunung Kelapa Dua69 Cimanggis DEPOK 16951 Tilp.8710167 Fax 8726635', NULL, '', '', '', '', 1, '', 0, 0),
-(2773, 'PT GLAXO SMITHKLINEBEECHAM', ' Jl. Raya Bogor Km 35Cimanggis Sukmajaya DEPOK 16415 Tilp. 021 8740886 Fax 0218741571BOGOR ', NULL, '', '', '', '', 1, '', 0, 0),
+(2773, 'PT GLAXO SMITHKLINEBEECHAM', ' Jl. Raya Bogor Km 35Cimanggis Sukmajaya DEPOK 16415 Tilp. 021 8740886 Fax 0218741571BOGOR ', NULL, '', '', '', '', 1, '', 0, 0),
 (2774, 'PT ALFA PRIMA PRATAMA', ' Jl.Raya Bogor â€“ Sukabumi Km 18 DesaMuncang Caringin Bogor 16720 Tilp.0251 323909 Fax. 0251 326422', NULL, '', '', '', '', 1, '', 0, 0),
-(2775, 'PT CATUR DAKWAH CRANEFARMASI', ' Jl. Olympic Raya Blok A4-A Kawasang Industri SentulBabakan Madang BOGOR 16810Telp.021 87920478 79 80 Fax 02187920481', NULL, '', '', '', '', 1, '', 0, 0),
-(2776, 'PT BOEHRINGER INGELHEIMINDONESIA', ' Jl. Lawang Gintung No.89 BOGOR 16133 Tilp. 0251321065 Fax 0251 329732', NULL, '', '', '', '', 1, '', 0, 0),
+(2775, 'PT CATUR DAKWAH CRANEFARMASI', ' Jl. Olympic Raya Blok A4-A Kawasang Industri SentulBabakan Madang BOGOR 16810Telp.021 87920478 79 80 Fax 02187920481', NULL, '', '', '', '', 1, '', 0, 0),
+(2776, 'PT BOEHRINGER INGELHEIMINDONESIA', ' Jl. Lawang Gintung No.89 BOGOR 16133 Tilp. 0251321065 Fax 0251 329732', NULL, '', '', '', '', 1, '', 0, 0),
 (2777, 'PT BRISTOL-MYERS SQUIBBINDONESIA', ' Jl. Raya Bogor Km 38Cilangkap BOGOR Tilp.0218752583 Fax 021 8752585', NULL, '', '', '', '', 1, '', 0, 0),
-(2778, 'PT DARYA VARIALABORATORIES', ' Jl. Mercedes No. 105 Desa Cicadas Gunung Putri.BOGOR PO Box 24 Cibinong Tilp 021 8072758 Fax 021 8072758.', NULL, '', '', '', '', 1, '', 0, 0),
+(2778, 'PT DARYA VARIALABORATORIES', ' Jl. Mercedes No. 105 Desa Cicadas Gunung Putri.BOGOR PO Box 24 Cibinong Tilp 021 8072758 Fax 021 8072758.', NULL, '', '', '', '', 1, '', 0, 0),
 (2779, 'PT DAXEN INDONESIA', ' Jl.Pancasila IV Gunung Putri Bogor 0218670811 Fax 8670811', NULL, '', '', '', '', 1, '', 0, 0),
 (2780, 'PT EISAI INDONESIA', ' DesaKarangasem Barat Citeureup. POBox 153/Bogor BOGOR 16001 Tilp.021 8073202 8073210 Fax 0218073206', NULL, '', '', '', '', 1, '', 0, 0),
 (2781, 'PT GEMA MUTIARA PRIMAINDAH', ' Jl. Mercedes Benz Km 0.5Desa Tlajung Udik Gunung PutriBOGOR Tilp. 021 6696654', NULL, '', '', '', '', 1, '', 0, 0),
-(2782, 'PT MEDIFARMALABORATORIES', ' Jl. Raya Bogor Km 33 Cimanggis BOGOR Tilp. 0218710659 8710773', NULL, '', '', '', '', 1, '', 0, 0),
+(2782, 'PT MEDIFARMALABORATORIES', ' Jl. Raya Bogor Km 33 Cimanggis BOGOR Tilp. 0218710659 8710773', NULL, '', '', '', '', 1, '', 0, 0),
 (2783, 'PT NOVARTIS BIOCHEMIE', ' Jl.Pahlawan 25 Desa Karang AsemTimur Citeureup BOGOR Tilp. 0218753184 Fax 021 8753895', NULL, '', '', '', '', 1, '', 0, 0),
-(2784, 'PT NOVELL', ' Jl. Wanaherang DesaTlajung Udik Gunung Putri BOGOR ', NULL, '', '', '', '', 1, '', 0, 0),
+(2784, 'PT NOVELL', ' Jl. Wanaherang DesaTlajung Udik Gunung Putri BOGOR ', NULL, '', '', '', '', 1, '', 0, 0),
 (2785, 'PT PRADJA PHARIN', ' DesaKarangasem Barat KecamatanCiteureup BOGOR.Telp. 80740948074098', NULL, '', '', '', '', 1, '', 0, 0),
-(2786, 'PT TULUS INDOJAYA', ' Jl. RayaBogor Sukabumi Km 18 DesaPasirmuncang Caringin BOGOR Tilp. 0251 8221177', NULL, '', '', '', '', 1, '', 0, 0),
-(2787, 'PT GALENIUM PHAR ', '. LAB. Jl.Raya Bogor Km 51.5 KedunghalangBOGOR Tilp. 0251 652140 Fax 0251652160SUKABUMI', NULL, '', '', '', '', 1, '', 0, 0),
+(2786, 'PT TULUS INDOJAYA', ' Jl. RayaBogor Sukabumi Km 18 DesaPasirmuncang Caringin BOGOR Tilp. 0251 8221177', NULL, '', '', '', '', 1, '', 0, 0),
+(2787, 'PT GALENIUM PHAR ', '. LAB. Jl.Raya Bogor Km 51.5 KedunghalangBOGOR Tilp. 0251 652140 Fax 0251652160SUKABUMI', NULL, '', '', '', '', 1, '', 0, 0),
 (2788, 'PT MERSIFARMA TIRMAKUMERCUSANA', ' Jl. Raya PelabuhanKm 18 Cikembar SUKABUMI Tilp.0266 321877 Fax 0266 321878', NULL, '', '', '', '', 1, '', 0, 0),
 (2789, 'PT PROMED RAHARDJOFARMASI INDUSTRI', ' Jl. RayaSiliwangi Desa SundawenangParungkuda SUKABUMI Tilp. 0266535393-6 Fax 0266 535397', NULL, '', '', '', '', 1, '', 0, 0),
-(2790, 'PT SIMEX PHARMACEUTICALINDONESIA', ' Jl. Pelabuhan II Km 9Pasir Malang Desa Kebon MangguGunung Guruh SUKABUMI 43141Tilp. 0266 321661 321662 Fax. 0266321066CIANJUR / PUNCAK ', NULL, '', '', '', '', 1, '', 0, 0),
+(2790, 'PT SIMEX PHARMACEUTICALINDONESIA', ' Jl. Pelabuhan II Km 9Pasir Malang Desa Kebon MangguGunung Guruh SUKABUMI 43141Tilp. 0266 321661 321662 Fax. 0266321066CIANJUR / PUNCAK ', NULL, '', '', '', '', 1, '', 0, 0),
 (2791, 'PT ARMOXINDO FARMA', ' Jl.Farmasi No. 1 Sukanagalih PacetCIANJUR 43253. PO Box 31/SDLSindanglaya CIANJUR Tilp. 0263514945-8 Fax 0263 514951', NULL, '', '', '', '', 1, '', 0, 0),
 (2792, 'PT HEXPHARM JAYA', ' jl. Gadog1 Cipanas SINDANGLAYA 43253Tilp. 0263 512470 Fax 0263 515526', NULL, '', '', '', '', 1, '', 0, 0),
-(2793, 'PT PERDANA SAKTIINDONESIA', ' Jl. Raya Hanjawar Pacet Km 14 Pacet CIANJUR 43253Tilp. 0263 512828 Fax. 0263 513920', NULL, '', '', '', '', 1, '', 0, 0),
-(2794, 'PT PYRIDAM FARMA Tbk ', ' Jl.Hanjawar â€“ Pacet Desa Cibodas Kec.Pacet CIANJUR 43253 Tilp. 0263580844 580855 Fax 0263 582290', NULL, '', '', '', '', 1, '', 0, 0),
+(2793, 'PT PERDANA SAKTIINDONESIA', ' Jl. Raya Hanjawar Pacet Km 14 Pacet CIANJUR 43253Tilp. 0263 512828 Fax. 0263 513920', NULL, '', '', '', '', 1, '', 0, 0),
+(2794, 'PT PYRIDAM FARMA Tbk ', ' Jl.Hanjawar â€“ Pacet Desa Cibodas Kec.Pacet CIANJUR 43253 Tilp. 0263580844 580855 Fax 0263 582290', NULL, '', '', '', '', 1, '', 0, 0),
 (2795, 'PT TROPICA MASPharmaceutical Industries', ' DesaKademangan Kecamatan Mande Km8 CIANJUR 43292 Tilp. 0263317365 Fax 0263 317364CIREBON', NULL, '', '', '', '', 1, '', 0, 0),
 (2796, 'PT YEE TIN FARMA', ' Jl.Pekalangan No. 2 RT 005/ 002 Kel.Pekalangan Kec. PekalipanCIREBON 45118 Tilp. 0231 202465BEKASI', NULL, '', '', '', '', 1, '', 0, 0),
 (2797, 'PT BIOLIFE MEDILAB', ' Jl.Pekopen Kobra No. 8 TambunBEKASI', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38464,20 +38468,20 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2799, 'PT DUNIA SEHAT', ' Jl. RawakalongDesa Setia Mekar Tambun BEKASI021 6617544. Fax 021 6694649', NULL, '', '', '', '', 1, '', 0, 0),
 (2800, 'PT PHARMACORE LAB', '.  Jl.Industri Selatan Blok HH No. 2-3Kawasan Industri Cikarang JababekaBEKASI 17550 Tilp. 021 89833029Fax 021 89833031', NULL, '', '', '', '', 1, '', 0, 0),
 (2801, 'PT FARATU', ' Jl. Raya NarogongKm 13.5 BEKASI', NULL, '', '', '', '', 1, '', 0, 0),
-(2802, 'PT FERRON PAR Pharmaceuticals', ' JababekaIndustrial Estate I Jl. Jababeka VIBlok J3 Cikarang BEKASI 17520Tilp. 021 89833333 Fax. 02189833138', NULL, '', '', '', '', 1, '', 0, 0),
+(2802, 'PT FERRON PAR Pharmaceuticals', ' JababekaIndustrial Estate I Jl. Jababeka VIBlok J3 Cikarang BEKASI 17520Tilp. 021 89833333 Fax. 02189833138', NULL, '', '', '', '', 1, '', 0, 0),
 (2803, 'Perum INDOFARMA', ' Jl.Indofarma No. 1 Cikarang BaratBEKASI 17520 PO Box 4111/JKT10041 Tilp. 021 8800025 8800727Fax. 021 8800029-30', NULL, '', '', '', '', 1, '', 0, 0),
 (2804, 'PT KALBE FARMA', ' KawasanIndustri Delta Silicon Jl. MHThamrin Blok A3-1 Lippo CikarangBEKASI 17550 PO Box 371BEKASI 17037 Tilp. 021 89907333-37 Fax 021 8972874', NULL, '', '', '', '', 1, '', 0, 0),
 (2805, 'PT LANDSON PERTIWIAGUNG', ' Jl. DDN SukadanauCikarang Barat BEKASI 17843 Tilp.021 88333138 â€“ 141 Fax 02188333132', NULL, '', '', '', '', 1, '', 0, 0),
 (2806, 'PT MECCAYA', ' Jl. RayaHasanuddin Km 39 Tambun BEKASITilp. 021 8801590 Fax. 021 8836886', NULL, '', '', '', '', 1, '', 0, 0),
-(2807, 'PT MUGI LABORATORIES', ' Jl.Akasia II Blok A9 â€“ 5Â Delta SiliconIndustrial Park Lippo CikarangBekasI 17550 Tilp. 021 89972817Fax 021 8972816', NULL, '', '', '', '', 1, '', 0, 0),
+(2807, 'PT MUGI LABORATORIES', ' Jl.Akasia II Blok A9 â€“ 5Â Delta SiliconIndustrial Park Lippo CikarangBekasI 17550 Tilp. 021 89972817Fax 021 8972816', NULL, '', '', '', '', 1, '', 0, 0),
 (2808, 'PT ORANG TUA FARMA', ' Jl.Kruing Dua Blok L9 No.1 DeltaSilicon Industrial Park LippoCikarang BEKASI 17550', NULL, '', '', '', '', 1, '', 0, 0),
-(2809, 'PT RATU INDUSTRIAL', ' Jl. Raya Narogong Km 13.5 Pangkalan 4BEKASI Tilp. 021 372296', NULL, '', '', '', '', 1, '', 0, 0),
+(2809, 'PT RATU INDUSTRIAL', ' Jl. Raya Narogong Km 13.5 Pangkalan 4BEKASI Tilp. 021 372296', NULL, '', '', '', '', 1, '', 0, 0),
 (2810, 'PT SAMPHINDO INDUSTRI', ' Jl.Diponegoro Km 38.5 Desa SetiaMekar  Tambun BEKASI', NULL, '', '', '', '', 1, '', 0, 0),
-(2811, 'PT SARI ENESIS INDAH', ' Jl.Kruing I Blok L5 No. 5 Delta SiliconIndustrial Estate Cikarang Bekasi17550 Tilp. 021 89902488 Fax 02189906754', NULL, '', '', '', '', 1, '', 0, 0),
+(2811, 'PT SARI ENESIS INDAH', ' Jl.Kruing I Blok L5 No. 5 Delta SiliconIndustrial Estate Cikarang Bekasi17550 Tilp. 021 89902488 Fax 02189906754', NULL, '', '', '', '', 1, '', 0, 0),
 (2812, 'PT SINDE BUDI SENTOSA', ' Jl.Diponegoro No. 35 Kp. Gedong GedeDesa Setiamekar Tambun BEKASI17150', NULL, '', '', '', '', 1, '', 0, 0),
 (2813, 'PT SUPRA FERBINDO FARMA', 'East Jakarta Industrial Park Kav. 8-CLemahabang Cikarang BEKASI17550 Tilp. 021 6196333 5196373', NULL, '', '', '', '', 1, '', 0, 0),
 (2814, 'PT TAKEDA INDONESIA', ' Jl.Diponegoro Km 38 Tambun BEKASI17510 tilp. 021 8804714 8801665Fax 021 8804715', NULL, '', '', '', '', 1, '', 0, 0),
-(2815, 'PT TEMPO SCAN PACIFIC Tbk ', '.East Jakarta Industrial Park Plot 1HLemah Abang CIKARANG BEKASI17550', NULL, '', '', '', '', 1, '', 0, 0),
+(2815, 'PT TEMPO SCAN PACIFIC Tbk ', '.East Jakarta Industrial Park Plot 1HLemah Abang CIKARANG BEKASI17550', NULL, '', '', '', '', 1, '', 0, 0),
 (2816, 'PT ULTRA SAKTI', ' Jl. CipendawaRT 04 RW 03 Narogong BEKASI', NULL, '', '', '', '', 1, '', 0, 0),
 (2817, 'PT ULTRA TREND BIOTECHINDONESIA', ' Jl. Jababeka IV DBlok V No. 28B Cikarang BEKASISEMARANG', NULL, '', '', '', '', 1, '', 0, 0),
 (2818, 'PT BUFA ANEKA', ' Jl. Tambak AjiV/4 SEMARANG', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38487,37 +38491,37 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2822, 'PT ERELA', ' Jl. Murbei No. 2Srondol SEMARANG', NULL, '', '', '', '', 1, '', 0, 0),
 (2823, 'PT ERLIMPEX', ' Jl. Setiabudhi 130SEMARANG 50269 Tilp. 0247472323 Fax 024 7472226 / 7452911', NULL, '', '', '', '', 1, '', 0, 0),
 (2824, 'PT GLOBAL MULTIPHARMALAB', 'Kawasan IndustriTerboyo Kav. A 20 â€“ 23 Jl. RayaKaligawe Km 6 SEMARANG 50118Tilp.024 6584452 Fax 024 6584453', NULL, '', '', '', '', 1, '', 0, 0),
-(2825, 'PT GRATIA HUSADA FARMA', 'Jl. Dharmawangsa No. 28 DesaÂ Ngempon â€“ Bergas KarangjatiSEMARANG 50552 Po Box 21Klepu Tilp. 024 6922055 69221988Fax 024 6923052', NULL, '', '', '', '', 1, '', 0, 0),
+(2825, 'PT GRATIA HUSADA FARMA', 'Jl. Dharmawangsa No. 28 DesaÂ Ngempon â€“ Bergas KarangjatiSEMARANG 50552 Po Box 21Klepu Tilp. 024 6922055 69221988Fax 024 6923052', NULL, '', '', '', '', 1, '', 0, 0),
 (2826, 'PT INTIJAYA META RATNAPHARMINDO', ' Jl. Karang Saru No.12 SEMARANG Tilp. 024 35414623553775', NULL, '', '', '', '', 1, '', 0, 0),
 (2827, 'PT ITRASAL', ' jl. Simongan 96SEMARANG 50148 PO Box 1198Semarang 50011 Tilp. 024 601454Fax 024 604157', NULL, '', '', '', '', 1, '', 0, 0),
 (2828, 'PT KEREP MANUNGGALFARMA', ' Jl. Industri XXIV/Lik.Muktiharjo Genuk Semarang. Tilp. /Fax 024 658204 - pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2829, 'PT KIMIA FARMA', 'Unit PlantSemarang Jl. Simongan 169 PO Box1206 SEMARANG 50147 Tilp. 0247605273 Fax 024 7605265', NULL, '', '', '', '', 1, '', 0, 0),
-(2830, 'PT LIBRACALPHARMACEUTICALINDUSTRIES', ' Jl. Brotojoyo Timur  No. 18 SEMARANG Tilp. 024 23282', NULL, '', '', '', '', 1, '', 0, 0),
+(2830, 'PT LIBRACALPHARMACEUTICALINDUSTRIES', ' Jl. Brotojoyo Timur  No. 18 SEMARANG Tilp. 024 23282', NULL, '', '', '', '', 1, '', 0, 0),
 (2831, 'PT META RATNA FARMA', ' Jl.Raya Semarang Kendal Km 10SEMARANG 50001 Tilp 024313082', NULL, '', '', '', '', 1, '', 0, 0),
 (2832, 'PT NUFARINDO PharmaceuticalLaboratories', ' Mangkang Kulon Km16.5 Kec. Tugu SEMARANG POBox 1221 SEMARANG 50155 Tilp.024 8660006 Fax 024 8660960', NULL, '', '', '', '', 1, '', 0, 0),
 (2833, 'PT PHAPROS', ' Jl. Simongan No.131 SEMARANG 50148 PO Box1233 Tilp. 024 7607325 7607330Fax 024 7605133', NULL, '', '', '', '', 1, '', 0, 0),
-(2834, 'PT PHARCO', ' Jl. Petak 21 â€“ 23 RT03/09 Dadapsari SEMARANG 50173Tilp. 024 3545260 Fax 024 3549782 -Â pindah', NULL, '', '', '', '', 1, '', 0, 0),
+(2834, 'PT PHARCO', ' Jl. Petak 21 â€“ 23 RT03/09 Dadapsari SEMARANG 50173Tilp. 024 3545260 Fax 024 3549782 -Â pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2835, 'PT SAKA FARMA Laboratories', 'Jl. Kimar I/275 (Majapahit 75A)SEMARANG 50167 Tilp. 0246711111 Fax 024 6715744', NULL, '', '', '', '', 1, '', 0, 0),
 (2836, 'PT SAMPHARINDO PERDANA', 'Jl. Tambak Aji Timur 111SEMARANG 50185 Tilp. 0248660461-62 Fax 024 8664838', NULL, '', '', '', '', 1, '', 0, 0),
-(2837, 'PT SAPTA USAHAKEMULYAAN', ' Jl. Kalisari DepanPasar Kembang SEMARANG â€“ tidakÂ dikenal', NULL, '', '', '', '', 1, '', 0, 0),
+(2837, 'PT SAPTA USAHAKEMULYAAN', ' Jl. Kalisari DepanPasar Kembang SEMARANG â€“ tidakÂ dikenal', NULL, '', '', '', '', 1, '', 0, 0),
 (2838, 'PT SEHAT SUMBER BAHAGIA', 'Jl. Raya Semarang Km 19 KaliwunguDesa Sumberejo KENDAL 51372Tilp 0294 381019', NULL, '', '', '', '', 1, '', 0, 0),
 (2839, 'PT SEKAR MIRAHLABORATORIES', ' Jl. Tambak AjiTimur I/1 Ngaliyan TuguSEMARANG Tilp. 024 607175', NULL, '', '', '', '', 1, '', 0, 0),
-(2840, 'PT ZENITHPHARMACEUTICAL', ' Jl. Tambak Aji I/1 SEMARANG 50159 tilp. 0248663870 Fax 024 8661574SOLO', NULL, '', '', '', '', 1, '', 0, 0),
-(2841, 'PT YAKATRIA FARMA', ' Jl. Mojo10 Dagen Jaten KARANGANYAR Po Box 134 SURAKARTA 57101Tilp. 0271 825381 Fax 0271 825014', NULL, '', '', '', '', 1, '', 0, 0),
+(2840, 'PT ZENITHPHARMACEUTICAL', ' Jl. Tambak Aji I/1 SEMARANG 50159 tilp. 0248663870 Fax 024 8661574SOLO', NULL, '', '', '', '', 1, '', 0, 0),
+(2841, 'PT YAKATRIA FARMA', ' Jl. Mojo10 Dagen Jaten KARANGANYAR Po Box 134 SURAKARTA 57101Tilp. 0271 825381 Fax 0271 825014', NULL, '', '', '', '', 1, '', 0, 0),
 (2842, 'PT GRAHA FARMA', ' Jl. Dr.Rajiman No. 296 SURAKARTA57141 Tilp. 0271 721946 Fax 0271719656', NULL, '', '', '', '', 1, '', 0, 0),
 (2843, 'PT IFARS PharmaceuticalLaboratories', ' Jl. Raya Solo SragenKm 14.9 Kebakkramat Surakarta57762 Tilp. 0271 827724 Fax 0271656230', NULL, '', '', '', '', 1, '', 0, 0),
 (2844, 'PT KONIMEX PharmaceuticalLaboratories', ' Desa SanggrahanKec. Grogol Kabupaten SukoharjoPO Box 233 SURAKARTA 57101Tilp. 0271 714645 Fax 0271 716247', NULL, '', '', '', '', 1, '', 0, 0),
-(2845, 'PT DUTA KAISAR PHARMACY', 'Jl. Adisucipto No. 41 BulukanColomadu KARANGANYAR SURAKARTA 57174 Tilp. 0271715627 Fax. 0271 724116', NULL, '', '', '', '', 1, '', 0, 0),
+(2845, 'PT DUTA KAISAR PHARMACY', 'Jl. Adisucipto No. 41 BulukanColomadu KARANGANYAR SURAKARTA 57174 Tilp. 0271715627 Fax. 0271 724116', NULL, '', '', '', '', 1, '', 0, 0),
 (2846, 'PT DELTOMEDLABORATORIES', ' Jl. Raya No.267B WONOGIRI Tilp. 0273 118', NULL, '', '', '', '', 1, '', 0, 0),
-(2847, 'PT YAKKUM FARMA', ' Jl. DagenKec. Jaten Karanganyar SURAKARTA 57101 Tilp. 027148381YOGYAKARTA', NULL, '', '', '', '', 1, '', 0, 0),
+(2847, 'PT YAKKUM FARMA', ' Jl. DagenKec. Jaten Karanganyar SURAKARTA 57101 Tilp. 027148381YOGYAKARTA', NULL, '', '', '', '', 1, '', 0, 0),
 (2848, 'PT BERLICO MULIA FARMA', ' Jl.Juwangen Kalasan Km 10.6Tromolpos No. 8 YOGYAKARTA55571 Tilp. 0274 496446 Fax 0274496396', NULL, '', '', '', '', 1, '', 0, 0),
-(2849, 'PT ETHICA Industri Farmasi', ' Jl. Nitipuran No.9 Kadipuro BaruJogjakarta', NULL, '', '', '', '', 1, '', 0, 0),
-(2850, 'PT MERBABU FALA', ' Jl. MerbabuÂ No. 14 KLATEN tilp. 0272 22278Fax 0272 21808 â€“ pindah', NULL, '', '', '', '', 1, '', 0, 0),
-(2851, 'PT JOSEPH FARMA', ' Jl. GodeanKm 5 No. 52 YOGJAKARTA Tilp.0274 520710 Fax. 0274 520710 - pindah', NULL, '', '', '', '', 1, '', 0, 0),
+(2849, 'PT ETHICA Industri Farmasi', ' Jl. Nitipuran No.9 Kadipuro BaruJogjakarta', NULL, '', '', '', '', 1, '', 0, 0),
+(2850, 'PT MERBABU FALA', ' Jl. MerbabuÂ No. 14 KLATEN tilp. 0272 22278Fax 0272 21808 â€“ pindah', NULL, '', '', '', '', 1, '', 0, 0),
+(2851, 'PT JOSEPH FARMA', ' Jl. GodeanKm 5 No. 52 YOGJAKARTA Tilp.0274 520710 Fax. 0274 520710 - pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2852, 'PT NOVIMEX LABORATORIES', 'Jl. Raya Bantul (Suryaden) No. 123JOGYAKARTA 55142 Tilp. 027471820 - Pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2853, 'PT MIROTA KSM INC', '. Jl. TayaJogjakarta â€“ Solo Km 9 SambilegiMaguwohardjo Depok SLEMANJOGJAKARTA 55002 Tilp. 027462519 Fax 0274 5479', NULL, '', '', '', '', 1, '', 0, 0),
 (2854, 'PT SARI HUSADA', ' Jl.Kusumanegara No. 135 Jogjakarta55002 Tilp. 0274 62412 Fax 07463328TEGAL', NULL, '', '', '', '', 1, '', 0, 0),
-(2855, 'PT MARGUNA TARULATA APK FARMA', ' Desa Grobog Kulon Kec.Pangkah PO Box 37 TEGAL Tilp.0283 21126TANGERANG / BANTEN', NULL, '', '', '', '', 1, '', 0, 0),
+(2855, 'PT MARGUNA TARULATA APK FARMA', ' Desa Grobog Kulon Kec.Pangkah PO Box 37 TEGAL Tilp.0283 21126TANGERANG / BANTEN', NULL, '', '', '', '', 1, '', 0, 0),
 (2856, 'PT APEX PHARMA INDONESIA', 'Jl. Raya Serang Km 12 Desa BunderCikupa TANGERANG 15170Tilp.021 5960339 5960340 Fax 0215960341', NULL, '', '', '', '', 1, '', 0, 0),
 (2857, 'PT ARTOIS FARMA', ' Jl. Siliwangi1 Desa Keroncong Kec. JatiuwungKm TANGERANG Fax 021 5903349', NULL, '', '', '', '', 1, '', 0, 0),
 (2858, 'PT BIMA MITRA FARMA', ' Jl.Raya Pasar Kemis Desa KeroncongRT 003/04 Kecamatan JatiuwungTANGERANG 15134 Tilp. 0215902303', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38529,7 +38533,7 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2864, 'PT IMEDCO DJAJA', ' Jl. RayaSerang Km 25 No. 8 BALARAJA15610 Tilp. 021 5950101 Fax 0215950102', NULL, '', '', '', '', 1, '', 0, 0),
 (2865, 'PT LAPI LABORATORIES', ' Jl.Raya Serang Industri Kav. 18 ModernCikande Estate Serang BANTEN42816 Tilp. 0254 402150 Fax 0254402151', NULL, '', '', '', '', 1, '', 0, 0),
 (2866, 'PT MEDIKON PRIMALABORATORIES', ' Jl. Raya SerangKm 12 Desa Sukadamai KecamatanCikupa TANGERANG 15170', NULL, '', '', '', '', 1, '', 0, 0),
-(2867, 'PT MOLEX AYUS', ' Jl. Ir. H. Juanda No. 5C Gedung Sinar AsriJAKARTA 10120 Jl. Raya SerangKm 11.5 Desa Bunder CikupaTANGERANG 15170 Tilp. 0215960311 Fax 021 5960312', NULL, '', '', '', '', 1, '', 0, 0),
+(2867, 'PT MOLEX AYUS', ' Jl. Ir. H. Juanda No. 5C Gedung Sinar AsriJAKARTA 10120 Jl. Raya SerangKm 11.5 Desa Bunder CikupaTANGERANG 15170 Tilp. 0215960311 Fax 021 5960312', NULL, '', '', '', '', 1, '', 0, 0),
 (2868, 'PT MUDITA KARUNA', ' Jl. GatotSubroto Km 5.5 Kp Ledug DesaKroncong .Jatiuwung TANGERANG15134 Tilp. 021 5900582 Fax 0215900583', NULL, '', '', '', '', 1, '', 0, 0),
 (2869, 'PT NEW TOMBAK FARMA', ' Jl.Raya Kebayoran Lama 12AJAKARTA Tilp. 021 7111128 Jl.Raya Serang Km 16.8 RT 02/02Talaga Cihideung CikupaTANGERANG 15170', NULL, '', '', '', '', 1, '', 0, 0),
 (2870, 'PT ORYZA FARMAINDONESIA', ' Jl. Industri III Kav. 7Kawasan Industri Modern CikandeSERANG 42816 Tilp. 0254 401866Fax. 0254 401865', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38537,27 +38541,27 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2872, 'PT SAMCO FARMA', ' Jl. GatotSubroto No. 27 Km 1.2TANGERANG 15138 PO Box 480TANGERANG Tilp. 021 5524084Fax 021 5525830', NULL, '', '', '', '', 1, '', 0, 0),
 (2873, 'PT SUNTHI SEPURIPharmaceutical Manufacturing', ' Jl.Raya Serang Km 17 CikupaTANGERANG 15170 Tilp. 0215963255 Fax 021 5960741', NULL, '', '', '', '', 1, '', 0, 0),
 (2874, 'PT YAHI UTAMA', ' Jl. Raya SerangKm 12 Desa Bitung Jaya KecamatanCikupa TANGERANG Tilp. 0215961043 Fax 021 5961094', NULL, '', '', '', '', 1, '', 0, 0),
-(2875, 'PT YANTHI UTAMA', ' KawasanIndustri Pasar Kemis Jl. Putra UtamaRaya Kav. C No. 3Â Pasir Awi PasarÂ Kemis TANGERANG 15560 Tilp.5903324 â€“ 228 Fax. 021 5903329', NULL, '', '', '', '', 1, '', 0, 0),
+(2875, 'PT YANTHI UTAMA', ' KawasanIndustri Pasar Kemis Jl. Putra UtamaRaya Kav. C No. 3Â Pasir Awi PasarÂ Kemis TANGERANG 15560 Tilp.5903324 â€“ 228 Fax. 021 5903329', NULL, '', '', '', '', 1, '', 0, 0),
 (2876, 'PT YARINDO FARMATAMA', ' Jl.Modern Industri IV Kavling 29 KIModern Cikande SERANG 42816Tilp. 0254 400888 Fax (0254)400673SURABAYA', NULL, '', '', '', '', 1, '', 0, 0),
-(2877, 'PT ADITAMARAYAFARMINDO', ' Jl. Rungkut Industri2 / 45C SURABAYA 60291 Tilp.031 8412522-23 Fax 031 8412509', NULL, '', '', '', '', 1, '', 0, 0),
+(2877, 'PT ADITAMARAYAFARMINDO', ' Jl. Rungkut Industri2 / 45C SURABAYA 60291 Tilp.031 8412522-23 Fax 031 8412509', NULL, '', '', '', '', 1, '', 0, 0),
 (2878, 'PT APMO INDONESIA', ' Jl. JendralA. Yani No. 17 MOJOKERTO Tilp.0321 21034 fax. 0321 21034', NULL, '', '', '', '', 1, '', 0, 0),
-(2879, 'PT ARJUNA VALENCIA', ' Jl.Kenjeran No. 65 â€“ 67 SURABAYATilp. 031 315936 Fax 031 318667 â€“Â Pindah', NULL, '', '', '', '', 1, '', 0, 0),
+(2879, 'PT ARJUNA VALENCIA', ' Jl.Kenjeran No. 65 â€“ 67 SURABAYATilp. 031 315936 Fax 031 318667 â€“Â Pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2880, 'PT DURAFARMA JAYA', ' Jl.Rungkut Industri VIII/22-24SURABAYA 60293 Tilp. 0318439617 Fax 031 8433848', NULL, '', '', '', '', 1, '', 0, 0),
 (2881, 'PT HENSON FARMA', ' Jl.Karangpilang Barat No. 200SURABAYA 60221 Tilp. 0317662601 - 3 Fax 031 7663329', NULL, '', '', '', '', 1, '', 0, 0),
 (2882, 'PT HEROIC PHARMA', ' Jl.Rungkut Industri VII/8 SURABAYA60293 Tilp. 031 833398 Fax 031817844', NULL, '', '', '', '', 1, '', 0, 0),
 (2883, 'PT IE DJIEN SAN', ' Jl. KembangJepun No. 78 SURABAYA', NULL, '', '', '', '', 1, '', 0, 0),
-(2884, 'PT INTAN NOER AQUASURINDO', ' Jl. Dinoyo No.64-65 SURABAYA â€“ tak dikenal', NULL, '', '', '', '', 1, '', 0, 0),
+(2884, 'PT INTAN NOER AQUASURINDO', ' Jl. Dinoyo No.64-65 SURABAYA â€“ tak dikenal', NULL, '', '', '', '', 1, '', 0, 0),
 (2885, 'PT KALIROTO', ' Jl. Sidorame No.19 SURABAYA 60152 PO Box 136SURABAYA Tilp. 031 3719440 0313711717 Fax 031 3718997', NULL, '', '', '', '', 1, '', 0, 0),
 (2886, 'PT KASA HUSADA', ' jl. KalimasBarat No. 17 â€“ 19 SURABAYA60163 Tilp. 031', NULL, '', '', '', '', 1, '', 0, 0),
-(2887, 'PT KEMBANG BULAN', ' Jl. Demak  No. 275 SURABAYA 60179 Tilp.031 270341', NULL, '', '', '', '', 1, '', 0, 0),
+(2887, 'PT KEMBANG BULAN', ' Jl. Demak  No. 275 SURABAYA 60179 Tilp.031 270341', NULL, '', '', '', '', 1, '', 0, 0),
 (2888, 'PT PARI ANOM', ' Jl. GembongTebasan No. 18 SURABAYA Tilp.031 312578', NULL, '', '', '', '', 1, '', 0, 0),
 (2889, 'PT RITA SINAR INDAH', ' Jl.Rungkut Industri IV/24 SURABAYA', NULL, '', '', '', '', 1, '', 0, 0),
 (2890, 'PT ROI SURYA PRIMA', ' Jl.Tambak Adi 51 SURABAYA /Kapaskrampung 57 Surabaya Tilp.031 3724232 fax 031 3724243 Jl.Patimura 25 PANDAAN', NULL, '', '', '', '', 1, '', 0, 0),
-(2891, 'PT SANDAI FARMA', ' Jl. Kenjeran No. 401B SURABAYA 60134 Tilp./Fax. 031 3893921 Tilp. 031 3894545', NULL, '', '', '', '', 1, '', 0, 0),
+(2891, 'PT SANDAI FARMA', ' Jl. Kenjeran No. 401B SURABAYA 60134 Tilp./Fax. 031 3893921 Tilp. 031 3894545', NULL, '', '', '', '', 1, '', 0, 0),
 (2892, 'PT SUMBER KESEHATANBARU', ' Jl. Welirang 14-16-18Surabaya Tilp.031 5344929 Jl JawaWadungasih Buduran SIDOARJOTlp. 031 5475579 Fax 031 537419', NULL, '', '', '', '', 1, '', 0, 0),
 (2893, 'PT SURYA DERMATO MEDICALABORATORIES', ' Jl. RungkutIndustri III/31 PO Box 41SURABAYA 60293 Tilp. 0318493209 Fax 031 8438731', NULL, '', '', '', '', 1, '', 0, 0),
 (2894, 'PT USFI', ' Jl. Kedungcowek No. 345SURABAYA 60129 Tilp. 3715451Fax 031 3711996MALANG', NULL, '', '', '', '', 1, '', 0, 0),
-(2895, 'PT BALATIF', ' Jl. Tenaga Tengah No. 5 MALANG 65125 Tilp. 0341485165 Fax 0341 491557', NULL, '', '', '', '', 1, '', 0, 0),
+(2895, 'PT BALATIF', ' Jl. Tenaga Tengah No. 5 MALANG 65125 Tilp. 0341485165 Fax 0341 491557', NULL, '', '', '', '', 1, '', 0, 0),
 (2896, 'PT BEIERSDORF INDONESIA', 'Desa Randuagung Singosari Km 75PO Box 45 MALANG Tilp. 0341458624 Fax 0341 458623', NULL, '', '', '', '', 1, '', 0, 0),
 (2897, 'PT NEON FARMA', ' Jl. RayaSengkaling No 281 RT 4/4Mulyoagung Dau MALANG 65112', NULL, '', '', '', '', 1, '', 0, 0),
 (2898, 'PT OTSUKA INDONESIA', ' Jl.Sumber Waras No. 25 Lawang POBox 103 MALANG 65216 Tilp. 0341426244 Fax 0341 426644SIDOARJO', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38572,9 +38576,9 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2907, 'PT SEGER WARAS', ' Jl. Raya No.151 Sruni Gedangan SIDOARJOTilp.0319 41151', NULL, '', '', '', '', 1, '', 0, 0),
 (2908, 'PT SELPASINDO PHARCO', ' Jl.Raya Bebek No. 28 WaruSIDOARJO Tilp. 031 832533  0318663217 Fax 031 8672371', NULL, '', '', '', '', 1, '', 0, 0),
 (2909, 'PT SURABAYA INDAH PERMAI', 'Jl. Kali Bader Selatan 14 RT 16/03Kalijaten Taman SIDOARJO 61257Tilp. 031 7881263 Fax 031 7882543', NULL, '', '', '', '', 1, '', 0, 0),
-(2910, 'PT WIRO SATIVA FARMINDO', 'Jl. Raya Taman Km 20 TanjungsariTaman SIDOARJO Tilp. 0317881440 Fax 031 7881976GRESIK ', NULL, '', '', '', '', 1, '', 0, 0),
+(2910, 'PT WIRO SATIVA FARMINDO', 'Jl. Raya Taman Km 20 TanjungsariTaman SIDOARJO Tilp. 0317881440 Fax 031 7881976GRESIK ', NULL, '', '', '', '', 1, '', 0, 0),
 (2911, 'PT DASA ESA FARMA', ' Jl. RayaKamaden Desa Kamaden GRESIK.Tilp. 031 7911149 Fax 031 5454519', NULL, '', '', '', '', 1, '', 0, 0),
-(2912, 'PT INDO ABADISARIMAKMUR ', ' Dusun NgablakDesa. Gempolkurung No. 168M Kec.Menganti GRESIK Tilp. 0317990889 Fax. 031 7990890', NULL, '', '', '', '', 1, '', 0, 0),
+(2912, 'PT INDO ABADISARIMAKMUR ', ' Dusun NgablakDesa. Gempolkurung No. 168M Kec.Menganti GRESIK Tilp. 0317990889 Fax. 031 7990890', NULL, '', '', '', '', 1, '', 0, 0),
 (2913, 'PT NOVAPHARINPharmaceutical Industries', ' Jl. RayaKepatihan No. 112 MengantiGRESIK 61174 Tilp. 031 7994614-5Fax 031 7994616', NULL, '', '', '', '', 1, '', 0, 0),
 (2914, 'PT RAMA EMERALD MULTISUKSES', ' Desa Tenaru DriyorejoGRESIK d/a Jl. Embong Trengguli20 SURABAYA 60271. Tilp. 0317509193 / 7507406 Fax. 0317507069PANDAAN PASURUAN', NULL, '', '', '', '', 1, '', 0, 0),
 (2915, 'PT IMFARMIND PharmaceuticalIndustries', ' Desa WonokoyoKecamatan Beji PASURUANTilp./Fax. 0343 656373 atau PTIMFARMIND Pharm. Ind.Jl.Gentengkali No. 67 SURABAYA60272', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38586,27 +38590,27 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2921, 'PT AFIFARMA Laboratories', ' Jl.Mauni Industri No. 8 KEDIRI 64131Tilp.0354 683675 Fax 0354 687292MOJOKERTO', NULL, '', '', '', '', 1, '', 0, 0),
 (2922, 'PT KIMIA FARMA', 'PlantWatudakon Jl. Watudakon DusunBulak Desa Jombok Kec.KesambenPO Box 126 MOJOKERTO 61301Telp. 0321 397300 â€“ 2 Fax. 0321397303', NULL, '', '', '', '', 1, '', 0, 0),
 (2923, 'PT PRESTO MEDICAL HOUSE', 'Mojosari Mojokerto d/a Jl. Kutai No.21 SURABAYABALI', NULL, '', '', '', '', 1, '', 0, 0),
-(2924, 'PT KRESNA KARYA', ' Jl. RayaGianyar No. 100 Batubulan Gianyar Bali 80237 PO Box 19 SUKAWATITilp. 0361 298311 fax 0361 298312JAKARTA', NULL, '', '', '', '', 1, '', 0, 0),
+(2924, 'PT KRESNA KARYA', ' Jl. RayaGianyar No. 100 Batubulan Gianyar Bali 80237 PO Box 19 SUKAWATITilp. 0361 298311 fax 0361 298312JAKARTA', NULL, '', '', '', '', 1, '', 0, 0),
 (2925, 'PT ACTAVIS', ' Jl. Raya JakartaBogor Km 28 PO Box 1044/JAT13010 JAKARTA TIMUR 13710Tilp. 021 8710311 Fax 021 8710044 /8711382', NULL, '', '', '', '', 1, '', 0, 0),
-(2926, 'PT BAYER INDONESIA', ' Jl. RayaJakarta Bogor Km 38 CibuburÂ JAKARTA TIMUR Tilp. 0218710421 â€“ 425 Fax 021 8710425', NULL, '', '', '', '', 1, '', 0, 0),
+(2926, 'PT BAYER INDONESIA', ' Jl. RayaJakarta Bogor Km 38 CibuburÂ JAKARTA TIMUR Tilp. 0218710421 â€“ 425 Fax 021 8710425', NULL, '', '', '', '', 1, '', 0, 0),
 (2927, 'PT BINTANG TOEDJOE', ' Jl. RawaSumur Barat II / K-9 KawasanIndustri Pulogadung JAKARTATIMUR 13930 Tilp. 021 4605533Fax 021 4605535', NULL, '', '', '', '', 1, '', 0, 0),
-(2928, 'PT BISON', ' Jl. Raya Kapuk Kamal No. 67 Kel. Kapuk Muara Kec.Penjaringan JAKARTA UTARA14460 Tilp. O21 6194094 Fax 9215561962', NULL, '', '', '', '', 1, '', 0, 0),
+(2928, 'PT BISON', ' Jl. Raya Kapuk Kamal No. 67 Kel. Kapuk Muara Kec.Penjaringan JAKARTA UTARA14460 Tilp. O21 6194094 Fax 9215561962', NULL, '', '', '', '', 1, '', 0, 0),
 (2929, 'PT BROMO PharmaceuticalIndustries', ' Jl. Kartini VIII/5JAKARTA 10750 Tilp. 021 6390413Fax 021 6261404', NULL, '', '', '', '', 1, '', 0, 0),
-(2930, 'PT DANKOS FARMA', ' Jl. RawaGatel Blok III S / 37-38 KawasanIndustri Pulogadung PO Box1195/JAT 13011 JAKARTA TIMUR 13930 Tilp. 021 4600158 Fax. 0214611301', NULL, '', '', '', '', 1, '', 0, 0),
+(2930, 'PT DANKOS FARMA', ' Jl. RawaGatel Blok III S / 37-38 KawasanIndustri Pulogadung PO Box1195/JAT 13011 JAKARTA TIMUR 13930 Tilp. 021 4600158 Fax. 0214611301', NULL, '', '', '', '', 1, '', 0, 0),
 (2931, 'PT DUA LIMA FARMA', ' Jl.Tomang Rawa Kepa Raya 23JAKARTA BARAT Tilp. 021', NULL, '', '', '', '', 1, '', 0, 0),
 (2932, 'PT DUA MENARA', ' Jl. PangeranTubagus Angke196 RT 11/6JAKARTA BARAT 11280 Tilp. 021', NULL, '', '', '', '', 1, '', 0, 0),
-(2933, 'PT ETHICA', ' Jl. Raya PulogadungÂ No. 6 Kawasan Industri PulogadungJAKARTA 13920 Tilp. 021 4615132Â â€“ 35 Fax. 021 4615132', NULL, '', '', '', '', 1, '', 0, 0),
-(2934, 'PT FINUSOL PRIMA FARMAINTI', ' Jl. Rawa Gelam V Kav. OR 39Sapta Mulia Center Lt 4 PulogadungJakarta Timur ', NULL, '', '', '', '', 1, '', 0, 0),
-(2935, 'PT GANDHA', ' Jl. Pulo KambingKav. II-1 / No. 5 Kawasan IndustriPulogadung Jakarta Timur.', NULL, '', '', '', '', 1, '', 0, 0),
+(2933, 'PT ETHICA', ' Jl. Raya PulogadungÂ No. 6 Kawasan Industri PulogadungJAKARTA 13920 Tilp. 021 4615132Â â€“ 35 Fax. 021 4615132', NULL, '', '', '', '', 1, '', 0, 0),
+(2934, 'PT FINUSOL PRIMA FARMAINTI', ' Jl. Rawa Gelam V Kav. OR 39Sapta Mulia Center Lt 4 PulogadungJakarta Timur ', NULL, '', '', '', '', 1, '', 0, 0),
+(2935, 'PT GANDHA', ' Jl. Pulo KambingKav. II-1 / No. 5 Kawasan IndustriPulogadung Jakarta Timur.', NULL, '', '', '', '', 1, '', 0, 0),
 (2936, 'PT GLAXO SMITHKLINE', ' Jl.Pulo Buaran Raya Kav. III DD / 2-3-4 Kawasan Industri PulogadungJAKARTA 13930 PO Box 1204Jakarta 13012 Tilp. 021 4603292 Fax021 4603293', NULL, '', '', '', '', 1, '', 0, 0),
 (2937, 'PT HARSEN LABORATORIES', ' â€“ 8404433 Fax.3411643', NULL, '', '', '', '', 1, '', 0, 0),
 (2938, 'PT IKAPHARMINDOPUTRAMAS', ' Jl. Raya Pulogadung29 Kawasan Industri PulogadungJAKARTA 13920 PO Box 188/JATJAKARTA 13001 Tilp. 021 4600086Fax 021 4608865', NULL, '', '', '', '', 1, '', 0, 0),
-(2939, 'PT IKONG PharmaceuticalIndustries', ' Jl. Petak Asam Gg.Semut No. 50 JAKARTA BARAT - pindah', NULL, '', '', '', '', 1, '', 0, 0),
+(2939, 'PT IKONG PharmaceuticalIndustries', ' Jl. Petak Asam Gg.Semut No. 50 JAKARTA BARAT - pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2940, 'PT INTERNATIONALCHEMICAL IND. CO. LTD', '. Jl.Daan Mogot Km 11 RT 06/03 Kel.Kedaung Kali Angke Kec.Cengkareng JAKARTABARAT11710', NULL, '', '', '', '', 1, '', 0, 0),
 (2941, 'PT INDONESIANPHARMACEUTICALINDUSTRIES (IPI)', ' Jl. Industri No.7 JAKARTA 10720 Tilp. 0216252752 Fax. 021 6397060 - pindah', NULL, '', '', '', '', 1, '', 0, 0),
 (2942, 'PT INTRA ARIES', ' Jl. KrekotBunder IV/34F Kel. Pasar Baru Kec.Sawah Besar Jakarta Pusat 10710', NULL, '', '', '', '', 1, '', 0, 0),
 (2943, 'PT KIMIA FARMA', 'Unit ProduksiFormulasi Pulogadung Jl.Rawagelam V No. 1 KawasanIndustri Pulogadung JAKARTATIMUR 13930 Tilp. 46031444603661 Fax. 4603143', NULL, '', '', '', '', 1, '', 0, 0),
-(2944, 'PT LAUREL INDUSTRIFARMASI', ' Jl. Raya Jakarta Bogor Km 26 JAKARTA TIMUR Tilp. 0218710431 Fax021 8710768', NULL, '', '', '', '', 1, '', 0, 0),
+(2944, 'PT LAUREL INDUSTRIFARMASI', ' Jl. Raya Jakarta Bogor Km 26 JAKARTA TIMUR Tilp. 0218710431 Fax021 8710768', NULL, '', '', '', '', 1, '', 0, 0),
 (2945, 'PT MAHAKAM BETA FARMA', 'Jl. Pulo Kambing II/20 KawasanIndustri Pulogadung JAKARTA13930 Tilp. 021 4603543 Fax 0214603667', NULL, '', '', '', '', 1, '', 0, 0),
 (2946, 'PT MECOSIN INDONESIA', ' Jl.Palmerah Utara 14A JAKARTA11480 tilp. 021 5481665 Fax. 0215301613', NULL, '', '', '', '', 1, '', 0, 0),
 (2947, 'PT MEDISTA KARYA FARMA', 'Jl. Kakap No. 26 Kel. PenjaringanJAKARTA UTARA â€“ pindah', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38616,10 +38620,10 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2951, 'PT NELLCO INDOPHARMA', ' jl.Raya Ciracas No. 1 Pasar ReboJAKARTA 13740 Tilp. 021 8710431Fax 8710768', NULL, '', '', '', '', 1, '', 0, 0),
 (2952, 'PT NICHOLAS LaboratoriesIndustries', ' Jl. Raya PulogadungBlok FF 12A Kawasan IndustriPulogadung PO Box 2470JAKARTA 10001 Tilp. 021 4602850Fax 021 4602853', NULL, '', '', '', '', 1, '', 0, 0),
 (2953, 'PT NOVA CHEMIE UTAMA', ' Jl.Suci Km 24', NULL, '', '', '', '', 1, '', 0, 0),
-(2954, 'PT PEMBANGUNAN ROCELLALaboratories', ' Jl. Raya Jakarta Bogor Km 20 No. 113 PO Box 229 JKTJakarta 13510 Tilp. 021 8091603 Fax.021 8009523', NULL, '', '', '', '', 1, '', 0, 0),
+(2954, 'PT PEMBANGUNAN ROCELLALaboratories', ' Jl. Raya Jakarta Bogor Km 20 No. 113 PO Box 229 JKTJakarta 13510 Tilp. 021 8091603 Fax.021 8009523', NULL, '', '', '', '', 1, '', 0, 0),
 (2955, 'PT PFIZER INDONESIA', ' Jl. RayaBogor Km 28 JAkARTa 13710 POBox 2706 JAKARTA 10027 Tilp.021 8710521 Fax 021 8725905', NULL, '', '', '', '', 1, '', 0, 0),
-(2956, 'PT PHAROS INDONESIA', ' jl.Limo 40 Permata Hijau SenayanJAKARTA 12220 PO Box 1502/JKT12044 Tilp. 021 7200981 fax 0217260788 Cijantung JAKARTATIMUR ', NULL, '', '', '', '', 1, '', 0, 0),
-(2957, 'PT PHYTO KEMO AGUNGFARMA', ' Jl. Masjid No. 90 SusukanPasar Rebo JAKARTA TIMUR 13750 PO Box 105/JAT CGJAKARTA 13760 Tilp. 021 8400263fax 021 8400533', NULL, '', '', '', '', 1, '', 0, 0),
+(2956, 'PT PHAROS INDONESIA', ' jl.Limo 40 Permata Hijau SenayanJAKARTA 12220 PO Box 1502/JKT12044 Tilp. 021 7200981 fax 0217260788 Cijantung JAKARTATIMUR ', NULL, '', '', '', '', 1, '', 0, 0),
+(2957, 'PT PHYTO KEMO AGUNGFARMA', ' Jl. Masjid No. 90 SusukanPasar Rebo JAKARTA TIMUR 13750 PO Box 105/JAT CGJAKARTA 13760 Tilp. 021 8400263fax 021 8400533', NULL, '', '', '', '', 1, '', 0, 0),
 (2958, 'PT PROCTER & GAMBLEINDONESIA', ' Jl. Raya Bekasi Km25 Ujung Menteng CakungJAKARTA 13960 Tilp. 0214600882-3 Fax 021 4697959 - Tutup', NULL, '', '', '', '', 1, '', 0, 0),
 (2959, 'PT SAMIE SAHARI', ' Jl. Gg.Berdikari I No. 9 Kapuk KamalJAKARTA BARAT Tilp. 0216192136', NULL, '', '', '', '', 1, '', 0, 0),
 (2960, 'PT SANOFI AVENTIS', ' Jl. JendralA. Yani Pulomas JAKARTA 13210PO Box 1919/JKT 13019 Tilp. 0214892208 Fax. 021 4751035', NULL, '', '', '', '', 1, '', 0, 0),
@@ -38631,27 +38635,27 @@ INSERT INTO `relasi_instansi` (`id`, `nama`, `alamat`, `kabupaten_id`, `telp`, `
 (2966, 'PT TRIYASA NAGAMASFARMA', ' Jl. Raya Udang No. 75Kawasan Industri PulogadungJAKARTA 13920 PO Box 1059JAKARTA 13010 Tilp. 021 4603104Fax. 021 4602232', NULL, '', '', '', '', 1, '', 0, 0),
 (2967, 'PT TUNGGAL IDAMAN ABDIPharmaceutical Enterprises', ' jl.Jendral Achmad Yani No. 7JAKARTA 13230 PO Box4009/JNG JAKARTAMEDAN', NULL, '', '', '', '', 1, '', 0, 0),
 (2968, 'PT BINA FARMA', ' Jl. Kasuari II/2(Perumnas II) MEDAN 20226', NULL, '', '', '', '', 1, '', 0, 0),
-(2969, 'PT DEWI TUNJONG', ' Jl. Komodor Yos Sudarso Km 7.2 MEDAN 20241Tilp. 061 612171', NULL, '', '', '', '', 1, '', 0, 0),
-(2970, 'PT INFAR ARISPHARMA', ' Jl.Tojal 1 Kompleks Industri dan pergudangan Mabar Hilir MedanDeli MEDAN Tilp. 061 6850873 Fax061 6858841', NULL, '', '', '', '', 1, '', 0, 0),
+(2969, 'PT DEWI TUNJONG', ' Jl. Komodor Yos Sudarso Km 7.2 MEDAN 20241Tilp. 061 612171', NULL, '', '', '', '', 1, '', 0, 0),
+(2970, 'PT INFAR ARISPHARMA', ' Jl.Tojal 1 Kompleks Industri dan pergudangan Mabar Hilir MedanDeli MEDAN Tilp. 061 6850873 Fax061 6858841', NULL, '', '', '', '', 1, '', 0, 0),
 (2971, 'PT KIMIA FARMA', 'Plant MedanJl. Si Singamangaraja Km 9 No. 59MEDAN 20148 Tilp. 061 7867022Fax 061 7865744', NULL, '', '', '', '', 1, '', 0, 0),
 (2972, 'PT MULIA FARMA SUCI', ' Jl.Sambas No. 46 MEDAN 20213 Tilp.061 519568 (pindah)', NULL, '', '', '', '', 1, '', 0, 0),
-(2973, 'PT MUTIFA PharmacaeuticalLaboratories', ' Jl. Raya Medan â€“Â Â Namurambe Km 8.5 No.68 Pasar VKecamatan Delitua Kabupaten DeliSerdang 20355 PO Box 2566MEDAN 20001 Tilp. 061 7031178Fax 061 7030393', NULL, '', '', '', '', 1, '', 0, 0),
+(2973, 'PT MUTIFA PharmacaeuticalLaboratories', ' Jl. Raya Medan â€“Â Â Namurambe Km 8.5 No.68 Pasar VKecamatan Delitua Kabupaten DeliSerdang 20355 PO Box 2566MEDAN 20001 Tilp. 061 7031178Fax 061 7030393', NULL, '', '', '', '', 1, '', 0, 0),
 (2974, 'PT PEPHARIN RIA', ' Tapian nanuli Sunggal MEDAN d/a Jl. AdamMalik No. 68 MEDAN 20113', NULL, '', '', '', '', 1, '', 0, 0),
 (2975, 'PT SINABUNG Pharm. Ind', ' Jl.Komodor Laut Yos Sudarso Km 6.8MEDAN', NULL, '', '', '', '', 1, '', 0, 0),
-(2976, 'PT SINAR MANJUR ', ' Jl. RayaMedan 191 Tanjung Morawa Km 13Gang Mardisan Tanjung MorawaMEDAN 061 324822', NULL, '', '', '', '', 1, '', 0, 0),
-(2977, 'PT UNIVERSAL PharmaceuticalIndustries', ' Jl. Yos Sudarso 347 BB â€“Â Km 8 Tanjung. Mulia MEDAN20241 Tilp. 061 611112', NULL, '', '', '', '', 1, '', 0, 0),
+(2976, 'PT SINAR MANJUR ', ' Jl. RayaMedan 191 Tanjung Morawa Km 13Gang Mardisan Tanjung MorawaMEDAN 061 324822', NULL, '', '', '', '', 1, '', 0, 0),
+(2977, 'PT UNIVERSAL PharmaceuticalIndustries', ' Jl. Yos Sudarso 347 BB â€“Â Km 8 Tanjung. Mulia MEDAN20241 Tilp. 061 611112', NULL, '', '', '', '', 1, '', 0, 0),
 (2978, 'PT VARIA SEKATAPharmaceutical Laboratories', ' jl.Letjen Jamin Ginting Km 19.5PANCUR BATU DELI SERDANG20353 Tilp. 061 8363566', NULL, '', '', '', '', 1, '', 0, 0),
 (2979, 'PT YANTHI INDUSTRIFARMASI', ' Jl. Asia Dalam Mo. 15KMEDAN 20214PALEMBANG', NULL, '', '', '', '', 1, '', 0, 0),
-(2980, 'PT DEXA MEDICA', ' Jl. LetjenBambang Utoyo No. 138 Ilir PALEMBANG 30114 Tilp. 0711711390 Fax 0711 713242', NULL, '', '', '', '', 1, '', 0, 0),
+(2980, 'PT DEXA MEDICA', ' Jl. LetjenBambang Utoyo No. 138 Ilir PALEMBANG 30114 Tilp. 0711711390 Fax 0711 713242', NULL, '', '', '', '', 1, '', 0, 0),
 (2981, 'PT KINOL', ' Jl. Lebak Murni No.1062 â€“ 1063 RT 21 RW 09 Kel. SakoKantan PALEMBANG 30163', NULL, '', '', '', '', 1, '', 0, 0),
 (2982, 'PT SOYOSAN Pharm. Ind', '. Jl.Mayor Santoso (Kamuning) No. 2605PALEMBANG 30129 Tilp. 071123381PADANG', NULL, '', '', '', '', 1, '', 0, 0),
 (2983, 'PT NUSANTARA BETA FARMA', 'Jl. Raya Padang â€“ Bukittinggi Km 25Kab. Padang Pariaman PADANG25121 Tilp. 0751 482111', NULL, '', '', '', '', 1, '', 0, 0),
-(2984, 'PT USAHA BROS UTAMA', ' Jl.Perintis Kemerdakaan No. 35 Kel.Aurtanjunkang Tengah Sawah Guguk Panjang BUKIT TINGGI 26111 Tilp.0752 21459JAMBI', NULL, '', '', '', '', 1, '', 0, 0),
-(2985, 'PT NEW ASIAPHARM', ' Jl.Makalam No. 10A RT 17/07 Kel.Cempaka Putih Kec. Jelutung JAMBi36134 NON PABRIK OBAT', NULL, '', '', '', '', 1, '', 0, 0),
+(2984, 'PT USAHA BROS UTAMA', ' Jl.Perintis Kemerdakaan No. 35 Kel.Aurtanjunkang Tengah Sawah Guguk Panjang BUKIT TINGGI 26111 Tilp.0752 21459JAMBI', NULL, '', '', '', '', 1, '', 0, 0),
+(2985, 'PT NEW ASIAPHARM', ' Jl.Makalam No. 10A RT 17/07 Kel.Cempaka Putih Kec. Jelutung JAMBi36134 NON PABRIK OBAT', NULL, '', '', '', '', 1, '', 0, 0),
 (2986, 'PT TRANSFARMA MEDICAINDAH', ' Wisma Pondok Indah 1 Lt.1 Unit 103 Jl. Sultan Iskandar MudaBlok V â€“ TA Jakarta Selatan 12310Tilp. 021 7697323 Fax 021 7997528', NULL, '', '', '', '', 1, '', 0, 0),
 (2987, 'PT AMERTA INDAH OTSUKA', 'Jl. Siliwangi Km 28 KampungSindangresmi Desa KutajayaCicurug Sukabumi.', NULL, '', '', '', '', 1, '', 0, 0),
 (2988, 'PT FRISIAN FLAG INDONESIA', 'Jl. Raya Bogor Km 5 Pasar ReboJakarta 13760', NULL, '', '', '', '', 1, '', 0, 0),
-(2989, 'PT BUMITANGERANGMESINDOTAMA', ' Jl. Dipati Unus No. 30 Cibodas Tangerang Tilp. 0215585870 Fax. 021 5585872', NULL, '', '', '', '', 1, '', 0, 0),
+(2989, 'PT BUMITANGERANGMESINDOTAMA', ' Jl. Dipati Unus No. 30 Cibodas Tangerang Tilp. 0215585870 Fax. 021 5585872', NULL, '', '', '', '', 1, '', 0, 0),
 (2990, 'PT ASTELLAS Pharma Indonesia', '11th Floor Kyoei Prince Building Jl.Jendral Sudirman Kav 3 Jakarta10220 Tilp. 021 5724344 Fax 0215724345', NULL, '', '', '', '', 1, '', 0, 0);
 
 -- --------------------------------------------------------
@@ -38691,7 +38695,7 @@ CREATE TABLE IF NOT EXISTS `resep` (
   PRIMARY KEY (`id`),
   KEY `dokter_penduduk_id` (`dokter_penduduk_id`),
   KEY `pasien_penduduk_id` (`pasien_penduduk_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `resep`
@@ -38709,7 +38713,8 @@ INSERT INTO `resep` (`id`, `waktu`, `dokter_penduduk_id`, `pasien_penduduk_id`, 
 (9, '2013-05-08 12:57:35', 9, 12, 'Sah', '-'),
 (10, '2013-05-08 13:13:16', 9, 8, 'Sah', '-'),
 (11, '2013-05-29 05:52:47', 9, 8, 'Sah', 'Keterangan'),
-(12, '2013-06-04 08:22:00', 9, 8, 'Sah', '-');
+(12, '2013-06-04 08:22:00', 9, 8, 'Sah', '-'),
+(13, '2013-06-16 09:16:00', 9, 11, 'Sah', 'Metallica');
 
 -- --------------------------------------------------------
 
@@ -38732,7 +38737,7 @@ CREATE TABLE IF NOT EXISTS `resep_r` (
   KEY `resep_id` (`resep_id`),
   KEY `tarif_id` (`tarif_id`),
   KEY `pegawai_penduduk_id` (`pegawai_penduduk_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `resep_r`
@@ -38750,7 +38755,8 @@ INSERT INTO `resep_r` (`id`, `resep_id`, `r_no`, `resep_r_jumlah`, `tebus_r_juml
 (12, 9, 1, 3, 3, '1x1', 0, 2, 3000, 7),
 (13, 10, 1, 6, 6, '3x1', 0, 1, 5500, 7),
 (14, 11, 1, 12, 12, 'S3dd1', 0, 2, 3000, 7),
-(15, 12, 1, 12, 12, 'S3DD1', 0, 1, 5500, 7);
+(15, 12, 1, 12, 12, 'S3DD1', 0, 1, 5500, 7),
+(16, 13, 1, 12, 12, 'S3DD1', 0, 2, 3000, 7);
 
 -- --------------------------------------------------------
 
@@ -38769,7 +38775,7 @@ CREATE TABLE IF NOT EXISTS `resep_racik_r_detail` (
   PRIMARY KEY (`id`),
   KEY `r_resep_id` (`r_resep_id`),
   KEY `barang_packing_id` (`barang_packing_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `resep_racik_r_detail`
@@ -38787,7 +38793,9 @@ INSERT INTO `resep_racik_r_detail` (`id`, `r_resep_id`, `barang_packing_id`, `ju
 (9, 14, 16328, 1500, 1, 12, NULL),
 (10, 14, 12589, 0, 1, 12, NULL),
 (11, 15, 12590, 1150, 1, 12, NULL),
-(12, 15, 16328, 1500, 1, 12, NULL);
+(12, 15, 16328, 1500, 1, 12, NULL),
+(13, 16, 16328, 1500, 1, 12, NULL),
+(14, 16, 12589, 7000, 1, 12, NULL);
 
 -- --------------------------------------------------------
 
@@ -39060,18 +39068,18 @@ CREATE TABLE IF NOT EXISTS `transaksi_detail` (
   `ss` int(11) NOT NULL,
   `selisih_waktu_beli` double NOT NULL,
   `is_jual_resep` tinyint(1) NOT NULL DEFAULT '0',
-  `h_jual_resep` double NOT NULL,
+  `h_jual` double NOT NULL,
   PRIMARY KEY (`id`),
   KEY `transaksi_id` (`transaksi_id`,`barang_packing_id`),
   KEY `barang_packing_id` (`barang_packing_id`),
   KEY `unit_id` (`unit_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
 
 --
 -- Dumping data for table `transaksi_detail`
 --
 
-INSERT INTO `transaksi_detail` (`id`, `transaksi_id`, `transaksi_jenis`, `waktu`, `nobatch`, `barang_packing_id`, `unit_id`, `ed`, `harga`, `beli_diskon_percentage`, `beli_diskon_rupiah`, `terdiskon_harga`, `subtotal`, `ppn`, `hna`, `hpp`, `het`, `margin_percentage`, `jual_diskon_percentage`, `awal`, `masuk`, `keluar`, `sisa`, `leadtime_hours`, `ss`, `selisih_waktu_beli`, `is_jual_resep`, `h_jual_resep`) VALUES
+INSERT INTO `transaksi_detail` (`id`, `transaksi_id`, `transaksi_jenis`, `waktu`, `nobatch`, `barang_packing_id`, `unit_id`, `ed`, `harga`, `beli_diskon_percentage`, `beli_diskon_rupiah`, `terdiskon_harga`, `subtotal`, `ppn`, `hna`, `hpp`, `het`, `margin_percentage`, `jual_diskon_percentage`, `awal`, `masuk`, `keluar`, `sisa`, `leadtime_hours`, `ss`, `selisih_waktu_beli`, `is_jual_resep`, `h_jual`) VALUES
 (1, 755, 'Stok Opname', '2013-05-08 10:59:00', NULL, 4289, 1, '2014-11-18', 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 50, 0, 50, 0, 0, 0, 0, 0),
 (2, 755, 'Stok Opname', '2013-05-08 10:59:00', NULL, 4010, 1, '2018-05-01', 0, 0, 0, 0, 0, 0, 2000, 0, 0, 0, 0, 0, 60, 0, 60, 0, 0, 0, 0, 0),
 (3, 756, 'Stok Opname', '2013-05-08 11:06:00', NULL, 3997, 1, '2014-03-31', 0, 0, 0, 0, 0, 0, 3244, 0, 0, 0, 0, 0, 30, 0, 30, 0, 0, 0, 0, 0),
@@ -39128,7 +39136,20 @@ INSERT INTO `transaksi_detail` (`id`, `transaksi_id`, `transaksi_jenis`, `waktu`
 (54, 28, 'Penjualan', '2013-06-04 17:58:00', NULL, 16328, 1, '2019-05-01', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 162, 0, 1, 161, 0, 0, 0, 0, 0),
 (55, 1, 'Retur Pembelian', '2013-06-14 19:55:00', '0192309', 5189, 1, '2018-06-25', 15, 0, 0, 0, 0, 0, 1500, 1275, 0, 0, 0, 30, 0, 30, 0, 0, 0, 0, 0, 0),
 (56, 1, 'Retur Pembelian', '2013-06-14 19:55:00', '0192334', 12571, 1, '2018-06-25', 2, 0, 0, 0, 0, 0, 2000, 1700, 0, 0, 0, 30, 0, 30, 0, 0, 0, 0, 0, 0),
-(57, 1, 'Retur Pembelian', '2013-06-14 19:55:00', '0192132', 12610, 1, '2018-06-25', 2, 0, 0, 0, 0, 0, 2000, 2000, 0, 0, 0, 29, 0, 30, -1, 0, 0, 0, 0, 0);
+(57, 1, 'Retur Pembelian', '2013-06-14 19:55:00', '0192132', 12610, 1, '2018-06-25', 2, 0, 0, 0, 0, 0, 2000, 2000, 0, 0, 0, 29, 0, 30, -1, 0, 0, 0, 0, 0),
+(58, 762, 'Stok Opname', '2013-06-16 09:17:00', NULL, 12589, 1, '2019-06-13', 0, 0, 0, 0, 0, 0, 7000, 0, 0, 0, 0, 0, 12, 0, 12, 0, 0, 0, 0, 0),
+(59, 29, 'Penjualan', '2013-06-16 09:18:00', NULL, 12589, 1, '2019-06-13', 0, 0, 0, 9100, 109200, 0, 7000, 0, 0, 0, 0, 12, 0, 12, 0, 0, 0, 0, 1, 9100),
+(60, 29, 'Penjualan', '2013-06-16 09:18:00', NULL, 16328, 1, '2019-05-01', 0, 0, 0, 1950, 23400, 0, 1000, 1000, 0, 50, 0, 162, 0, 12, 150, 0, 0, 0, 1, 1950),
+(61, 30, 'Penjualan', '2013-06-16 16:08:00', NULL, 4010, 1, '2018-05-01', 0, 0, 0, 0, 0, 0, 2000, 2000, 0, 0, 0, 47, 0, 1, 46, 0, 0, 0, 0, 0),
+(62, 30, 'Penjualan', '2013-06-16 16:08:00', NULL, 4289, 1, '2014-11-18', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 23, 0, 1, 22, 0, 0, 0, 0, 0),
+(63, 30, 'Penjualan', '2013-06-16 16:08:00', NULL, 16328, 1, '2019-05-01', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 150, 0, 1, 149, 0, 0, 0, 0, 0),
+(64, 31, 'Penjualan', '2013-06-16 16:14:00', NULL, 4010, 1, '2018-05-01', 0, 0, 0, 0, 0, 0, 2000, 2000, 0, 0, 0, 46, 0, 1, 45, 0, 0, 0, 0, 0),
+(65, 31, 'Penjualan', '2013-06-16 16:14:00', NULL, 4289, 1, '2014-11-18', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 22, 0, 10, 12, 0, 0, 0, 0, 0),
+(66, 32, 'Penjualan', '2013-06-16 16:24:00', NULL, 3997, 1, '2014-03-31', 0, 0, 0, 0, 0, 0, 3244, 3244, 0, 0, 0, 30, 0, 1, 29, 0, 0, 0, 0, 3244),
+(67, 32, 'Penjualan', '2013-06-16 16:24:00', NULL, 4010, 1, '2018-05-01', 0, 0, 0, 0, 0, 0, 2000, 2000, 0, 0, 0.5, 45, 0, 1, 44, 0, 0, 0, 0, 1990),
+(68, 32, 'Penjualan', '2013-06-16 16:24:00', NULL, 16328, 1, '2019-05-01', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 149, 0, 1, 148, 0, 0, 0, 0, 1500),
+(69, 32, 'Penjualan', '2013-06-16 16:24:00', NULL, 12590, 1, '2014-05-31', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 10, 34, 0, 1, 33, 0, 0, 0, 0, 1125),
+(70, 32, 'Penjualan', '2013-06-16 16:24:00', NULL, 4289, 1, '2014-11-18', 0, 0, 0, 0, 0, 0, 1000, 1000, 0, 0, 0, 12, 0, 10, 2, 0, 0, 0, 0, 12000);
 
 -- --------------------------------------------------------
 
@@ -39450,7 +39471,3 @@ ALTER TABLE `transaksi_detail`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penduduk` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
