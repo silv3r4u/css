@@ -30,7 +30,7 @@ function add(i) {
         '<td id=sisa'+i+' align=center></td>'+
         '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=subtotal'+i+' align="right"></td>'+
-        '<td class=aksi align=center><a class=delete onclick=eliminate(this)></a><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
+        '<td class=aksi><span class=delete onclick=eliminate(this)><img src="<?= base_url('assets/images/icons/delete.gif') ?>" /></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
     '</tr>';
 
     $('.form-inputan tbody').append(str);
@@ -207,8 +207,8 @@ function subTotal() {
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
         //$('#total-tagihan').html(numberToCurrency(tagihan));
         //alert(jasa_apt)
-        var totalllica = Math.ceil((tagihan - disc)+jasa_apt);
-        var total = totalllica+(tagihan*ppn);
+        var totalllica = Math.ceil(tagihan+jasa_apt-disc);
+        var total = totalllica+(totalllica*ppn);
         $('#ppn-hasil').html(numberToCurrency(Math.ceil(tagihan*ppn)));
         $('#total').html(numberToCurrency(Math.ceil(total)));
         $('input[name=total]').val(Math.ceil(total));
@@ -598,8 +598,8 @@ $(function() {
             <table width="100%">
                 <tr style="height: 22px;"><td width="27%">Biaya Apoteker (Rp.):</td><td id="jasa-apt"></td></tr>
                 <tr style="height: 22px;"><td>Total Tagihan (Rp.):</td><td id="total-tagihan"></td></tr>
-                <tr style="height: 22px;"><td>PPN (Rp.):</td><td id="ppn-hasil"></td></tr>
                 <tr style="height: 22px;"><td>Total Diskon (Rp.):</td><td id="total-diskon" class="label"></td></tr>
+                <tr style="height: 22px;"><td>PPN (Rp.):</td><td id="ppn-hasil"></td></tr>
                 <tr style="height: 22px;"><td>Total (Rp.):</td><td id="total" class="label"></td></tr>
             </table>
         </div>
@@ -610,14 +610,14 @@ $(function() {
             <thead>
             <tr>
                 <th width="10%">Barcode</th>
-                <th width="40%">Kemasan Barang</th>
+                <th width="33%">Kemasan Barang</th>
                 <th width="15%">ED</th>
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="7%">Sisa Stok</th>
                 <th width="5%">Jumlah</th>
                 <th width="10%">SubTotal</th>
-                <th>#</th>
+                <th width="10%">#</th>
             </tr>
             </thead>
             <tbody>

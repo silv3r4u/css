@@ -486,6 +486,27 @@ $(function() {
 </script>
 <h1><?= $title ?></h1>
 <?= form_open('pelayanan/penjualan_nr', 'id=form_penjualan_non_resep') ?>
+    <div class="data-list">
+        <?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+        <table class="tabel form-inputan" width="100%">
+            <thead>
+            <tr>
+                <th width="10%">Barcode</th>
+                <th width="35%">Barang</th>
+                <th width="10%">Jumlah</th>
+                <th width="10%">Unit Kemasan</th>
+                <th width="7%">ED</th>
+                <th width="10%">Harga Jual</th>
+                <th width="7%">Diskon</th>
+                <th width="10%">Sub Total</th>
+                <th width="5%">Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table> <br/>
+        
+    </div>
     <div class="data-input">
         <fieldset>
         <?= form_hidden('total') ?>
@@ -510,34 +531,16 @@ $(function() {
                 <!--<tr><td>Kembalian (Rp)</td><td><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
                 </table>
             </div>
+            
         </fieldset>
+        <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
+        <?= form_button(null, 'Cetak Nota', 'id=print') ?>
 <!--<?= form_submit('save', 'Simpan', 'id=save') ?>-->
     
      <!--<?= form_button(null, 'Retur Penjualan', 'id=retur') ?>-->
         
     </div>
-    <div class="data-list">
-        <?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
-        <table class="tabel form-inputan" width="100%">
-            <thead>
-            <tr>
-                <th width="10%">Barcode</th>
-                <th width="35%">Barang</th>
-                <th width="10%">Jumlah</th>
-                <th width="10%">Unit Kemasan</th>
-                <th width="7%">ED</th>
-                <th width="10%">Harga Jual</th>
-                <th width="7%">Diskon</th>
-                <th width="10%">Sub Total</th>
-                <th width="5%">Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table> <br/>
-        <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
-    <?= form_button(null, 'Cetak Nota', 'id=print') ?>
-    </div>
+    
     
     <?= form_close() ?>
 </div>

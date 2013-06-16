@@ -16,7 +16,7 @@ foreach ($list_data as $key => $data) {
         $alert = "style=background:red";
     }
     ?>
-    <tr <?= $alert ?> class="tr_row <?= ($key%2==0)?'odd':'even' ?>">
+    <tr <?= $alert ?> class="tr_row">
         <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
         <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
             <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" /></td>
@@ -29,7 +29,7 @@ foreach ($list_data as $key => $data) {
         <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
         
         <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>
-        <td class=aksi><a class=delete onclick="eliminate(this)"></a> 
+        <td class=aksi><span class=delete onclick="eliminate(this)"><?= img('assets/images/icons/delete.gif') ?></span> 
             <input type=hidden name="disc[]" id="disc<?= $no ?>" value="<?= $data->percent ?>" />
             <input type=hidden name="harga_jual[]" id="harga_jual<?= $no ?>" value="<?= $harga_jual ?>" /></td>
     </tr>

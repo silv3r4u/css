@@ -56,10 +56,10 @@ foreach ($penjualan as $key => $data) {
         <td align="center" id=diskon<?= $no ?>><?= $data->jual_diskon_percentage ?></td>
         <!--<td><?= rupiah(($data->jual_harga - (($data->jual_harga*($data->percent/100))))*$data->pakai_jumlah) ?></td>-->
         <td align="center"><?= $data->keluar ?></td>
-        <td align="right"><?= rupiah($data->h_jual) ?></td>
+        <td align="right"><?= rupiah($data->subtotal) ?></td>
     </tr>
 <?php 
-$tagihan = $tagihan + $data->h_jual;
+$tagihan = $tagihan + $data->subtotal;
 $no++;
 }
 
@@ -79,10 +79,10 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     <tr><td>Biaya Apoteker:</td><td align="right"><?= rupiah($biaya->jasa_apoteker) ?></td></tr>
     <?php } 
     $diskon_member = $tagihan*($rows->diskon_member/100);
-    $totals = $tagihan-$diskon_member+$byapotek+($jml_ppn/100*$tagihan);
+    $totals = ($tagihan+$byapotek-$diskon_member)+($jml_ppn/100*($tagihan+$byapotek-$diskon_member));
     ?>
     <tr><td>Diskon:</td><td align="right"><?= ($diskon_member) ?></td></tr>
-    <tr><td>PPN (%):</td><td align="right"><?= $jml_ppn ?></td></tr>
+    <tr><td>PPN (%):</td><td align="right"><?= round($jml_ppn/100*($tagihan+$byapotek-$diskon_member)) ?></td></tr>
     <tr><td>Total:</td><td align="right"><?= inttocur($totals) ?></td></tr>
     <?php if ($rows->bayar != '0') { 
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
