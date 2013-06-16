@@ -1203,6 +1203,7 @@ class M_inventory extends CI_Model {
         $kemasan = $this->input->post('kemasan');
         $jumlah = $this->input->post('jl');
         $diskon = $this->input->post('diskon');
+        $subtotal = $this->input->post('subtotal');
         $this->session->set_userdata(array('sisa_stok' => NULL));
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
@@ -1228,7 +1229,8 @@ class M_inventory extends CI_Model {
                         'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
                         'masuk' => '0',
                         'keluar' => ($jumlah[$key]*$value[1]),
-                        'sisa' => $sisa
+                        'sisa' => $sisa,
+                        'h_jual' => currencyToNumber($subtotal[$key])
                     );
                 
                     $this->db->insert('transaksi_detail', $data_trans);
@@ -1744,7 +1746,7 @@ class M_inventory extends CI_Model {
                         'sisa' => $sisa,
                         'leadtime_hours' => (isset($leadtime->loadtime_hours)?$leadtime->loadtime_hours:'0'),
                         'is_jual_resep' => '1',
-                        'h_jual_resep' => $harga_jual[$key]
+                        'h_jual' => $harga_jual[$key]
                     );
                     $this->db->insert('transaksi_detail', $data_trans);
             }

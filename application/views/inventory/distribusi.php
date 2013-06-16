@@ -92,7 +92,6 @@
             $('#addnewrow').click(function() {
                 row = $('.tr_row').length;
                 add(row);
-                i++;
             });
         });
         function eliminate(el) {
@@ -103,8 +102,9 @@
                 $('.tr_row:eq('+i+')').children('td:eq(0)').html(i+1);
                 $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
                 $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
-                $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','ed'+i);
+                $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','exp'+i);
                 $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','sisa'+i);
+                $('.tr_row:eq('+i+')').children('td:eq(4)').children('.ed').attr('id','ed'+i);
                 $('.tr_row:eq('+i+')').children('td:eq(4)').children('.jl').attr('id','jml'+i);
             }
         }
@@ -127,7 +127,7 @@
                     alert('Tidak boleh melebihi sisa stok');
                     $('#jl'+i).val('').focus();
                 }
-            })
+            });
             $('#pb'+i).autocomplete("<?= base_url('inv_autocomplete/load_data_packing_barang_per_ed') ?>",
             {
                 parse: function(data){
@@ -143,19 +143,19 @@
                 },
                 formatItem: function(data,i,max){
                     var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                    if (data.isi != '1') { var isi = '@ '+data.isi; }
-                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                    if (data.satuan != null) { var satuan = data.satuan; }
-                    if (data.sediaan != null) { var sediaan = data.sediaan; }
-                    if (data.pabrik != null) { var pabrik = data.pabrik; }
-                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                    if (data.id_obat == null) {
+                    if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                    if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                    if (data.satuan !== null) { var satuan = data.satuan; }
+                    if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                    if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                    if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                    if (data.id_obat === null) {
                         var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>'+datefmysql(data.ed)+'</div>';
                     } else {
-                        if (data.generik == 'Non Generik') {
-                            var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'<br/>'+datefmysql(data.ed)+'</div>';
+                        if (data.generik === 'Non Generik') {
+                            var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'<br/>'+datefmysql(data.ed)+'</div>';
                         } else {
-                            var str = '<div class=result>'+data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>'+datefmysql(data.ed)+'</div>';
+                            var str = '<div class=result>'+data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'<br/>'+datefmysql(data.ed)+'</div>';
                         }
                     }
                     return str;
@@ -165,23 +165,25 @@
             }).result(
             function(event,data,formated){
                 var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                if (data.isi != '1') { var isi = '@ '+data.isi; }
-                if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                if (data.satuan != null) { var satuan = data.satuan; }
-                if (data.sediaan != null) { var sediaan = data.sediaan; }
-                if (data.pabrik != null) { var pabrik = data.pabrik; }
-                if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                if (data.id_obat == null) {
+                if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                if (data.satuan !== null) { var satuan = data.satuan; }
+                if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                if (data.id_obat === null) {
                     $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+' '+datefmysql(data.ed));
                 } else {
-                    if (data.generik == 'Non Generik') {
-                        $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+' '+datefmysql(data.ed));
+                    if (data.generik === 'Non Generik') {
+                        $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+' '+datefmysql(data.ed));
                     } else {
-                        $(this).val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+' '+datefmysql(data.ed));
+                        $(this).val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+' '+datefmysql(data.ed));
                     }
                 }
                 $('#id_pb'+i).val(data.id);
+                //alert(i);
                 $('#ed'+i).val(datefmysql(data.ed));
+                
                 $('#exp'+i).html(datefmysql(data.ed));
                 $('#sisa'+i).html(data.sisa);
                 $('#jl'+i).focus();

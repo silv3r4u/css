@@ -32,18 +32,23 @@
     <tr>
         <th align="left" width="20%">Barang</th>
         <th width="15%">Harga</th>
-        <th width="15%">Diskon(%)</th>
-        <th width="15%">Jumlah</th>
+        <th width="15%">Disc(%)</th>
+        <th width="15%">Qty</th>
+        <th width="20%">Subtotal</th>
     </tr>
 <?php
 
 $no = 1;
 $tagihan = 0;
-$diskon = 0;
+//$diskon = 0;
 $set = $this->m_referensi->get_setting()->row();
+$f_kali = $set->h_resep;
+if (isset($jenis) and $jenis != '') {
+    $f_kali = 0;
+}
 foreach ($penjualan as $key => $data) {
     $hjual = ($data->hna*($data->margin/100))+$data->hna;
-    $harga = $hjual+($hjual*($set->h_resep/100));
+    $harga = $hjual+($hjual*($f_kali/100));
     ?>
     <tr valign="top" class="<?= ($key%2==0)?'even':'odd' ?> tr_row">
         <td width="60%"><?= $data->barang." ".(($data->kekuatan == '1')?'':$data->kekuatan)." ". $data->satuan." ".$data->sediaan." @ ".(($data->isi==1)?'':$data->isi)." ".$data->satuan_terkecil ?></td>
@@ -51,9 +56,10 @@ foreach ($penjualan as $key => $data) {
         <td align="center" id=diskon<?= $no ?>><?= $data->jual_diskon_percentage ?></td>
         <!--<td><?= rupiah(($data->jual_harga - (($data->jual_harga*($data->percent/100))))*$data->pakai_jumlah) ?></td>-->
         <td align="center"><?= $data->keluar ?></td>
+        <td align="right"><?= rupiah($data->h_jual) ?></td>
     </tr>
 <?php 
-$tagihan = $tagihan + ($harga*$data->keluar) - (($harga*($data->jual_diskon_percentage/100))*$data->keluar);
+$tagihan = $tagihan + $data->h_jual;
 $no++;
 }
 

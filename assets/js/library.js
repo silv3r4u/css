@@ -199,7 +199,8 @@ function komaKeTitik(obj){
 }
 
 function numberToCurrency(a){
-       a=a.toString();       
+    if (a != null) {
+        a=a.toString();       
         var b = a.replace(/[^\d\,]/g,'');
 		var dump = b.split(',');
         var c = '';
@@ -222,6 +223,9 @@ function numberToCurrency(a){
 			}
 		}
     return c;
+    } else {
+        return '0';
+    }
 }
 
 function numberToCurrency2(a){
@@ -247,13 +251,17 @@ function numberToCurrency2(a){
 }
 
 function currencyToNumber(a) {
-    var b=a.toString();
-    var c='';
-    if(a!==''){
-        c=b.replace(/\.+/g, '');
+    if (!isNaN(a)) {
+        var b=a.toString();
+        var c='';
+        if(a!==''){
+            c=b.replace(/\.+/g, '');
+        }
+        return parseFloat(c);
+    } else {
+        return 0;
     }
     
-    return parseFloat(c);
 }
 
 function formatNumber(obj) {
