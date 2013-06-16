@@ -945,6 +945,7 @@ class Referensi extends CI_Controller {
                 $update['barang'] = $add;
                 $search['id'] = $this->input->post('id_barang');
                 $this->m_referensi->barang_edit_data($update, 'non obat');
+                $this->m_referensi->kemasan_barang_save_edit($search['id']);
                 $data = $this->get_barang_list($limit, $page, 1, 'Non Obat', $search);
                 $this->load->view('referensi/barang/list_non_obat', $data);
                 break;
@@ -1067,6 +1068,13 @@ class Referensi extends CI_Controller {
         $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
         $data['list_data'] = $this->m_referensi->load_data_edit_kemasan($id_barang)->result();
         $this->load->view('referensi/barang/packing-table', $data);
+    }
+    
+    function load_data_edit_kemasan_nb($id_barang) {
+        $data['satuan'] = $this->m_referensi->satuans_get_data(null);
+        $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
+        $data['list_data'] = $this->m_referensi->load_data_edit_kemasan($id_barang)->result();
+        $this->load->view('referensi/barang/packing-nb-table', $data);
     }
     
     /* Barang */

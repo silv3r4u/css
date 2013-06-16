@@ -4,7 +4,7 @@
         $('#form_non').tabs();
         $('#keys').watermark('Search ...');
         $('#add_kemasan').button({icons: {primary: "ui-icon-circle-plus"}}).click(function() {
-            var jml = $('.rowx').length;
+            var jml = $('.rowx').length+1;
             add_kemasan(jml);
         });
         $( "#addnewrow" ).button({icons: {primary: "ui-icon-newwin"}});
@@ -16,7 +16,7 @@
         $('#form_non').dialog({
             autoOpen: false,
             height: 360,
-            width: 770,
+            width: 765,
             modal: true,
             buttons: {
                 "Simpan": function() {
@@ -30,6 +30,7 @@
                 reset_all();
             },
             open : function(){
+                $('.kemasanx tbody').html('');
                 add_kemasan(0);
             }
         });        
@@ -275,6 +276,41 @@
         }
     }
     
+    function set_harga_jual_nb(i) {
+        var hna = currencyToNumber($('#hna_nb').val());
+        if (isNaN(hna)) {
+            var hna = 0;
+        }
+        var isi = parseInt($('#isi_nb'+i).val());
+        if (isNaN(isi)) {
+            var isi = 0;
+        }
+        
+        var margin = parseInt($('#margin_nb'+i).val())/100;
+        var diskon = parseInt($('#diskon_nb'+i).val())/100;
+        var harga_jual = (hna*(margin+1))-((hna*(margin+1))*diskon);
+        $('#harga_jual_nb'+i).val(numberToCurrency(parseInt(harga_jual*isi)));
+        //alert(harga_jual*isi);
+        //($data->hna+($data->hna*$data->margin/100)) - (($data->hna+($data->hna*$data->margin/100))*($data->diskon/100));
+    }
+
+    function set_margin_nb(i) {
+        var hna = currencyToNumber($('#hna_nb').val());
+        var harga_jual = currencyToNumber($('#harga_jual_nb'+i).val());
+        var diskon = parseInt($('#diskon_nb'+i).val())/100;
+        var isi = parseInt($('#isi_nb'+i).val());
+        var satu = harga_jual/isi;
+        var dua  = satu - (hna-(hna*diskon));
+        var tiga = (dua/hna)*100;
+        var margin = tiga;
+        var hsl = margin;
+        if (isNaN(margin)) {
+            hsl = '';
+        }
+        //alert(hna+' - '+harga_jual+' - '+diskon+' - '+margin);
+        $('#margin_nb'+i).val(hsl);
+    }
+    
     function edit_non(arr){
         var data = arr.split("#");
         $('input[name=id_barang]').val(data[0]);
@@ -293,19 +329,26 @@
         $('input[name=tipe]').val('edit');
         $('#form_non').dialog("option",  "title", "Edit Data Master Barang Non Obat");
         $('#form_non').dialog("open");
+        $.ajax({
+            url: '<?= base_url('referensi/load_data_edit_kemasan_nb') ?>/'+data[0],
+            cache: false,
+            success: function(data) {
+                $('.kemasanx tbody').html(data);
+            }
+        });
     }
     function add_kemasan(i) {
         var str = '<tr class=rowx>'+
                 '<td><input type=hidden name=id_kemasan[] value="" /><input type=text name=barcode[] size=10 style="min-width: 100px;" /></td>'+
                 '<td><select name="kemasan[]" style="min-width: 120px;"><option value="">Pilih kemasan ...</option><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td>'+
-                '<td><input type=text name=isi[] size=10 class=isi id=isi'+i+' onkeyup=set_harga_jual('+i+') style="min-width: 100px;" /></td>'+
+                '<td><input type=text name=isi[] size=10 class=isi id=isi_nb'+i+' onkeyup=set_harga_jual('+i+') style="min-width: 100px;" /></td>'+
                 '<td><select name="satuan_kecil[]" style="min-width: 120px;"><option value="">Pilih satuan ...</option><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td>'+
-                '<td align="center"><input type=text name=margin[] size=5 onkeyup=set_harga_jual('+i+') value="0" id=margin'+i+' style="min-width: 50px;" /></td>'+
-                '<td align="center"><input type=text name=diskon[] size=5 onkeyup=set_harga_jual('+i+') value="0" id=diskon'+i+' style="min-width: 50px;" /></td>'+
-                '<td align="right" id="hj'+i+'"><input type=text name=harga_jual[] size=5 onblur=FormNum(this) value="0" onkeyup=set_margin('+i+') style="min-width: 50px;" id=harga_jual'+i+' /></td>'+
+                '<td align="center"><input type=text name=margin[] size=5 onkeyup=set_harga_jual_nb('+i+') value="0" id=margin_nb'+i+' style="min-width: 50px;" /></td>'+
+                '<td align="center"><input type=text name=diskon[] size=5 onkeyup=set_harga_jual_nb('+i+') value="0" id=diskon_nb'+i+' style="min-width: 50px;" /></td>'+
+                '<td align="right" id="hj'+i+'"><input type=text name=harga_jual[] size=5 onblur=FormNum(this) value="0" onkeyup=set_margin_nb('+i+') style="min-width: 50px;" id=harga_jual_nb'+i+' /></td>'+
                 '<td><input type=button value="delete" onclick=eliminate(this,"") /></td>'+
             '</tr>';
-        $('.kemasan tbody').append(str);
+        $('.kemasanx tbody').append(str);
     }
 </script>
 
@@ -314,13 +357,14 @@
     <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=keys size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
     <br/><br/>
 <div id="form_non" style="display: none;position: static; background: #fff; padding: 10px;">
+    <?= form_open('', 'id=formnon') ?>
     <ul>
         <li><a href="#tabs-1">Atribut Obat</a></li>
         <li><a href="#tabs-2">Kemasan Barang & Adm. Harga</a></li>
     </ul>
     <div id="tabs-1">
     <div class="msg" id="msg_non"></div>
-    <?= form_open('', 'id=formnon') ?>
+    
     <?= form_hidden('tipe') ?>
     <?= form_hidden('id_barang', '', 'id=id_barang') ?>
     <table width="100%">
@@ -354,7 +398,7 @@
     </table>
     </div>
     <div id="tabs-2">
-        <table class="tabel kemasan" width="100%">
+        <table class="tabel kemasanx" width="100%">
             <thead>
                 <tr>
                     <th width="15%">Barcode</th>

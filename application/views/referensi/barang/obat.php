@@ -381,12 +381,17 @@
         var hna = currencyToNumber($('#hna').val());
         var harga_jual = currencyToNumber($('#harga_jual'+i).val());
         var diskon = parseInt($('#diskon'+i).val())/100;
-        var margin = (harga_jual - (hna+(hna*diskon)))/(hna - (hna*diskon));
+        var isi = parseInt($('#isi'+i).val());
+        var satu = harga_jual/isi;
+        var dua  = satu - (hna-(hna*diskon));
+        var tiga = (dua/hna)*100;
+        var margin = tiga;
         var hsl = margin;
+        var margin = (harga_jual - (hna+(hna*diskon)))/(hna - (hna*diskon));
         if (isNaN(margin)) {
             hsl = '';
         }
-        $('#margin'+i).val(hsl*100);
+        $('#margin'+i).val(hsl);
     }
     
     function eliminate(el, id) {
@@ -432,7 +437,7 @@
 <div style="margin-bottom: 2px; float: right;"><?= form_input('barang_cari', null, 'id=key size=10 style="padding: 4px 5px 5px 5px; min-width: 200px;"') ?></div>
 <br/><br/>
 <div id="form_obat" style="display: none;" class="data-input">
-    <?= form_open_multipart('', 'id=formobat') ?>
+    <?= form_open('', 'id=formobat') ?>
     <ul>
         <li><a href="#tabs-1">Atribut Obat</a></li>
         <li><a href="#tabs-2">Kemasan Obat & Adm. Harga</a></li>
