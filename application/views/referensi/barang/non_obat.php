@@ -3,6 +3,10 @@
     $(function(){
         $('#form_non').tabs();
         $('#keys').watermark('Search ...');
+        $('#add_kemasan').button({icons: {primary: "ui-icon-circle-plus"}}).click(function() {
+            var jml = $('.rowx').length;
+            add_kemasan(jml);
+        });
         $( "#addnewrow" ).button({icons: {primary: "ui-icon-newwin"}});
         $('input[type=submit]').each(function(){ $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');});
         $('button[type=submit]').button({icons: {primary: 'ui-icon-circle-check'}});
@@ -12,7 +16,7 @@
         $('#form_non').dialog({
             autoOpen: false,
             height: 360,
-            width: 600,
+            width: 770,
             modal: true,
             buttons: {
                 "Simpan": function() {
@@ -26,7 +30,7 @@
                 reset_all();
             },
             open : function(){
-                
+                add_kemasan(0);
             }
         });        
         $('#carinonobat').dialog({
@@ -289,6 +293,19 @@
         $('input[name=tipe]').val('edit');
         $('#form_non').dialog("option",  "title", "Edit Data Master Barang Non Obat");
         $('#form_non').dialog("open");
+    }
+    function add_kemasan(i) {
+        var str = '<tr class=rowx>'+
+                '<td><input type=hidden name=id_kemasan[] value="" /><input type=text name=barcode[] size=10 style="min-width: 100px;" /></td>'+
+                '<td><select name="kemasan[]" style="min-width: 120px;"><option value="">Pilih kemasan ...</option><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td>'+
+                '<td><input type=text name=isi[] size=10 class=isi id=isi'+i+' onkeyup=set_harga_jual('+i+') style="min-width: 100px;" /></td>'+
+                '<td><select name="satuan_kecil[]" style="min-width: 120px;"><option value="">Pilih satuan ...</option><?php foreach ($kemasan as $rows) { echo '<option value="'.$rows->id.'">'.$rows->nama.'</option>'; } ?></select></td>'+
+                '<td align="center"><input type=text name=margin[] size=5 onkeyup=set_harga_jual('+i+') value="0" id=margin'+i+' style="min-width: 50px;" /></td>'+
+                '<td align="center"><input type=text name=diskon[] size=5 onkeyup=set_harga_jual('+i+') value="0" id=diskon'+i+' style="min-width: 50px;" /></td>'+
+                '<td align="right" id="hj'+i+'"><input type=text name=harga_jual[] size=5 onblur=FormNum(this) value="0" onkeyup=set_margin('+i+') style="min-width: 50px;" id=harga_jual'+i+' /></td>'+
+                '<td><input type=button value="delete" onclick=eliminate(this,"") /></td>'+
+            '</tr>';
+        $('.kemasan tbody').append(str);
     }
 </script>
 

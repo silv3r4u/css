@@ -862,6 +862,11 @@ class Referensi extends CI_Controller {
             }
         }
         $data['kategori'] = $kat;
+        $data['satuan'] = $this->m_referensi->satuans_get_data(null);
+        $data['sediaan'] = $this->m_referensi->sediaan_get_data(null);
+        $data['admr'] = $this->m_referensi->adm_r_get_data(null);
+        $data['perundangan'] = $this->m_referensi->perundangan_get_data(null);
+        $data['kemasan'] = $this->m_referensi->satuan_get_data(null);
         $this->load->view('referensi/barang/non_obat', $data);
     }
 
@@ -922,6 +927,7 @@ class Referensi extends CI_Controller {
             case 'add':
                 $insert['barang'] = $add;
                 $search['id'] = $this->m_referensi->barang_add_data($insert, 'non obat');
+                $this->m_referensi->kemasan_barang_save($search['id']);
                 $data = $this->get_barang_list($limit, $page, 1, 'Non Obat', $search);
                 $cek = $this->db->query("select count(*) as jumlah from barang")->row();
                 if ($cek->jumlah == 15) {
