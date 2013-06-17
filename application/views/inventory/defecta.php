@@ -43,25 +43,30 @@
         $('#showchart').click(function() {
             $('#loaddata').load('<?= base_url('inventory/rencana_pemesanan') ?>');
         });
-        $('#form_defecta').submit(function() {
+       $( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
             var data = $('.check').is(':checked');
             if (data === false) {
                 alert('Pilih salah satu barang !');
             } else {
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= base_url('inventory/save_defecta') ?>/',
-                    data: $(this).serialize(),
-                    cache: false,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.status === true) {
-                            alert_tambah();
-                        } else {
-                            alert('Failed to process transaction !');
-                        }
-                    }
-                });
+//                $.ajax({
+//                    type: 'POST',
+//                    url: '<?= base_url('inventory/save_defecta') ?>/',
+//                    data: $('input:checked').serialize(),
+//                    cache: false,
+//                    dataType: 'json',
+//                    success: function(data) {
+//                        alert_tambah();
+//                        $('#loaddata').load('<?= base_url('inventory/defecta') ?>');
+//                    }
+//                });
+                    var data = { 'id_pb[]' : []};
+                    $("input:checked").each(function() {
+                        data['id_pb[]'].push($(this).val());
+                    });
+                    $.post("<?= base_url('inventory/save_defecta') ?>", data, 'json');
+                    alert_tambah();
+                    $('#loaddata').load('<?= base_url('inventory/defecta') ?>');
             }
             return false;
         });
@@ -89,7 +94,7 @@
                 $supp = $this->m_inventory->get_last_distributor($data->barang_packing_id)->row();
                 ?>
                 <tr class="tr_row" id="listdata<?= $key ?>">
-                    <td align="center"><?= form_checkbox('id_pb[]', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>
+                    <td align="center"><?= form_checkbox('id_pb', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>
                     <td align="center"><?= ++$key ?></td>
                     <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
                     <td><?= isset($supp->suplier)?$supp->suplier:NULL ?></td>

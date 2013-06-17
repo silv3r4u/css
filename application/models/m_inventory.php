@@ -2217,9 +2217,19 @@ class M_inventory extends CI_Model {
                     'jumlah' => '1'
                 );
                 $this->db->insert('defecta', $datas);
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                }
             }
         }
-        $result['status'] = TRUE;
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $status = FALSE;
+        } else {
+            $this->db->trans_commit();
+            $status = TRUE;
+        }
+        $result['status'] = $status;
         return $result;
     }
     
