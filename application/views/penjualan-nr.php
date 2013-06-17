@@ -14,13 +14,15 @@ function eliminate(el, j) {
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_barang').attr('id','id_barang'+i);
         $('.tr_row:eq('+i+')').children('td:eq(2)').children('.ed').attr('id','exp'+i);
         $('.tr_row:eq('+i+')').children('td:eq(2)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.subttl').attr('id','subttl'+i);
         $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','unit'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.diskon').attr('id','diskon'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(8)').children('.disc').attr('id','disc'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.harga_jual').attr('id','harga_jual'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','sisa'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(7)').children('.diskon').attr('id','diskon'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(8)').attr('id','subtotal'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(9)').children('.disc').attr('id','disc'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(9)').children('.harga_jual').attr('id','harga_jual'+i);
         if ($('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').val() === '') {
             $('.tr_row:eq('+i+')').remove();
         }
@@ -36,6 +38,7 @@ function add(i) {
                 '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input id=id_barang'+i+' class=id_barang name=id_barang[] type=hidden /> </td>'+
                 '<td><input type=hidden name=ed[] id=exp'+i+' class=ed /><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() onblur=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
                 '<td id=unit'+i+' align=right><select style="width: 100%;"></select></td>'+
+                '<td id=sisa'+i+' align=center></td>'+
                 '<td id=ed'+i+' align=center></td>'+
                 '<td id=hj'+i+' align=right></td>'+
                 '<td align=center><input type=text name=diskon[] id=diskon'+i+' class=diskon size=10 onkeyup=subTotal() /></td>'+
@@ -45,6 +48,16 @@ function add(i) {
     $('.form-inputan tbody').append(str);
     var lebar = $('#pb'+i).width();
     $('#jl'+i).live('keydown', function(e) {
+        if (e.keyCode === 13) {
+            $('#kemasan'+i).focus();
+        }
+    });
+    $('#kemasan'+i).live('keydown', function(e) {
+        if (e.keyCode === 13) {
+            $('#diskon'+i).focus();
+        }
+    });
+    $('#diskon'+i).live('keydown', function(e) {
         if (e.keyCode === 13) {
             $('#pb'+(i+1)).focus();
         }
@@ -85,6 +98,7 @@ function add(i) {
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
+        $('#jl'+i).focus();
         var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
         if (data.isi !== '1') { var isi = '@ '+data.isi; }
         if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
@@ -107,6 +121,7 @@ function add(i) {
         $('#ed'+i).html(datefmysql(data.ed));
         $('#exp'+i).val(data.ed);
         $('#id_barang'+i).val(data.id_barang);
+        $('#sisa'+i).html(data.sisa);
         $('#kekuatan'+i).html(data.kekuatan);
         var id_barang = data.barang_id;
         $.ajax({
@@ -129,7 +144,7 @@ function add(i) {
                 subTotal(i);
             }
         });
-        $('#jl'+i).val('1').focus();
+        
         var jml = $('.tr_row').length;
         if (jml - i === 1) {
             add(jml);
@@ -495,6 +510,7 @@ $(function() {
                 <th width="35%">Barang</th>
                 <th width="10%">Jumlah</th>
                 <th width="10%">Unit Kemasan</th>
+                <th width="10%">Sisa</th>
                 <th width="7%">ED</th>
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>

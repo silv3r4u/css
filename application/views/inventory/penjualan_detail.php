@@ -127,7 +127,7 @@
     <?= form_close() ?>
 </div>
 <script>
-    $('#total-diskon').html(numberToCurrency(<?= $total_diskon ?>));
-    $('#total').html(numberToCurrency(<?= $total_diskon+$rows->total+$biaya_apoteker->jasa ?>));
+    $('#total-diskon').html(numberToCurrency(parseInt(<?= $total_diskon ?>)));
+    $('#total').html(numberToCurrency(parseInt(<?= $total_diskon+$rows->total+$biaya_apoteker->jasa ?>)));
     //subTotal();
 </script>

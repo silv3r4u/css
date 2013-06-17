@@ -10,12 +10,16 @@ function eliminate(el) {
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.pb').attr('id','pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').attr('id','id_pb'+i);
         $('.tr_row:eq('+i+')').children('td:eq(1)').children('.ed').attr('id','exp'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(2)').attr('id','ed'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','hj'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','diskon'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.jl').attr('id','jl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(2)').children('.subttl').attr('id','subttl'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(3)').attr('id','ed'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(4)').attr('id','hj'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','diskon'+i);
         $('.tr_row:eq('+i+')').children('td:eq(5)').attr('id','sisa'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(6)').children('.jl').attr('id','jl'+i);
-        $('.tr_row:eq('+i+')').children('td:eq(7)').attr('id','subtotal'+i);
+        $('.tr_row:eq('+i+')').children('td:eq(6)').attr('id','subtotal'+i);
+        if ($('.tr_row:eq('+i+')').children('td:eq(1)').children('.id_pb').val() === '') {
+            $('.tr_row:eq('+i+')').remove();
+        }
     }
     subTotal();
 }
@@ -24,11 +28,11 @@ function add(i) {
      str = '<tr class=tr_row>'+
         '<td><input type=text name=nr[] id=bc'+i+' class=bc size=20 /></td>'+
         '<td><input type=text name=dr[] id=pb'+i+' class=pb size=60 /><input type=hidden name=id_pb[] id=id_pb'+i+' class=id_pb /><input type=hidden name=ed[] id=exp'+i+' class=ed /></td>'+
+        '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=ed'+i+' align=center></td>'+
         '<td id=hj'+i+' align=right></td>'+
         '<td align=center id=diskon'+i+'></td>'+
         '<td id=sisa'+i+' align=center></td>'+
-        '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=subtotal'+i+' align="right"></td>'+
         '<td class=aksi><span class=delete onclick=eliminate(this)><img src="<?= base_url('assets/images/icons/delete.gif') ?>" /></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
     '</tr>';
@@ -66,6 +70,7 @@ function add(i) {
                         $('#harga_jual'+i).val(data.harga);
                         $('#disc'+i).val(data.diskon);
                         $('#diskon'+i).html(data.diskon);
+                        $('#sisa'+i).html(data.sisa);
                         $('#jl'+i).val('1');
                         subTotal(i);
                         var jml = $('.tr_row').length;
@@ -88,6 +93,11 @@ function add(i) {
                 }
             });
             return false;
+        }
+    });
+    $('#jl'+i).live('keydown', function(e) {
+        if (e.keyCode === 13) {
+            $('#pb'+(i+1)).focus();
         }
     });
     var lebar = $('#pb'+i).width();
@@ -147,6 +157,7 @@ function add(i) {
         $('#kekuatan'+i).html(data.kekuatan);
         $('#exp'+i).val(data.ed);
         $('#ed'+i).html(datefmysql(data.ed));
+        $('#sisa'+i).html(data.sisa);
         var id_packing = data.id;
         $.ajax({
             url: '<?= base_url('inv_autocomplete/get_harga_jual') ?>',
@@ -158,7 +169,12 @@ function add(i) {
                 $('#harga_jual'+i).val(msg.harga);
                 $('#disc'+i).val(msg.diskon);
                 $('#diskon'+i).html(msg.diskon);
-                //subTotal(i);
+                var jml = $('.tr_row').length;
+                //alert(jml+' - '+i)
+                if (jml - i === 1) {
+                    add(jml);
+                }
+                $('#jl'+i).focus();
             }
         });
     });
@@ -611,11 +627,12 @@ $(function() {
             <tr>
                 <th width="10%">Barcode</th>
                 <th width="33%">Kemasan Barang</th>
+                <th width="5%">Jumlah</th>
                 <th width="15%">ED</th>
                 <th width="10%">Harga Jual</th>
                 <th width="7%">Diskon</th>
                 <th width="7%">Sisa Stok</th>
-                <th width="5%">Jumlah</th>
+                
                 <th width="10%">SubTotal</th>
                 <th width="10%">#</th>
             </tr>
@@ -636,16 +653,17 @@ $(function() {
                             $alert = "style=background:red";
                         }
                         ?>
-                        <tr <?= $alert ?> class="tr_row <?= ($key%2==0)?'odd':'even' ?>">
+                        <tr <?= $alert ?> class="tr_row">
                             <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
                             <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
-                                <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" /></td>
+                                <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" />
                                 <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" />
+                            </td>    
+                            <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
                             <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
                             <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
                             <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
                             <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
-                            <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
                             <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
 
                             <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>

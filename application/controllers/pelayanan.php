@@ -73,7 +73,7 @@ class Pelayanan extends CI_Controller {
         $data['jenis'] = '';
         $data['apt'] = $this->configuration->rumah_sakit_get_atribute()->row();
         
-        $data['penjualan'] = $this->m_resep->kitir_load_data($id_resep)->result();
+        $data['penjualan'] = $this->m_resep->nota_load_data($id_resep)->result();
         $this->load->view('inventory/print/kitir', $data);
     }
     

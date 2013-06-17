@@ -19,13 +19,13 @@ foreach ($list_data as $key => $data) {
     <tr <?= $alert ?> class="tr_row">
         <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
         <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
-            <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" /></td>
-            <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" />
+            <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" />
+            <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" /></td>
+        <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
         <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
         <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
         <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
         <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
-        <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
         <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
         
         <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>

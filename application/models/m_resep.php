@@ -78,14 +78,14 @@ class M_resep extends CI_Model {
         $sql = "select pj.ppn, pj.total, pj.bayar, pj.pembulatan, rr.resep_id, td.transaksi_id, td.hna, td.hpp, pj.bayar, pj.id as id_penjualan, rrr.pakai_jumlah as keluar, td.ed, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
             o.kekuatan, r.nama as pabrik, td.jual_diskon_percentage, td.h_jual, td.subtotal, pdd.member as diskon_member, s.nama as satuan, sd.nama as sediaan, pdk.nama as pegawai, pdd.nama as pasien, pdd.nama, rs.pasien_penduduk_id
             from resep rs
-            join resep_r rr on (rs.id = rr.resep_id)
-            join resep_racik_r_detail rrr on (rr.id = rrr.r_resep_id)
+            left join resep_r rr on (rs.id = rr.resep_id)
+            left join resep_racik_r_detail rrr on (rr.id = rrr.r_resep_id)
             left join penjualan pj on (pj.resep_id = rs.id)
             left join transaksi_detail td on (rrr.barang_packing_id = td.barang_packing_id)
             left join penduduk pdd on (pdd.id = rs.pasien_penduduk_id)
             left join penduduk pdk on (pdk.id = rs.dokter_penduduk_id)
-            join barang_packing bp on (td.barang_packing_id = bp.id)
-            join barang b on (b.id = bp.barang_id)
+            left join barang_packing bp on (td.barang_packing_id = bp.id)
+            left join barang b on (b.id = bp.barang_id)
             left join obat o on (o.id = b.id)
             left join satuan s on (s.id = o.satuan_id)
             left join satuan st on (st.id = bp.terkecil_satuan_id)
@@ -94,6 +94,32 @@ class M_resep extends CI_Model {
                 select barang_packing_id, max(id) as id_max from transaksi_detail group by barang_packing_id
             ) tm on (tm.barang_packing_id = td.barang_packing_id and tm.id_max = td.id)
             left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id) $q";
+        //echo "<pre>".$sql."</pre>";
+        return $this->db->query($sql);
+    }
+    
+    function nota_load_data($id_resep = NULL) {
+        $q = null;
+        if ($id_resep != null) {
+            $q.="where rs.id = '$id_resep'";
+        }
+        $sql = "select pj.ppn, rs.id as resep_id, pj.total, pj.bayar, pj.pembulatan, td.transaksi_id, td.hna, td.hpp, pj.bayar, pj.id as id_penjualan, td.keluar, td.ed, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
+            o.kekuatan, r.nama as pabrik, td.jual_diskon_percentage, td.h_jual, td.subtotal, pdd.member as diskon_member, s.nama as satuan, sd.nama as sediaan, pdk.nama as pegawai, pdd.nama as pasien, pdd.nama, rs.pasien_penduduk_id
+            from penjualan pj
+            left join transaksi_detail td on (pj.id = td.transaksi_id)
+            left join resep rs on (pj.resep_id = rs.id)
+            left join penduduk pdd on (pdd.id = rs.pasien_penduduk_id)
+            left join penduduk pdk on (pdk.id = rs.dokter_penduduk_id)
+            left join barang_packing bp on (td.barang_packing_id = bp.id)
+            left join barang b on (b.id = bp.barang_id)
+            left join obat o on (o.id = b.id)
+            left join satuan s on (s.id = o.satuan_id)
+            left join satuan st on (st.id = bp.terkecil_satuan_id)
+            left join sediaan sd on (sd.id = o.sediaan_id)
+            inner join (
+                select barang_packing_id, max(id) as id_max from transaksi_detail group by barang_packing_id
+            ) tm on (tm.barang_packing_id = td.barang_packing_id and tm.id_max = td.id)
+            left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id) $q and td.transaksi_jenis = 'Penjualan'";
         //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);
     }

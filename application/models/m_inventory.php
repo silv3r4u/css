@@ -2181,6 +2181,17 @@ class M_inventory extends CI_Model {
         return $this->db->query($sql);
     }
     
+    function get_last_distributor($id) {
+        $sql = "select r.nama as suplier from transaksi_detail td
+            join pembelian p on (td.transaksi_id = p.id)
+            join relasi_instansi r on (p.suplier_relasi_instansi_id = r.id)
+            inner join (
+                select barang_packing_id, max(id) as id_max from transaksi_detail GROUP BY barang_packing_id
+            ) tm on (tm.barang_packing_id = td.barang_packing_id and tm.id_max = td.id)
+            where td.barang_packing_id = '$id'";
+        return $this->db->query($sql);
+    }
+    
     function save_defecta($id = null) {
         $this->db->trans_begin();
         if ($id != NULL) {
