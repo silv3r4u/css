@@ -2206,6 +2206,7 @@ class M_inventory extends CI_Model {
             $this->db->insert('defecta', $datas);
         } else {
             $id_pb = $this->input->post('id_pb');
+            
             foreach ($id_pb as $data) {
                 $rows = $this->db->query("select p.suplier_relasi_instansi_id, td.hpp from pembelian p join transaksi_detail td on (p.id = td.transaksi_id) where td.transaksi_jenis = 'Pembelian' and td.barang_packing_id = '$data' order by td.waktu desc limit 1")->row();
                 $hpp  = $this->db->query("select hpp from transaksi_detail where barang_packing_id = '$data' and transaksi_jenis != 'Pemesanan' order by waktu desc limit 1")->row();
@@ -2216,19 +2217,9 @@ class M_inventory extends CI_Model {
                     'jumlah' => '1'
                 );
                 $this->db->insert('defecta', $datas);
-                if ($this->db->trans_status() === FALSE) {
-                    $this->db->trans_rollback();
-                }
             }
         }
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            $status = FALSE;
-        } else {
-            $this->db->trans_commit();
-            $status = TRUE;
-        }
-        $result['status'] = $status;
+        $result['status'] = TRUE;
         return $result;
     }
     

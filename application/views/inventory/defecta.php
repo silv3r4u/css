@@ -48,20 +48,20 @@
             if (data === false) {
                 alert('Pilih salah satu barang !');
             } else {
-//                $.ajax({
-//                    type: 'POST',
-//                    url: '<?= base_url('inventory/save_defecta') ?>/',
-//                    data: $('#form_defecta').serialize(),
-//                    cache: false,
-//                    dataType: 'json',
-//                    success: function(data) {
-//                        if (data.status === true) {
-//                            alert_tambah();
-//                        } else {
-//                            alert('Failed to process transaction !');
-//                        }
-//                    }
-//                });
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= base_url('inventory/save_defecta') ?>/',
+                    data: $(this).serialize(),
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status === true) {
+                            alert_tambah();
+                        } else {
+                            alert('Failed to process transaction !');
+                        }
+                    }
+                });
             }
             return false;
         });
@@ -84,12 +84,12 @@
             </thead>
             <tbody>
                 <?php 
-                echo form_open('', 'id=form_defecta');
+                echo form_open('', 'id=form_defecta name=form_defecta');
                 foreach ($list_data as $key => $data) { 
                 $supp = $this->m_inventory->get_last_distributor($data->barang_packing_id)->row();
                 ?>
                 <tr class="tr_row" id="listdata<?= $key ?>">
-                    <td align="center"><?= form_checkbox('id_pb', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>
+                    <td align="center"><?= form_checkbox('id_pb[]', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>
                     <td align="center"><?= ++$key ?></td>
                     <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
                     <td><?= isset($supp->suplier)?$supp->suplier:NULL ?></td>
