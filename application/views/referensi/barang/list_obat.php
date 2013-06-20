@@ -22,10 +22,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <tr>
         <th width="5%"><h3>No.</h3> </th>
         <th width="25%"><h3>Nama</h3> </th>
-<!--        <th width="8%"><h3>HNA</h3></th>
+        <th width="8%"><h3>HNA</h3></th>
         <th width="8%"><h3>HV (Rp.)</h3></th>
         <th width="8%"><h3>OWA (Rp.)</h3></th>
-        <th width="10%"><h3>H.Resep (Rp.)</h3></th>-->
+        <th width="10%"><h3>H.Resep (Rp.)</h3></th>
         <th width="10%">Lokasi Rak</th>
         <th width="8%"><h3>Kekuatan</h3></th>
         <th width="8%"><h3>Sediaan</h3></th>
@@ -46,10 +46,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td></td>
-<!--                <td></td>
                 <td></td>
                 <td></td>
-                <td></td>-->
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -74,10 +74,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
             <tr class="<?= ($key % 2 == 1) ? 'even' : 'odd' ?>">
                 <td align="center"><?= (++$key+$start) ?></td>
                 <td class="no-wrap"><?= $rows->nama ?></td>
-<!--                <td align="right"><?= rupiah($rows->hna) ?></td>
+                <td align="right"><?= rupiah($rows->hna) ?></td>
                 <td align="right"><?= rupiah($hv) ?></td>
                 <td align="right"><?= rupiah($owa) ?></td>
-                <td align="right"><?= rupiah($resep) ?></td>-->
+                <td align="right"><?= rupiah($resep) ?></td>
                 <td align="center"><?= $rows->lokasi_rak ?></td>
                 <td align="center"><?= $rows->kekuatan ?></td>
                 <td><?= $rows->sediaan ?></td>
