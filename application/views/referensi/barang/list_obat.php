@@ -87,7 +87,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td><?= $rows->kandungan ?></td>
                 <td><?= $rows->indikasi ?></td>
                 <td><?= $rows->dosis ?></td>
-                <td class="aksi" align="center"> 
+                <td class="aksi" align="center">       
                     <?php
                     $str = $rows->id . "#" . $rows->nama
                             . "#" . $rows->id_pabrik . "#" . $rows->pabrik
