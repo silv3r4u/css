@@ -47,7 +47,7 @@
                         '</tr>'+
                         '<tr>'+
                             '<td width=15%>Diskon Penjualan (%):</td>'+
-                            '<td><input type=text name=diskon_penjualan id=diskon_penjualan size=5 /></td>'+
+                            '<td><input type=text name=diskon_penjualan id=diskon_penjualan size=5 /> (Khusus Instansi Jenis Bank)</td>'+
                         '</tr>'+
                         '<tr>'+
                             '<td>Diskon Supplier:</td>'+

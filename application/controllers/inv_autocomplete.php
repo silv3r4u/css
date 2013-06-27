@@ -315,6 +315,12 @@ class Inv_autocomplete extends CI_Controller {
         $data = $this->m_inv_autocomplete->load_data_resep($id)->row();
         die(json_encode($data));
     }
+    
+    function load_data_asuransi_produk() {
+        $q = $_GET['q'];
+        $data = $this->m_inv_autocomplete->load_data_asuransi_produk($q)->result();
+        die(json_encode($data));
+    }
 }
 
 ?>

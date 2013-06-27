@@ -32,9 +32,9 @@ $("#table").tablesorter({sortList:[[0,0]]});
         <th width="8%"><h3>Adm R</h3></th>
         <th width="10%"><h3>Perundangan</h3></th>
         <th width="10%"><h3>Generik</h3></th>
-        <th width="25%"><h3>Kandungan</h3></th>
-        <th width="25%"><h3>Indikasi</h3></th>
-        <th width="25%"><h3>Dosis</h3></th>
+        <th width="10%"><h3>Kandungan</h3></th>
+        <th width="10%"><h3>Indikasi</h3></th>
+        <th width="10%"><h3>Dosis</h3></th>
         <th width="10%"><h3>Aksi</h3></th>
     </tr>
     </thead>
@@ -96,7 +96,7 @@ $("#table").tablesorter({sortList:[[0,0]]});
                             . "#" . $rows->perundangan . "#" . $rows->generik . "#" . $rows->formularium
                             . "#" . $rows->indikasi . "#" . $rows->dosis
                             . "#" . $rows->kandungan .'#'. $rows->hna
-                            . "#" . $rows->stok_minimal. "#".$rows->is_konsinyasi."#".$rows->lokasi_rak;
+                            . "#" . $rows->stok_minimal. "#".$rows->is_konsinyasi."#".$rows->lokasi_rak.'#'.$rows->asuransi_produk.'#'.$rows->id_asuransi_produk;
                     ?>
                     <span class="edit" onclick="edit_obat('<?= $str ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_obat('<?= $rows->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>

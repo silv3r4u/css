@@ -141,7 +141,7 @@ function add(i) {
                 $('#harga_jual'+i).val(msg.harga);
                 $('#disc'+i).val(msg.diskon);
                 $('#diskon'+i).val(msg.diskon);
-                subTotal(i);
+                subTotal();
             }
         });
         
@@ -251,6 +251,7 @@ function subTotal() {
         
         var jasa_apt = 0;
         var ppn = $('#ppn').val()/100;
+        
         for (i = 0; i <= jumlah; i++) {
             if ($('#id_pb'+i).val() !== '') {
                 var harga  = currencyToNumber($('#hj'+i).html());

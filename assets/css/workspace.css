@@ -1,4 +1,4 @@
-* { font-family: Arial, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; -webkit-print-color-adjust:exact; }
+* { font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size: 11.5px; -webkit-print-color-adjust:exact; }
 fieldset { border: 1px solid #ccc; }
 #useractive { float:right; position: fixed; right: 80px; top: 9px; color: #fff; border-right: 1px solid #fff; padding-right: 14px;  }
 #useractive .label { text-transform: none; font-style: italic;  }
@@ -94,7 +94,6 @@ a.tab.selected-tab, .buttonsave {
     border:1px solid #82b033;
     display:inline-block;
     color:#ffffff;
-    font-family:arial;
     font-size:15px;
     font-weight:bold;
     padding:6px 24px;
@@ -204,7 +203,7 @@ input[type='text'], input[type='password'], input[type=number], textarea, select
        border:1px solid #82b033;
        display:inline-block;
        color:#ffffff;
-       font-family:arial;
+       
        font-size:15px;
        font-weight:bold;
        padding:3px 24px;
@@ -216,9 +215,9 @@ input[type='text'], input[type='password'], input[type=number], textarea, select
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#c8e08f');
     background:#8cb82b;
 }
-.layout-printer { width: 21.1cm; height: 14cm; padding: 10px; border-radius: 3px;  font-family: "Lucida Sans Unicode";}
+.layout-printer { width: 21.1cm; height: 14cm; padding: 10px; border-radius: 3px; }
 .layout-printer li {  }
-.header-printer td {  font-weight: bold; font-family: "Lucida Sans Unicode"; }
+.header-printer td {  font-weight: bold; }
 .content-printer { margin-top: 10px; }
 .content-printer td {  }
 .content-printer .result td { text-transform: lowercase; }

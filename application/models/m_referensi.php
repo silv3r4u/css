@@ -621,9 +621,11 @@ class M_referensi extends CI_Model {
         foreach ($data['id_produk'] as $k => $val) {
             if ($val != '') {
                 $add = array(
-                    'penduduk_id' => $data['id_penduduk'],
-                    'asuransi_produk_id' => $val,
-                    'polis_no' => $data['no'][$k]
+                    'id_penduduk' => $data['id_penduduk'],
+                    'id_asuransi_produk' => $val,
+                    'no_polish' => $data['no'][$k],
+                    'diskon_persen' => $data['disk_persen'][$k],
+                    'diskon_rupiah' => $data['disk_rupiah'][$k]
                 );
                 $this->db->insert('asuransi_kepesertaan', $add);
             }
@@ -734,13 +736,14 @@ class M_referensi extends CI_Model {
         
 
         $sql = "select o.*, b.*, bp.margin, bp.diskon, bk.nama as kategori, bp.isi, r.id as id_pabrik, 
-        r.nama as pabrik, s.nama as satuan, sd.nama as sediaan from barang b
+        r.nama as pabrik, s.nama as satuan, sd.nama as sediaan, ap.nama as asuransi_produk from barang b
         left join barang_kategori bk on (b.barang_kategori_id = bk.id)
         left join relasi_instansi r on (b.pabrik_relasi_instansi_id = r.id)
         left join obat o on (b.id = o.id)
         left join satuan s on (s.id = o.satuan_id)
         left join barang_packing bp on (b.id = bp.barang_id)
         left join sediaan sd on (sd.id = o.sediaan_id)
+        left join asuransi_produk ap on (ap.id = b.id_asuransi_produk)
         $inner";
         //echo "<pre>".$sql . $q . $limitation."</pre>";
         $query = $this->db->query($sql . $q . $limitation);
@@ -1136,7 +1139,7 @@ class M_referensi extends CI_Model {
         }
 
         $limitation = null;
-        $limitation.="";
+        $limitation.=" limit $start, $limit";
 
         $sql = "select p.*, d.*, d.identitas_no, d.id as id_dp, p.id as penduduk_id, kb.nama as kabupaten, kbt.nama as kabupaten_alamat, pd.nama as pendidikan, pr.nama profesi 
             , dp.no_id from penduduk p
@@ -1152,7 +1155,7 @@ class M_referensi extends CI_Model {
         where d.id is not null";
         $order = ' order by p.nama asc';
 
-
+        //echo $sql . $q . $order . $limitation;
         $query = $this->db->query($sql . $q . $order . $limitation);
         $data['data'] = $query->result();
         $data['jumlah'] = $this->db->query($sql . $q)->num_rows();

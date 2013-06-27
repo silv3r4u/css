@@ -828,7 +828,9 @@ class Referensi extends CI_Controller {
                 $add = array(
                     'id_produk' => $this->input->post('id_produk'), //array
                     'no' => $this->input->post('np'), //array
-                    'id_penduduk' => $this->input->post('id_penduduk')
+                    'id_penduduk' => $this->input->post('id_penduduk'),
+                    'disk_persen' => $this->input->post('disk_persen'),
+                    'disk_rupiah' => $this->input->post('disk_rupiah'),
                 );
 
                 $this->m_referensi->asuransi_kepesertaan_add_data($add);
@@ -991,7 +993,8 @@ class Referensi extends CI_Controller {
             'hna' => currencyToNumber($this->input->post('hna')),
             'stok_minimal' => $this->input->post('stokmin'),
             'is_konsinyasi' => (($this->input->post('konsinyasi') != '')?'1':'0'),
-            'lokasi_rak' => $this->input->post('lokasi_rak')
+            'lokasi_rak' => $this->input->post('lokasi_rak'),
+            'id_asuransi_produk' => $this->input->post('id_asuransi_produk')
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',

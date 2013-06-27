@@ -25,7 +25,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .information { background: url(../images/icons/warning.png) no-repeat left; height: 16px; padding-left: 17px; font-style: italic; }
 .panel-show-hide { position: absolute; color: #fff; }
 @media screen and (min-width: 400px) {
-    #loaddata { background: #efefef; width: 80%; float: right; height: 83%; overflow-y: auto; }
+    #loaddata { background: #efefef; width: 80%; float: right; height: 82%; border-top: 1px solid #333;  overflow-y: auto; }
     #loading { background: #ccc; width: 80%; position: absolute; float: right; height: 83%; overflow-y: auto; right: 0; }
     #useractive { display: block; }
     #jam {position: fixed; top: 87px; right: 10px;}
@@ -34,7 +34,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .logoutbutton:hover { background: #999; cursor: pointer; }
     .logout { padding: 0px; position: absolute; top: 88px; left: 7px; }
     .logout:hover { cursor: pointer; }
-    .mainribbon-min { height: 14%; width: 100%; top: 0; background: #b8d806 url('../images/header.png') no-repeat; }
+    .mainribbon-min { height: 14%; width: 100%; top: 0; background: #b8d806 url('../images/headbang.jpg') no-repeat; }
     .main-menu-user { color:#fff; padding-top: 5px; width:100%; font-size:10px; position: fixed;}
     .menu-detail:hover { overflow-y: auto; }
     .menu-detail { overflow-y: hidden; background: #32373d; color: #000; width: 20%; float: left; height: 83%;}
@@ -64,7 +64,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .logout:hover { cursor: pointer; }
     .mainribbon-min { 
         height: 14%; width: 100%; top: 0;
-        background: url(../images/header.png) no-repat;
+        background: url(../images/headbang.jpg) no-repeat top;
     }
     .main-menu-user { color:#fff; padding-top: 5px; width:100%; font-size:10px; position: fixed;}
     .menu-detail:hover { overflow-y: auto; }
@@ -83,6 +83,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .data-input textarea { height: 30px; float: left; min-width: 300px; border: 1px solid #CCCCCC; }
 
 }
+.logo-apotek { background: url(../images/logofix.png) no-repeat; width: 440px; height: 100px; }
 .info-user { display: inline-block; padding: 10px 0px; color: #fff; width: 100%; }
 .info-user a { color: #edea2b; }
 .info-user a:hover { color: #fff; }

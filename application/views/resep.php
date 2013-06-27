@@ -174,6 +174,7 @@ $(function() {
             var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
             return str;
         },
+        max: 100,
         width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
@@ -200,6 +201,7 @@ $(function() {
             var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
             return str;
         },
+        max: 100,
         width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(

@@ -116,9 +116,33 @@
             $('input[name=id_pabrik_obat]').val(data.id);
             $('input[name=id_pabriks_obat]').val(data.id);
         });
+        $('#asuransi_produk').autocomplete("<?= base_url('inv_autocomplete/load_data_asuransi_produk') ?>",
+        {
+            parse: function(data){
+                var parsed = [];
+                for (var i=0; i < data.length; i++) {
+                    parsed[i] = {
+                        data: data[i],
+                        value: data[i].nama // nama field yang dicari
+                    };
+                }
+                $('input[name=id_pabrik_obat]').val('');
+                return parsed;
+            },
+            formatItem: function(data,i,max){
+                var str = '<div class=result>'+data.nama+'</div>';
+                return str;
+            },
+            width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+            dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+        }).result(
+        function(event,data,formated){
+            $(this).attr('value',data.nama);
+            $('input[name=id_asuransi_produk]').val(data.id);
+        });
         $('#form_obat').dialog({
             autoOpen: false,
-            height: 530,
+            height: 580,
             width: 780,
             modal: true,
             resizable : true,
@@ -330,6 +354,8 @@
         $('#stokmin').val(data[17]);
         $('#konsinyasi').removeAttr('checked');
         $('#lokasi_rak').val(data[19]);
+        $('#asuransi_produk').val(data[20]);
+        $('input[name=id_asuransi_produk]').val(data[21]);
         if (data[18] === '1') {
             $('#konsinyasi').attr('checked','checked');
         }
@@ -507,6 +533,10 @@
         <tr>
             <td align="right">Konsinyasi?:</td>
             <td><?= form_checkbox('konsinyasi', '1', FALSE, 'id=konsinyasi') ?></td>
+        </tr>
+        <tr>
+            <td align="right">Asuransi Produk:</td>
+            <td><?= form_input('', NULL, 'id=asuransi_produk') ?><?= form_hidden('id_asuransi_produk') ?></td>
         </tr>
         <tr>
             <td width="15%"></td>

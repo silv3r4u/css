@@ -529,6 +529,13 @@ class M_inv_autocomplete extends CI_Model {
             order by r.waktu desc";
         return $this->db->query($sql);
     }
+    
+    function load_data_asuransi_produk($q) {
+        $sql = "select r.nama as asuransi, a.* from asuransi_produk a
+                join relasi_instansi r on (a.relasi_instansi_id = r.id)
+                where a.nama like ('%$q%') order by locate('$q',a.nama)";
+        return $this->db->query($sql);
+    }
 }
 
 ?>

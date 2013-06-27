@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/base.css') ?>" media="screen" /> 
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery-ui-1.9.1.custom.css') ?>" media="all" />
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.autocomplete.css') ?>" media="all" />
-        <link rel="stylesheet" href="<?= base_url('assets/js/sorter/style.css') ?>" media="all" />
+        
         
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.8.3.js') ?>"></script>
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.9.2.custom.js') ?>"></script>
