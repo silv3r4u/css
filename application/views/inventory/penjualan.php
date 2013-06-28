@@ -186,6 +186,12 @@ function subTotal() {
         var disc = 0;
         var ppn = $('#ppn').val()/100;
         var jasa_apt = currencyToNumber($('#jasa-apt').html());
+        var vartuslah = currencyToNumber($('#tuslah').val());
+        if (vartuslah >= 0) {
+            tuslah = vartuslah;
+        } else {
+            tuslah = 0;
+        }
         if (isNaN(jasa_apt)) { jasa_apt = 0; } else { var jasa_apt = jasa_apt; }
         for (i = 0; i <= jumlah; i++) {
             var harga = currencyToNumber($('#hj'+i).html());
@@ -224,7 +230,7 @@ function subTotal() {
         //$('#total-tagihan').html(numberToCurrency(tagihan));
         //alert(jasa_apt)
         var totalllica = Math.ceil(tagihan+jasa_apt-disc);
-        var total = totalllica+(totalllica*ppn);
+        var total = totalllica+(totalllica*ppn)+tuslah;
         $('#ppn-hasil').html(numberToCurrency(Math.ceil(tagihan*ppn)));
         $('#total').html(numberToCurrency(Math.ceil(total)));
         $('input[name=total]').val(Math.ceil(total));
@@ -233,8 +239,9 @@ function subTotal() {
         var nominal = currencyToNumber($('#total').html());
         $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
 }
-function setKembali() {
+function setKembali(el) {
         //var apoteker = currencyToNumber($('#jasa-apt').html());
+        //FormNum(el);
         var bayar = currencyToNumber($('#bayar').val());
         var bulat = currencyToNumber($('#bulat').val());
         var kembali = bayar - bulat;
@@ -251,7 +258,7 @@ function setKembali() {
 function pembulatan_seratus(angka) {
     var kelipatan = 100;
     var sisa = angka % kelipatan;
-    if (sisa != 0) {
+    if (sisa !== 0) {
         var kekurangan = kelipatan - sisa;
         var hasilBulat = angka + kekurangan;
         return Math.ceil(hasilBulat);
@@ -269,15 +276,20 @@ function loading() {
 
 function form_open() {
     var str = '<div class="data-input" id="form_pembayaran" title="Pembayaran Penjualan Resep">'+
-        '<table width=100%><tr><td width=30% style="font-size: 18px;">Total (Rp.):</td><td style="font-size: 18px;" id="total_tagihan_penjualan"></td></tr>'+
-        '<tr><td style="font-size: 18px;">Pembulatan(Rp.):</td><td><?= form_input('', null, 'id=bulat style="font-size: 18px;" onkeyup=FormNum(this) ') ?></td></tr>'+
-        '<tr><td style="font-size: 18px;">Bayar (Rp):</td><td><?= form_input('', null, 'id=bayar  style="font-size: 18px;" onkeyup=FormNum(this); onblur=setKembali();') ?></td></tr>'+
-        '<tr><td style="font-size: 18px;">Kembalian (Rp):</td><td id="kembalian" style="font-size: 18px;"></td></tr></table>'+
+        '<table width=100%>'+
+        '<tr><td width=30% style="font-size: 18px;">Total (Rp.):</td><td style="font-size: 18px;" id="total_tagihan_penjualan"></td></tr>'+
+        '<tr><td style="font-size: 18px;">Pembulatan(Rp.):</td><td><?= form_input('', null, 'id=bulat onblur=setKembali(this); onfocus=Angka(this); style="font-size: 18px;"') ?></td></tr>'+
+        '<tr><td style="font-size: 18px;">Bayar (Rp):</td><td><?= form_input('', null, 'id=bayar style="font-size: 18px;" onkeyup=setKembali(this);') ?></td></tr>'+
+        '<tr><td style="font-size: 18px;">Kembalian (Rp):</td><td id="kembalian" style="font-size: 18px;"></td></tr></table><input type=hidden name=total_orig id=total_orig />'+
     '</div>';
     $('#form_penjualan').append(str);
-    $('#total_tagihan_penjualan').html($('#total').html());
-    $('#bulat').val($('#total').html());
-    $('#bayar').focus();
+    $('#bayar').blur(function() {
+        FormNum(this);
+        $('#bulat').val(numberToCurrency($('#bulat').val()));
+    });
+    $('#bayar').focus(function() {
+        Angka(this);
+    });
     $('#form_pembayaran').dialog({
         autoOpen: true,
         modal: true,
@@ -292,10 +304,17 @@ function form_open() {
                 $('#noresep').focus();
             }
         },
+        open: function() {
+            $('#total_tagihan_penjualan').html(currencyToNumber($('#total').html()));
+            $('#bulat').val(currencyToNumber($('#total').html()));
+            $('#bayar').focus();
+            $('#total_orig').val($('input[name=nominal_total]').val());
+        },
         close: function() {
             $(this).dialog().remove();
         }
     });
+    
 }
 
 function searchs() {
@@ -436,6 +455,16 @@ $(function() {
         $('#pasien').html(data.pasien);
         $('input[name=id_pasien]').val(data.no_rm);
         $('input[name=diskon_member]').val(data.diskon);
+        $('input[name=id_produk_asuransi]').val(data.id_produk_asuransi);
+        $('#asuransi').html('-');
+        $('input[name=diskon_persen]').val('');
+        $('input[name=diskon_rupiah]').val('');
+        if (data.asuransi !== null) {
+            $('input[name=diskon_persen]').val(data.diskon_persen);
+            $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
+            $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value=yes style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
+            $('#asuransi').html(data.asuransi+' - '+data.no_polish);
+        }
         //$('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
         var id_resep = data.id;
         $.ajax({
@@ -455,6 +484,47 @@ $(function() {
             }
         });
         $('#ppn').focus();
+    });
+    $('#use_asuransi').live('click', function() {
+        $('input[name=nominal_total]').val(currencyToNumber($('#total').html()));
+        if ($('#use_asuransi').is(':checked')) {
+            var persen = $('input[name=diskon_persen]').val();
+            var rupiah = $('input[name=diskon_rupiah]').val();
+            if (rupiah === '0') {
+                var nilaitotal = currencyToNumber($('#total').html());
+                var total = nilaitotal-(nilaitotal*(persen/100));
+                $('#total').html(numberToCurrency(Math.ceil(total)));
+                $('input[name=total]').val(Math.ceil(total));
+                
+                $('#total_tagihan_penjualan').html($('#total').html());
+                var nominal = currencyToNumber($('#total').html());
+                $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+            }
+            if (persen === '0') {
+                var nilaitotal = currencyToNumber($('#total').html());
+                if (nilaitotal-rupiah <= 0) {
+                    var total = 0;
+                } else {
+                    var total = nilaitotal-rupiah;
+                }
+                
+                $('#total').html(numberToCurrency(Math.ceil(total)));
+                $('input[name=total]').val(Math.ceil(total));
+                
+                $('#total_tagihan_penjualan').html($('#total').html());
+                var nominal = currencyToNumber($('#total').html());
+                $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+            }
+        }
+        else {
+            $.ajax({
+                url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+$('#noresep').val(),
+                cache: false,
+                success: function(msg) {
+                    $('.form-inputan tbody').html(msg);
+                }
+            });
+        }
     });
     $('#tanggal').datetimepicker();
     $('#reset').click(function() {
@@ -550,6 +620,15 @@ $(function() {
             cache: false,
             dataType: 'json',
             success: function(data) {
+                $('#asuransi').html('-');
+                $('input[name=diskon_persen]').val('');
+                $('input[name=diskon_rupiah]').val('');
+                if (data.asuransi !== null) {
+                    $('input[name=diskon_persen]').val(data.diskon_persen);
+                    $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
+                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value=yes style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
+                    $('#asuransi').html(data.asuransi+' - '+data.no_polish);
+                }
                 $('#noresep').val(data.id);
                 $('#display-apt').show();
                 $('input[name=id_resep]').val(data.id);
@@ -594,19 +673,23 @@ $(function() {
     <?= form_hidden('bayar') ?>
     <?= form_hidden('id_pasien', null, 'id=id_pasien') ?>
     <fieldset><legend>Summary</legend>
-        <?= form_hidden('total', null) ?>
+        <?= form_hidden('total') ?>
         <?= form_hidden('jasa_apotek') ?>
         <?= form_hidden('diskon_member') ?>
+        <?= form_hidden('diskon_persen') ?> <?= form_hidden('diskon_rupiah') ?>
+        <?= form_hidden('id_produk_asuransi') ?>
+        <?= form_hidden('nominal_total') ?>
         <div class="left_side" style="min-height: 150px;">
             <table width="100%">
                 <tr><td width="25%">No.:</td><td id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></td></tr>
                 <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
                 <tr><td>No. Resep:</td><td>
-                    <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?> 
-                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?><?= form_button(null, 'Cari', 'id=search onclick="searchs()" style="font-size: 9px;"') ?>
+                    <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?>&nbsp;<img src="<?= base_url('assets/images/icons/detail.png') ?>" id=search onclick="searchs();" style="margin-top: 1px;" />
+                    <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?>
                 <tr><td>Pasien:</td><td id="pasien"><?= isset($rows->pasien)?$rows->pasien:NULL ?></td></tr>
-<!--            <label>Produk Asuransi</label><span id="asuransi" class="label"></span>-->
+                <tr><td>Produk Asuransi:</td><td><span id="checkbox"></span> <span id="asuransi" class="label"></span></td></tr>
             <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+            <tr><td>Tuslah (Rp.):</td><td><?= form_input('tuslah', 0, 'size=10 id=tuslah onblur=FormNum(this); onkeyup=subTotal();') ?></td></tr>
             <tr><td></td><td><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?></td></tr>
             </table>
         </div>

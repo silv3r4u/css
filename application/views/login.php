@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title>CSS - Login</title>
+        <title><?= $title ?></title>
+        <link rel="shortcut icon" href="<?= base_url('assets/images/fav.ico') ?>" />
         <link rel="stylesheet" href="<?= base_url('assets/css/login.css') ?>" />
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.8.3.js') ?>"></script>
         <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.9.2.custom.js') ?>"></script>
@@ -12,67 +13,69 @@
                 }
             });
         });
-        /*"+window.location.hostname+"*/
-        function loginForm(){
-            
-            //$('#login-button').html("<img src='http://"+window.location.hostname+"/simpeg/images/background/loading.gif' alt=''/>Login");
-            $('#username-label').html('Checking Username..');
-            $('#password-label').html('Checking Password..');
-            $('#username-check .loadingbar').fadeIn().animate({'width':'280px'},1000,function(){
-              $(this).children('span').fadeIn();
-            });
-            $('#password-check .loadingbar').delay(500).fadeIn().animate({'width':'280px'},1000,function(){
-                $(this).children('span').fadeIn(function(){
-                    if ($('#username').val() == '') {
-                        $('#username-label').html('Username:');
-                        $('#password-label').html('Password:');
-                        $('#loading').show().html('Username tidak boleh kosong');
-                        $('#username-check .loadingbar,#password-check .loadingbar').fadeOut();
-                        $('#username').focus();
-                        return false;
-                    }
-                    if ($('#password').val() == '') {
-                        $('#username-label').html('Username:');
-                        $('#password-label').html('Password:');
-                        $('#loading').show().html('Password tidak boleh kosong');
-                        $('#username-check .loadingbar,#password-check .loadingbar').fadeOut();
-                        $('#password').focus();
-                        return false;
-                    }
-                    $('#loginform').submit();
-                });
-            });
+        
+        var tit = document.title;
+        var c = 0;
+        function writetitle() {
+            document.title = tit.substring(0,c);
+            if(c===tit.length) {
+                c = 0;
+                setTimeout("writetitle()", 500);
+            }
+            else {
+                c++;
+                setTimeout("writetitle()", 100);
+            }
         }
-
-
+        writetitle();
+        
+        function loginForm() {
+            var Url = '<?= base_url('user/login') ?>';
+                $.ajax({
+                    type : 'POST',
+                    url: Url,               
+                    data: $('#loginform').serialize(),
+                    cache: false,                        
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('.loading').fadeIn();
+                    },
+                    success: function(data) { 
+                        location.reload();
+                    }
+                });
+        }
         </script>
         
     </head>
 <body class="body-login">
-        <div class="transparent">&nbsp;</div>
-        <div class="base-first">
-                <div class="logo">&nbsp;</div>
+        <div class="logo">&nbsp;</div>
+        <div class="informasi">
+            <br/>
+            <p>Manajemen Operasional Bisnis Apotek:</p>
+            <ul>
+                <li><img src="<?= base_url('assets/images/icons/stock.png') ?>" align="center" /> Inventory Barang Obat & Non Obat</li>
+                <li><img src="<?= base_url('assets/images/icons/stock.png') ?>" align="center" /> Pelayanan Obat</li>
+                <li><img src="<?= base_url('assets/images/icons/stock.png') ?>" align="center" /> Medication Therapy Management</li>
+                <li><img src="<?= base_url('assets/images/icons/stock.png') ?>" align="center" /> Laporan (Kas, Stok, Hutang, Laba-rugi)</li>
+            </ul>
         </div>
-
-        <div class="login-wrapper">   
-            
-                <?= form_open('user/login', 'id=loginform name=formData') ?>
+        <div class="login-wrapper"> 
+            <div class="loading">Loading...</div>
+                <div class="introduce">Login</div>
+                <?= form_open('', 'id=loginform name=formData') ?>
                     <div class="login-body">
-                        <!--<h1>Login</h1>-->
-                        <div id="loading"></div>
-                        <div class="logo-key">&nbsp;</div>
-                        <div class="login-input">
                             <label id="username-label">Username :</label>
-                            <div class='loadingbox' id='username-check'><input type="text" name="username" id="username" class="inputbox"/><div class="loadingbar"><span>Completed!..</span></div></div><br/>
+                            <div class='loadingbox'><input type="text" name="username" id="username" autocomplete="off" class="inputbox"/></div><br/>
                             <label id="password-label">Password :</label>
-                            <div class='loadingbox' id='password-check'><input type="password" name="password" id="password" class="inputbox"/><div class="loadingbar"><span>Completed!..</span></div></div>
-                            <input id="login-button" name="login_button" value="Login" type="button" class="buttonsave" onclick="loginForm()" />
+                            <div class='loadingbox'><input type="password" name="password" id="password" autocomplete="off" class="inputbox"/></div>
+                            <input id="login-button" name="login_button" value="Login" type="button" class="buttonsave" onclick="loginForm();" />
                             <input type="hidden" name="last_link" value="<?=$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']?>" />
-                        </div>
                     </div>
-                <?= form_close() ?>
+                <?= form_close() ?><br/>
+                
         </div>
-
+        
     
     </body>
 </html>

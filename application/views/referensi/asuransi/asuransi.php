@@ -56,7 +56,7 @@
                     var str = '<div class=result>'+data.nama+'<br/>'+data.alamat+'</div>';
                     return str;
                 },
-                max: 100,
+                max: 50,
                 width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
                 dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
             }).result(
@@ -119,9 +119,7 @@
             str = '<tr class=tr_row>'+
                 '<td><input type=text name=np[] id=np'+i+' class=bc size=15 style="width: 100%" /></td>'+
                 '<td><input type=text name=produk[] id=produk'+i+' class=produk size=40 style="width: 100%" /><input type=hidden name=id_produk[] id=id_produk'+i+' class=id_produk size=10 /></td>'+
-                '<td><input type=text name=disk_persen[] id=disk_persen'+i+' class=disk_persen value="0" /></td>'+
-                '<td><input type=text name=disk_rupiah[] id=disk_rupiah'+i+' class=disk_rupiah value="0" /></td>'+
-                '<td class=aksi><span href=# class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
+                '<td class=center><span href=# class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></span></td>'+
                 '</tr>';
 
             $('.form-inputan tbody').append(str);
@@ -184,9 +182,7 @@
             <thead>
                 <tr>
                     <th width="10%">No. Polis</th>
-                    <th width="50%"><h3>Nama Produk Asuransi</h3></th>
-                    <th width="10%">Diskon Persen (%)</th>
-                    <th width="10%">Diskon Rupiah (Rp.)</th>
+                    <th width="85%"><h3>Nama Produk Asuransi</h3></th>
                     <th width="5%"><h3>Aksi</h3></th>
                 </tr>
             </thead>

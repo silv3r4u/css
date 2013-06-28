@@ -181,7 +181,7 @@
         <fieldset><legend>Parameter</legend>
 
             <?= form_open('laporan/resep', 'id=forminforesep') ?>
-                <label>Range Resep:</label> <?= form_input('awal',isset($_GET['awal'])?$_GET['awal']:date("d/m/Y"),'size=10 id=awal') ?> <span class="label">s/d </span><?= form_input('akhir',isset($_GET['akhir'])?$_GET['akhir']:date("d/m/Y"),'size=10 id=akhir') ?>
+            <label>Range Resep:</label> <?= form_input('awal',isset($_GET['awal'])?$_GET['awal']:date("d/m/Y"),'size=10 id=awal') ?> <span class="label">&nbsp; s.d &nbsp;</span><?= form_input('akhir',isset($_GET['akhir'])?$_GET['akhir']:date("d/m/Y"),'size=10 id=akhir') ?>
                 <label>Nama Apoteker:</label><?= form_input('apoteker',isset($_GET['awal'])?$_GET['apoteker']:NULL,'size=40 id=apoteker') ?> <?= form_hidden('id_apoteker', isset($_GET['awal'])?$_GET['id_apoteker']:NULL) ?>
                 <label>Nama Dokter:</label><?= form_input('dokter',isset($_GET['awal'])?$_GET['dokter']:NULL,'size=40 id=dokter') ?> <?= form_hidden('id_dokter', isset($_GET['awal'])?$_GET['id_dokter']:NULL) ?>
                 <label>Nama Pasien:</label><?= form_input('pasien',isset($_GET['awal'])?$_GET['pasien']:NULL,'size=40 id=pasien') ?> <?= form_hidden('id_pasien', isset($_GET['awal'])?$_GET['id_pasien']:NULL) ?>

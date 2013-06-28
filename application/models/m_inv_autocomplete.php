@@ -319,9 +319,11 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function load_data_no_resep($q) {
-        $sql = "select r.*, p.nama as dokter, pd.nama as pasien, pd.member as diskon from resep r
+        $sql = "select r.*, p.nama as dokter, pd.nama as pasien, pd.member as diskon, ap.nama as asuransi, ak.no_polish, ap.diskon_persen, ap.diskon_rupiah, ap.id as id_produk_asuransi from resep r
             join penduduk p on (r.dokter_penduduk_id = p.id)
             join penduduk pd on (r.pasien_penduduk_id = pd.id)
+            left join asuransi_kepesertaan ak on (ak.id_penduduk = pd.id)
+            left join asuransi_produk ap on (ap.id = ak.id_asuransi_produk)
             where r.id like '%$q%' order by locate ('$q', r.id)";
         return $this->db->query($sql);
     }
@@ -522,9 +524,11 @@ class M_inv_autocomplete extends CI_Model {
         if ($id != NULL) {
             $q.=" and r.id = '$id'";
         }
-        $sql = "select r.*, p.nama as pasien, pd.nama as dokter, p.member as diskon from resep r
+        $sql = "select r.*, p.nama as pasien, pd.nama as dokter, p.member as diskon, ap.nama as asuransi, ak.no_polish, ap.diskon_persen, ap.diskon_rupiah from resep r
             join penduduk p on (r.pasien_penduduk_id = p.id)
             join penduduk pd on (r.dokter_penduduk_id = pd.id)
+            left join asuransi_kepesertaan ak on (ak.id_penduduk = p.id)
+            left join asuransi_produk ap on (ap.id = ak.id_asuransi_produk)
             where r.id not in (select resep_id from penjualan where resep_id is not NULL) $q
             order by r.waktu desc";
         return $this->db->query($sql);

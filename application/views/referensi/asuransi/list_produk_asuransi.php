@@ -5,8 +5,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
     <thead>
     <tr>
         <th width="10%" class="nosort"><h3>No.</h3></th>
-        <th width="40%"><h3>Perusahaan</h3></th>
-        <th width="40%"><h3>Nama Produk</h3></th>
+        <th width="30%"><h3>Perusahaan</h3></th>
+        <th width="30%"><h3>Nama Produk</h3></th>
+        <th width="10%"><h3>Diskon (%)</h3></th>
+        <th width="10%"><h3>Diskon (Rp.)</h3></th>
         <th width="10%" class="nosort"><h3>Aksi</h3></th>
     </tr>
     </thead>
@@ -33,8 +35,10 @@ $("#table").tablesorter({sortList:[[0,0]]});
                 <td align="center"><?= (++$key + (($page - 1) * $limit)) ?></td>
                 <td><?= $prov->prsh ?></td>
                 <td><?= $prov->nama ?></td>
+                <td align="center"><?= $prov->diskon_persen ?></td>
+                <td align="right"><?= rupiah($prov->diskon_rupiah) ?></td>
                 <td class="aksi" align="center">
-                    <span class="edit" onclick="edit_produk_asuransi('<?= $prov->id ?>','<?= $prov->nama ?>','<?= $prov->id_ap ?>','<?= $prov->prsh ?>','<?= $prov->reimbursement ?>')"><?= img('assets/images/icons/edit.png') ?></span>
+                    <span class="edit" onclick="edit_produk_asuransi('<?= $prov->id ?>','<?= $prov->nama ?>','<?= $prov->id_ap ?>','<?= $prov->prsh ?>','<?= $prov->reimbursement ?>','<?= $prov->diskon_persen ?>','<?= $prov->diskon_rupiah ?>')"><?= img('assets/images/icons/edit.png') ?></span>
                     <span class="delete" onclick="delete_produk_asuransi('<?= $prov->id ?>')"><?= img('assets/images/icons/delete.png') ?></span>
                 </td>
             </tr>

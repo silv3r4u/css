@@ -1697,8 +1697,15 @@ class M_inventory extends CI_Model {
             'ppn' => $this->input->post('ppn'),
             'total' => currencyToNumber($this->input->post('total')),
             'bayar' => currencyToNumber($this->input->post('bayar')),
-            'pembulatan' => currencyToNumber($this->input->post('bulat'))
+            'pembulatan' => currencyToNumber($this->input->post('bulat')),
+            'tuslah' => currencyToNumber($this->input->post('tuslah'))
         );
+        $yes = $this->input->post('use_asuransi');
+        if (isset($yes)) {
+            $selisih = ($this->input->post('total_orig') - $this->input->post('bayar'));
+            $data_penjualan['id_asuransi_produk'] = ($this->input->post('id_produk_asuransi') != '')?$this->input->post('id_produk_asuransi'):NULL;
+            $data_penjualan['reimburse'] = $selisih;
+        }
         $this->db->insert('penjualan', $data_penjualan);
         $id_penjualan = $this->db->insert_id();
         
@@ -1759,10 +1766,15 @@ class M_inventory extends CI_Model {
             'transaksi_id' => $id_penjualan,
             'transaksi_jenis' => 'Penjualan Resep',
             'awal_saldo' => (isset($rows->akhir_saldo)?$rows->akhir_saldo:'0'),
-            'penerimaan' => currencyToNumber($this->input->post('bulat')),
-            'pengeluaran' => '0',
-            'akhir_saldo' => ((isset($rows->akhir_saldo)?$rows->akhir_saldo:'0')+currencyToNumber($this->input->post('bulat')))
+            'pengeluaran' => '0'
         );
+        if (isset($yes)) {
+            $data_kas['penerimaan'] = $selisih;
+            $data_kas['akhir_saldo'] = ((isset($rows->akhir_saldo)?$rows->akhir_saldo:'0')+$selisih);
+        } else {
+            $data_kas['penerimaan'] = currencyToNumber($this->input->post('bulat'));
+            $data_kas['akhir_saldo'] = ((isset($rows->akhir_saldo)?$rows->akhir_saldo:'0')+currencyToNumber($this->input->post('bulat')));
+        }
         $this->db->insert('kas', $data_kas);
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

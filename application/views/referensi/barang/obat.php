@@ -126,7 +126,7 @@
                         value: data[i].nama // nama field yang dicari
                     };
                 }
-                $('input[name=id_pabrik_obat]').val('');
+                $('input[name=id_asuransi_produk]').val('');
                 return parsed;
             },
             formatItem: function(data,i,max){

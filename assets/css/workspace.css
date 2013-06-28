@@ -17,7 +17,7 @@ h2 { font-size: 14px; display: block; }
 .tabel input[type=text] { width: 100%; margin: 0; }
 .tabel input[type=text]:focus { border: none; }
 .tabel input[type=number] { border: none; margin: 0; padding-top: 2px; background: #fff; }
-.tabel td {border-bottom: 1px solid #cccccc; border-right:1px solid #c6d5e1; padding: 0; height: 20px; white-space: nowrap; }
+.tabel td {border-bottom: 1px solid #cccccc; border-right:1px solid #c6d5e1; padding: 0 1px; height: 20px; white-space: nowrap; }
 .tabel th { 
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fbfaf3), color-stop(1, #faf6d1) );
     background:-moz-linear-gradient( center top, #fbfaf3 5%, #faf6d1 100% );

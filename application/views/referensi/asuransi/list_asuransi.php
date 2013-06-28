@@ -1,9 +1,9 @@
 <?php if (count($asuransi) > 0) : ?>
     <?php foreach ($asuransi as $no => $rows): ?>
         <tr class="<?= ($no % 2 == 0) ? 'odd' : 'even' ?>">
-            <td><?= $rows->polis_no ?></td>
+            <td><?= $rows->no_polish ?></td>
             <td><?= $rows->nama ?></td>
-            <td class="aksi"><a class="delete" onclick="delete_ak(<?= $rows->id_ak ?>,this)"></a></td>
+            <td align="center"><a class="delete" onclick="delete_ak(<?= $rows->id_ak ?>,this)"><?= img('assets/images/icons/delete.png') ?></a></td>
         </tr>
     <?php endforeach; ?>
 <?php else: ?>
@@ -12,7 +12,7 @@
         <tr class=tr_row>
             <td><input type=text name=np[] id=np<?= $i ?> class=bc style="width: 100%" /></td>
             <td><input type=text name=produk[] id=produk<?= $i ?> class=produk style="width: 100%" /><input type=hidden name=id_produk[] id=id_produk<?= $i ?> class=id_produk size=10 /></td>
-            <td class=aksi><a href=# class=delete onclick=eliminate(this)></a></td>'+
+            <td class="center"><a href=# class=delete onclick=eliminate(this)><?= img('assets/images/icons/delete.png') ?></a></td>
         </tr>
         <script>
             $(function() {

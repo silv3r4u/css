@@ -92,30 +92,7 @@
             });
         
             $('#formadd').submit(function(){
-                var nama = $('#nama').val();
-                var relasi = $('input[name=id_ap]').val();
-              
-                if(($('#suplier').val()!='')&($('#nama').val()!='')){
-                    $.ajax({
-                        url: '<?= base_url('referensi/produk_asuransi_cek') ?>',
-                        data:'relasi='+relasi+"&nama="+nama,
-                        cache: false,
-                        dataType: 'json',
-                        success: function(msg){
-                            if (msg.status == false){
-                                $('#text_konfirmasi').html('Nama Instansi <b>"'+nama+'"</b> sudah ada<br/> Apakah anda yakin akan menambahkannya lagi?');            
-                            } else {
-                                $('#text_konfirmasi').html('Nama Instansi <b>"'+nama+'"</b><br/> Apakah anda akan menyimpan data?');                    
-                            }
-                        
-                            $('#konfirmasi').dialog("open");
-                        }
-                    });
-                }else{
-                    $('.msg').fadeIn('fast').html('Silahkan lengkapi data !');
-                    $('#suplier').focus();
-                    return false;
-                }                
+                save();
                 return false;
             });
         });
@@ -136,7 +113,7 @@
                     $('#asu_list').html(data);
                     $('#form-prov').fadeOut('fast');
                         
-                    if($('input[name=tipe]').val() == 'add'){
+                    if($('input[name=tipe]').val() === 'add'){
                         alert_tambah();
                     }else{
                         alert_edit();
@@ -152,6 +129,8 @@
             $('input[name=id_ap]').val('');
             $('#suplier').val('');
             $('#nama').val('');
+            $('#disk_persen').val('');
+            $('#disk_rupiah').val('');
             $('.msg').fadeOut('fast');
         }
     
@@ -182,13 +161,15 @@
             }
         }
     
-        function edit_produk_asuransi(id, nama,id_ap,suplier,reim){
+        function edit_produk_asuransi(id, nama,id_ap,suplier,reim, persen, rupiah){
             $('input[name=tipe]').val('edit');
             $('input[name=id_produk]').val(id);
             $('input[name=id_ap]').val(id_ap);
             $('#suplier').val(suplier);
             $('#no_produk').html(id);  
             $('#nama').val(nama);    
+            $('#disk_persen').val(persen);
+            $('#disk_rupiah').val(numberToCurrency(rupiah));
             if(reim=='Ya'){
                 $('#ya').attr('checked', 'checked');
             }
@@ -212,9 +193,11 @@
                 <tr><td>No</td><td><span id="no_produk"></span><?= form_hidden('id_produk') ?></td> </tr>
                 <tr><td>Nama Perusahaan</td><td><?= form_input('perusahaan', '', 'id=suplier size=40') ?>
                         <?= form_hidden('id_ap') ?>
-                <tr><td>Nama Produk</td><td><?= form_input('nama', '', 'id=nama size=30') ?></td></tr>
+                <tr><td>Nama Produk</td><td><?= form_input('nama', '', 'id=nama size=40') ?></td></tr>
                 <tr><td>Reimbursement</td><td><?= form_radio('reimbursement', 'Ya', '', 'id=ya') ?>Ya
                         <?= form_radio('reimbursement', 'Tidak', 'true', 'id=tidak') ?>Tidak</td></tr>
+                <tr><td>Diskon (%)</td><td><input type=text name=disk_persen id=disk_persen class=disk_persen value="0" /></td></tr>
+                <tr><td>Diskon (Rp.)</td><td><input type=text name=disk_rupiah id=disk_rupiah class=disk_rupiah value="0" /></td></tr>
                 <tr><td></td><td><?= form_submit('addasuransi', 'Simpan', null) ?>
                         <?= form_button('', 'Reset', 'id=reset') ?></td> </tr>
             </table>

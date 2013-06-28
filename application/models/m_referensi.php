@@ -602,11 +602,11 @@ class M_referensi extends CI_Model {
     /* Asuransi Kepesertaan */
 
     function asuransi_kepersertaan_get_data($id) {
-        $sql = "select p.nama as pasien, p.id as id_pasien, ap.*, r.nama as prsh, ak.id as id_ak, ak.polis_no 
+        $sql = "select p.nama as pasien, p.id as id_pasien, ap.*, r.nama as prsh, ak.id as id_ak, ak.no_polish 
         from asuransi_kepesertaan ak
-        join asuransi_produk ap on (ak.asuransi_produk_id = ap.id)
+        join asuransi_produk ap on (ak.id_asuransi_produk = ap.id)
         join relasi_instansi r on (ap.relasi_instansi_id = r.id)
-        join penduduk p on (ak.penduduk_id = p.id) 
+        join penduduk p on (ak.id_penduduk = p.id) 
         where p.id = '$id'";
         $query = $this->db->query($sql);
         return $query->result();
@@ -623,9 +623,7 @@ class M_referensi extends CI_Model {
                 $add = array(
                     'id_penduduk' => $data['id_penduduk'],
                     'id_asuransi_produk' => $val,
-                    'no_polish' => $data['no'][$k],
-                    'diskon_persen' => $data['disk_persen'][$k],
-                    'diskon_rupiah' => $data['disk_rupiah'][$k]
+                    'no_polish' => $data['no'][$k]
                 );
                 $this->db->insert('asuransi_kepesertaan', $add);
             }
@@ -822,9 +820,9 @@ class M_referensi extends CI_Model {
             if ($id_kemasan_barang[$i] != '') {
                 $data_kemasan = array(
                     'barcode' => $barcode[$i],
-                    'terbesar_satuan_id' => $data,
+                    'terbesar_satuan_id' => ($data != '')?$data:NULL,
                     'isi' => $isi[$i],
-                    'terkecil_satuan_id' => $satuan[$i],
+                    'terkecil_satuan_id' => ($satuan[$i] != '')?$satuan[$i]:NULL,
                     'margin' => $margin[$i],
                     'diskon' => $diskon[$i]
                 );

@@ -24,11 +24,11 @@ class User extends CI_Controller {
     }
 
     function index() {
-        $data['title'] = 'Home Sistem Informasi Rumah Sakit';
+        $data['title'] = '.:: CSS Login ::.';
         $user = $this->session->userdata('user');
 
         if ($user == '') {
-            $this->load->view('login');
+            $this->load->view('login', $data);
         }
         //$this->is_login();
     }
@@ -38,10 +38,8 @@ class User extends CI_Controller {
         if (isset($jml->username) and $jml->username != '') {
             $data = array('id_user' => $jml->id, 'user' => $jml->username, 'pass' => $jml->password, 'nama' => $jml->nama, 'id_unit' => $jml->unit_id, 'unit' => $jml->unit);
             $this->session->set_userdata($data);
-
-            redirect(base_url());
-        } else {
-            redirect(base_url());
+            die(json_encode($jml));
+            //redirect(base_url());
         }
     }
 

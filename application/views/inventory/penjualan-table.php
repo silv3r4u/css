@@ -173,5 +173,6 @@ $no++;
         for (i = 1; i <= jumlah; i++) {
             subTotal(i);
         }
+        $('input[name=nominal_total]').val($('#total').html());
     });
 </script>

@@ -213,6 +213,8 @@ class Referensi extends CI_Controller {
             'id' => $this->input->post('id_produk'),
             'nama' => $this->input->post('nama'),
             'reimbursement' => $this->input->post('reimbursement'),
+            'diskon_persen' => $this->input->post('disk_persen'),
+            'diskon_rupiah' => currencyToNumber($this->input->post('disk_rupiah')),
         );
         if ($this->input->post('id_ap') == '') {
             // Perusahaan belum ada
@@ -256,6 +258,8 @@ class Referensi extends CI_Controller {
             'nama' => $this->input->post('nama'),
             'relasi_instansi_id' => $this->input->post('id_ap'),
             'reimbursement' => $this->input->post('reimbursement'),
+            'diskon_persen' => $this->input->post('disk_persen'),
+            'diskon_rupiah' => currencyToNumber($this->input->post('disk_rupiah')),
         );
         $search['id'] = $dat['id'];
         $this->m_referensi->edit_produk_asuransi_data($dat);
@@ -823,14 +827,11 @@ class Referensi extends CI_Controller {
                 $this->load->view('referensi/asuransi/list_asuransi', $data);
 
                 break;
-
             case 'add':
                 $add = array(
                     'id_produk' => $this->input->post('id_produk'), //array
                     'no' => $this->input->post('np'), //array
-                    'id_penduduk' => $this->input->post('id_penduduk'),
-                    'disk_persen' => $this->input->post('disk_persen'),
-                    'disk_rupiah' => $this->input->post('disk_rupiah'),
+                    'id_penduduk' => $this->input->post('id_penduduk')
                 );
 
                 $this->m_referensi->asuransi_kepesertaan_add_data($add);
@@ -994,7 +995,7 @@ class Referensi extends CI_Controller {
             'stok_minimal' => $this->input->post('stokmin'),
             'is_konsinyasi' => (($this->input->post('konsinyasi') != '')?'1':'0'),
             'lokasi_rak' => $this->input->post('lokasi_rak'),
-            'id_asuransi_produk' => $this->input->post('id_asuransi_produk')
+            'id_asuransi_produk' => ($this->input->post('id_asuransi_produk') != '')?$this->input->post('id_asuransi_produk'):NULL
         );
         $obat = array(
             'kekuatan' => ($this->input->post('kekuatan') != '') ? $this->input->post('kekuatan') : '1',

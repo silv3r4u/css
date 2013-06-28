@@ -318,7 +318,7 @@ function addnoresep(i) {
 
 function add(i) {
     var j = $('.detailobat'+i).length;
-    str = ' <div class=tr_rows style="width: 100%; display: block;">'+
+    str = ' <div class=tr_rows style="width: 100%; display: block; color: #000;">'+
                 '<table align=right width=95% style="border-bottom: 1px solid #f1f1f1;" class="detailobat'+i+'">'+
                 '<tr><td>Produk</td><td>  <input type=text name=pb'+i+'[] id=pb'+i+''+j+' class=pb />'+
                     '<input type=hidden name=id_pb'+i+'[] id=id_pb'+i+''+j+' class=id_pb />'+
