@@ -16,6 +16,7 @@ $(function() {
     });
 });
 </script>
+NB: Double click pada data yang dipilih, untuk melakukan penjualan.
 <table width="100%" class="tabel" id="table">
     <tr>
         <th width="5%">No.</th>

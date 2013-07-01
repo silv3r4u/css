@@ -31,7 +31,7 @@ function add(i) {
         '<td><input type=text name=jl[] id=jl'+i+' class=jl size=20 style="width: 100%;" onKeyup=subTotal() /><input type=hidden name=subtotal[] id=subttl'+i+' class=subttl /></td>'+
         '<td id=ed'+i+' align=center></td>'+
         '<td id=hj'+i+' align=right></td>'+
-        '<td align=center id=diskon'+i+'></td>'+
+        '<td align=center><input type="text" name="diskon[]" value="" id="diskon'+i+'" onkeyup="subTotal('+i+')" /></td>'+
         '<td id=sisa'+i+' align=center></td>'+
         '<td id=subtotal'+i+' align="right"></td>'+
         '<td class=aksi><span class=delete onclick=eliminate(this)><img src="<?= base_url('assets/images/icons/delete.gif') ?>" /></span><input type=hidden name=disc[] id=disc'+i+' /><input type=hidden name=harga_jual[] id=harga_jual'+i+' /></td>'+
@@ -184,9 +184,9 @@ function subTotal() {
         var jumlah = $('.tr_row').length-1;
         var tagihan = 0;
         var disc = 0;
-        var ppn = $('#ppn').val()/100;
-        var jasa_apt = currencyToNumber($('#jasa-apt').html());
-        var vartuslah = currencyToNumber($('#tuslah').val());
+        var ppn = ($('#ppn').val()/100)*(-1);
+        var jasa_apt = parseInt(currencyToNumber($('#jasa-apt').html()));
+        var vartuslah = parseInt(currencyToNumber($('#tuslah').val()));
         if (vartuslah >= 0) {
             tuslah = vartuslah;
         } else {
@@ -195,7 +195,7 @@ function subTotal() {
         if (isNaN(jasa_apt)) { jasa_apt = 0; } else { var jasa_apt = jasa_apt; }
         for (i = 0; i <= jumlah; i++) {
             var harga = currencyToNumber($('#hj'+i).html());
-            var diskon= parseInt($('#diskon'+i).html())/100;
+            var diskon= parseInt($('#diskon'+i).val())/100;
             <?php 
             if (isset($_GET['id'])) { ?>
             var jml= parseInt($('#jl'+i).html());                
@@ -210,7 +210,7 @@ function subTotal() {
             //alert(disc)
             
             var harga = parseInt(currencyToNumber($('#hj'+i).html()));
-            var diskon= parseInt($('#diskon'+i).html())/100;
+            var diskon= parseInt($('#diskon'+i).val())/100;
             //var jumlah= parseInt($('#jl'+i).val());
             var subtotall = 0;
             //alert(harga); alert(diskon); alert(jumlah);
@@ -224,14 +224,13 @@ function subTotal() {
             }
             
         }
-        //$('#jasa_total_apotek').val(ja);
         
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
-        //$('#total-tagihan').html(numberToCurrency(tagihan));
-        //alert(jasa_apt)
+        var disc_rupiah = Math.floor((tagihan+jasa_apt)*ppn);
+        $('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
         var totalllica = Math.ceil(tagihan+jasa_apt-disc);
         var total = totalllica+(totalllica*ppn)+tuslah;
-        $('#ppn-hasil').html(numberToCurrency(Math.ceil(tagihan*ppn)));
+        $('#ppn-hasil').html(numberToCurrency(Math.ceil((tagihan+jasa_apt+vartuslah)*ppn)));
         $('#total').html(numberToCurrency(Math.ceil(total)));
         $('input[name=total]').val(Math.ceil(total));
         
@@ -339,9 +338,7 @@ function searchs() {
             $(this).dialog().remove();
         },
         buttons: {
-            "OK": function() {
-                
-            }, "Batal": function() {
+            "Batal": function() {
                 $(this).dialog().remove();
             }
         }
@@ -349,6 +346,14 @@ function searchs() {
 }
 
 $(function() {
+    $('#disc_rp').blur(function() {
+        var total_tgh = currencyToNumber($('#total-tagihan').html());
+        var bia_apotek= currencyToNumber($('#jasa-apt').html());
+        var discrupiah= currencyToNumber($('#disc_rp').val());
+        var hasil_disc_persen = (discrupiah/(total_tgh+bia_apotek))*100;
+        $('#ppn').val(Math.ceil(hasil_disc_persen));
+        subTotal();
+    });
     <?php if (!isset($list_data)) { ?>
     for(x = 0; x <= 1; x++) {
         add(x);
@@ -485,35 +490,58 @@ $(function() {
         });
         $('#ppn').focus();
     });
+    
     $('#use_asuransi').live('click', function() {
+        
         $('input[name=nominal_total]').val(currencyToNumber($('#total').html()));
-        if ($('#use_asuransi').is(':checked')) {
+        if ($('#use_asuransi').is(':checked') === true) {
             var persen = $('input[name=diskon_persen]').val();
             var rupiah = $('input[name=diskon_rupiah]').val();
             if (rupiah === '0') {
-                var nilaitotal = currencyToNumber($('#total').html());
-                var total = nilaitotal-(nilaitotal*(persen/100));
-                $('#total').html(numberToCurrency(Math.ceil(total)));
-                $('input[name=total]').val(Math.ceil(total));
-                
-                $('#total_tagihan_penjualan').html($('#total').html());
-                var nominal = currencyToNumber($('#total').html());
-                $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+                var nilaitotal = parseInt(currencyToNumber($('#total').html()));
+                $.ajax({
+                    url: '<?= base_url('inv_autocomplete/get_asuransi_diskon') ?>/'+$('input[name=id_produk_asuransi]').val(),
+                    dataType: 'json',
+                    cache: false,
+                    beforeSend: function() {
+                        $("#loading").show();
+                    },
+                    success: function(data) {
+                        var total = (nilaitotal-(nilaitotal*(data.diskon_persen/100)));;
+                        $('#total').html(numberToCurrency(Math.ceil(total)));
+                        $('input[name=total]').val(Math.ceil(total));
+
+                        $('#total_tagihan_penjualan').html($('#total').html());
+                        var nominal = currencyToNumber($('#total').html());
+
+                        $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+                    }
+                });
             }
-            if (persen === '0') {
+            else if (persen === '0') {
                 var nilaitotal = currencyToNumber($('#total').html());
                 if (nilaitotal-rupiah <= 0) {
                     var total = 0;
                 } else {
                     var total = nilaitotal-rupiah;
                 }
-                
-                $('#total').html(numberToCurrency(Math.ceil(total)));
-                $('input[name=total]').val(Math.ceil(total));
-                
-                $('#total_tagihan_penjualan').html($('#total').html());
-                var nominal = currencyToNumber($('#total').html());
-                $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+                $.ajax({
+                    url: '<?= base_url('inv_autocomplete/get_asuransi_diskon') ?>/'+$('input[name=id_produk_asuransi]').val(),
+                    dataType: 'json',
+                    cache: false,
+                    beforeSend: function() {
+                        $("#loading").show();
+                    },
+                    success: function(data) {
+                        var total = nilaitotal - data.diskon_rupiah;
+                        $('#total').html(numberToCurrency(Math.ceil(total)));
+                        $('input[name=total]').val(Math.ceil(total));
+
+                        $('#total_tagihan_penjualan').html($('#total').html());
+                        var nominal = currencyToNumber($('#total').html());
+                        $('#bulat').val(numberToCurrency(pembulatan_seratus(nominal)));
+                    }
+                });
             }
         }
         else {
@@ -623,10 +651,11 @@ $(function() {
                 $('#asuransi').html('-');
                 $('input[name=diskon_persen]').val('');
                 $('input[name=diskon_rupiah]').val('');
+                $('input[name=id_produk_asuransi]').val(data.id_asuransi_produk);
                 if (data.asuransi !== null) {
                     $('input[name=diskon_persen]').val(data.diskon_persen);
                     $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
-                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value=yes style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
+                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value="y" style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
                     $('#asuransi').html(data.asuransi+' - '+data.no_polish);
                 }
                 $('#noresep').val(data.id);
@@ -676,7 +705,7 @@ $(function() {
         <?= form_hidden('total') ?>
         <?= form_hidden('jasa_apotek') ?>
         <?= form_hidden('diskon_member') ?>
-        <?= form_hidden('diskon_persen') ?> <?= form_hidden('diskon_rupiah') ?>
+        <?= form_hidden('diskon_persen') ?><?= form_hidden('diskon_rupiah') ?>
         <?= form_hidden('id_produk_asuransi') ?>
         <?= form_hidden('nominal_total') ?>
         <div class="left_side" style="min-height: 150px;">
@@ -684,12 +713,13 @@ $(function() {
                 <tr><td width="25%">No.:</td><td id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></td></tr>
                 <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
                 <tr><td>No. Resep:</td><td>
-                    <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?>&nbsp;<img src="<?= base_url('assets/images/icons/detail.png') ?>" id=search onclick="searchs();" style="margin-top: 1px;" />
+                    <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?>&nbsp;<img src="<?= base_url('assets/images/icons/detail.png') ?>" id=search onclick="searchs();" style="cursor: pointer" title="Cari resep" />
                     <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?>
                 <tr><td>Pasien:</td><td id="pasien"><?= isset($rows->pasien)?$rows->pasien:NULL ?></td></tr>
                 <tr><td>Produk Asuransi:</td><td><span id="checkbox"></span> <span id="asuransi" class="label"></span></td></tr>
-            <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
-            <tr><td>Tuslah (Rp.):</td><td><?= form_input('tuslah', 0, 'size=10 id=tuslah onblur=FormNum(this); onkeyup=subTotal();') ?></td></tr>
+            <tr><td>Diskon (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+            <tr><td>Diskon (Rp.):</td><td><?= form_input('disc_rp', '0', 'id=disc_rp size=10 onblur=FormNum(this)') ?></td></tr>
+            <tr><td>Biaya Embalage (Rp.):</td><td><?= form_input('tuslah', 0, 'size=10 id=tuslah onblur=FormNum(this); onkeyup=subTotal();') ?></td></tr>
             <tr><td></td><td><?= isset($_GET['msg'])?'':form_button(null, 'Tambah Baris', 'id=addnewrow') ?></td></tr>
             </table>
         </div>
@@ -697,8 +727,8 @@ $(function() {
             <table width="100%">
                 <tr style="height: 22px;"><td width="27%">Biaya Apoteker (Rp.):</td><td id="jasa-apt"></td></tr>
                 <tr style="height: 22px;"><td>Total Tagihan (Rp.):</td><td id="total-tagihan"></td></tr>
-                <tr style="height: 22px;"><td>Total Diskon (Rp.):</td><td id="total-diskon" class="label"></td></tr>
-                <tr style="height: 22px;"><td>PPN (Rp.):</td><td id="ppn-hasil"></td></tr>
+                <tr style="height: 22px;"><td>Diskon Barang (Rp.):</td><td id="total-diskon" class="label"></td></tr>
+                <tr style="height: 22px;"><td>Diskon Penjualan (Rp.):</td><td id="ppn-hasil"></td></tr>
                 <tr style="height: 22px;"><td>Total (Rp.):</td><td id="total" class="label"></td></tr>
             </table>
         </div>
@@ -709,14 +739,14 @@ $(function() {
             <thead>
             <tr>
                 <th width="10%">Barcode</th>
-                <th width="33%">Kemasan Barang</th>
-                <th width="5%">Jumlah</th>
-                <th width="15%">ED</th>
-                <th width="10%">Harga Jual</th>
-                <th width="7%">Diskon</th>
+                <th width="40%">Kemasan Barang</th>
+                <th width="5%">Qty</th>
+                <th width="10%">ED</th>
+                <th width="10%">Harga Jual (Rp.)</th>
+                <th width="7%">Diskon(%)</th>
                 <th width="7%">Sisa Stok</th>
                 
-                <th width="10%">SubTotal</th>
+                <th width="10%">SubTotal (Rp.)</th>
                 <th width="10%">#</th>
             </tr>
             </thead>

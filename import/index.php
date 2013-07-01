@@ -7,7 +7,9 @@
         h1.judul { font-size: 14px; margin-left: 5px; font-weight: normal; border-bottom: 1px solid #d9d9d9; padding-bottom: 5px; }
 </style>
 <div style="background: #b8d806; height: 91px;">
-    <div style="background: url(../assets/images/header.png) no-repeat; height: 120px;"></div>
+    <div style="background: url(../assets/images/headbang.jpg) no-repeat top; height: 95px;">
+        <div style="background: url(../assets/images/logo.png) no-repeat; height: 90px;"></div>
+    </div>
 </div>
 <h1 class="judul">Import Data</h1>
 <div class="form">
@@ -23,6 +25,12 @@ File Excel: <input name="userfile" type="file">
 <input name="upload" type="submit" value="Import">
 </form>
 <br/>
+<br/><br/>
+<h1>Import Data Pasien / Customer</h1>
+<form method="post" enctype="multipart/form-data" action="proses_cust.php">
+File Excel: <input name="userfile" type="file">
+<input name="upload" type="submit" value="Import">
+</form>
 <a href="../">Kembali</a>
 </div>
 

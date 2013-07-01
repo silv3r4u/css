@@ -250,8 +250,9 @@ function subTotal() {
         var disc = 0;
         
         var jasa_apt = 0;
-        var ppn = $('#ppn').val()/100;
-        
+        var ppn = ($('#ppn').val()/100)*(-1);
+        $('#disc_bank').html(ppn);
+        $('#diskon_bank').val(ppn);
         for (i = 0; i <= jumlah; i++) {
             if ($('#id_pb'+i).val() !== '') {
                 var harga  = currencyToNumber($('#hj'+i).html());
@@ -276,7 +277,8 @@ function subTotal() {
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
         $('#total-tagihan').html(numberToCurrency(tagihan));
         var totallica = (tagihan - disc)+jasa_apt;
-        var diskon_bank   = (totallica * ($('#disc_bank').html()/100));
+        //var diskon_bank   = (totallica * ($('#disc_bank').html()/100)); original script
+        var diskon_bank   = (totallica * (0/100));
         var diskon_jual   = (totallica * ($('#disk_penjualan').html()/100));
         var pajak = ppn*tagihan;
         var new_totallica = (totallica - (diskon_bank+diskon_jual))+pajak;
@@ -417,6 +419,8 @@ $(function() {
                     value: data[i].nama // nama field yang dicari
                 };
             }
+            $('#disk_penjualan').html('0');
+            subTotal();
             return parsed;
         },
         formatItem: function(data,i,max){
@@ -426,7 +430,8 @@ $(function() {
             return str;
         },
         width: 320, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-        dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+        dataType: 'json', // tipe data yang diterima oleh library ini disetup sebagai JSON
+        cache: false
     }).result(
     function(event,data,formated){
         $('#pembeli').val(data.nama);
@@ -531,8 +536,8 @@ $(function() {
                 <table width="100%">
                     <tr><td width="25%">No.:</td> <td class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </td></tr>
                     <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
-                    <tr><td>Pembayaran Bank:</td><td><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?></td></tr>
-                    <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+<!--                    <tr><td>Pembayaran Bank:</td><td><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?></td></tr>-->
+                    <tr><td>Diskon (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
                     <tr><td>Pembeli:</td><td><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?></td></tr>
                     <tr><td>Total Tagihan:</td><td id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </td></tr>
                 </table>
@@ -540,7 +545,7 @@ $(function() {
             <div class="right_side" style="min-height: 150px; margin-bottom: 10px;">
                 <table width="100%">
                     <tr><td width="25%">Total Diskon Barang:</td><td class="label" id="total-diskon"></td></tr>
-                    <tr><td>Diskon Bank (%):</td><td><span id="disc_bank" class="label">0</span><?= form_hidden('diskon_bank', 0) ?></td></tr>
+<!--                    <tr><td>Diskon Bank (%):</td><td><span id="disc_bank" class="label">0</span><?= form_hidden('diskon_bank', 0) ?></td></tr>-->
                     <tr><td>Diskon Penjualan (%):</td><td id="disk_penjualan" class="label"></td></tr>
                     <tr><td>Total:</td><td id="total" class="label"></td></tr>
                     <tr><td>Pembulatan Total:</td><td><?= form_input('bulat', NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?></td></tr>

@@ -324,7 +324,7 @@ class M_inv_autocomplete extends CI_Model {
             join penduduk pd on (r.pasien_penduduk_id = pd.id)
             left join asuransi_kepesertaan ak on (ak.id_penduduk = pd.id)
             left join asuransi_produk ap on (ap.id = ak.id_asuransi_produk)
-            where r.id like '%$q%' order by locate ('$q', r.id)";
+            where r.id like '%$q%' GROUP BY r.id order by locate ('$q', r.id)";
         return $this->db->query($sql);
     }
     
@@ -524,13 +524,13 @@ class M_inv_autocomplete extends CI_Model {
         if ($id != NULL) {
             $q.=" and r.id = '$id'";
         }
-        $sql = "select r.*, p.nama as pasien, pd.nama as dokter, p.member as diskon, ap.nama as asuransi, ak.no_polish, ap.diskon_persen, ap.diskon_rupiah from resep r
+        $sql = "select r.*, p.nama as pasien, pd.nama as dokter, ak.id_asuransi_produk, p.member as diskon, ap.nama as asuransi, ak.no_polish, ap.diskon_persen, ap.diskon_rupiah from resep r
             join penduduk p on (r.pasien_penduduk_id = p.id)
             join penduduk pd on (r.dokter_penduduk_id = pd.id)
             left join asuransi_kepesertaan ak on (ak.id_penduduk = p.id)
             left join asuransi_produk ap on (ap.id = ak.id_asuransi_produk)
             where r.id not in (select resep_id from penjualan where resep_id is not NULL) $q
-            order by r.waktu desc";
+             group by r.id order by r.waktu desc";
         return $this->db->query($sql);
     }
     
@@ -538,6 +538,11 @@ class M_inv_autocomplete extends CI_Model {
         $sql = "select r.nama as asuransi, a.* from asuransi_produk a
                 join relasi_instansi r on (a.relasi_instansi_id = r.id)
                 where a.nama like ('%$q%') order by locate('$q',a.nama)";
+        return $this->db->query($sql);
+    }
+    
+    function get_asuransi_diskon($id) {
+        $sql = "select * from asuransi_produk where id = '$id'";
         return $this->db->query($sql);
     }
 }

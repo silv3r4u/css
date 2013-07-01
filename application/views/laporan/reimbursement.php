@@ -98,14 +98,13 @@ if (isset($_GET['do'])) {
         <table class="tabel" width="100%" <?= $border ?>>
             <thead>
             <tr>
-                <th>Waktu</th>
-                <th>No. Nota</th>
-                <th>No. Kepesertaan</th>
-                <th>Pasien</th>
-                <th>Packing Barang</th>
-                <th>Jumlah</th>
-                <th>Harga</th>
-                <th>Subtotal</th>
+                <th width="5%">No.</th>
+                <th width="5%">Waktu</th>
+                <th width="5%">No. Nota</th>
+                <th width="10%">No. Kepesertaan</th>
+                <th width="10%">Produk Asuransi</th>
+                <th width="20%">Pasien</th>
+                <th width="10%">Subtotal</th>
             </tr>
             </thead>
             <tbody>
@@ -117,17 +116,16 @@ if (isset($_GET['do'])) {
             //$total_faktur = ($data->total+$data->materai)+($data->total*($data->ppn/100));    
             ?>
             <tr class="<?= ($key%2==1)?'even':'odd' ?>">
+                <td align="center"><?= ++$key ?></td>
                 <td align="center"><?= datetimefmysql($data->waktu) ?></td>
-                <td><?= $data->id ?></td>
-                <td><?= $data->polis_no ?></td>
+                <td align="center"><?= $data->id ?></td>
+                <td align="center"><?= $data->no_polish ?></td>
+                <td><?= $data->perusahaan_asuransi ?></td>
                 <td><?= $data->pasien ?></td>
-                <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
-                <td align="center"><?= $data->keluar ?></td>
-                <td align="right"><?= rupiah($data->hna) ?></td>
-                <td align="right"><?= rupiah($subtotal) ?></td>
+                <td align="right"><?= rupiah($data->reimburse) ?></td>
             </tr>
             <?php 
-            $total = $total+$subtotal;
+            $total = $total+$data->reimburse;
                 } 
             } ?>
             </tbody>

@@ -77,12 +77,13 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     $byapotek = $biaya->jasa_apoteker;
     ?>
     <tr><td>Biaya Apoteker:</td><td align="right"><?= rupiah($biaya->jasa_apoteker) ?></td></tr>
+    <tr><td>Biaya Embalage:</td><td align="right"><?= rupiah($rows->tuslah) ?></td></tr>
     <?php } 
     $diskon_member = $tagihan*($rows->diskon_member/100);
-    $totals = ($tagihan+$byapotek-$diskon_member)+($jml_ppn/100*($tagihan+$byapotek-$diskon_member));
+    $totals = (($tagihan+$byapotek+$rows->tuslah)-$diskon_member)+($jml_ppn/100*($tagihan+$byapotek-$diskon_member));
     ?>
-    <tr><td>Diskon:</td><td align="right"><?= ($diskon_member) ?></td></tr>
-    <tr><td>PPN (%):</td><td align="right"><?= round($jml_ppn/100*($tagihan+$byapotek-$diskon_member)) ?></td></tr>
+    <tr><td>Diskon:</td><td align="right"><?= rupiah($diskon_member) ?></td></tr>
+    <tr><td>PPN (%):</td><td align="right"><?= rupiah(round($jml_ppn/100*(($tagihan+$byapotek+$rows->tuslah)-$diskon_member))) ?></td></tr>
     <tr><td>Total:</td><td align="right"><?= inttocur($totals) ?></td></tr>
     <?php if ($rows->bayar != '0') { 
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
@@ -91,4 +92,8 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-$totals) ?></td></tr>
     <?php } ?>
 </table>
+    <br/>
+    <center>
+        TERIMA KASIH, SEMOGA LEKAS SEMBUH
+    </center>
 </body>

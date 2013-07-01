@@ -105,12 +105,12 @@
     <?= form_hidden('defecta','yeaah') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="one_side">
-            <label>No. SP:</label><span id="no_doc" class="label"><?= get_last_id('pemesanan', 'id').'/'.date("dmY") ?></span>
-            <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-            <label>Supplier:</label><?= form_input(null, null, 'id=suplier') ?>
-            <?= form_hidden('id_suplier') ?>
-            </div>
+            <table width="100%">
+                <tr><td width="10%">No. SP:</td><td><span id="no_doc" class="label"><?= get_last_id('pemesanan', 'id').'/'.date("dmY") ?></span></td></tr>
+                <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+                <tr><td>Supplier:</td><td><?= form_input(null, null, 'id=suplier') ?></td></tr>
+                <?= form_hidden('id_suplier') ?>
+            </table>
         </fieldset>
     </div>
     <div class="data-list">

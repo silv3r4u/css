@@ -24,7 +24,7 @@ foreach ($list_data as $key => $data) {
         <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
         <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
         <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
-        <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
+        <td align="center"><input type="text" name="diskon[]" value="<?= $data->percent?>" id="diskon<?= $no ?>" onkeyup="subTotal(<?= $no ?>)" /></td>
         <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
         <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
         
@@ -34,12 +34,12 @@ foreach ($list_data as $key => $data) {
             <input type=hidden name="harga_jual[]" id="harga_jual<?= $no ?>" value="<?= $harga_jual ?>" /></td>
     </tr>
     <script type="text/javascript">
-        $(function() {
+        //$(function() {
             <?php if ($data->sisa <= 0) { ?>
                 alert('Stok barang untuk <?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?> = 0 !');
             <?php } ?>
             $('#bc<?= $no ?>').live('keydown', function(e) {
-                if (e.keyCode==13) {
+                if (e.keyCode===13) {
                     var bc = $('#bc<?= $no ?>').val();
                     $.ajax({
                         url: '<?= base_url('inventory/fillField') ?>',
@@ -47,21 +47,21 @@ foreach ($list_data as $key => $data) {
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
-                            if (data.nama != null) {
+                            if (data.nama !== null) {
                                 var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = ''; var kekuatan = '';
-                                if (data.isi != '1') { var isi = '@ '+data.isi; }
-                                if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                                if (data.satuan != null) { var satuan = data.satuan; }
-                                if (data.sediaan != null) { var sediaan = data.sediaan; }
-                                if (data.pabrik != null) { var pabrik = data.pabrik; }
-                                if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                                if (data.id_obat == null) {
+                                if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                                if (data.satuan !== null) { var satuan = data.satuan; }
+                                if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                                if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                                if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                                if (data.id_obat === null) {
                                     $('#pb<?= $no ?>').val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                 } else {
-                                    if (data.generik == 'Non Generik') {
-                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                    if (data.generik === 'Non Generik') {
+                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                     } else {
-                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan == '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
+                                        $('#pb<?= $no ?>').val(data.nama+' '+((kekuatan === '1')?'':kekuatan)+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
                                     }
                                     
                                 }
@@ -108,16 +108,16 @@ foreach ($list_data as $key => $data) {
                 },
                 formatItem: function(data,i,max){
                     var isi = ''; var satuan = ''; var sediaan = ''; var pabrik = ''; var satuan_terkecil = '';
-                    if (data.isi != '1') { var isi = '@ '+data.isi; }
-                    if (data.satuan != null) { var satuan = data.satuan; }
-                    if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                    if (data.sediaan != null) { var sediaan = data.sediaan; }
-                    if (data.pabrik != null) { var pabrik = data.pabrik; }
-                    if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                    if (data.id_obat == null) {
+                    if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                    if (data.satuan !== null) { var satuan = data.satuan; }
+                    if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                    if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                    if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                    if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                    if (data.id_obat === null) {
                         var str = '<div class=result>'+data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
                     } else {
-                        if (data.generik == 'Non Generik') {
+                        if (data.generik === 'Non Generik') {
                             var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil+'</div>';
                         } else {
                             var str = '<div class=result>'+data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil+'</div>';
@@ -131,16 +131,16 @@ foreach ($list_data as $key => $data) {
             }).result(
             function(event,data,formated){
                 var sisa = data.sisa;
-                if (data.isi != '1') { var isi = '@ '+data.isi; }
-                if (data.satuan != null) { var satuan = data.satuan; }
-                if (data.kekuatan != null && data.kekuatan != '0') { var kekuatan = data.kekuatan; }
-                if (data.sediaan != null) { var sediaan = data.sediaan; }
-                if (data.pabrik != null) { var pabrik = data.pabrik; }
-                if (data.satuan_terkecil != null) { var satuan_terkecil = data.satuan_terkecil; }
-                if (data.id_obat == null) {
+                if (data.isi !== '1') { var isi = '@ '+data.isi; }
+                if (data.satuan !== null) { var satuan = data.satuan; }
+                if (data.kekuatan !== null && data.kekuatan !== '0') { var kekuatan = data.kekuatan; }
+                if (data.sediaan !== null) { var sediaan = data.sediaan; }
+                if (data.pabrik !== null) { var pabrik = data.pabrik; }
+                if (data.satuan_terkecil !== null) { var satuan_terkecil = data.satuan_terkecil; }
+                if (data.id_obat === null) {
                     $(this).val(data.nama+' '+pabrik+' '+isi+' '+satuan_terkecil);
                 } else {
-                    if (data.generik == 'Non Generik') {
+                    if (data.generik === 'Non Generik') {
                         $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+isi+' '+satuan_terkecil);
                     } else {
                         $(this).val(data.nama+' '+kekuatan+' '+satuan+' '+sediaan+' '+pabrik+' '+isi+' '+satuan_terkecil);
@@ -150,7 +150,7 @@ foreach ($list_data as $key => $data) {
                 $('#id_pb<?= $no ?>').val(data.id);
                 $('#bc<?= $no ?>').val(data.barcode);
             });
-        })
+        //});
     </script>
 <?php 
 
@@ -167,7 +167,7 @@ $no++;
         var diskon_member = $('input[name=diskon_member]').val();
         var diskon_total = (<?= $total ?>*(diskon_member/100));
         $('#total-tagihan').html(numberToCurrency(parseInt(<?= $total ?>)));
-        //$('#total-diskon').html();
+        
         $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
         var jumlah = $('.tr_row').length;
         for (i = 1; i <= jumlah; i++) {

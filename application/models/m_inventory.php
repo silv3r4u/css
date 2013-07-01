@@ -1190,8 +1190,8 @@ class M_inventory extends CI_Model {
         $data_penjualan = array(
             'pegawai_penduduk_id' => $this->session->userdata('id_user'),
             'pembeli_penduduk_id' => ($id_pembeli != '')?$id_pembeli:NULL,
-            'diskon_bank' => $this->input->post('cara_bayar'),
-            'ppn' => $this->input->post('ppn'),
+            'diskon_bank' => $this->input->post('ppn'),
+            'ppn' => 0,
             'total' => currencyToNumber($this->input->post('total')),
             'bayar' => currencyToNumber($this->input->post('bayar')),
             'pembulatan' => currencyToNumber($this->input->post('bulat'))
@@ -1272,7 +1272,7 @@ class M_inventory extends CI_Model {
         if ($id_penjualan != null) {
             $q.="and p.id = '$id_penjualan'";
         }
-        $sql = "select td.*, p.resep_id, p.bayar, p.total, p.pembulatan, p.id as id_penjualan, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
+        $sql = "select td.*, p.resep_id, p.bayar, p.total, p.tuslah, p.pembulatan, p.id as id_penjualan, bp.id as id_pb, bp.barcode, bp.margin, bp.diskon, b.nama as barang, st.nama as satuan_terkecil, bp.isi, 
             o.kekuatan, r.nama as pabrik, s.nama as satuan, pd.member as diskon_member, sd.nama as sediaan, pdk.nama as pegawai, p.pembeli_penduduk_id, pdd.nama as pasien, pd.nama as pembeli, pdd.nama, rs.pasien_penduduk_id, p.ppn, p.total, p.bayar, p.pembulatan
             from penjualan p
             left join transaksi_detail td on (p.id = td.transaksi_id)
@@ -1690,21 +1690,26 @@ class M_inventory extends CI_Model {
     function penjualan_save() {
         $this->db->trans_begin();
         $resep = $this->input->post('id_resep');
+        $yes = $this->input->post('use_asuransi');
         $data_penjualan = array(
             'pegawai_penduduk_id' => $this->session->userdata('id_user'),
             'resep_id' => $resep,
             'diskon_bank' => $this->input->post('cara_bayar'),
             'ppn' => $this->input->post('ppn'),
-            'total' => currencyToNumber($this->input->post('total')),
+            'total' => currencyToNumber($this->input->post('nominal_total')),
             'bayar' => currencyToNumber($this->input->post('bayar')),
             'pembulatan' => currencyToNumber($this->input->post('bulat')),
             'tuslah' => currencyToNumber($this->input->post('tuslah'))
         );
-        $yes = $this->input->post('use_asuransi');
-        if (isset($yes)) {
-            $selisih = ($this->input->post('total_orig') - $this->input->post('bayar'));
+        
+        if (!empty($yes)) {
+            $selisih = ($this->input->post('nominal_total') - $this->input->post('total'));
             $data_penjualan['id_asuransi_produk'] = ($this->input->post('id_produk_asuransi') != '')?$this->input->post('id_produk_asuransi'):NULL;
             $data_penjualan['reimburse'] = $selisih;
+        } else {
+            $selisih = 0;
+            $data_penjualan['id_asuransi_produk'] = NULL;
+            $data_penjualan['reimburse'] = 0;
         }
         $this->db->insert('penjualan', $data_penjualan);
         $id_penjualan = $this->db->insert_id();
@@ -1742,7 +1747,7 @@ class M_inventory extends CI_Model {
                         'ed' => $jml->ed,
                         'harga' => $jml->harga,
                         'margin_percentage' => $marg->margin,
-                        'jual_diskon_percentage' => $disc[$key],
+                        'jual_diskon_percentage' => $diskon[$key],
                         'terdiskon_harga' => $terdiskon,
                         'subtotal' => currencyToNumber($subtotal[$key]),
                         'ppn' => $jml->ppn,
@@ -1775,7 +1780,9 @@ class M_inventory extends CI_Model {
             $data_kas['penerimaan'] = currencyToNumber($this->input->post('bulat'));
             $data_kas['akhir_saldo'] = ((isset($rows->akhir_saldo)?$rows->akhir_saldo:'0')+currencyToNumber($this->input->post('bulat')));
         }
-        $this->db->insert('kas', $data_kas);
+        if (($selisih !== '0') and ($this->input->post('total') !== '0')) {
+            $this->db->insert('kas', $data_kas);
+        }
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
         }
@@ -1838,22 +1845,26 @@ class M_inventory extends CI_Model {
             $q.="and ap.id = '$instansi'";
         }
         $sql = "
-            select td.waktu, td.keluar, td.hna, td.jual_diskon_percentage, (td.harga+(td.harga*(td.jual_diskon_percentage/100))) as harga, 
-        bp.id as id_pb, b.nama as barang, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan, p.id, pd.nama as pasien,
+            select td.waktu, td.keluar, p.reimburse, td.hna, td.jual_diskon_percentage, (td.harga+(td.harga*(td.jual_diskon_percentage/100))) as harga, 
+        bp.id as id_pb, b.nama as barang, ak.no_polish, st.nama as satuan_terkecil, bp.isi, o.kekuatan, r.nama as pabrik, s.nama as satuan, sd.nama as sediaan, p.id, pdd.nama as pasien,
         ap.nama as perusahaan_asuransi
         from penjualan p
-            join penduduk pd on (p.pembeli_penduduk_id = pd.id)
-            join transaksi_detail td on (p.id = td.transaksi_id)
-            join barang_packing bp on (td.barang_packing_id = bp.id)
-            join barang b on (bp.barang_id = b.id)
+            left join penduduk pd on (p.pembeli_penduduk_id = pd.id)
+            join resep rs on (rs.id = p.resep_id)
+            join penduduk pdd on (pdd.id = rs.pasien_penduduk_id)
+            join asuransi_kepesertaan ak on (ak.id_penduduk = pdd.id)
+            left join transaksi_detail td on (p.id = td.transaksi_id)
+            left join barang_packing bp on (td.barang_packing_id = bp.id)
+            left join barang b on (bp.barang_id = b.id)
             left join relasi_instansi r on (r.id = b.pabrik_relasi_instansi_id)
             left join obat o on (b.id = o.id)
             left join satuan s on (s.id = o.satuan_id)
             left join satuan st on (st.id = bp.terkecil_satuan_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
-            join asuransi_produk ap on (ak.asuransi_produk_id = ap.id)
-            join relasi_instansi ris on (ap.relasi_instansi_id = ris.id)
-            where td.transaksi_jenis = 'Penjualan' $q group by bp.id
+            join asuransi_produk ap on (p.id_asuransi_produk = ap.id)
+            left join relasi_instansi ris on (ap.relasi_instansi_id = ris.id)
+            
+            where td.transaksi_jenis = 'Penjualan' $q group by p.id
         ";
         //echo "<pre>".$sql."</pre>";
         return $this->db->query($sql);

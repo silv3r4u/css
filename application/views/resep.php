@@ -124,7 +124,8 @@ $(function() {
                     $('button[type=submit], #addnewrow').hide();
                     $('#id_receipt').html(data.id_resep);
                     $('.etiket,#copyresep, #print').show();
-                    konfirmasi();
+                    //konfirmasi();
+                    alert_tambah();
                 } else {
 
                 }

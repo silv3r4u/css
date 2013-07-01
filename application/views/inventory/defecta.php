@@ -72,12 +72,14 @@
         });
     </script>
     <h1><?= $title ?></h1>
-    <?= form_button(NULL, 'Check all', 'id=checkall') ?><?= form_button(null, 'Masukkan ke Rencana', 'id=pesancheck') ?><?= form_button(NULL, 'Rencana Pemesanan', 'id=showchart') ?>
+    <?= form_button(NULL, 'Check all', 'id=checkall') ?>
+    <!--<?= form_button(null, 'Masukkan ke Rencana', 'id=pesancheck') ?>-->
+    <?= form_button(NULL, 'Rencana Pemesanan', 'id=showchart') ?>
     <div class="data-list">
         <table class="sortable" id="table" width="100%">
             <thead>
             <tr>
-                <th class="nosort"><h3>#</h3></th>
+<!--                <th class="nosort"><h3>#</h3></th>-->
                 <th class="nosort"><h3>No.</h3></th>
                 <th><h3>Nama Barang</h3></th>
                 <th><h3>Distributor</h3></th>
@@ -94,7 +96,7 @@
                 $supp = $this->m_inventory->get_last_distributor($data->barang_packing_id)->row();
                 ?>
                 <tr class="tr_row" id="listdata<?= $key ?>">
-                    <td align="center"><?= form_checkbox('id_pb', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>
+<!--                    <td align="center"><?= form_checkbox('id_pb', $data->barang_packing_id, FALSE, 'class=check id=check'.$key.'') ?></td>-->
                     <td align="center"><?= ++$key ?></td>
                     <td><?= $data->barang ?> <?= $data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= $data->pabrik ?> @ <?= ($data->isi==1)?'':$data->isi ?> <?= $data->satuan_terkecil ?></td>
                     <td><?= isset($supp->suplier)?$supp->suplier:NULL ?></td>
