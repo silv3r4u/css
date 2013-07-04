@@ -226,8 +226,8 @@ function subTotal() {
         }
         
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
-        var disc_rupiah = Math.floor((tagihan+jasa_apt)*ppn);
-        $('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
+        //var disc_rupiah = Math.floor((tagihan+jasa_apt)*ppn);
+        //$('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
         var totalllica = Math.ceil(tagihan+jasa_apt-disc);
         var total = totalllica+(totalllica*ppn)+tuslah;
         $('#ppn-hasil').html(numberToCurrency(Math.ceil((tagihan+jasa_apt+vartuslah)*ppn)));
@@ -346,6 +346,14 @@ function searchs() {
 }
 
 $(function() {
+    $('#ppn').blur(function() {
+        var total_tgh = currencyToNumber($('#total-tagihan').html());
+        var bia_apotek= currencyToNumber($('#jasa-apt').html());
+        var discpersen= currencyToNumber($('#ppn').val());
+        var hasil_disc_rupiah = (discpersen/100)*(total_tgh+bia_apotek);
+        $('#disc_rp').val(numberToCurrency(parseInt(Math.floor(hasil_disc_rupiah))));
+        subTotal();
+    });
     $('#disc_rp').blur(function() {
         var total_tgh = currencyToNumber($('#total-tagihan').html());
         var bia_apotek= currencyToNumber($('#jasa-apt').html());

@@ -52,7 +52,6 @@ class Configuration extends CI_Model {
     function jenis_transaksi() {
         return array (
             '' => 'Semua Transaksi ...',
-            'Billing' => 'Billing',
             'Inkaso' => 'Inkaso',
             'Penerimaan Retur Pembelian' => 'Penerimaan Retur Pembelian',
             'Penerimaan dan Pengeluaran' => 'Penerimaan dan Pengeluaran',

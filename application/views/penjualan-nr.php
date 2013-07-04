@@ -275,6 +275,10 @@ function subTotal() {
             }
         }
         $('#total-diskon').html(numberToCurrency(Math.ceil(disc)));
+        
+        //var disc_rupiah = Math.floor((tagihan+jasa_apt)*ppn);
+        //$('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
+        
         $('#total-tagihan').html(numberToCurrency(tagihan));
         var totallica = (tagihan - disc)+jasa_apt;
         //var diskon_bank   = (totallica * ($('#disc_bank').html()/100)); original script
@@ -338,6 +342,22 @@ function create_dialog() {
 }
 
 $(function() {
+    $('#ppn').blur(function() {
+        var total_tgh = currencyToNumber($('#total-tagihan').html());
+        var discpersen= currencyToNumber($('#ppn').val());
+        var hasil_disc_rupiah = (discpersen/100)*total_tgh;
+        $('#disc_rp').val(numberToCurrency(parseInt(Math.floor(hasil_disc_rupiah))));
+        subTotal();
+    });
+    $('#disc_rp').blur(function() {
+        FormNum(this);
+        var total_tgh = currencyToNumber($('#total-tagihan').html());
+        var bia_apotek= 0;
+        var discrupiah= currencyToNumber($('#disc_rp').val());
+        var hasil_disc_persen = (discrupiah/(total_tgh+bia_apotek))*100;
+        $('#ppn').val(Math.floor(hasil_disc_persen));
+        subTotal();
+    });
     $('#reset').click(function() {
         $('.kegiatan').remove();
         $('#loaddata').empty().load('<?= base_url('pelayanan/penjualan_nr') ?>');
@@ -538,6 +558,7 @@ $(function() {
                     <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
 <!--                    <tr><td>Pembayaran Bank:</td><td><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?></td></tr>-->
                     <tr><td>Diskon (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
+                    <tr><td>Diskon (Rp.):</td><td><?= form_input('disc_rp', '0', 'id=disc_rp size=10 onblur=subTotal() onblur=FormNum(this)') ?></td></tr>
                     <tr><td>Pembeli:</td><td><?= form_input(null, null, 'id=pembeli') ?><?= form_hidden('id_pembeli') ?></td></tr>
                     <tr><td>Total Tagihan:</td><td id="total-tagihan"><?= isset($data['total'])?rupiah($data['total']):null ?> </td></tr>
                 </table>

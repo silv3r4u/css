@@ -23,27 +23,43 @@ for ($i=2; $i<=$baris; $i++)
 {
     
     $nama = $data->val($i, 1);
-    $kekuatan = $data->val($i, 2);
-    $satuan = $data->val($i, 3);
-    $adm_r = $data->val($i, 4);
+    $isi  = $data->val($i, 2);
+    $kekuatan = $data->val($i, 3);
+    $satuan = $data->val($i, 4);
+    //$adm_r = $data->val($i, 4);
     $perundangan = $data->val($i, 5);
     $kandungan = $data->val($i, 6);
     $indikasi = $data->val($i, 7);
-    $dosis = $data->val($i, 8);
-    $hna = $data->val($i, 9);
+    $hna = $data->val($i, 8);
+    $hja = $data->val($i, 9);
     $stokmin = $data->val($i, 10);
     $kategori = $data->val($i, 11);
+    $batch = $data->val($i, 12);
+    $ed = $data->val($i, 13);
+    $sisa = $data->val($i, 14);
+    $lokasi = $data->val($i, 15);
     $kat = (($kategori != NULL)?$kategori:"NULL");
     $sat = (($satuan != NULL)?$satuan:"NULL");
-    $query = "INSERT INTO barang (nama,barang_kategori_id, is_konsinyasi, stok_minimal, hna) VALUES ('$nama',$kat,'0','$stokmin','$hna')";
+    $query = "INSERT INTO barang (nama,barang_kategori_id, is_konsinyasi, stok_minimal, hna, lokasi_rak) VALUES ('$nama',$kat,'0','$stokmin','$hna','$lokasi')";
    // echo $query."<br/>";
     $hasil = mysql_query($query);
-    
     $id_barang = mysql_insert_id();
-    mysql_query("insert into obat (id, kekuatan, satuan_id, adm_r, perundangan, indikasi, kandungan, dosis) values ('$id_barang', '$kekuatan',$sat,'$adm_r','$perundangan','$indikasi', '$kandungan','$dosis')");
-    mysql_query("insert into barang_packing (barcode, barang_id, isi, margin) values ('$id_barang','$id_barang','1','0')");
     
-  
+    $margin = round(($hja - $hna)/$hna,0);
+    
+    if ($kategori == '1') {
+        mysql_query("insert into obat (id, kekuatan, satuan_id, adm_r, perundangan, indikasi, kandungan) values ('$id_barang', '".(($kekuatan != null)?$kekuatan:'1')."',$sat,'Oral','$perundangan','$indikasi', '$kandungan')");
+    }
+    mysql_query("insert into barang_packing (barcode, barang_id, isi, margin) values ('$id_barang','$id_barang','".(($isi != null)?$isi:'1')."','$margin')");
+    $id_packing = mysql_insert_id();
+    $exp = '';
+    if ($ed != null) {
+        $val_ed = explode("/", $ed);
+        $exp = ($val_ed[2].'-'.$val_ed[0].'-'.$val_ed[1]);
+    }
+    //echo "insert into transaksi_detail (waktu, transaksi_id, transaksi_jenis, barang_packing_id, nobatch, unit_id, ed, masuk, sisa, hna) VALUES (NOW(), '$id_opname','Stok Opname','$id_packing','$batch','1','$exp','$sisa','$sisa','$hna')<br/>";
+    mysql_query("insert into transaksi_detail (waktu, transaksi_id, transaksi_jenis, barang_packing_id, nobatch, unit_id, ed, masuk, sisa, hna) VALUES (NOW(), '$id_opname','Stok Opname','$id_packing','$batch','1','$exp','$sisa','$sisa','$hna')");
+    
   if ($hasil) $sukses++;
   else $gagal++;
 }
