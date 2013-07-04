@@ -185,6 +185,10 @@ function subTotal() {
         var tagihan = 0;
         var disc = 0;
         var ppn = ($('#ppn').val()/100)*(-1);
+        if (ppn === 0) {
+            var ppn = currencyToNumber($('#disc_rp').val());
+        }
+        
         var jasa_apt = parseInt(currencyToNumber($('#jasa-apt').html()));
         var vartuslah = parseInt(currencyToNumber($('#tuslah').val()));
         if (vartuslah >= 0) {
@@ -229,8 +233,15 @@ function subTotal() {
         //var disc_rupiah = Math.floor((tagihan+jasa_apt)*ppn);
         //$('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
         var totalllica = Math.ceil(tagihan+jasa_apt-disc);
-        var total = totalllica+(totalllica*ppn)+tuslah;
-        $('#ppn-hasil').html(numberToCurrency(Math.ceil((tagihan+jasa_apt+vartuslah)*ppn)));
+        var ppn = ($('#ppn').val()/100)*(-1);
+        if (ppn === 0) {
+            var ppn = currencyToNumber($('#disc_rp').val());
+            var total = (totalllica+tuslah-ppn);
+            $('#ppn-hasil').html(numberToCurrency(ppn));
+        } else {
+            var total = totalllica+(totalllica*ppn)+tuslah;
+            $('#ppn-hasil').html(numberToCurrency(Math.ceil((tagihan+jasa_apt+vartuslah)*ppn)));
+        }
         $('#total').html(numberToCurrency(Math.ceil(total)));
         $('input[name=total]').val(Math.ceil(total));
         
@@ -351,7 +362,8 @@ $(function() {
         var bia_apotek= currencyToNumber($('#jasa-apt').html());
         var discpersen= currencyToNumber($('#ppn').val());
         var hasil_disc_rupiah = (discpersen/100)*(total_tgh+bia_apotek);
-        $('#disc_rp').val(numberToCurrency(parseInt(Math.floor(hasil_disc_rupiah))));
+        $('#disc_rp').val('0');
+        $('#tuslah').focus();
         subTotal();
     });
     $('#disc_rp').blur(function() {
@@ -359,7 +371,9 @@ $(function() {
         var bia_apotek= currencyToNumber($('#jasa-apt').html());
         var discrupiah= currencyToNumber($('#disc_rp').val());
         var hasil_disc_persen = (discrupiah/(total_tgh+bia_apotek))*100;
-        $('#ppn').val(Math.ceil(hasil_disc_persen));
+        //alert(discrupiah+' '+bia_apotek+' '+total_tgh);
+        $('#ppn').val('0');
+        $('#tuslah').focus();
         subTotal();
     });
     <?php if (!isset($list_data)) { ?>
@@ -743,6 +757,7 @@ $(function() {
         </fieldset>
     </div>
     <div class="data-list">
+        NB: F9 Untuk pembayaran
         <table class="tabel form-inputan" width="100%">
             <thead>
             <tr>

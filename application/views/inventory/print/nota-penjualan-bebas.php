@@ -26,7 +26,6 @@
     <?php if ($jenis == '') {?>
     <tr><td>Nama:</td><td><?= $rows->pasien ?></td></tr>
     <?php } ?>
-    <tr><td>Dokter:</td><td><?= $rows->pegawai ?></td></tr>
 </table>
 
 <table width="100%" style="border-bottom: 1px solid #000">
@@ -70,7 +69,7 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
 ?>
 </table>
 <table width="100%">
-    <tr><td>Sub Total:</td><td align="right"><?= inttocur($tagihan) ?></td></tr>
+    <tr><td>Total Tagihan:</td><td align="right"><?= inttocur($tagihan) ?></td></tr>
     <?php 
     $byapotek = 0;
     if ($rows->resep_id != NULL) { 
@@ -81,22 +80,31 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     <tr><td>Biaya Embalage:</td><td align="right"><?= rupiah($rows->tuslah) ?></td></tr>
     <?php } 
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
-    $disc_penjualan= ($tagihan+$biaya->jasa_apoteker+$rows->tuslah)-$money->total;
+    $disc_penjualan= ($tagihan+$rows->tuslah)-$money->total;
     $diskon_member = $tagihan*($rows->diskon_member/100)+$disc_penjualan;
     $totals = (($tagihan+$byapotek+$rows->tuslah)-$diskon_member)+($jml_ppn/100*($tagihan+$byapotek-$diskon_member));
     ?>
-    <tr><td>Diskon (Rp.):</td><td align="right"><?= rupiah($diskon_member) ?></td></tr>
-<!--    <tr><td>PPN (%):</td><td align="right"><?= rupiah(round($jml_ppn/100*(($tagihan+$byapotek+$rows->tuslah)-$diskon_member))) ?></td></tr>-->
+    <tr><td>Diskon:</td><td align="right"><?= rupiah($diskon_member) ?></td></tr>
+    <!--<tr><td>PPN (%):</td><td align="right"><?= rupiah(round($jml_ppn/100*(($tagihan+$byapotek+$rows->tuslah)-$diskon_member))) ?></td></tr>-->
     <tr><td>Total:</td><td align="right"><?= inttocur($totals) ?></td></tr>
     <?php if ($rows->bayar != '0') { 
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
     ?>
     <tr><td>Bayar:</td><td align="right"><?= inttocur($money->bayar) ?></td></tr>
-    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->total-$money->bayar) ?></td></tr>
+    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-$totals) ?></td></tr>
     <?php } ?>
 </table>
     <br/>
-    <center>
+    <center style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc;">
         TERIMA KASIH, SEMOGA LEKAS SEMBUH
     </center>
+    <?php
+    if (($money->bayar-$totals) >= 0) { ?>
+    <table width="100%">
+        <tr>
+            <td width="50%">LUNAS</td><td width="50%" align="right"><?= $this->session->userdata('nama') ?></td>
+        </tr>
+    </table>
+    <?php }
+    ?>
 </body>

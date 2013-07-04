@@ -31,13 +31,14 @@ for ($i=2; $i<=$baris; $i++)
     $kandungan = $data->val($i, 6);
     $indikasi = $data->val($i, 7);
     $hna = $data->val($i, 8);
-    $hja = $data->val($i, 9);
-    $stokmin = $data->val($i, 10);
-    $kategori = $data->val($i, 11);
-    $batch = $data->val($i, 12);
-    $ed = $data->val($i, 13);
-    $sisa = $data->val($i, 14);
-    $lokasi = $data->val($i, 15);
+    $margin = round($data->val($i, 9),2);
+    //$hja = $data->val($i, 9);
+    $stokmin = $data->val($i, 11);
+    $kategori = $data->val($i, 12);
+    $batch = $data->val($i, 13);
+    $ed = $data->val($i, 14);
+    $sisa = $data->val($i, 15);
+    $lokasi = $data->val($i, 16);
     $kat = (($kategori != NULL)?$kategori:"NULL");
     $sat = (($satuan != NULL)?$satuan:"NULL");
     $query = "INSERT INTO barang (nama,barang_kategori_id, is_konsinyasi, stok_minimal, hna, lokasi_rak) VALUES ('$nama',$kat,'0','$stokmin','$hna','$lokasi')";
@@ -45,12 +46,12 @@ for ($i=2; $i<=$baris; $i++)
     $hasil = mysql_query($query);
     $id_barang = mysql_insert_id();
     
-    $margin = round(($hja - $hna)/$hna,0);
+    
     
     if ($kategori == '1') {
         mysql_query("insert into obat (id, kekuatan, satuan_id, adm_r, perundangan, indikasi, kandungan) values ('$id_barang', '".(($kekuatan != null)?$kekuatan:'1')."',$sat,'Oral','$perundangan','$indikasi', '$kandungan')");
     }
-    mysql_query("insert into barang_packing (barcode, barang_id, isi, margin) values ('$id_barang','$id_barang','".(($isi != null)?$isi:'1')."','$margin')");
+    mysql_query("insert into barang_packing (barcode, barang_id, terbesar_satuan_id, isi, terkecil_satuan_id, margin) values ('$id_barang','$id_barang','2','".(($isi != null)?$isi:'1')."','2','$margin')");
     $id_packing = mysql_insert_id();
     $exp = '';
     if ($ed != null) {

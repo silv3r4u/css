@@ -12,7 +12,7 @@ $(function() {
         if (ok) {
             var id = $('#id_pembelian').html();
             $.get('<?= base_url('inventory/pembelian_delete') ?>/'+id, function(data) {
-                if (data.status == true) {
+                if (data.status === true) {
                     alert_delete();
                     loading();
                 }

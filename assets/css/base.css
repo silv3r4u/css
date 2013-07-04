@@ -34,7 +34,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .logoutbutton:hover { background: #999; cursor: pointer; }
     .logout { padding: 0px; position: absolute; top: 88px; left: 7px; }
     .logout:hover { cursor: pointer; }
-    .mainribbon-min { height: 14%; width: 100%; top: 0; background: #b8d806 url('../images/headbang.jpg') no-repeat; }
+    .mainribbon-min { height: 14%; width: 100%; top: 0; background: #b8d806 url('../images/headbang.jpg') no-repeat left; }
     .main-menu-user { color:#fff; padding-top: 5px; width:100%; font-size:10px; position: fixed;}
     .menu-detail:hover { overflow-y: auto; }
     .menu-detail { overflow-y: hidden; background: #32373d; color: #000; width: 20%; float: left; height: 83%;}
@@ -64,7 +64,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .logout:hover { cursor: pointer; }
     .mainribbon-min { 
         height: 14%; width: 100%; top: 0;
-        background: url(../images/headbang.jpg) no-repeat top;
+        background: url(../images/headbang.jpg) no-repeat left;
     }
     .main-menu-user { color:#fff; padding-top: 5px; width:100%; font-size:10px; position: fixed;}
     .menu-detail:hover { overflow-y: auto; }

@@ -251,6 +251,9 @@ function subTotal() {
         
         var jasa_apt = 0;
         var ppn = ($('#ppn').val()/100)*(-1);
+        if (ppn === 0) {
+            var ppn = currencyToNumber($('#disc_rp').val());
+        }
         $('#disc_bank').html(ppn);
         $('#diskon_bank').val(ppn);
         for (i = 0; i <= jumlah; i++) {
@@ -280,12 +283,19 @@ function subTotal() {
         //$('#disc_rp').val(numberToCurrency(parseInt(disc_rupiah)));
         
         $('#total-tagihan').html(numberToCurrency(tagihan));
-        var totallica = (tagihan - disc)+jasa_apt;
+        var totallica = (tagihan - disc);
         //var diskon_bank   = (totallica * ($('#disc_bank').html()/100)); original script
         var diskon_bank   = (totallica * (0/100));
         var diskon_jual   = (totallica * ($('#disk_penjualan').html()/100));
-        var pajak = ppn*tagihan;
-        var new_totallica = (totallica - (diskon_bank+diskon_jual))+pajak;
+        var ppn = ($('#ppn').val()/100)*(-1);
+        if (ppn === 0) {
+            var ppn = currencyToNumber($('#disc_rp').val());
+            var pajak = tagihan-ppn;
+            var new_totallica = (totallica - ppn);
+        } else {
+            var pajak = ppn*tagihan;
+            var new_totallica = (totallica - (diskon_bank+diskon_jual))+pajak;
+        }
         $('#total, #total_tagihan_penjualan_nr').html(numberToCurrency(Math.ceil(new_totallica)));
         if (tagihan !== 0) {
             $('#bulat').val(numberToCurrency(pembulatan_seratus(Math.ceil(new_totallica))));
@@ -343,19 +353,14 @@ function create_dialog() {
 
 $(function() {
     $('#ppn').blur(function() {
-        var total_tgh = currencyToNumber($('#total-tagihan').html());
-        var discpersen= currencyToNumber($('#ppn').val());
-        var hasil_disc_rupiah = (discpersen/100)*total_tgh;
-        $('#disc_rp').val(numberToCurrency(parseInt(Math.floor(hasil_disc_rupiah))));
+        $('#disc_rp').val('0');
+        $('#pembeli').focus();
         subTotal();
     });
     $('#disc_rp').blur(function() {
         FormNum(this);
-        var total_tgh = currencyToNumber($('#total-tagihan').html());
-        var bia_apotek= 0;
-        var discrupiah= currencyToNumber($('#disc_rp').val());
-        var hasil_disc_persen = (discrupiah/(total_tgh+bia_apotek))*100;
-        $('#ppn').val(Math.floor(hasil_disc_persen));
+        $('#ppn').val('');
+        $('#pembeli').focus();
         subTotal();
     });
     $('#reset').click(function() {
@@ -571,11 +576,12 @@ $(function() {
                     <tr><td>Total:</td><td id="total" class="label"></td></tr>
                     <tr><td>Pembulatan Total:</td><td><?= form_input('bulat', NULL, 'id=bulat size=30 onkeyup=FormNum(this) ') ?></td></tr>
                     <tr><td>Bayar (Rp):</td><td><?= form_input('bayar', null, 'id=bayar_nr size=30 ') ?></td></tr>
-                <!--<tr><td>Kembalian (Rp)</td><td><span id="kembalian" class="label"><?= rupiah(isset($kembali)?$kembali:null) ?></span>-->
+                    <tr><td colspan="2" style="font-size: 10px; color: blue;">NB: F9 Untuk pembayaran</td></tr>
                 </table>
             </div>
             <br/>
-            <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
+            
+        <?= form_button('Reset', 'Reset Form', 'id=reset') ?>
         <?= form_button(null, 'Cetak Nota', 'id=print') ?>
         </fieldset>
         

@@ -35,7 +35,7 @@ class M_inv_autocomplete extends CI_Model {
         if ($id != NULL) {
             $q = " where p.id = '$id'";
         } else if ($name != null) {
-            $q = "where p.nama like ('%$name%')";
+            $q = "where p.nama like ('%$name%') order by locate ('$name', p.nama)";
         }
         $sql = "select p.id as id_penduduk, p.nama, p.lahir_tanggal, p.lahir_kabupaten_id, p.telp, p.member, pk.nama as pekerjaan, dp.*, kb.nama as kabupaten from penduduk p
         join dinamis_penduduk dp on (p.id = dp.penduduk_id)

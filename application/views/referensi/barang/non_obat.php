@@ -110,7 +110,7 @@
                     data: 'search='+$('#keys').val(),
                     cache: false,
                     success: function(data) {
-                        $('#obat_list').html(data);
+                        $('#non_list').html(data);
                     }
                 });
             }
