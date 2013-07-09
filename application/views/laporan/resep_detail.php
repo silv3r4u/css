@@ -2,9 +2,9 @@
 $(function() {
     $('#salinresep').click(function() {
         var id = $('#id_resep').html();
-        location.href='<?= base_url('laporan/salin_resep') ?>/'+id;
-    })
-})
+        window.open('<?= base_url('laporan/salin_resep') ?>/'+id, 'mywindow', 'width=300px, height=400, resizable=yes, scrollable=yes');
+    });
+});
 function cetak_etiket(i) {
     var no_resep = $('#id_resep').html();
     var no_r = i;
@@ -19,9 +19,9 @@ function cetak_etiket(i) {
                 modal: true,
                 width: 350,
                 height: 400
-            })
+            });
         }
-    })
+    });
 }
 </script>
 <div id="data_cetak"></div>

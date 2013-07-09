@@ -253,17 +253,16 @@ $(function() {
     <?= form_open('inventory/reretur_penjualan_save', 'id=form_reretur_penjualan') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="one_side">
         <?= form_hidden('totalreretur') ?>
-        <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-        <label>No. Retur:</label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>
-        <label>Pembeli:</label><span id="pembeli" class="label"><?= isset($_GET['id'])?$data[0]['pembeli']:null ?></span>
-        <label>Pegawai:</label><span id="pegawai" class="label"><?= isset($_GET['id'])?$data[0]['pegawai']:null ?></span>
-        <label>Total:</label><span class="label" id="returan"></span>
-        <label></label><span class="label"><?= form_radio('berupa', 'barang', TRUE) ?> Barang</span> <span class="label"><?= form_radio('berupa', 'uang', FALSE) ?> Uang</span>
-            <label></label><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
+        <table width="100%">
+            <tr style="line-height: 20px;"><td width="13%">Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+            <tr style="line-height: 20px;"><td>No. Retur:</td><td><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?></td></tr>
+            <tr style="line-height: 20px;"><td>Pembeli:</td><td><span id="pembeli" class="label"><?= isset($_GET['id'])?$data[0]['pembeli']:null ?></span></td></tr>
+            <tr style="line-height: 20px;"><td>Pegawai:</td><td><span id="pegawai" class="label"><?= isset($_GET['id'])?$data[0]['pegawai']:null ?></span></td></tr>
+            <tr style="line-height: 20px;"><td>Total:</td><td><span class="label" id="returan"></span></td></tr>
+            <tr style="line-height: 20px;"><td>Jenis Pengeluaran:</td><td><span class="label"><?= form_radio('berupa', 'barang', TRUE) ?> Barang</span> <span class="label"><?= form_radio('berupa', 'uang', FALSE) ?> Uang</span></td></tr>
+            <tr style="line-height: 20px;"><td></td><td><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?></td></tr>
         </table>
-        </div>
         </fieldset>
     </div>
     <div class="data-list">

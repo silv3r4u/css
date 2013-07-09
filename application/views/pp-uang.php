@@ -131,17 +131,17 @@ $(function() {
     <?= form_open('billing/pp_uang_save', 'id=form_pp_uang') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
-            <div class="one_side">
-                <label>No. Dokumen</label> <?= form_input('nodoc',NULL,'id=nodoc size=30') ?>
-                <label>Tanggal</label><?= form_input('tanggal',date("d/m/Y H:i"),'id=awal size=15') ?>
-                <label>Jenis Transaksi</label>
-                <span class="label"> <?= form_radio('jenis', 'Penerimaan', TRUE) ?> Pemasukan </span>
-                <span class="label"> <?= form_radio('jenis', 'Pengeluaran', FALSE) ?>Pengeluaran </span>
-                <?php
-                if(!isset($_GET['id'])) { ?>
-                <label></label><?= form_button(null, 'Tambah Baris','id=addnewrow') ?>
-                <?php } ?>
-            </div>
+        <table width="100%">
+            <tr style="line-height: 20px;"><td width="13%">No. Dokumen</td><td> <?= form_input('nodoc',NULL,'id=nodoc size=30') ?></td></tr>
+            <tr style="line-height: 20px;"><td>Tanggal</td><td><?= form_input('tanggal',date("d/m/Y H:i"),'id=awal size=15') ?></td></tr>
+            <tr style="line-height: 20px;"><td>Jenis Transaksi</td><td>
+            <span class="label"> <?= form_radio('jenis', 'Penerimaan', TRUE) ?> Pemasukan </span>
+            <span class="label"> <?= form_radio('jenis', 'Pengeluaran', FALSE) ?>Pengeluaran </span></td></tr>
+            <?php
+            if(!isset($_GET['id'])) { ?>
+            <tr style="line-height: 20px;"><td></td><td><?= form_button(null, 'Tambah Baris','id=addnewrow') ?></td></tr>
+            <?php } ?>
+        </table>
         </fieldset>
     </div>
 	<div class="data-list">

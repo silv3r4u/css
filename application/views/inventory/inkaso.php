@@ -139,21 +139,25 @@ $(function() {
     <?= form_open('inventory/inkaso', 'id=form_inkaso') ?>
     <div class="data-input">
     <fieldset><legend>Summary</legend>
-        <div class="one_side">
-        <?= form_hidden('id_layanan', isset($rows['id'])?$rows['id']:null, null) ?>
         
-            <label>No.:</label><span class="label"> <?= isset($_GET['id'])?$_GET['id']:get_last_id('inkaso', 'id') ?></span>
-            <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-            <label>No. Faktur / Pembelian:</label><?= form_input('nopembelian', isset($_GET['id'])?$rows['id_pembelian']:null, 'id=nopembelian size=30') ?> <?= form_hidden('nopemb', isset($_GET['id'])?$rows['id_pembelian']:null) ?>
-            <label>Suplier:</label> <span class="label" id="suplier"><?= isset($_GET['id'])?$rows['nama']:null ?></span>
-            <label>Total Tagihan (Rp.):</label><span class="label" id="total_tagihan"></span>
-            <label>Total Terbayar (Rp.):</label><span class="label" id="total_terbayar"></span>
-            <label>Sisa Tagihan (Rp.):</label><span class="label" id="sisa_tagihan"></span>
-            <label>Bayar (Rp.):</label><?= form_input('bayar', null, 'id="bayar" onkeyup=FormNum(this) size=30') ?>
-        </div>
+        <?= form_hidden('id_layanan', isset($rows['id'])?$rows['id']:null, null) ?>
+            <table width="100%" class="tabel-new">
+                <tr style="line-height: 20px;"><td width="15%">No.:</td><td><span class="label"> <?= isset($_GET['id'])?$_GET['id']:get_last_id('inkaso', 'id') ?></span></td></tr>
+                <tr style="line-height: 20px;"><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+                <tr style="line-height: 20px;"><td>No. Faktur / Pembelian:</td><td><?= form_input('nopembelian', isset($_GET['id'])?$rows['id_pembelian']:null, 'id=nopembelian size=30') ?> <?= form_hidden('nopemb', isset($_GET['id'])?$rows['id_pembelian']:null) ?></td></tr>
+                <tr style="line-height: 20px;"><td>Suplier:</td><td> <span class="label" id="suplier"><?= isset($_GET['id'])?$rows['nama']:null ?></span></td></tr>
+                <tr style="line-height: 20px;"><td>Total Tagihan (Rp.):</td><td><span class="label" id="total_tagihan"></span></td></tr>
+                <tr style="line-height: 20px;"><td>Total Terbayar (Rp.):</td><td><span class="label" id="total_terbayar"></span></td></tr>
+                <tr style="line-height: 20px;"><td>Sisa Tagihan (Rp.):</td><td><span class="label" id="sisa_tagihan"></span></td></tr>
+                <tr style="line-height: 20px;"><td>Bayar (Rp.):</td><td><?= form_input('bayar', null, 'id="bayar" onkeyup=FormNum(this) size=30') ?></td></tr>
+                <tr><td></td><td>
+                        <?= form_submit('simpan', 'Simpan', 'id=simpan') ?> 
+                        <?= form_button('Reset', 'Reset', 'id=reset') ?>
+                    </td></tr>
+            </table>
+        
     </fieldset>
     </div>
-    <?= form_submit('simpan', 'Simpan', 'id=simpan') ?> 
-    <?= form_button('Reset', 'Reset', 'id=reset') ?>
+    
     <?= form_close() ?>
 </div>

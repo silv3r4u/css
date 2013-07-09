@@ -141,7 +141,7 @@ $(function() {
     });
     $('#copyresep').click(function() {
         var id = $('#id_receipt').html();
-        location.href='<?= base_url('laporan/salin_resep') ?>/'+id;
+        window.open('<?= base_url('laporan/salin_resep') ?>/'+id, 'mywindow', 'width=300px, height=400, resizable=yes, scrollable=yes');
     });
     
     $('#csr').click(function() {

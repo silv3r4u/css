@@ -39,6 +39,7 @@ h2 { font-size: 14px; display: block; }
 .tabel th a { color: #fff; font: 10px tahoma !important; font-weight: bold !important; text-decoration: underline}
 .tabel .total-sum {background: #f4f4f4}
 .tabel select { border: none; width: 100%; }
+.tabel-new tr td { height: 15px; }
 .tabel input[type=text] { border: none; }
 .tabel-input td input[type=text] { min-width: 200px; }
 .tabel-input td:first-child { width: 150px; height: 20px;  text-align: right ;color: #666;}

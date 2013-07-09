@@ -1209,6 +1209,7 @@ class M_inventory extends CI_Model {
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
                 $value = explode("-", $kemasan[$key]);
+                $hna_barang = $this->db->query("select hna from barang where id = (select barang_id from barang_packing where id = '".$data."')")->row();
                 $jml = $this->db->query("select * from transaksi_detail
                     WHERE barang_packing_id = '$data' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."'
                     and ed = '$ed[$key]' order by waktu desc limit 1")->row();
@@ -1224,7 +1225,7 @@ class M_inventory extends CI_Model {
                         'subtotal' => currencyToNumber($subtotal[$key]),
                         'harga' => (isset($jml->harga)?$jml->harga:'0'),
                         'ppn' => (isset($jml->ppn)?$jml->ppn:'0'),
-                        'hna' => (isset($jml->hna)?$jml->hna:'0'),
+                        'hna' => $hna_barang->hna,
                         'hpp' => (isset($jml->hna)?$jml->hna:'0'),
                         'het' => (isset($jml->het)?$jml->het:'0'),
                         'jual_diskon_percentage' => $diskon[$key],
@@ -1696,7 +1697,7 @@ class M_inventory extends CI_Model {
             'resep_id' => $resep,
             'diskon_bank' => $this->input->post('cara_bayar'),
             'ppn' => $this->input->post('ppn'),
-            'total' => currencyToNumber($this->input->post('nominal_total')),
+            'total' => currencyToNumber($this->input->post('total')),
             'bayar' => currencyToNumber($this->input->post('bayar')),
             'pembulatan' => currencyToNumber($this->input->post('bulat')),
             'tuslah' => currencyToNumber($this->input->post('tuslah'))
@@ -1726,6 +1727,7 @@ class M_inventory extends CI_Model {
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
                 $terdiskon = $harga_jual[$key] - ($harga_jual[$key]*($disc[$key]/100));
+                $hna_barang = $this->db->query("select hna from barang where id = (select barang_id from barang_packing where id = '".$data."')")->row();
                 $jml = $this->db->query("select * from transaksi_detail 
                     WHERE barang_packing_id = '$data' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."'
                     and ed = '$ed[$key]' order by waktu desc limit 1")->row();
@@ -1751,7 +1753,7 @@ class M_inventory extends CI_Model {
                         'terdiskon_harga' => $terdiskon,
                         'subtotal' => currencyToNumber($subtotal[$key]),
                         'ppn' => $jml->ppn,
-                        'hna' => $jml->hna,
+                        'hna' => $hna_barang->hna,
                         'hpp' => $jml->hpp,
                         'het' => $jml->het,
                         'awal' => $jml->sisa,

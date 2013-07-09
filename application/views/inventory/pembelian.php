@@ -475,31 +475,35 @@ function hitungDetail() {
     <?= form_hidden('total_tagihan') ?>
     <div class="data-input">
         <fieldset><legend>Summary</legend>
+            
             <div class="left_side" style="min-height: 300px;">
-            <label>No.:</label> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span>
-            <label>Jenis Pembelian</label><?= form_dropdown('jenis', array('tempo' => 'Tempo', 'cash' => 'Cash', 'konsinyasi' => 'Konsinyasi'), NULL, 'id=jenis') ?>
-            <label id="label_sp">No. SP:</label><?= form_input('no_dokumen', isset($rows->dokumen_no)?$rows->dokumen_no:null, 'id=nopemesanan size=20') ?>
-            <?= form_hidden('no_pemesanan',isset($rows->id)?$rows->id:NULL) ?>
-            <label>No. Faktur:</label><?= form_input('nodoc', null, 'size=20 id=nodoc') ?>
-            <label>Tanggal:</label><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?>
-            <label>Supplier:</label><?= form_input(null, isset($rows->id)?$rows->suplier:null, 'id=suplier') ?> <?= form_hidden('id_suplier', isset($rows->id)?$rows->suplier_relasi_instansi_id:null) ?>
-            <label>Ttd Penerimaan:</label>
-                <span class="label"><?= form_radio('ttd', 'Ada', TRUE, null) ?>  Ada</span>
-                <span class="label"><?= form_radio('ttd', 'Tidak', FALSE, null) ?> Tidak</span>
-            <label>PPN (%):</label><?= form_input('ppn', '0', 'id=ppn min=0 max=100 onblur=hitungDetail() ') ?>
-            <label>Materai (Rp.):</label><?= form_input('materai', '0', 'id=materai size=10 onkeyup=FormNum(this) onblur=hitungDetail() ') ?>
-            <label id="tgl_tempo">Tgl Jatuh Tempo:</label><?= form_input('tempo', null, 'id=tempo class=tanggals size=10') ?>
+                <table width="100%" class="tabel-new">
+                    <tr><td>No.:</td><td> <span class="label" id="id_pembelian"><?= get_last_id('pembelian', 'id') ?></span></td></tr>
+                    <tr><td>Jenis Pembelian</td><td><?= form_dropdown('jenis', array('tempo' => 'Tempo', 'cash' => 'Cash', 'konsinyasi' => 'Konsinyasi'), NULL, 'id=jenis') ?></td></tr>
+                    <tr id="label_sp"><td>No. SP:</td><td><?= form_input('no_dokumen', isset($rows->dokumen_no)?$rows->dokumen_no:null, 'id=nopemesanan size=20') ?></td></tr>
+                    <?= form_hidden('no_pemesanan',isset($rows->id)?$rows->id:NULL) ?></td></tr>
+                    <tr><td>No. Faktur:</td><td><?= form_input('nodoc', null, 'size=20 id=nodoc') ?></td></tr>
+                    <tr><td>Tanggal:</td><td><?= form_input('tgldoc', date("d/m/Y"), 'size=10 class=tanggals') ?></td></tr>
+                    <tr><td>Supplier:</td><td><?= form_input(null, isset($rows->id)?$rows->suplier:null, 'id=suplier') ?> <?= form_hidden('id_suplier', isset($rows->id)?$rows->suplier_relasi_instansi_id:null) ?></td></tr>
+                    <tr><td>Ttd Penerimaan:</td><td>
+                        <span class="label"><?= form_radio('ttd', 'Ada', TRUE, null) ?>  Ada</span>
+                        <span class="label"><?= form_radio('ttd', 'Tidak', FALSE, null) ?> Tidak</span></td></tr>
+                    <tr><td>PPN (%):</td><td><?= form_input('ppn', '0', 'id=ppn min=0 max=100 onblur=hitungDetail() ') ?></td></tr>
+                    <tr><td>Materai (Rp.):</td><td><?= form_input('materai', '0', 'id=materai size=10 onkeyup=FormNum(this) onblur=hitungDetail() ') ?></td></tr>
+                    <tr id="tgl_tempo"><td>Tgl Jatuh Tempo:</td><td><?= form_input('tempo', null, 'id=tempo class=tanggals size=10') ?></td></tr>
 
-            <label>Keterangan:</label><?= form_textarea('keterangan',null, null) ?>
-            <label></label><?= form_button('add','Tambah Baris', 'id=addnewrow') ?>
+                    <tr><td valign="top">Keterangan:</td><td><?= form_textarea('keterangan',null, null) ?></td></tr>
+                    <tr><td></td><td><?= form_button('add','Tambah Baris', 'id=addnewrow') ?></td></tr>
+                </table>
             </div>
             <div class="right_side" style="min-height: 300px;">
-                    <label>Total Harga:</label><span class="label" id="total-harga"></span>
-                    <label>Total Diskon:</label><span class="label" id="total-diskon"></span>
-                    <label>Total Pembelian:</label><span class="label" id="total-pembelian"></span>
-                    <label>Total PPN:</label><span class="label" id="total-ppn"></span>
-                    <label>Materai:</label><span class="label" id="materai2"></span>
-                    <label>Total Tagihan:</label><span class="label" id="total-tagihan"></span>
+                <table width="100%">
+                    <tr><td>Total Harga:</td><td><span class="label" id="total-harga"></span></td></tr>
+                    <tr><td>Total Diskon:</td><td><span class="label" id="total-diskon"></span></td></tr>
+                    <tr><td>Total Pembelian:</td><td><span class="label" id="total-pembelian"></span></td></tr>
+                    <tr><td>Total PPN:</td><td><span class="label" id="total-ppn"></span></td></tr>
+                    <tr><td>Materai:</td><td><span class="label" id="materai2"></span></td></tr>
+                    <tr><td>Total Tagihan:</td><td><span class="label" id="total-tagihan"></span></td></tr>
                 </table>
             </div>
         </fieldset>

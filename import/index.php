@@ -34,3 +34,6 @@ File Excel: <input name="userfile" type="file">
 <a href="../">Kembali</a>
 </div>
 
+<?php
+mysql_connect("localhost", "root", '');
+?>

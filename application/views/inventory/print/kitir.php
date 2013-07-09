@@ -1,6 +1,6 @@
 <title><?= $title ?></title>
 <style>
-    * { font-family: Arial; font-size: 10px; }
+    * { font-family: Calibri; font-size: 11px; font-weight: bold; }
 </style>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-print.min.js') ?>"></script>
 <script type="text/javascript">
@@ -83,7 +83,7 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
     $disc_penjualan= ($tagihan+$biaya->jasa_apoteker+$rows->tuslah)-$money->total;
     $diskon_member = $tagihan*($rows->diskon_member/100)+$disc_penjualan;
-    $totals = (($tagihan+$byapotek+$rows->tuslah)-$diskon_member)+($jml_ppn/100*($tagihan+$byapotek-$diskon_member));
+    $totals = (($tagihan+$byapotek+$rows->tuslah)-$diskon_member);
     ?>
     <tr><td>Diskon (Rp.):</td><td align="right"><?= rupiah($diskon_member) ?></td></tr>
 <!--    <tr><td>PPN (%):</td><td align="right"><?= rupiah(round($jml_ppn/100*(($tagihan+$byapotek+$rows->tuslah)-$diskon_member))) ?></td></tr>-->
@@ -92,7 +92,7 @@ $jml_ppn = isset($rows->ppn)?$rows->ppn:'0';
     $money = $this->db->query("select total, bayar, pembulatan from penjualan where id = '".$rows->id_penjualan."'")->row();
     ?>
     <tr><td>Bayar:</td><td align="right"><?= inttocur($money->bayar) ?></td></tr>
-    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->total-$money->bayar) ?></td></tr>
+    <tr><td>Kembali:</td><td align="right"><?= inttocur($money->bayar-$money->total) ?></td></tr>
     <?php } ?>
 </table>
     <br/>

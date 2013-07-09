@@ -30,7 +30,11 @@ for ($i=2; $i<=$baris; $i++)
     $hasil = mysql_query($query);
     $id_penduduk = mysql_insert_id();
     $query2 = "INSERT into dinamis_penduduk (penduduk_id, alamat, identitas_no) VALUES ('$id_penduduk','$alamat','$noktp')";
-      mysql_query($query2);
+    mysql_query($query2);
+    
+    if ($alamat == 'ASKES') {
+        mysql_query("insert into asuransi_kepesertaan (id_penduduk, id_asuransi_produk, no_polish) VALUES ('$id_penduduk','1','$noktp')");
+    }
   if ($hasil) $sukses++;
   else $gagal++;
 }

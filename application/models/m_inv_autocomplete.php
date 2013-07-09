@@ -116,7 +116,7 @@ class M_inv_autocomplete extends CI_Model {
     }
     
     function load_data_packing_barang_where_stok_ready($q, $extra_param = null) {
-        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, td.ed, td.sisa, td.hpp, td.hna, td.ppn, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil,
+        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, td.ed, td.sisa, td.hpp, b.hna, td.ppn, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil,
             o.kekuatan from transaksi_detail td
             join barang_packing bp on (td.barang_packing_id = bp.id)
             join barang b on (bp.barang_id = b.id)
@@ -140,7 +140,7 @@ class M_inv_autocomplete extends CI_Model {
         if ($extra_param != NULL) {
             $param.=" and b.id = '$extra_param'";
         }
-        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, td.ed, td.sisa, td.hpp, td.hna, td.ppn, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, 
+        $sql = "select o.id as id_obat, o.generik, bp.*, r.nama as pabrik, td.ed, td.sisa, td.hpp, b.hna, td.ppn, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, 
             stb.nama as satuan_terbesar, o.kekuatan from barang_packing bp
             join barang b on (b.id = bp.barang_id)
             left join obat o on (b.id = o.id)
@@ -195,8 +195,9 @@ class M_inv_autocomplete extends CI_Model {
     }
     
     function get_harga_jual($id) {
-        $sql = "select d.hpp, b.margin, (d.hna*(b.margin/100)+d.hna) as harga, b.diskon from transaksi_detail d 
+        $sql = "select d.hpp, b.margin, (br.hna*(b.margin/100)+br.hna) as harga, b.diskon from transaksi_detail d 
             join barang_packing b on (d.barang_packing_id = b.id) 
+            join barang br on (br.id = b.barang_id)
             where d.transaksi_jenis != 'Pemesanan' and d.barang_packing_id = '$id' and d.unit_id = '".$this->session->userdata('id_unit')."' order by d.id desc limit 1";
         return $this->db->query($sql);
     }
@@ -264,14 +265,15 @@ class M_inv_autocomplete extends CI_Model {
     }
 
     function get_harga_barang_penjualan($id) {
-        $sql = "select d.hpp, b.margin, (d.hna*(b.margin/100)+d.hna) as harga, b.diskon from transaksi_detail d 
+        $sql = "select d.hpp, b.margin, (br.hna*(b.margin/100)+br.hna) as harga, b.diskon from transaksi_detail d 
             join barang_packing b on (d.barang_packing_id = b.id) 
+            join barang br on (br.id = b.barang_id)
             where d.transaksi_jenis != 'Pemesanan' and d.barang_packing_id = '$id' and d.unit_id = '" . $this->session->userdata('id_unit') . "' order by d.id desc limit 1";
         return $this->db->query($sql);
     }
 
     function get_penjualan_field($barcode) {
-        $sql = "select d.hpp, bp.margin, (d.hna*(bp.margin/100)+d.hna) as harga, bp.diskon,
+        $sql = "select d.hpp, bp.margin, (br.hna*(bp.margin/100)+br.hna) as harga, bp.diskon,
         o.id as id_obat, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, b.nama, s.nama as satuan, st.nama as satuan_terkecil, 
         stb.nama as satuan_terbesar, o.kekuatan from transaksi_detail d 
             join barang_packing bp on (d.barang_packing_id = bp.id) 
@@ -336,7 +338,7 @@ class M_inv_autocomplete extends CI_Model {
     function load_penjualan_by_no_resep($noresep) {
         $sql = "select rr.*, o.generik, td.sisa, td.ed, rd.jual_harga, rd.pakai_jumlah, b.nama as barang, bp.margin, bp.diskon, rd.barang_packing_id, bp.barcode, r.nama as pabrik, 
             o.kekuatan, st.nama as satuan_terkecil, sd.nama as sediaan, bp.isi, td.keluar, s.nama as satuan, td.harga, bp.diskon as percent,
-            td.hna
+            b.hna
             from resep_r rr
                 join resep_racik_r_detail rd on (rr.id = rd.r_resep_id)
                 join barang_packing bp on (rd.barang_packing_id = bp.id)
@@ -473,7 +475,7 @@ class M_inv_autocomplete extends CI_Model {
     }
     
     function load_data_retur_unit($id) {
-        $sql = "select pdd.nama as pegawai,o.generik, td.barang_packing_id, td.ed, td.hpp, td.hna, td.masuk, td.sisa, o.id as id_obat, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, 
+        $sql = "select pdd.nama as pegawai,o.generik, td.barang_packing_id, td.ed, td.hpp, b.hna, td.masuk, td.sisa, o.id as id_obat, bp.*, r.nama as pabrik, b.id as id_barang, sd.nama as sediaan, 
         b.nama as barang, td.keluar, s.nama as satuan, st.nama as satuan_terkecil, stb.nama as satuan_terbesar, o.kekuatan from distribusi_retur p
         join transaksi_detail td on (p.id = td.transaksi_id)
         join penduduk pdd on (p.pegawai_penduduk_id = pdd.id)

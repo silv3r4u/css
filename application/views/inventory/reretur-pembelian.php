@@ -235,16 +235,16 @@ $(function() {
         
     <?= form_hidden('total') ?>
         <fieldset><legend>Summary</legend>
-            <div class="one_side">
-        <label>Waktu:</label><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
-        <label>No. Retur:</label></label><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?>
-        <label>Suplier:</label><span id="suplier" class="label"><?= isset($_GET['id'])?$data[0]['suplier']:null ?></span>
-        <label>Total:</label><span class="label" id="returan"><?= isset($kas)?rupiah($kas['penerimaan']):null ?></span>
-        <label></label>
+        <table width="100%">
+            <tr style="line-height: 20px;"><td width="13%">Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+            <tr style="line-height: 20px;"><td>No. Retur:</td><td><?= form_input('noretur', isset($_GET['id'])?$_GET['id']:null, 'id=noretur size=40') ?></td></tr>
+            <tr style="line-height: 20px;"><td>Suplier:</td><td><span id="suplier" class="label"><?= isset($_GET['id'])?$data[0]['suplier']:null ?></span></td></tr>
+            <tr style="line-height: 20px;"><td>Total:</td><td><span class="label" id="returan"><?= isset($kas)?rupiah($kas['penerimaan']):null ?></span></td></tr>
+            <tr style="line-height: 20px;"><td>Jenis Penerimaan:</td><td>
             <span class="label"><?= form_radio('berupa', 'barang', TRUE, 'id=barang') ?> Barang</span> 
-            <span class="label"><?= form_radio('berupa', 'uang', FALSE, 'id=uang') ?> Uang</span>
-            <label></label><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?>
-        </div>
+            <span class="label"><?= form_radio('berupa', 'uang', FALSE, 'id=uang') ?> Uang</span></td></tr>
+            <tr><td></td><td><?= form_button(null, 'Tambah Baris', 'id=addnewrow') ?></td></tr>
+        </table>
         </fieldset>
     </div>
     <div class="data-list">

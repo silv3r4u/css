@@ -78,9 +78,9 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
     .menu-root span:hover { color: #f4f4f4; cursor: pointer; color: #006a9c; background: #f4f4f4; padding: 8px 10px; }
     .data-input label {color: #000; clear: both; display: block; float: left; line-height: 1em; padding: 0.5em .5em 0; width: 11.5em; white-space: nowrap;}
     .data-input input[type=text], .data-input input[type=radio], .data-input input[type=submit], .data-input input[type=checkbox], .data-input input[type=button], .data-input input[type=reset], .data-input input[type=textarea], .data-input select, .data-input button {float: left; margin-top: 1px;}
-    .data-input input[type=text] { min-width: 238px; margin-bottom: 2px;}
+    .data-input input[type=text] { min-width: 238px;}
     .data-input input[type=text].hasDatepicker { min-width: 100px; }
-    .data-input textarea { height: 30px; float: left; min-width: 252px; border: 1px solid #CCCCCC; }
+    .data-input textarea { height: 30px; float: left; min-width: 232px; border: 1px solid #CCCCCC; }
 
 }
 .logo-apotek { background: url(../images/logofix.png) no-repeat; width: 440px; height: 100px; }
@@ -96,7 +96,7 @@ input[type=button]:active, input[type=submit]:active { position:relative; top:1p
 .data-input button { margin-left: 0; }
 .data-input fieldset { margin-top: 5px; padding-top: 10px; }
 .data-input fieldset legend { display: none; }
-.data-input select { margin-bottom: 2px; min-width: 238px; }
+.data-input select { min-width: 238px; padding: 1px; }
 .data-input .filter-predicate {min-width: 150px;width: 253px;}
 .data-input .filter-values {min-width: 150px;}
 .data-input .mini {min-width: 2em;}
