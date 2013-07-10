@@ -427,11 +427,11 @@ function jmlSubTotal(i) {
             //$('#diskon_rp'+i).attr('disabled','disabled');
         }
         if (dis_rp !== '' || dis_rp !== 0) {
-            var subttl = subttl - (dis_rp * jumlah);
+            var subttl = subttl - (dis_rp);
             //$('#diskon_pr'+i).attr('disabled','disabled');
         }
-        $('#subttl'+i).val(subttl);
-        $('#subtotal'+i).html(numberToCurrency(subttl));
+        $('#subttl'+i).val(parseInt(subttl));
+        $('#subtotal'+i).html(numberToCurrency(parseInt(subttl)));
         hitungDetail();
 }
 function hitungDetail() {
@@ -544,7 +544,7 @@ function hitungDetail() {
                     <td><input type=text name=harga[] id="harga<?= $key ?>" size=6 value="" onkeyup="FormNum(this);" onblur="jmlSubTotal(<?= $key ?>);" class=harga /></td>
                     <td>
                     <select style="border: 1px solid #ccc;" class="kemasan" name="kemasan[]" id="kemasan<?= $key ?>"><option value="">Pilih kemasan ...</option>
-                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($rows->barang_id); 
+                        <?php $array_kemasan = $this->m_inventory->get_kemasan_by_barang($data->id_barang); 
                         foreach ($array_kemasan as $rowA) { ?>
                             <option value="<?= $rowA->isi ?>-<?= $rowA->id ?>"><?= $rowA->nama ?></option>
                         <?php } ?>
