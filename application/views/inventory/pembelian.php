@@ -419,8 +419,8 @@ function jmlSubTotal(i) {
         
         var harga = parseInt(currencyToNumber($('#harga'+i).val()));
         var jumlah= parseInt($('#jml'+i).val());
-        //$('#diskon_rp'+i).removeAttr('disabled');
-        //$('#diskon_pr'+i).removeAttr('disabled');
+        
+        //alert(harga);
         var subttl= (harga * jumlah);
         if (dis_pr !== 0 || dis_rp !== '') {
             var subttl = subttl - ((dis_pr/100)*harga)*jumlah;

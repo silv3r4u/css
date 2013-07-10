@@ -1,5 +1,5 @@
 <?php
-header_excel("surat-pemesanan-".date("d-m-Y").".xls");
+//header_excel("surat-pemesanan-".date("d-m-Y").".xls");
 foreach ($pemesanan as $rows);
 /*if ($apt['logo_file_nama'] != '') {
     $img = "<img src='".app_base_url('assets/images/company/'.$apt['logo_file_nama'])."' width='100px' />";
@@ -104,7 +104,7 @@ if ($rows->perundangan == 'Psikotropika') {
 <?php } ?>
 <table align="right" width="100%">
     <tr><td align="right" colspan="4"><?= $apt->kabupaten ?>, <?= date("d F Y") ?></td> </tr>
-    <tr><td align="right" colspan="4"></td> </tr>
+    <tr><td align="right" colspan="4">APA</td></tr>
     <tr><td colspan="4">&nbsp;</td> </tr>
     <tr><td colspan="4">&nbsp;</td> </tr>
     <tr><td align="right" colspan="4"><?= isset($manager->nama)?$manager->nama:NULL ?></td> </tr>

@@ -251,13 +251,14 @@ function numberToCurrency2(a){
 }
 
 function currencyToNumber(a) {
-    if (!isNaN(a)) {
+    
+    if (a !== '') {
         var b=a.toString();
         var c='';
         if(a!==''){
-            c=b.replace(/\.+/g, '');
+            c=b.replace(/\./g, '');
         }
-        return parseFloat(c);
+        return parseInt(c);
     } else {
         return 0;
     }

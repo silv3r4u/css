@@ -1247,8 +1247,8 @@ class M_referensi extends CI_Model {
     function jabatan_get_data() {
         return array(
             '' => 'Pilih...',
-            'PSA' => 'Pemegang Saham Apotek',
-            'APA' => 'Apoteker Pengelola Apotek',
+            'PSA' => 'PSA',
+            'APA' => 'APA',
             'Akuntan' => 'Akuntan',
             'Staff' => 'Staff'
         );
