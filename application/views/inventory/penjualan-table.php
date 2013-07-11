@@ -13,7 +13,7 @@ foreach ($list_data as $key => $data) {
     $disc = $disc + (($data->percent/100)*$harga_jual);
     $alert=NULL;
     if ($data->sisa <= 0) {
-        $alert = "style=background:red";
+        $alert = "style='background:red; color: white;'";
     }
     ?>
     <tr <?= $alert ?> class="tr_row">
@@ -35,9 +35,6 @@ foreach ($list_data as $key => $data) {
     </tr>
     <script type="text/javascript">
         //$(function() {
-            <?php if ($data->sisa <= 0) { ?>
-                alert('Stok barang untuk <?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?> = 0 !');
-            <?php } ?>
             $('#bc<?= $no ?>').live('keydown', function(e) {
                 if (e.keyCode===13) {
                     var bc = $('#bc<?= $no ?>').val();
@@ -74,7 +71,7 @@ foreach ($list_data as $key => $data) {
                                 subTotal(i);
                                 var jml = $('.tr_row').length;
                                 //alert(jml+' - '+i)
-                                if (jml - i == 1) {
+                                if (jml - i === 1) {
                                     add(jml);
                                 }
                                 $('#jl<?= $no ?>').focus();
@@ -90,7 +87,7 @@ foreach ($list_data as $key => $data) {
                                 $('#diskon<?= $no ?>').html('');
                             }
                         }
-                    })
+                    });
                     return false;
                 }
             });
@@ -158,22 +155,20 @@ $no++;
 }
 ?>
 <script>
-    $(function() {
-        <?php if (count($list_data) == 0) { ?>
-            $('button[type=submit]').hide();
-        <?php } else { ?>
-            $('button[type=submit]').show();
-        <?php } ?>
-            
-        var diskon_member = $('input[name=diskon_member]').val();
-        var diskon_total = (<?= $total ?>*(diskon_member/100));
-        $('#total-tagihan').html(numberToCurrency(parseInt(Math.ceil(<?= $total ?>))));
-        
-        $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
-        var jumlah = $('.tr_row').length;
-        for (i = 1; i <= jumlah; i++) {
-            subTotal(i);
-        }
-        $('input[name=nominal_total]').val($('#total').html());
-    });
+    <?php if (count($list_data) == 0) { ?>
+        $('button[type=submit]').hide();
+    <?php } else { ?>
+        $('button[type=submit]').show();
+    <?php } ?>
+
+    var diskon_member = $('input[name=diskon_member]').val();
+    var diskon_total = (<?= $total ?>*(diskon_member/100));
+    $('#total-tagihan').html(numberToCurrency(parseInt(Math.ceil(<?= $total ?>))));
+
+    $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
+    var jumlah = $('.tr_row').length;
+    for (i = 1; i <= jumlah; i++) {
+        subTotal(i);
+    }
+    $('input[name=nominal_total]').val($('#total').html());
 </script>

@@ -356,7 +356,53 @@ function searchs() {
     });
 }
 
-$(function() {
+function load_detail_resep(id_resep) {
+
+    $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_data_resep_byid') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#asuransi').html('-');
+                $('input[name=diskon_persen]').val('');
+                $('input[name=diskon_rupiah]').val('');
+                $('input[name=id_produk_asuransi]').val(data.id_asuransi_produk);
+                if (data.asuransi) {
+                    $('input[name=diskon_persen]').val(data.diskon_persen);
+                    $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
+                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value="y" style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
+                    $('#asuransi').html(data.asuransi+' - '+data.no_polish);
+                }
+                //$('#noresep').val(data.id);
+                $('#display-apt').show();
+                $('input[name=id_resep]').val(data.id);
+                $('#pasien').html(data.pasien);
+                $('input[name=id_pasien]').val(data.pasien_penduduk_id);
+                $('input[name=diskon_member]').val(data.diskon);
+            }
+        });
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
+            }
+        });
+        
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id_resep,
+            cache: false,
+            success: function(msg) {
+                $('.form-inputan tbody').empty().html(msg);
+                $('#searchs').dialog().remove();
+            }
+        });
+        $('#ppn').focus();
+}
+
+$(document).ready(function() {
+    
     $('#ppn').blur(function() {
         var total_tgh = currencyToNumber($('#total-tagihan').html());
         var bia_apotek= currencyToNumber($('#jasa-apt').html());
@@ -663,49 +709,11 @@ $(function() {
             });
         }
     });
-    $('.choosen').live('dblclick', function() {
+    $('tr.choosen').live('dblclick', function(e) {
+        e.preventDefault();
         var id_resep = $(this).attr('id');
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_data_resep_byid') ?>/'+id_resep,
-            cache: false,
-            dataType: 'json',
-            success: function(data) {
-                $('#asuransi').html('-');
-                $('input[name=diskon_persen]').val('');
-                $('input[name=diskon_rupiah]').val('');
-                $('input[name=id_produk_asuransi]').val(data.id_asuransi_produk);
-                if (data.asuransi !== null) {
-                    $('input[name=diskon_persen]').val(data.diskon_persen);
-                    $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
-                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value="y" style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
-                    $('#asuransi').html(data.asuransi+' - '+data.no_polish);
-                }
-                $('#noresep').val(data.id);
-                $('#display-apt').show();
-                $('input[name=id_resep]').val(data.id);
-                $('#pasien').html(data.pasien);
-                $('input[name=id_pasien]').val(data.pasien_penduduk_id);
-                $('input[name=diskon_member]').val(data.diskon);
-            }
-        });
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
-            cache: false,
-            dataType: 'json',
-            success: function(data) {
-                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
-            }
-        });
-        var id = $(this).attr('id');
-        $.ajax({
-            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id,
-            cache: false,
-            success: function(msg) {
-                $('.form-inputan tbody').html(msg);
-                $('#searchs').dialog().remove();
-            }
-        });
-        $('#ppn').focus();
+        load_detail_resep(id_resep);
+        
     });
 });
 
@@ -717,8 +725,10 @@ $(function() {
     <?= form_open('inventory/penjualan', 'id=form_penjualan') ?>
     
     <?php if (isset($list_data)) {
-        foreach ($atribute as $rows);
-    } ?>
+        foreach ($atribute as $rows); ?>
+        <script>load_detail_resep(<?= $rows->resep_id ?>)</script>
+    <?php } ?>
+    
     <div class="data-input">
     <?= form_hidden('bulat') ?>
     <?= form_hidden('bayar') ?>
@@ -778,40 +788,39 @@ $(function() {
                     $no = 0;
                     $total = 0; $disc = 0;
                     $biaya_apoteker = 0;
+                    $set = $this->m_referensi->get_setting()->row();
                     foreach ($list_data as $key => $data) {
-                        $harga_jual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
+                        $hjual = $data->hna+($data->hna*$data->margin/100) - ($data->hna*($data->diskon/100));
+                        $harga_jual = $hjual+($hjual*($set->h_resep/100));
                         $subtotal = ($harga_jual - (($harga_jual*($data->percent/100))))*$data->pakai_jumlah;
                         $total = $total + $subtotal;
-                        $disc = $disc + (($data->percent/100)*$harga_jual);
                         $biaya_apoteker = $biaya_apoteker + $data->profesi_layanan_tindakan_jasa_total;
+                        $disc = $disc + (($data->percent/100)*$harga_jual);
                         $alert=NULL;
                         if ($data->sisa <= 0) {
-                            $alert = "style=background:red";
+                            $alert = "style='background:red; color: white;'";
                         }
                         ?>
                         <tr <?= $alert ?> class="tr_row">
                             <td><input type=text name=nr[] id=bc<?= $no ?> class=bc size=20 value="<?= $data->barcode ?>" /></td>
                             <td><input type=text name=dr[] id=pb<?= $no ?> class=pb size=60 value="<?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?>" />
                                 <input type=hidden name=id_pb[] id=id_pb<?= $no ?> class=id_pb value="<?= $data->barang_packing_id ?>" />
-                                <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" />
-                            </td>    
+                                <input type="hidden" name="ed[]" value="<?= $data->ed ?>" id="exp<?= $key ?>" /></td>
                             <td><input type=text name=jl[] id=jl<?= $no ?> class=jl size=10 value="<?= $data->pakai_jumlah ?>" onkeyup="subTotal(<?= $no ?>)" />
                             <td align="center" id=ed<?= $no ?>><?= datefmysql($data->ed) ?></td>
                             <td align="right" id=hj<?= $no ?>><?= rupiah($harga_jual) ?></td>
-                            <td align="center" id=diskon<?= $no ?>><?= $data->percent ?></td>
+                            <td align="center"><input type="text" name="diskon[]" value="<?= $data->percent?>" id="diskon<?= $no ?>" onkeyup="subTotal(<?= $no ?>)" /></td>
                             <td align="center" id=sisa<?= $no ?>><?= $data->sisa ?></td>
                             <input type=hidden name=subtotal[] id="subttl<?= $no ?>" class=subttl /></td>
 
-                            <td id=subtotal<?= $no ?> align="right"><?= rupiah($subtotal) ?></td>
-                            <td class=aksi><a class=delete onclick="eliminate(this)"></a> 
+                            <td id=subtotal<?= $no ?> align="right"><?= $subtotal ?></td>
+                            <td class=aksi><span class=delete onclick="eliminate(this)"><?= img('assets/images/icons/delete.gif') ?></span> 
                                 <input type=hidden name="disc[]" id="disc<?= $no ?>" value="<?= $data->percent ?>" />
                                 <input type=hidden name="harga_jual[]" id="harga_jual<?= $no ?>" value="<?= $harga_jual ?>" /></td>
                         </tr>
                         <script type="text/javascript">
                             $(function() {
-                                <?php if ($data->sisa <= 0) { ?>
-                                    alert('Stok barang untuk <?= $data->barang ?> <?= ($data->kekuatan == '1')?'':$data->kekuatan ?>  <?= $data->satuan ?> <?= $data->sediaan ?> <?= ($data->generik == '1')?'':$data->pabrik ?> <?= ($data->isi==1)?'':'@'.$data->isi ?> <?= $data->satuan_terkecil ?> = 0 !');
-                                <?php } ?>
+                                
                                 $('#bc<?= $no ?>').live('keydown', function(e) {
                                     if (e.keyCode==13) {
                                         var bc = $('#bc<?= $no ?>').val();
@@ -947,9 +956,9 @@ if (isset($list_data)) { ?>
     <script>
         $(function() {
             $('#jasa-apt').html(numberToCurrency(<?= $biaya_apoteker ?>));
-            $('#total-tagihan').html(numberToCurrency(<?= $total ?>));
+            $('#total-tagihan').html(numberToCurrency(parseInt(<?= $total ?>)));
             $('#total-diskon').html(<?= ceil($disc) ?>);
-            $('#total').html(numberToCurrency(<?= ($total-ceil($disc)) ?>));
+            $('#total').html(numberToCurrency(parseInt(<?= ($total-ceil($disc)) ?>)));
             var jumlah = $('.tr_row').length;
             for (i = 1; i <= jumlah; i++) {
                 subTotal(i);

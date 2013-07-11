@@ -46,8 +46,8 @@ $(function() {
         dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
     }).result(
     function(event,data,formated){
-        $(this).attr('value',data.nama);
-        $('input[name=id_asuransi]').attr('value',data.id);
+        $(this).val(data.nama);
+        $('input[name=id_asuransi]').val(data.id_asuransi);
     });
     $('#cetak').click(function() {
         var awal = '<?= isset($_GET['awal'])?$_GET['awal']:null ?>';
@@ -115,7 +115,7 @@ if (isset($_GET['do'])) {
             $subtotal = $data->keluar*$data->hna;
             //$total_faktur = ($data->total+$data->materai)+($data->total*($data->ppn/100));    
             ?>
-            <tr class="<?= ($key%2==1)?'even':'odd' ?>">
+            <tr>
                 <td align="center"><?= ++$key ?></td>
                 <td align="center"><?= datetimefmysql($data->waktu) ?></td>
                 <td align="center"><?= $data->id ?></td>
@@ -131,8 +131,8 @@ if (isset($_GET['do'])) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" align="right">Total Reimburse</td>
-                    <td align="right" colspan="3" style="font-weight: bold"><?= (isset($_GET['awal'])?rupiah($total):null) ?></td>
+                    <td colspan="6" align="right"><b>TOTAL REIMBURSE</b></td>
+                    <td align="right" style="font-weight: bold"><?= (isset($_GET['awal'])?rupiah($total):null) ?></td>
                 </tr>
             </tfoot>
         </table>

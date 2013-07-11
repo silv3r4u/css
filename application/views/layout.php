@@ -69,6 +69,7 @@
             });
 
         </script>
+    </head>
         <body>
             <div style="height: 100%">
                 <div class="mainribbon-min">

@@ -1775,7 +1775,7 @@ class M_inventory extends CI_Model {
             'awal_saldo' => (isset($rows->akhir_saldo)?$rows->akhir_saldo:'0'),
             'pengeluaran' => '0'
         );
-        if (isset($yes)) {
+        if (!empty($yes)) {
             $data_kas['penerimaan'] = $selisih;
             $data_kas['akhir_saldo'] = ((isset($rows->akhir_saldo)?$rows->akhir_saldo:'0')+$selisih);
         } else {
@@ -1844,7 +1844,7 @@ class M_inventory extends CI_Model {
             $q.="and date(td.waktu) between '".date2mysql($awal)."' and '".date2mysql($akhir)."'";
         }
         if ($instansi != null) {
-            $q.="and ap.id = '$instansi'";
+            $q.=" and ap.id = '$instansi'";
         }
         $sql = "
             select td.waktu, td.keluar, p.reimburse, td.hna, td.jual_diskon_percentage, (td.harga+(td.harga*(td.jual_diskon_percentage/100))) as harga, 

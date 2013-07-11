@@ -3,9 +3,14 @@
 class M_inv_autocomplete extends CI_Model {
 
     function load_data_instansi_relasi($jenis, $q) {
-        
-        $sql = "select i.*, j.nama as jenis from relasi_instansi i
+        $join = ""; $slc = "";
+        if ($jenis === 'Asuransi') {
+            $slc  = ",ap.id as id_asuransi";
+            $join = "join asuransi_produk ap on (ap.relasi_instansi_id = i.id)";
+        }
+        $sql = "select i.*, j.nama as jenis $slc from relasi_instansi i
         join relasi_instansi_jenis j on (i.relasi_instansi_jenis_id = j.id)
+        $join
         where i.nama like ('%$q%') and j.nama = '$jenis' order by locate('$q', i.nama)";
         return $this->db->query($sql);
     }

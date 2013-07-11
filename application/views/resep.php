@@ -36,13 +36,18 @@ function konfirmasi() {
     });
 }
 $(function() {
-    $('#copyresep, #print').hide();
+    $('#copyresep, #print, #penjualan').hide();
     $('input[type=submit]').each(function(){
         $(this).replaceWith('<button type="' + $(this).attr('type') + '" name="'+$(this).attr('name')+'" id="'+$(this).attr('id')+'">' + $(this).val() + '</button>');
     });
     $('button[type=submit]').button({
         icons: {
             primary: 'ui-icon-circle-check'
+        }
+    });
+    $('#penjualan').button({
+        icons: {
+            secondary: 'ui-icon-cart'
         }
     });
     $('button[id=addnewrow]').button({
@@ -72,6 +77,51 @@ $(function() {
             });
         });
     });
+    $('#penjualan').click(function() {
+        var id_resep = $('#id_receipt').html();
+        $('#loaddata').load('<?= base_url('inventory/penjualan') ?>/'+id_resep);
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_data_resep_byid') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#asuransi').html('-');
+                $('input[name=diskon_persen]').val('');
+                $('input[name=diskon_rupiah]').val('');
+                $('input[name=id_produk_asuransi]').val(data.id_asuransi_produk);
+                if (data.asuransi !== null) {
+                    $('input[name=diskon_persen]').val(data.diskon_persen);
+                    $('input[name=diskon_rupiah]').val(data.diskon_rupiah);
+                    $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value="y" style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
+                    $('#asuransi').html(data.asuransi+' - '+data.no_polish);
+                }
+                $('#noresep').val(data.id);
+                $('#display-apt').show();
+                $('input[name=id_resep]').val(data.id);
+                $('#pasien').html(data.pasien);
+                $('input[name=id_pasien]').val(data.pasien_penduduk_id);
+                $('input[name=diskon_member]').val(data.diskon);
+            }
+        });
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_jasa_apoteker') ?>/'+id_resep,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#jasa-apt').html(numberToCurrency(data.jasa_apoteker));
+            }
+        });
+        var id = $(this).attr('id');
+        $.ajax({
+            url: '<?= base_url('inv_autocomplete/load_penjualan_by_no_resep') ?>/'+id,
+            cache: false,
+            success: function(msg) {
+                $('.form-inputan tbody').html(msg);
+                $('#searchs').dialog().remove();
+            }
+        });
+        $('#ppn').focus();
+    }); 
     $('#form_resep').submit(function() {
         if ($('input[name=nama_dokter]').val() === '') {
             alert('Nama dokter tidak boleh kosong !');
@@ -123,7 +173,7 @@ $(function() {
                     $('input[type=text], select, input[type=radio], textarea').attr('disabled','disabled');
                     $('button[type=submit], #addnewrow').hide();
                     $('#id_receipt').html(data.id_resep);
-                    $('.etiket,#copyresep, #print').show();
+                    $('.etiket,#copyresep, #print, #penjualan').show();
                     //konfirmasi();
                     alert_tambah();
                 } else {
@@ -630,6 +680,7 @@ $(function() {
         <?= form_submit('save', 'Simpan', 'id=submit') ?>
         <?= form_button('Reset', 'Reset', 'id=reset') ?>
         <?= form_button('copyresep', 'Cetak', 'id=copyresep') ?>
-        <?= form_button(null, 'Cetak Kitir', 'id=print') ?>
+        <?= form_button(null, 'Penjualan Resep', 'id=penjualan') ?>
+        <!--<?= form_button(null, 'Cetak Kitir', 'id=print') ?>-->
     <?= form_close() ?>
 </div>

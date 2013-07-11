@@ -426,6 +426,7 @@ class M_billing extends CI_Model {
     
     function pendapatan_penjualan_load_data($awal, $akhir) {
         $sql = "select sum(penerimaan) as penjualan_barang from kas where transaksi_jenis like ('Penjualan%') and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        //echo $sql."<br/>";
         return $this->db->query($sql);
     }
     
@@ -446,6 +447,7 @@ class M_billing extends CI_Model {
     
     function hna_load_data($awal, $akhir) {
         $sql = "select sum(hna*keluar) as total_hna from transaksi_detail where transaksi_jenis = 'Penjualan' and date(waktu) between '".  date2mysql($awal)."' and '".  date2mysql($akhir)."'";
+        //echo $sql."<br/>";
         return $this->db->query($sql);
     }
     
