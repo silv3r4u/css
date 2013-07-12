@@ -316,7 +316,7 @@ function form_open() {
         },
         open: function() {
             $('#total_tagihan_penjualan').html(currencyToNumber($('#total').html()));
-            $('#bulat').val(currencyToNumber($('#total').html()));
+            $('#bulat').val(pembulatan_seratus(currencyToNumber($('#total').html())));
             $('#bayar').focus();
             $('#total_orig').val($('input[name=nominal_total]').val());
         },
