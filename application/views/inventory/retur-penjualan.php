@@ -98,7 +98,7 @@ $(function() {
     <?= form_hidden('id_penjualan', $rows->transaksi_id) ?>
     <fieldset><legend>Summary</legend>
         <table width="100%">
-            <tr><td width="15%">No.:</td><td id="id_retur_penjualan"><?= $rows->transaksi_id ?></td> </tr>
+            <tr><td width="15%">No.:</td><td id="id_retur_penjualan"><?= get_last_id('penjualan_retur', 'id') ?></td> </tr>
             <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
             <tr><td>Pembeli:</td><td><?= $rows->nama ?> <?= form_hidden('idpembeli', $rows->pasien_penduduk_id) ?></td> </tr>
         </table>

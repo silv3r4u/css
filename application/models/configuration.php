@@ -80,7 +80,7 @@ class Configuration extends CI_Model {
                 select penduduk_id, max(id) as id_max
                 from dinamis_penduduk group by penduduk_id
             ) dm on (dp.penduduk_id = dm.penduduk_id and dp.id = dm.id_max)
-            where dp.jabatan = 'Manajer' and u.nama = 'Pelayanan Farmasi'";
+            where dp.jabatan = 'APA'";
         return $this->db->query($sql);
     }
     

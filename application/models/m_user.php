@@ -7,6 +7,7 @@ class M_user extends CI_Model {
             join penduduk p on (u.id = p.id)
             join unit un on (un.id = p.unit_id)
         where u.username = '".$this->input->post('username')."' and u.password = '".md5($this->input->post('password'))."'";
+        //echo $query;
         $hasil=$this->db->query($query);
         return $hasil->row();
     }

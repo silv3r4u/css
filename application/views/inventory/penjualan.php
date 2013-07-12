@@ -373,9 +373,9 @@ function load_detail_resep(id_resep) {
                     $('#checkbox').html('<input type=checkbox name=use_asuransi id=use_asuransi value="y" style="margin-left: 0; padding-left: 0;" title="Check untuk menggunakan asuransi" />');
                     $('#asuransi').html(data.asuransi+' - '+data.no_polish);
                 }
-                //$('#noresep').val(data.id);
+                $('#noresep').val(id_resep);
                 $('#display-apt').show();
-                $('input[name=id_resep]').val(data.id);
+                $('input[name=id_resep]').val(id_resep);
                 $('#pasien').html(data.pasien);
                 $('input[name=id_pasien]').val(data.pasien_penduduk_id);
                 $('input[name=diskon_member]').val(data.diskon);

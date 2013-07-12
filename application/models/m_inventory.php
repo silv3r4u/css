@@ -1627,10 +1627,10 @@ class M_inventory extends CI_Model {
             $data_kas = array(
                 'waktu' => datetime2mysql($this->input->post('tanggal')),
                 'transaksi_id' => $id_retur,
-                'transaksi_jenis' => 'Penerimaan Retur Pembelian',
+                'transaksi_jenis' => 'Pengeluaran Retur Penjualan',
                 'awal_saldo' => $data->akhir_saldo,
-                'pengeluaran' => $total,
-                'pengeluaran' => '0',
+                'penerimaan' => '0',
+                'pengeluaran' => $this->input->post('totalreretur'),
                 'akhir_saldo' => $sisa
             );
             $this->db->insert('kas', $data_kas);
