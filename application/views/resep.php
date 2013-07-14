@@ -461,11 +461,12 @@ function add(i) {
     });
 }
 function jmlPakai(i,j) {
-        var dosis_racik = parseInt($('#dr'+i+''+j).val());
+        var dosis_racik = $('#dr'+i+''+j).val();
         var jumlah_tbs  = parseInt($('#jt'+i).val());
-        var kekuatan    = parseInt($('#kekuatan'+i+''+j).html());
+        var kekuatan    = $('#kekuatan'+i+''+j).html();
         var jumlah_pakai= (dosis_racik*jumlah_tbs)/kekuatan;
-        if (isNaN(kekuatan) || kekuatan === 0) {
+		
+        if (isNaN(kekuatan) || kekuatan === '0') {
             alert('Kekuatan obat tidak boleh bernilai nol, silahkan diubah pada master data obat !');
             $('#pb'+i+''+j).val('');
             $('#id_pb'+i+''+j).val('');

@@ -76,10 +76,10 @@
         </div>
         <div class="right_side_detail">
             <label>Biaya Apoteker</label><span id="jasa-apt" class="label"><?= isset($biaya_apoteker->jasa)?rupiah($biaya_apoteker->jasa):'-' ?></span>
-            <label>Total Tagihan</label><span id="total-tagihan" class="label"><?= rupiah($rows->total) ?></span>
+            <label>Sub Total</label><span id="total-tagihan" class="label"><?= rupiah($rows->total) ?></span>
             <label>PPN</label><span id="ppn-hasil" class="label"><?= $rows->ppn ?></span>
             <label>Total Diskon</label><span id="total-diskon" class="label"><?= $rows->total ?></span>
-            <label>Total</label><span id="total" class="label"></span>
+            <label>Total Tagihan</label><span id="total" class="label"></span>
         </div>
     </div>
         <table class="tabel" width="100%">
@@ -94,15 +94,15 @@
                 <th width="7%">Diskon</th>
                 <th width="10%">Jumlah</th>
                 <th width="10%">Sub Total</th>
-                <th>#</th>
             </tr>
             </thead>
             <tbody>
                 <?php
                 $total_diskon = 0;
+				$total = 0;
                 foreach ($list_data as $key => $data) {
                     $hjual = ($data->hna*($data->margin/100))+$data->hna;
-                    
+                    $subtotal = ($hjual - ($hjual*($data->diskon/100)))*$data->keluar;
                 ?>
                 <tr class="<?= ($key%2==0)?'odd':'even' ?> tr_row">
                     <td align="center"><?= $data->barcode ?></td>
@@ -113,11 +113,11 @@
                     <td align="right" id="hj<?= $key ?>"><?= inttocur($hjual) ?></td>
                     <td align="center" id="diskon<?= $key ?>"><?= $data->diskon ?></td>
                     <td align="center" id="jl<?= $key ?>"><?= $data->keluar ?></td>
-                    <td align="right"><?= inttocur(($hjual - ($hjual*($data->diskon/100)))*$data->keluar) ?></td>
-                    <td></td>
+                    <td align="right"><?= inttocur($subtotal) ?></td>
                 </tr>
                 <?php
                 $total_diskon = $total_diskon+($data->diskon*$hjual*$data->keluar);
+				$total = ceil($total + $subtotal);
                 } ?>
             </tbody>
         </table><br/>
@@ -128,6 +128,7 @@
 </div>
 <script>
     $('#total-diskon').html(numberToCurrency(parseInt(<?= $total_diskon ?>)));
-    $('#total').html(numberToCurrency(parseInt(<?= $total_diskon+$rows->total+$biaya_apoteker->jasa ?>)));
+    $('#total').html(numberToCurrency(parseInt(<?= $total_diskon+$total+$biaya_apoteker->jasa ?>)));
+	$('#total-tagihan').html(numberToCurrency(parseInt(<?= $total ?>)));
     //subTotal();
 </script>

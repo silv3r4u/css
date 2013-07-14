@@ -359,6 +359,7 @@ class M_inv_autocomplete extends CI_Model {
                     from transaksi_detail group by barang_packing_id
                     ) tm on (td.barang_packing_id = tm.barang_packing_id and td.id = tm.id_max)
                 where td.transaksi_jenis != 'Pemesanan' and rr.resep_id = '$noresep'";
+		
         return $this->db->query($sql);
     }
     
