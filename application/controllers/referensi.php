@@ -656,7 +656,7 @@ class Referensi extends CI_Controller {
                 break;
             case 'add':
                 $search['id'] = $this->m_referensi->instansi_add_data($add);
-                $data = $this->get_instansi_list($limit, $page, $search);
+                $data = $this->get_instansi_list($limit, 1, $search);
                 $this->load->view('referensi/instansi_relasi/list_instansi', $data);
                 break;
 
@@ -664,7 +664,7 @@ class Referensi extends CI_Controller {
                 $add['id'] = $this->input->post('id');
                 $search['id'] = $this->input->post('id');
                 $this->m_referensi->instansi_edit_data($add);
-                $data = $this->get_instansi_list($limit, $page, $search);
+                $data = $this->get_instansi_list($limit, 1, $search);
                 $this->load->view('referensi/instansi_relasi/list_instansi', $data);
                 break;
 

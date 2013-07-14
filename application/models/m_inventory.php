@@ -61,7 +61,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_pemesanan,
                     'transaksi_jenis' => 'Pemesanan',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'ed' => isset($row->ed)?$row->ed:NULL,
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -111,7 +111,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_pemesanan,
                     'transaksi_jenis' => 'Pemesanan',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'ed' => isset($row->ed)?$row->ed:NULL,
                     'barang_packing_id' => $rows->id,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -190,7 +190,7 @@ class M_inventory extends CI_Model {
         }
         $sql = "select o.id as id_obat, ri.diskon_supplier, o.generik, o.perundangan, p.*, bp.barang_id, b.nama as barang, bp.isi, r.nama as pabrik, o.kekuatan, bp.id as id_pb, b.id as id_barang, bp.barcode, 
         bp.isi, s.nama as satuan, pdd.nama as petugas, t.awal, t.masuk, sd.nama as sediaan, t.leadtime_hours, t.ss, ri.nama as suplier,
-        t.sisa, t.awal, r.alamat, st.nama as satuan_terkecil, t.barang_packing_id, t.ed, t.beli_diskon_percentage, t.beli_diskon_rupiah, k.nama as kabupaten from pemesanan p
+        t.sisa, t.awal, r.alamat, st.nama as satuan_terkecil, t.barang_packing_id, b.hna, t.ed, t.beli_diskon_percentage, t.beli_diskon_rupiah, k.nama as kabupaten from pemesanan p
             join transaksi_detail t on (p.id = t.transaksi_id)
             join barang_packing bp on (t.barang_packing_id = bp.id)
             join barang b on (b.id = bp.barang_id)
@@ -201,7 +201,9 @@ class M_inventory extends CI_Model {
             left join kabupaten k on (k.id = ri.kabupaten_id)
             left join sediaan sd on (sd.id = o.sediaan_id)
             left join satuan st on (st.id = bp.terkecil_satuan_id)
-            join penduduk pdd on (pdd.id = p.pegawai_penduduk_id) where t.transaksi_jenis = 'Pemesanan' $q";
+            join penduduk pdd on (pdd.id = p.pegawai_penduduk_id) 
+            
+            where t.transaksi_jenis = 'Pemesanan' $q";
             return $this->db->query($sql);
         }
         
@@ -613,7 +615,7 @@ class M_inventory extends CI_Model {
         $hna= currencyToNumber($this->input->post('hna'));
         $sisa= $this->input->post('js');
         $batch = $this->input->post('nobatch');
-        $tanggal = datetime2mysql($this->input->post('tanggal'));
+        $tanggal = date("Y-m-d H:i:s");
         $id_barang = $this->input->post('id_barang');
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
@@ -681,7 +683,7 @@ class M_inventory extends CI_Model {
     function pemakaian_save() {
         $this->db->trans_begin();
         $data_pemakaian = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'pegawai_penduduk_id' => $this->session->userdata('id_user')
         );
         $this->db->insert('pemakaian', $data_pemakaian);
@@ -985,7 +987,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_distribusi,
                     'transaksi_jenis' => 'Distribusi',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                     'barang_packing_id' => $id_pb[$key],
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1024,7 +1026,7 @@ class M_inventory extends CI_Model {
             $cek = $this->db->query("select sum(jumlah_bayar) as total_terbayar from inkaso where pembelian_id = '".$this->input->post('nopembelian')."'")->row();
             
             $data_inkaso = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'pembelian_id' => $this->input->post('nopembelian'),
                 'pegawai_penduduk_id' => $this->session->userdata('id_user'),
                 'jumlah_bayar' => currencyToNumber($this->input->post('bayar'))
@@ -1038,7 +1040,7 @@ class M_inventory extends CI_Model {
 
             $rows = $this->db->query("select * from kas order by waktu desc limit 1")->row();
             $data_kas = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'transaksi_id' => $id_inkaso,
                 'transaksi_jenis' => 'Inkaso',
                 'awal_saldo' => $rows->akhir_saldo,
@@ -1088,7 +1090,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_pemusnahan,
                     'transaksi_jenis' => 'Pemusnahan',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1151,7 +1153,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_dist_penerimaan,
                     'transaksi_jenis' => 'Penerimaan Distribusi',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($rows->nobatch)?$rows->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1217,7 +1219,7 @@ class M_inventory extends CI_Model {
                     $data_trans = array(
                         'transaksi_id' => $id_penjualan,
                         'transaksi_jenis' => 'Penjualan',
-                        'waktu' => datetime2mysql($this->input->post('tanggal')),
+                        'waktu' => date("Y-m-d H:i:s"),
                         'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                         'barang_packing_id' => $id_pb[$key],
                         'unit_id' => $this->session->userdata('id_unit'),
@@ -1247,7 +1249,7 @@ class M_inventory extends CI_Model {
         $saldo = $this->db->query("select * from kas order by waktu desc limit 1")->row();
         $sisa  = (isset($saldo->akhir_saldo)?$saldo->akhir_saldo:'0')+currencyToNumber($this->input->post('bulat'));
         $data_kas = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'transaksi_id' => $id_penjualan,
             'transaksi_jenis' => 'Penjualan Non Resep',
             'awal_saldo' => isset($saldo->akhir_saldo)?$saldo->akhir_saldo:'0',
@@ -1303,7 +1305,7 @@ class M_inventory extends CI_Model {
         foreach ($data as $key => $rows) {
             if ($rows != '') {
                 $data_jasa_penjualan = array(
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'no_daftar' => $last->no_daftar,
                     'tarif_id' => $rows,
                     'tarif' => $tarif[$key],
@@ -1346,7 +1348,7 @@ class M_inventory extends CI_Model {
             $this->db->insert('dinamis_penduduk', array('tanggal' => date("Y-m-d"),'penduduk_id' => $id_pasien));
         }
         $data_resep = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'dokter_penduduk_id' => $id_dokter,
             'pasien_penduduk_id' => $id_pasien,
             'sah' => $this->input->post('absah'),
@@ -1447,7 +1449,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id,
                     'transaksi_jenis' => 'Retur Pembelian',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1496,7 +1498,7 @@ class M_inventory extends CI_Model {
             $data = $this->db->query("select * from kas order by waktu desc limit 1")->row();
             $sisa = $data->akhir_saldo+$total;
             $data_kas = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'transaksi_id' => $id_retur,
                 'transaksi_jenis' => 'Penerimaan Retur Pembelian',
                 'awal_saldo' => $data->akhir_saldo,
@@ -1526,7 +1528,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_retur,
                     'transaksi_jenis' => 'Penerimaan Retur Pembelian',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($rows->nobatch)?$rows->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1576,7 +1578,7 @@ class M_inventory extends CI_Model {
             $data_trans = array(
                     'transaksi_id' => $id,
                     'transaksi_jenis' => 'Retur Penjualan',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1625,7 +1627,7 @@ class M_inventory extends CI_Model {
             $data = $this->db->query("select * from kas order by waktu desc limit 1")->row();
             $sisa = $data->akhir_saldo+$total;
             $data_kas = array(
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'transaksi_id' => $id_retur,
                 'transaksi_jenis' => 'Pengeluaran Retur Penjualan',
                 'awal_saldo' => $data->akhir_saldo,
@@ -1655,7 +1657,7 @@ class M_inventory extends CI_Model {
                 $data_trans = array(
                     'transaksi_id' => $id_retur,
                     'transaksi_jenis' => 'Pengeluaran Retur Penjualan',
-                    'waktu' => datetime2mysql($this->input->post('tanggal')),
+                    'waktu' => date("Y-m-d H:i:s"),
                     'nobatch' => (isset($rows->nobatch)?$rows->nobatch:NULL),
                     'barang_packing_id' => $data,
                     'unit_id' => $this->session->userdata('id_unit'),
@@ -1742,7 +1744,7 @@ class M_inventory extends CI_Model {
                     $data_trans = array(
                         'transaksi_id' => $id_penjualan,
                         'transaksi_jenis' => 'Penjualan',
-                        'waktu' => datetime2mysql($this->input->post('tanggal')),
+                        'waktu' => date("Y-m-d H:i:s"),
                         'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                         'barang_packing_id' => $id_pb[$key],
                         'unit_id' => $this->session->userdata('id_unit'),
@@ -1769,7 +1771,7 @@ class M_inventory extends CI_Model {
         }
         $rows = $this->db->query("select * from kas order by waktu desc limit 1")->row();
         $data_kas = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'transaksi_id' => $id_penjualan,
             'transaksi_jenis' => 'Penjualan Resep',
             'awal_saldo' => (isset($rows->akhir_saldo)?$rows->akhir_saldo:'0'),
@@ -2054,7 +2056,7 @@ class M_inventory extends CI_Model {
         
         $id_penerimaan_dist = $this->input->post('id_distribusi_penerimaan');
         $data_retur_dist = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'penerimaan_distribusi_id' => $id_penerimaan_dist,
             'pegawai_penduduk_id' => $this->session->userdata('id_user')
         );
@@ -2070,7 +2072,7 @@ class M_inventory extends CI_Model {
             $data_trans = array(
                 'transaksi_id' => $id_retur,
                 'transaksi_jenis' => 'Retur Distribusi',
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                 'barang_packing_id' => $data,
                 'unit_id' => $this->session->userdata('id_unit'),
@@ -2104,7 +2106,7 @@ class M_inventory extends CI_Model {
         $this->db->trans_begin();
         
         $data_penerimaan_retur_distribusi = array(
-            'waktu' => datetime2mysql($this->input->post('tanggal')),
+            'waktu' => date("Y-m-d H:i:s"),
             'distribusi_retur_id' => $this->input->post('noretur'),
             'pegawai_penduduk_id' => $this->session->userdata('id_user')
         );
@@ -2119,7 +2121,7 @@ class M_inventory extends CI_Model {
             $data_trans = array(
                 'transaksi_id' => $id_penerimaan,
                 'transaksi_jenis' => 'Penerimaan Retur Distribusi',
-                'waktu' => datetime2mysql($this->input->post('tanggal')),
+                'waktu' => date("Y-m-d H:i:s"),
                 'nobatch' => (isset($jml->nobatch)?$jml->nobatch:NULL),
                 'barang_packing_id' => $data,
                 'unit_id' => $this->session->userdata('id_unit'),

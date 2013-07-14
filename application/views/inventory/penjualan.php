@@ -743,7 +743,7 @@ $(document).ready(function() {
         <div class="left_side" style="min-height: 150px;">
             <table width="100%">
                 <tr><td width="25%">No.:</td><td id="id_penjualan"><?= get_last_id('penjualan', 'id') ?></td></tr>
-                <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?>
+                <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal disabled') ?>
                 <tr><td>No. Resep:</td><td>
                     <?= form_input('', isset($rows->resep_id)?$rows->resep_id:NULL, 'id=noresep size=30') ?>&nbsp;<img src="<?= base_url('assets/images/icons/detail.png') ?>" id=search onclick="searchs();" style="cursor: pointer" title="Cari resep" />
                     <?= form_hidden('id_resep', isset($rows->resep_id)?$rows->resep_id:NULL) ?>

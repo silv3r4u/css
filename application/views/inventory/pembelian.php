@@ -6,6 +6,7 @@ function loading() {
     $('#loaddata').load(url);
 }
 $(function() {
+    $('#nopemesanan').focus();
     $('button[id=print], button[id=delete_pembelian]').hide();
     $('#delete_pembelian').click(function() {
         var ok=confirm('Anda yakin akan menghapus transaksi ini ?');

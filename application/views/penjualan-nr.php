@@ -560,7 +560,7 @@ $(function() {
             <div class="left_side" style="min-height: 150px; margin-bottom: 10px;">
                 <table width="100%">
                     <tr><td width="25%">No.:</td> <td class="label" id="id_penjualan"><?= isset($_GET['id'])?$_GET['id']:get_last_id('penjualan', 'id') ?> </td></tr>
-                    <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal') ?></td></tr>
+                    <tr><td>Waktu:</td><td><?= form_input('tanggal', date("d/m/Y H:i"), 'id=tanggal disabled') ?></td></tr>
 <!--                    <tr><td>Pembayaran Bank:</td><td><?= form_dropdown('cara_bayar', $list_bank, NULL, 'id=pembayaran') ?></td></tr>-->
                     <tr><td>Diskon (%):</td><td><?= form_input('ppn', '0', 'id=ppn size=10 onkeyup=subTotal()') ?></td></tr>
                     <tr><td>Diskon (Rp.):</td><td><?= form_input('disc_rp', '0', 'id=disc_rp size=10 onblur=subTotal() onblur=FormNum(this)') ?></td></tr>
