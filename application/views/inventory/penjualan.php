@@ -677,6 +677,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 if (data.status === true) {
+					$('input[type=text]').attr('disabled','disabled');
                     $('#deletion,#print').show();
                     $('#print').show();
                     $('#id_penjualan').html(data.id_penjualan);
@@ -758,10 +759,10 @@ $(document).ready(function() {
         <div class="right_side" style="min-height: 150px;">
             <table width="100%">
                 <tr style="height: 22px;"><td width="27%">Biaya Apoteker (Rp.):</td><td id="jasa-apt"></td></tr>
-                <tr style="height: 22px;"><td>Total Tagihan (Rp.):</td><td id="total-tagihan"></td></tr>
+                <tr style="height: 22px;"><td>Sub Total (Rp.):</td><td id="total-tagihan"></td></tr>
                 <tr style="height: 22px;"><td>Diskon Barang (Rp.):</td><td id="total-diskon" class="label"></td></tr>
                 <tr style="height: 22px;"><td>Diskon Penjualan (Rp.):</td><td id="ppn-hasil"></td></tr>
-                <tr style="height: 22px;"><td>Total (Rp.):</td><td id="total" class="label"></td></tr>
+                <tr style="height: 22px;"><td>Total Tagihan (Rp.):</td><td id="total" class="label"></td></tr>
             </table>
         </div>
         </fieldset>
