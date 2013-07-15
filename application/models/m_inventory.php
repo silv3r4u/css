@@ -376,8 +376,8 @@ class M_inventory extends CI_Model {
                         'selisih_waktu_beli' => (isset($beli->waktu)?range_hours_between_two_dates($beli->waktu, date2mysql($this->input->post('tgldoc')).' '.date("H:i:s")):'0')
                     );
                     $this->db->insert('transaksi_detail', $data_trans);
-                    $this->db->where('id', $barang_id[$key]);
-                    $this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
+                    //$this->db->where('id', $barang_id[$key]);
+                    //$this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
                     if ($this->db->trans_status() === FALSE) {
                         $this->db->trans_rollback();
                     }
