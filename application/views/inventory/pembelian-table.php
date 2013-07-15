@@ -2,7 +2,7 @@
 $key = 0;
 foreach ($list_data as $no => $rows) { ?>
     <tr class="tr_row">
-        <td align="center"><?= ++$no ?> <input type="hidden" id="cur_hna<?= $key ?>" value="<?= $rows->hna ?>" /></td>
+        <td align="center"><?= ++$no ?> <input type="hidden" name="cur_hna[]" id="cur_hna<?= $key ?>" value="<?= $rows->hna ?>" /></td>
         <td><?= form_input('batch[]', NULL, 'size=10') ?></td>
         <td><input type=text name=pb[] id="pb<?= $key ?>" style="width: 100%" value="<?= $rows->barang ?> <?= ($rows->kekuatan == '1')?'':$rows->kekuatan ?> <?= $rows->satuan ?> <?= $rows->sediaan ?> <?= (($rows->generik == 'Non Generik')?'':$rows->pabrik) ?> @ <?= ($rows->isi=='1')?'':$rows->isi ?> <?= $rows->satuan_terkecil ?>" class=pb />
         <input type=hidden name=id_pb[] id="id_pb<?= $key ?>" value="<?= $rows->barang_packing_id ?>" class=pb />
@@ -24,7 +24,9 @@ foreach ($list_data as $no => $rows) { ?>
         </td>
         <td id="subtotal<?= $key ?>" align="right"></td>
         <td align=center>-</td>
-        <td class=aksi><span class=delete onclick=eliminate(this);><?= img('assets/images/icons/delete.png') ?></span></td>
+        <td class=aksi>
+            <input type="hidden" name="status[]" value="Ya" id="status<?= $key ?>" />
+            <span class=delete onclick=eliminate(this);><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
         $('#ed<?= $key ?>').datepicker({
@@ -32,11 +34,16 @@ foreach ($list_data as $no => $rows) { ?>
             changeMonth: true
         });
         $('#harga<?= $key ?>').blur(function() {
+            var ppn = ($('#ppn').val()/100);
             var nama = $('#pb<?= $key ?>').val();
             var h_lama = parseInt($('#cur_hna<?= $key ?>').val());
-            var h_baru = parseInt(currencyToNumber($('#harga<?= $key ?>').val()));
-            if (h_lama !== h_baru) {
-                alert('Harga lama untuk '+nama+' = Rp. '+h_lama+' !');
+            var h_b    = parseInt(currencyToNumber($('#harga<?= $key ?>').val()));
+            var h_baru = h_b + (h_b*ppn);
+            if (h_lama > h_baru) {
+                var ok = confirm('Harga lama untuk '+nama+' = Rp. '+h_lama+', apakah anda akan mengubah HNA ?');
+                if (!ok) {
+                    $('#status<?= $key ?>').val('Tidak');
+                }
                 $(this).focus();
                 return false;
             }

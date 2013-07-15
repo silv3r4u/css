@@ -251,69 +251,136 @@ class M_inventory extends CI_Model {
         $barang_id = $this->input->post('barang_id');
         $kemasan = $this->input->post('kemasan');
         $isi = $this->input->post('isi');
-        
+        /*new parameter*/
+        $status = $this->input->post('status');
+        $cur_hna= $this->input->post('cur_hna');
         foreach ($id_pb as $key => $data) {
             if ($data != '') {
-                $base_hna=$harga[$key];
-                $hna_ppn= ($this->input->post('ppn')/100)*$base_hna;
-                $hna = $base_hna+$hna_ppn;
-                
-                $kmsan = explode('-',$kemasan[$key]);
-                
-                $base_hpp 	= ((currencyToNumber($harga[$key])*$jumlah[$key]) - ((currencyToNumber($harga[$key])*$jumlah[$key]) * ($disk_pr[$key]/100))) / ($jumlah[$key]);
-                $hpp_ppn	= ($this->input->post('ppn')/100)*$base_hpp;
-                $hpp 	= $base_hpp+$hpp_ppn;
+                if ($status[$key] === 'Ya') {
+                    $base_hna=$harga[$key];
+                    $hna_ppn= ($this->input->post('ppn')/100)*$base_hna;
+                    $hna = $base_hna+$hna_ppn;
 
-                $hna = currencyToNumber($harga[$key])+(currencyToNumber($harga[$key])*($this->input->post('ppn')/100));
-                //$hpp = $hna - (currencyToNumber($harga[$key]) - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]));
-                $hpp = $hna - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]);
+                    $kmsan = explode('-',$kemasan[$key]);
 
-                if ($disk_rp[$key] == 0) {
-                    $harga_terdiskon = currencyToNumber($harga[$key]) - (currencyToNumber($harga[$key])*($disk_pr[$key])/100);
-                } else if ($disk_pr[$key] == 0){
-                    $harga_terdiskon = currencyToNumber($harga[$key]) - $disk_rp[$key];
+                    $base_hpp 	= ((currencyToNumber($harga[$key])*$jumlah[$key]) - ((currencyToNumber($harga[$key])*$jumlah[$key]) * ($disk_pr[$key]/100))) / ($jumlah[$key]);
+                    $hpp_ppn	= ($this->input->post('ppn')/100)*$base_hpp;
+                    $hpp 	= $base_hpp+$hpp_ppn;
+
+                    $hna = currencyToNumber($harga[$key])+(currencyToNumber($harga[$key])*($this->input->post('ppn')/100));
+                    //$hpp = $hna - (currencyToNumber($harga[$key]) - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]));
+                    $hpp = $hna - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]);
+
+                    if ($disk_rp[$key] == 0) {
+                        $harga_terdiskon = currencyToNumber($harga[$key]) - (currencyToNumber($harga[$key])*($disk_pr[$key])/100);
+                    } else if ($disk_pr[$key] == 0){
+                        $harga_terdiskon = currencyToNumber($harga[$key]) - $disk_rp[$key];
+                    }
+                    $jml = $this->db->query("select sisa, ed, date(waktu) as tanggal from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and ed = '".  datetopg($ed[$key])."' order by waktu desc limit 1")->row();
+
+                    $cek = $this->db->query("select sisa, date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and transaksi_id = '".$this->input->post('no_pemesanan')."' order by waktu desc limit 1")->row();
+                    $beli= $this->db->query("select sisa, waktu from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$data' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1")->row();
+                    $banding = isset($cek->tanggal)?$cek->tanggal:date("Y-m-d");
+                    $sisa= (isset($jml->sisa)?$jml->sisa:0) + ($jumlah[$key]*$isi[$key]);
+                    $leadTime = $this->db->query("select datediff('".date("Y-m-d")."','".$banding."') as selisih")->row();
+                    $sekarang = gmdate('Y-m-d' ,gmdate('U')+25200);
+                    $ss  = $this->db->query("select avg(sisa) as safetystock from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and date(waktu) between '".$banding."' and '$sekarang'")->row();
+
+                    $id_packing_barang = $this->db->query("select id from barang_packing where barang_id = '$barang_id[$key]' and terbesar_satuan_id = '$kmsan[1][$key]'")->row();
+                    $isi_kemasan = (($isi[$key] == '')?'1':$isi[$key]);
+                    $data_trans = array(
+                        'transaksi_id' => $id_pembelian,
+                        'transaksi_jenis' => 'Pembelian',
+                        'waktu' => date2mysql($this->input->post('tgldoc')).' '.date("H:i:s"),
+                        'ed' => datetopg($ed[$key]),
+                        'nobatch' => $batch[$key],
+                        'barang_packing_id' => $id_packing_barang->id,
+                        'unit_id' => $this->session->userdata('id_unit'),
+                        'harga' => currencyToNumber($harga[$key]/$isi_kemasan),
+                        'beli_diskon_percentage' => $disk_pr[$key],
+                        'beli_diskon_rupiah' => $disk_rp[$key],
+                        'terdiskon_harga' => $harga_terdiskon,
+                        'subtotal' => $subtotal[$key],
+                        'ppn' => $this->input->post('ppn'),
+                        'hna' => ($hna/$isi_kemasan),
+                        'hpp' => ($hpp/$isi_kemasan),
+                        'het' => '0',
+                        'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
+                        'masuk' => ($jumlah[$key]*$isi_kemasan),
+                        'sisa' => $sisa,
+                        'leadtime_hours' => (isset($leadTime->selisih)?$leadTime->selisih:'0'),
+                        'ss' => (isset($ss->safetystock)?$ss->safetystock:'0'),
+                        'selisih_waktu_beli' => (isset($beli->waktu)?range_hours_between_two_dates($beli->waktu, date2mysql($this->input->post('tgldoc')).' '.date("H:i:s")):'0')
+                    );
+                    $this->db->insert('transaksi_detail', $data_trans);
+                    $this->db->where('id', $barang_id[$key]);
+                    $this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    }
                 }
-                $jml = $this->db->query("select sisa, ed, date(waktu) as tanggal from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and ed = '".  datetopg($ed[$key])."' order by waktu desc limit 1")->row();
-                
-                $cek = $this->db->query("select sisa, date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and transaksi_id = '".$this->input->post('no_pemesanan')."' order by waktu desc limit 1")->row();
-                $beli= $this->db->query("select sisa, waktu from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$data' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1")->row();
-                $banding = isset($cek->tanggal)?$cek->tanggal:date("Y-m-d");
-                $sisa= (isset($jml->sisa)?$jml->sisa:0) + ($jumlah[$key]*$isi[$key]);
-                $leadTime = $this->db->query("select datediff('".date("Y-m-d")."','".$banding."') as selisih")->row();
-                $sekarang = gmdate('Y-m-d' ,gmdate('U')+25200);
-                $ss  = $this->db->query("select avg(sisa) as safetystock from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and date(waktu) between '".$banding."' and '$sekarang'")->row();
-                
-                $id_packing_barang = $this->db->query("select id from barang_packing where barang_id = '$barang_id[$key]' and terbesar_satuan_id = '$kmsan[1][$key]'")->row();
-                $isi_kemasan = (($isi[$key] == '')?'1':$isi[$key]);
-                $data_trans = array(
-                    'transaksi_id' => $id_pembelian,
-                    'transaksi_jenis' => 'Pembelian',
-                    'waktu' => date2mysql($this->input->post('tgldoc')).' '.date("H:i:s"),
-                    'ed' => datetopg($ed[$key]),
-                    'nobatch' => $batch[$key],
-                    'barang_packing_id' => $id_packing_barang->id,
-                    'unit_id' => $this->session->userdata('id_unit'),
-                    'harga' => currencyToNumber($harga[$key]/$isi_kemasan),
-                    'beli_diskon_percentage' => $disk_pr[$key],
-                    'beli_diskon_rupiah' => $disk_rp[$key],
-                    'terdiskon_harga' => $harga_terdiskon,
-                    'subtotal' => $subtotal[$key],
-                    'ppn' => $this->input->post('ppn'),
-                    'hna' => ($hna/$isi_kemasan),
-                    'hpp' => ($hpp/$isi_kemasan),
-                    'het' => '0',
-                    'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
-                    'masuk' => ($jumlah[$key]*$isi_kemasan),
-                    'sisa' => $sisa,
-                    'leadtime_hours' => (isset($leadTime->selisih)?$leadTime->selisih:'0'),
-                    'ss' => (isset($ss->safetystock)?$ss->safetystock:'0'),
-                    'selisih_waktu_beli' => (isset($beli->waktu)?range_hours_between_two_dates($beli->waktu, date2mysql($this->input->post('tgldoc')).' '.date("H:i:s")):'0')
-                );
-                $this->db->insert('transaksi_detail', $data_trans);
-                $this->db->where('id', $barang_id[$key]);
-                $this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
-                if ($this->db->trans_status() === FALSE) {
-                    $this->db->trans_rollback();
+                if ($status[$key] === 'Tidak') {
+                    $base_hna=$harga[$key];
+                    $hna_ppn= ($this->input->post('ppn')/100)*$base_hna;
+                    $hna = $base_hna+$hna_ppn;
+
+                    $kmsan = explode('-',$kemasan[$key]);
+
+                    $base_hpp 	= ((currencyToNumber($harga[$key])*$jumlah[$key]) - ((currencyToNumber($harga[$key])*$jumlah[$key]) * ($disk_pr[$key]/100))) / ($jumlah[$key]);
+                    $hpp_ppn	= ($this->input->post('ppn')/100)*$base_hpp;
+                    $hpp 	= $base_hpp+$hpp_ppn;
+
+                    $hna = currencyToNumber($harga[$key])+(currencyToNumber($harga[$key])*($this->input->post('ppn')/100));
+                    //$hpp = $hna - (currencyToNumber($harga[$key]) - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]));
+                    $hpp = $hna - ($disk_pr[$key]/100)*currencyToNumber($harga[$key]);
+
+                    if ($disk_rp[$key] == 0) {
+                        $harga_terdiskon = currencyToNumber($harga[$key]) - (currencyToNumber($harga[$key])*($disk_pr[$key])/100);
+                    } else if ($disk_pr[$key] == 0){
+                        $harga_terdiskon = currencyToNumber($harga[$key]) - $disk_rp[$key];
+                    }
+                    $jml = $this->db->query("select sisa, ed, date(waktu) as tanggal from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and ed = '".  datetopg($ed[$key])."' order by waktu desc limit 1")->row();
+
+                    $cek = $this->db->query("select sisa, date(waktu) as tanggal from transaksi_detail where transaksi_jenis = 'Pemesanan' and transaksi_id = '".$this->input->post('no_pemesanan')."' order by waktu desc limit 1")->row();
+                    $beli= $this->db->query("select sisa, waktu from transaksi_detail where transaksi_jenis = 'Pembelian' and barang_packing_id = '$data' and unit_id = '".$this->session->userdata('id_unit')."' order by waktu desc limit 1")->row();
+                    $banding = isset($cek->tanggal)?$cek->tanggal:date("Y-m-d");
+                    $sisa= (isset($jml->sisa)?$jml->sisa:0) + ($jumlah[$key]*$isi[$key]);
+                    $leadTime = $this->db->query("select datediff('".date("Y-m-d")."','".$banding."') as selisih")->row();
+                    $sekarang = gmdate('Y-m-d' ,gmdate('U')+25200);
+                    $ss  = $this->db->query("select avg(sisa) as safetystock from transaksi_detail where transaksi_jenis != 'Pemesanan' and barang_packing_id = '$id_pb[$key]' and unit_id = '".$this->session->userdata('id_unit')."' and date(waktu) between '".$banding."' and '$sekarang'")->row();
+
+                    $id_packing_barang = $this->db->query("select id from barang_packing where barang_id = '$barang_id[$key]' and terbesar_satuan_id = '$kmsan[1][$key]'")->row();
+                    $isi_kemasan = (($isi[$key] == '')?'1':$isi[$key]);
+                    $data_trans = array(
+                        'transaksi_id' => $id_pembelian,
+                        'transaksi_jenis' => 'Pembelian',
+                        'waktu' => date2mysql($this->input->post('tgldoc')).' '.date("H:i:s"),
+                        'ed' => datetopg($ed[$key]),
+                        'nobatch' => $batch[$key],
+                        'barang_packing_id' => $id_packing_barang->id,
+                        'unit_id' => $this->session->userdata('id_unit'),
+                        'harga' => currencyToNumber($harga[$key]/$isi_kemasan),
+                        'beli_diskon_percentage' => $disk_pr[$key],
+                        'beli_diskon_rupiah' => $disk_rp[$key],
+                        'terdiskon_harga' => $harga_terdiskon,
+                        'subtotal' => $subtotal[$key],
+                        'ppn' => $this->input->post('ppn'),
+                        'hna' => $cur_hna[$key],
+                        'hpp' => ($hpp/$isi_kemasan),
+                        'het' => '0',
+                        'awal' => (isset($jml->sisa)?$jml->sisa:'0'),
+                        'masuk' => ($jumlah[$key]*$isi_kemasan),
+                        'sisa' => $sisa,
+                        'leadtime_hours' => (isset($leadTime->selisih)?$leadTime->selisih:'0'),
+                        'ss' => (isset($ss->safetystock)?$ss->safetystock:'0'),
+                        'selisih_waktu_beli' => (isset($beli->waktu)?range_hours_between_two_dates($beli->waktu, date2mysql($this->input->post('tgldoc')).' '.date("H:i:s")):'0')
+                    );
+                    $this->db->insert('transaksi_detail', $data_trans);
+                    $this->db->where('id', $barang_id[$key]);
+                    $this->db->update('barang', array('hna' => ($hna/$isi_kemasan)));
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    }
                 }
             }
         }
@@ -1734,7 +1801,7 @@ class M_inventory extends CI_Model {
                     WHERE barang_packing_id = '$data' and transaksi_jenis != 'Pemesanan' and unit_id = '".$this->session->userdata('id_unit')."'
                     and ed = '$ed[$key]' order by waktu desc limit 1")->row();
                 
-                $sisa = (isset($jml->sisa)?$jml->sisa:'0')-$jumlah[$key];
+                    $sisa = (isset($jml->sisa)?$jml->sisa:'0')-$jumlah[$key];
                 
                     $leadtime = $this->db->query("select leadtime_hours from transaksi_detail 
                     where unit_id = '".$this->session->userdata('id_unit')."' and barang_packing_id = '$data' and transaksi_jenis = 'Pembelian'
