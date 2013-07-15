@@ -575,6 +575,8 @@ function hitungDetail() {
                             var ok = confirm('Harga lama untuk '+nama+' = Rp. '+h_lama+' !, apakah anda akan mengubah HNA ?');
                             if (!ok) {
                                 $('#status<?= $key ?>').val('Tidak');
+                            } else {
+                                $('#status<?= $key ?>').val('Ya');
                             }
                             $(this).focus();
                             return false;

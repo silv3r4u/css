@@ -25,7 +25,7 @@ foreach ($list_data as $no => $rows) { ?>
         <td id="subtotal<?= $key ?>" align="right"></td>
         <td align=center>-</td>
         <td class=aksi>
-            <input type="hidden" name="status[]" value="Ya" id="status<?= $key ?>" />
+            <input type="text" name="status[]" value="Ya" id="status<?= $key ?>" />
             <span class=delete onclick=eliminate(this);><?= img('assets/images/icons/delete.png') ?></span></td>
     </tr>
     <script type="text/javascript">
@@ -43,6 +43,8 @@ foreach ($list_data as $no => $rows) { ?>
                 var ok = confirm('Harga lama untuk '+nama+' = Rp. '+h_lama+', apakah anda akan mengubah HNA ?');
                 if (!ok) {
                     $('#status<?= $key ?>').val('Tidak');
+                } else {
+                    $('#status<?= $key ?>').val('Ya');
                 }
                 $(this).focus();
                 return false;
