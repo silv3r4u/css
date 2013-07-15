@@ -84,15 +84,15 @@
                     <td style="white-space: nowrap"><?= $packing ?></td>
                     <td align="center"><?= datefmysql($data->ed) ?></td>
                     <td><?= round($data->masuk) ?></td>
-                    <td align="right"><?= inttocur($data->hna) ?></td>
+                    <td align="right"><?= inttocur($data->harga) ?></td>
                     <td align="center"><?= $data->beli_diskon_percentage ?></td>
                     <td align="right"><?= inttocur(($data->hna*($data->beli_diskon_percentage/100))*$data->masuk) ?></td>
                     <td align="right"><?= inttocur($data->subtotal) ?></td>
                     <td align="center"><?= ($data->beli_diskon_percentage == '100')?'Bonus':'-' ?></td>
                 </tr>
             <?php 
-            $total = $total + ($data->masuk*$data->hna);
-            $diskon= $diskon+ (($data->hna*($data->beli_diskon_percentage/100))*$data->masuk);
+            $total = $total + ($data->masuk*$data->harga);
+            $diskon= $diskon+ (($data->harga*($data->beli_diskon_percentage/100))*$data->masuk);
             
             }?>
             </tbody>
