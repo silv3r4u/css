@@ -1,6 +1,6 @@
 <title><?= $title ?></title>
 <style>
-    * { font-family: Arial; font-size: 10px; }
+    * { font-family: Arial; font-size: 10px; line-height: 9px; }
 </style>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-print.min.js') ?>"></script>
 <script type="text/javascript">
@@ -51,7 +51,7 @@ foreach ($penjualan as $key => $data) {
     $harga = $hjual+($hjual*($f_kali/100));
     ?>
     <tr valign="top" class="<?= ($key%2==0)?'even':'odd' ?> tr_row">
-        <td width="60%"><?= $data->barang." ".(($data->kekuatan == '1')?'':$data->kekuatan)." ". $data->satuan." ".$data->sediaan." @ ".(($data->isi==1)?'':$data->isi)." ".$data->satuan_terkecil ?></td>
+        <td width="60%"><?= $data->barang." ". $data->satuan ?></td>
         <td align="right" id=hj<?= $no ?>><?= rupiah($harga) ?></td>
         <td align="center" id=diskon<?= $no ?>><?= $data->jual_diskon_percentage ?></td>
         <!--<td><?= rupiah(($data->jual_harga - (($data->jual_harga*($data->percent/100))))*$data->pakai_jumlah) ?></td>-->

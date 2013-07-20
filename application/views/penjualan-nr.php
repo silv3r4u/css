@@ -137,8 +137,8 @@ function add(i) {
             cache: false,
             dataType: 'json',
             success: function(msg) {
-                $('#hj'+i).html(numberToCurrency(Math.ceil(msg.harga))); // text asli
-                $('#harga_jual'+i).val(msg.harga);
+                $('#hj'+i).html(numberToCurrency(pembulatan_seratus(Math.ceil(msg.harga)))); // text asli
+                $('#harga_jual'+i).val(pembulatan_seratus(Math.ceil(msg.harga)));
                 $('#disc'+i).val(msg.diskon);
                 $('#diskon'+i).val(msg.diskon);
                 subTotal();
